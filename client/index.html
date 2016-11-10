@@ -7,7 +7,22 @@
 	<link rel="stylesheet" href="">
 </head>
 <body>
-	<h1>Hello World</h1>
+	<nav>
+		<ul>
+			<li><a href="/" title="">Home</a></li>
+			<li><a href="http://localhost:3000/#/newJob" title="">New Job</a></li>
+			<li><a href="http://localhost:3000/#/findJob" title="">Find Job</a></li>
+			<li><a href="http://localhost:3000/#/getData" title="">Get Data</a></li>
+		</ul>
+	</nav>
+	<div ng-app='Database'>
+		<div class="container">
+			<div ng-view></div>
+		</div>
+	</div>
 	
+	<script src="/lib/angular/angular.min.js"></script>
+	<script src="/lib/angular-route/angular-route.min.js"></script>
+	<script src="/app/main.js"></script>
 </body>
 </html>
