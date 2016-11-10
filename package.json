@@ -1,0 +1,25 @@
+{
+  "name": "Chapdelaine-Associates",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielC2008/Chapdelaine-Associates.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanielC2008/Chapdelaine-Associates/issues"
+  },
+  "homepage": "https://github.com/DanielC2008/Chapdelaine-Associates#readme"
+}
