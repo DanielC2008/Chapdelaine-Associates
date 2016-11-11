@@ -1,0 +1,21 @@
+{
+  "name": "chapdelaine-associates",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Joseph Daniel Chapdelaine"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/DanielC2008/Chapdelaine-Associates",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8"
+  }
+}

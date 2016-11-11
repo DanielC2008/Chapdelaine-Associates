@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Chapdelaine & Associates</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<nav>
+		<ul>
+			<li><a href="http://localhost:3000/#/home" title="">Home</a></li>
+			<li><a href="http://localhost:3000/#/newJob" title="">New Job</a></li>
+			<li><a href="http://localhost:3000/#/findJob" title="">Find Job</a></li>
+			<li><a href="http://localhost:3000/#/getData" title="">Get Data</a></li>
+			<li><a href="/" title="">Login/Logout</a></li>
+		</ul>
+	</nav>
+	<div ng-app='Database'>
+		<div class="container">
+			<div ng-view></div>
+		</div>
+	</div>
+	
+	<script src="/lib/angular/angular.min.js"></script>
+	<script src="/lib/angular-route/angular-route.min.js"></script>
+	<script src="/app/main.js"></script>
+</body>
+</html>
