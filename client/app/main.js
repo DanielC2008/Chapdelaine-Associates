@@ -5,6 +5,10 @@ angular
 	.config( $routeProvider =>
 		$routeProvider
 			.when('/', {
+				controller: 'Login-Register',
+				templateUrl: 'partials/login-register.html'
+			})
+			.when('/home', {
 				controller: 'Home',
 				templateUrl: 'partials/home.html'
 			})
@@ -21,6 +25,18 @@ angular
 				templateUrl: 'partials/getData.html'
 			})
 	)
+	.controller('Login-Register', function($scope, $http) {
+		$scope.title = "Login-Register"
+		$scope.login = () => {
+			$http.post('/' , $scope.formData)
+			.success(function(data) {
+            console.log("posted successfully");
+       		})
+       		.error(function(data) {
+            console.error("error in posting");
+        	})
+		}
+	})
 	.controller('Home', function($scope) {
 		$scope.title = "Home"
 	})

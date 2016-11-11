@@ -1,0 +1,9 @@
+<h1>{{title}}</h1>
+
+<form ng-submit="login()">
+	<label for="email">Email:</label>
+	<input type="text" name="email" ng-model="formData.email" required>
+	<label for="password">Password:</label>
+	<input type="password" name="password" ng-model="formData.password" required>
+	<button>Login</button>
+</form>
