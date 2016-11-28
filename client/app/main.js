@@ -37,37 +37,15 @@ angular
         	})
 		}
 	})
-	.controller('Home', function($scope) {
-		$scope.title = "Home"
-		$scope.lastestJobs = [
-				{
-          name: 'Chapdelaine, Daniel',
-          number: '37438'
-        },
-        {
-          name: 'Chapdelaine, Daniel',
-          number: '37438'
-        },
-        {
-          name: 'Chapdelaine, Daniel',
-          number: '37438'
-        },
-        {
-          name: 'hsfa, Daniel',
-          number: '37438'
-        },
-        {
-          name: 'Chapdelaine, Daniel',
-          number: '37438'
-        },
-        {
-					name: 'Chapdelaine, Daniel',
-          number: '37438'
-				} 
-		]
-		// $scope.lastestJobs = () => {
-		// 	$http.get
-		// }
+	.controller('Home', function($scope, $http) {
+		$http.get('/home')
+    .success( data => {
+      $scope.latestJobs = data
+    })
+    .error( () => {
+      console.log('error')
+    })
+    $scope.title = "Home"
 	})
 	.controller('NewJob', function($scope) {
 		$scope.title = "NewJob"
