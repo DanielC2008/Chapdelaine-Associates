@@ -37,8 +37,15 @@ angular
         	})
 		}
 	})
-	.controller('Home', function($scope) {
-		$scope.title = "Home"
+	.controller('Home', function($scope, $http) {
+		$http.get('/home')
+    .success( data => {
+      $scope.latestJobs = data
+    })
+    .error( () => {
+      console.log('error')
+    })
+    $scope.title = "Home"
 	})
 	.controller('NewJob', function($scope) {
 		$scope.title = "NewJob"
