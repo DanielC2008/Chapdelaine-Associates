@@ -39,6 +39,35 @@ angular
 	})
 	.controller('Home', function($scope) {
 		$scope.title = "Home"
+		$scope.lastestJobs = [
+				{
+          name: 'Chapdelaine, Daniel',
+          number: '37438'
+        },
+        {
+          name: 'Chapdelaine, Daniel',
+          number: '37438'
+        },
+        {
+          name: 'Chapdelaine, Daniel',
+          number: '37438'
+        },
+        {
+          name: 'hsfa, Daniel',
+          number: '37438'
+        },
+        {
+          name: 'Chapdelaine, Daniel',
+          number: '37438'
+        },
+        {
+					name: 'Chapdelaine, Daniel',
+          number: '37438'
+				} 
+		]
+		// $scope.lastestJobs = () => {
+		// 	$http.get
+		// }
 	})
 	.controller('NewJob', function($scope) {
 		$scope.title = "NewJob"
