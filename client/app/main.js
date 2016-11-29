@@ -40,7 +40,7 @@ angular
 	.controller('Home', function($scope, $http) {
 		$http.get('/home')
     .success( data => {
-      $scope.latestJobs = data
+      $scope.recentJobs = data
     })
     .error( () => {
       console.log('error')

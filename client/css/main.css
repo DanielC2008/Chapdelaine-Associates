@@ -1,0 +1,24 @@
+/*INDEX*/
+body {
+  background-color: #B1725E;
+}
+
+
+/*HOME*/
+.recentJobs {
+  margin: 0 4% 50px 4% !important;
+  height: 80px !important;
+  line-height: 1.7rem;
+  color: black;
+  background-color: #eceff1;
+}
+
+.recentJobs:hover {
+  background-color: #bcaaa4;
+  box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
+}
+
+#lastName {
+  font-size: 1.3rem;
+}
+

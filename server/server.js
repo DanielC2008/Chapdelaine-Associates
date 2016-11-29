@@ -18,27 +18,33 @@ const knex = require('knex')({
 app.get('/home', (req, res) => {
   res.send([
     {
-      name: 'Chapdelaine, Daniel',
+      firstName: 'Daniel',
+      lastName: 'Chapdelaine',
       number: '37438'
     },
     {
-      name: 'Chapdelaine, wruiwyr',
+      firstName: 'wruiwyr',
+      lastName: 'something',
       number: '23414'
     },
     {
-      name: 'Chapdelaine, Daniel',
+      firstName: 'Daniel',
+      lastName: 'youuuuuu',
       number: '45645'
     },
     {
-      name: 'hsfa, Daniel',
+      firstName: 'Daniel',
+      lastName: 'Santafeeee',
       number: '23547'
     },
     {
-      name: 'Chapdelaine, you',
+      firstName: 'you',
+      lastName: 'creeeper',
       number: '77353'
     },
     {
-      name: 'Chapdelaine, dome',
+      firstName: 'dome',
+      lastName: 'domedomedome',
       number: '57846'
     } 
   ])
