@@ -53,11 +53,12 @@ app.get('/home', (req, res) => {
 
 //Login register... need to split this apart
 app.post('/', (req, res) => {
-	knex('Users')
-		.insert(req.body)
-		.then((data) => {
+  console.log('yuppppp');
+	// knex('Users')
+	// 	.insert(req.body)
+	// 	.then((data) => {
 			
-		})
+	// 	})
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

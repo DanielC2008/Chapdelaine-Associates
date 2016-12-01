@@ -26,8 +26,9 @@ angular
 			})
 	)
 	.controller('Login-Register', function($scope, $http) {
-		$scope.title = "Login-Register"
-		$scope.login = () => {
+		$scope.loginOrRegister = "login"
+
+		$scope.enterSite = () => {
 			$http.post('/' , $scope.formData)
 			.success(function(data) {
             console.log("posted successfully");
@@ -36,6 +37,14 @@ angular
             console.error("error in posting");
         	})
 		}
+
+    $scope.register = () => {
+      $scope.loginOrRegister = 'register'
+    }
+
+    $scope.login = () => {
+      $scope.loginOrRegister = 'login'
+    }  
 	})
 	.controller('Home', function($scope, $http) {
 		$http.get('/home')
