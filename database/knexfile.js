@@ -1,12 +1,13 @@
 // Update with your config settings.
 
+const DBCreds = require('../DBCreds.js')
+
+
 module.exports = {
 
   development: {
     client: 'mssql',
-    connection: {
-      filename: './dev.sqlite3'
-    }
+    connection: DBCreds
   },
 
   staging: {
