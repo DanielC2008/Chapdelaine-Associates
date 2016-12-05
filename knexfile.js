@@ -3,14 +3,14 @@
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'mssql',
     connection: {
       filename: './dev.sqlite3'
     }
   },
 
   staging: {
-    client: 'postgresql',
+    client: 'mssql',
     connection: {
       database: 'my_db',
       user:     'username',
@@ -26,7 +26,7 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
+    client: 'mssql',
     connection: {
       database: 'my_db',
       user:     'username',

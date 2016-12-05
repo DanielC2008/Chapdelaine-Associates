@@ -4,13 +4,15 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const PORT = process.env.PORT || 3000
+const DBCreds = require('../DBCreds.js')
 
 app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-const knex = require('knex')({
-
+var knex = require('knex')({
+  client: 'mssql',
+  connection: DBCreds
 });
 
 
@@ -53,12 +55,10 @@ app.get('/home', (req, res) => {
 
 //Login register... need to split this apart
 app.post('/', (req, res) => {
-  console.log('yuppppp');
-	// knex('Users')
-	// 	.insert(req.body)
-	// 	.then((data) => {
-			
-	// 	})
+	knex('Users')
+		.insert(req.body)
+		.then((data) => {
+		})
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
