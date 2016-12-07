@@ -44,7 +44,11 @@ angular
 
     $scope.login = () => {
       $scope.loginOrRegister = 'login'
-    }  
+    } 
+
+
+
+
 	})
 	.controller('Home', function($scope, $http) {
 		$http.get('/home')

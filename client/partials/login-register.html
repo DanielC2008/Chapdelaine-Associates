@@ -19,8 +19,8 @@
     </div>
     <div ng-if="loginOrRegister === 'register' " class="input-field col m5 offset-m6">
       <label for="confirm">Confirm Password:</label>
-      <input type="password" name="confirm" required>
+      <input type="password" name="confirm" ng-model="formData.confirm" required>
     </div>
-    <button class="col m2 offset-m5 btn loginRegister">Submit</button>
+    <button class="col m2 offset-m5 btn loginRegister" ng-disabled=" loginOrRegister === 'register' && formData.confirm != formData.password" >Submit</button>
   </form>
 </div>
