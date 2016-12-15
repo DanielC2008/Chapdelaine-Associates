@@ -26,13 +26,13 @@ angular
 			})
 	)
 	.controller('Login-Register', function($scope, $http) {
+		$scope.loginOrRegister = "login"
 
     const legitPassword = (password) => {
       const pattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
       return pattern.test(password)
     }
 
-		$scope.loginOrRegister = "login"
 
 		$scope.enterSite = (password) => {
       const testPassword = legitPassword(password)
@@ -45,7 +45,7 @@ angular
               console.error("error in posting");
           	})
       } else {
-        alert("Password must be atleast 8 characters long including one uppercase letter, one lowercase letter, and one number!")
+        alert("Password must be at least 8 characters long including one uppercase letter, one lowercase letter, and one number!")
       }
 
 		}
@@ -57,8 +57,6 @@ angular
     $scope.login = () => {
       $scope.loginOrRegister = 'login'
     } 
-
-
 
 
 	})
