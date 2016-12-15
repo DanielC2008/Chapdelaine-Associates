@@ -33,10 +33,16 @@ angular
       return pattern.test(password)
     }
 
+    const fieldsFilled = () => {
+      let formStatus = $scope.formData && $scope.formData.password && $scope.formData.userName ? true : false
+      return formStatus
+    }
+
 
 		$scope.enterSite = (password) => {
       const testPassword = legitPassword(password)
-      if (testPassword) {
+      const testForm = fieldsFilled()
+      if (testPassword && testForm) {
   			$http.post('/' , $scope.formData)
   			.success(function(data) {
               console.log("posted successfully");
@@ -44,7 +50,10 @@ angular
          		.error(function(data) {
               console.error("error in posting");
           	})
-      } else {
+      } else if ( !testForm ) {
+        alert("User Name and Password fields required!")
+      }
+       else {
         alert("Password must be at least 8 characters long including one uppercase letter, one lowercase letter, and one number!")
       }
 
