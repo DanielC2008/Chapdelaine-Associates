@@ -40,9 +40,20 @@ angular
 
     const enterSite = () => {
       if ($scope.loginOrRegister === 'login') {
-        console.log('nothing yet');
+        console.log('here', $scope.formData);
+        return $http.post('/login' , {
+          userName: $scope.formData.userName,
+          password: $scope.formData.password
+        })
+        .success( data => {
+          // console.log('data', data);
+          // $location.path('/home')
+        })
+        .error( data => {
+          alert("There was an error posting your credentials. Please try again.");
+        })
       } else {
-        return $http.post('/' , {
+        return $http.post('/register' , {
           userName: $scope.formData.userName,
           password: $scope.formData.password
         })

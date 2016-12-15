@@ -52,12 +52,24 @@ app.get('/home', (req, res) => {
   ])
 })
 
-app.post('/', (req, res) => {
+app.post('/register', (req, res) => {
 	knex('Users')
 		.insert(req.body)
 		.then( success => {
       res.send(success)
 		})
+})
+
+app.post('/login', ({body: {userName, suggestedPass}}, res) => {
+  knex('Users')
+    .where({ userName: userName})
+    .then( user => {
+      // if (suggestedPass === user.password){
+        console.log( user);
+      // } else {
+      // console.log('false');
+      // }
+    })
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
