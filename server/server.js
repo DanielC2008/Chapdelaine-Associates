@@ -4,13 +4,15 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const PORT = process.env.PORT || 3000
+const DBCreds = require('../DBCreds.js')
 
 app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-const knex = require('knex')({
-
+var knex = require('knex')({
+  client: 'mssql',
+  connection: DBCreds
 });
 
 
@@ -18,27 +20,33 @@ const knex = require('knex')({
 app.get('/home', (req, res) => {
   res.send([
     {
-      name: 'Chapdelaine, Daniel',
+      firstName: 'Daniel',
+      lastName: 'Chapdelaine',
       number: '37438'
     },
     {
-      name: 'Chapdelaine, wruiwyr',
+      firstName: 'wruiwyr',
+      lastName: 'something',
       number: '23414'
     },
     {
-      name: 'Chapdelaine, Daniel',
+      firstName: 'Daniel',
+      lastName: 'youuuuuu',
       number: '45645'
     },
     {
-      name: 'hsfa, Daniel',
+      firstName: 'Daniel',
+      lastName: 'Santafeeee',
       number: '23547'
     },
     {
-      name: 'Chapdelaine, you',
+      firstName: 'you',
+      lastName: 'creeeper',
       number: '77353'
     },
     {
-      name: 'Chapdelaine, dome',
+      firstName: 'dome',
+      lastName: 'domedomedome',
       number: '57846'
     } 
   ])
@@ -50,7 +58,6 @@ app.post('/', (req, res) => {
 	knex('Users')
 		.insert(req.body)
 		.then((data) => {
-			
 		})
 })
 
