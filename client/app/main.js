@@ -28,31 +28,26 @@ angular
 	.controller('Login-Register', function($scope, $http) {
 
     const legitPassword = (password) => {
-      console.log('got here', password);
       const pattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
       return pattern.test(password)
-
     }
 
 		$scope.loginOrRegister = "login"
 
 		$scope.enterSite = (password) => {
       const testPassword = legitPassword(password)
-      console.log('testPassword', testPassword);
       if (testPassword) {
-        console.log('true')
+  			$http.post('/' , $scope.formData)
+  			.success(function(data) {
+              console.log("posted successfully");
+         		})
+         		.error(function(data) {
+              console.error("error in posting");
+          	})
       } else {
-        console.log('false');
+        alert("Password must be atleast 8 characters long including one uppercase letter, one lowercase letter, and one number!")
       }
 
-
-			$http.post('/' , $scope.formData)
-			.success(function(data) {
-            console.log("posted successfully");
-       		})
-       		.error(function(data) {
-            console.error("error in posting");
-        	})
 		}
 
     $scope.register = () => {
