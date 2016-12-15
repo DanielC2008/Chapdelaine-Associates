@@ -26,9 +26,26 @@ angular
 			})
 	)
 	.controller('Login-Register', function($scope, $http) {
+
+    const legitPassword = (password) => {
+      console.log('got here', password);
+      const pattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
+      return pattern.test(password)
+
+    }
+
 		$scope.loginOrRegister = "login"
 
-		$scope.enterSite = () => {
+		$scope.enterSite = (password) => {
+      const testPassword = legitPassword(password)
+      console.log('testPassword', testPassword);
+      if (testPassword) {
+        console.log('true')
+      } else {
+        console.log('false');
+      }
+
+
 			$http.post('/' , $scope.formData)
 			.success(function(data) {
             console.log("posted successfully");
