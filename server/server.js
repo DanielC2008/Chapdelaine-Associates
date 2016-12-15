@@ -52,12 +52,11 @@ app.get('/home', (req, res) => {
   ])
 })
 
-
-//Login register... need to split this apart
 app.post('/', (req, res) => {
 	knex('Users')
 		.insert(req.body)
-		.then((data) => {
+		.then( success => {
+      res.send(success)
 		})
 })
 

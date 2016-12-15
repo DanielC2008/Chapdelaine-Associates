@@ -25,8 +25,8 @@ angular
 				templateUrl: 'partials/getData.html'
 			})
 	)
-	.controller('Login-Register', function($scope, $http) {
-		$scope.loginOrRegister = "login"
+	.controller('Login-Register', function($scope, $http, $location) {
+		$scope.loginOrRegister = 'login'
 
     const legitPassword = (password) => {
       const pattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
@@ -38,18 +38,30 @@ angular
       return formStatus
     }
 
+    const enterSite = () => {
+      if ($scope.loginOrRegister === 'login') {
+        console.log('nothing yet');
+      } else {
+        return $http.post('/' , {
+          userName: $scope.formData.userName,
+          password: $scope.formData.password
+        })
+        .success( data => {
+          console.log('data', data);
+          $location.path('/home')
+        })
+        .error( data => {
+          alert("There was an error posting your credentials. Please try again.");
+        })
+      }
 
-		$scope.enterSite = (password) => {
+    }
+
+    $scope.passTests = (password) => {
       const testPassword = legitPassword(password)
       const testForm = fieldsFilled()
       if (testPassword && testForm) {
-  			$http.post('/' , $scope.formData)
-  			.success(function(data) {
-              console.log("posted successfully");
-         		})
-         		.error(function(data) {
-              console.error("error in posting");
-          	})
+        enterSite()
       } else if ( !testForm ) {
         alert("User Name and Password fields required!")
       }
@@ -57,7 +69,7 @@ angular
         alert("Password must be at least 8 characters long including one uppercase letter, one lowercase letter, and one number!")
       }
 
-		}
+    }
 
     $scope.register = () => {
       $scope.loginOrRegister = 'register'
