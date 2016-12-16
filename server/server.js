@@ -52,13 +52,25 @@ app.get('/home', (req, res) => {
   ])
 })
 
-
-//Login register... need to split this apart
-app.post('/', (req, res) => {
+app.post('/register', (req, res) => {
 	knex('Users')
 		.insert(req.body)
-		.then((data) => {
+		.then( success => {
+      res.send(success)
 		})
+})
+
+app.post('/login', ({body: {userName, password}}, res) => {
+  knex('Users')
+    .where({ userName: userName})
+    .then( user => {
+      let [userObj] = user
+      if (password === userObj.password){
+        res.send({userName: userObj.userName})
+      } else {
+        res.send({msg: "User name and/or password incorrect."})
+      }
+    })
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

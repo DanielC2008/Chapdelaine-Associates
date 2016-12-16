@@ -8,18 +8,18 @@
   </div>
     
 
-  <form class="row" ng-submit="enterSite(formData.password)">
+  <form class="row" ng-submit="passTests(formData.password)">
     <div class="input-field col m5 offset-m1">
       <label for="userName">User Name:</label>
-      <input type="text" name="userName" ng-model="formData.userName" required="true">
+      <input type="text" name="userName" ng-model="formData.userName">
     </div>
     <div class="input-field col m5">
       <label for="password">Password:</label>
-      <input type="password" name="password" ng-model="formData.password" required="true">
+      <input type="password" name="password" ng-model="formData.password">
     </div>
     <div ng-if="loginOrRegister === 'register' " class="input-field col m5 offset-m6">
       <label for="confirm">Confirm Password:</label>
-      <input type="password" name="confirm" ng-model="formData.confirm" required="true">
+      <input type="password" name="confirm" ng-model="formData.confirm">
     </div>
     <button class="col m2 offset-m5 btn loginRegister" ng-disabled=" loginOrRegister === 'register' && formData.confirm != formData.password">Submit</button>
   </form>
