@@ -10,13 +10,16 @@
 <body>
 	<div ng-app='Database'>
 		<nav class="brown darken-1">
-			<a href="/#/home" ng-if="$user" class="brand-logo right"> Welcome {{$user}} </a>
+			<a href="/#/home" ng-if="$user != null" class="brand-logo right"> Welcome {{$user}} </a>
+			<ul ng-if="$user != null">
+				<li><a href="/#/home" title="">Home</a></li>
+				<li><a href="/#/newJob" title="">New Job</a></li>
+				<li><a href="/#/findJob" title="">Find Job</a></li>
+				<li><a href="/#/getData" title="">Get Data</a></li>
+				<li><a href="/#/logout" title="">Logout</a></li> <!-- make this modal????? -->
+			</ul>
 			<ul>
-				<li><a href="http://localhost:3000/#/home" title="">Home</a></li>
-				<li><a href="http://localhost:3000/#/newJob" title="">New Job</a></li>
-				<li><a href="http://localhost:3000/#/findJob" title="">Find Job</a></li>
-				<li><a href="http://localhost:3000/#/getData" title="">Get Data</a></li>
-				<li><a href="/" title="">Login/Logout</a></li>
+				<li><a ng-if="$user === null" href="/#/login" title="">Login</a></li>
 			</ul>
 		</nav>
 		<div class="container">

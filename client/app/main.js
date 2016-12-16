@@ -7,9 +7,13 @@ angular
   })
 	.config( $routeProvider =>
 		$routeProvider
-			.when('/login', {
-				controller: 'Login-Register',
-				templateUrl: 'partials/login-register.html'
+      .when('/login', {
+        controller: 'Login-Register',
+        templateUrl: 'partials/login-register.html'
+      })
+			.when('/logout', {
+				controller: 'Logout',
+        templateUrl: 'partials/logout.html'
 			})
 			.when('/home', {
 				controller: 'Home',
@@ -101,7 +105,6 @@ angular
 
 	})
 	.controller('Home', function($scope, $http, $rootScope) {
-    console.log('root', $rootScope);
 		$http.get('/home')
     .success( data => {
       $scope.recentJobs = data
@@ -120,3 +123,12 @@ angular
 	.controller('GetData', function($scope) {
 		$scope.title = "GetData"
 	})
+  .controller('Logout', function($scope, $location, $rootScope) {
+    $scope.logout = () => {
+      $rootScope.$user = null
+      $location.path('/login')
+    }
+    $scope.stayLoggedIn = () => {
+      $location.path('/home')
+    }
+  })
