@@ -2,9 +2,12 @@
 
 angular
 	.module('Database', ['ngRoute'])
+  .run(function($rootScope) {
+    $rootScope.$user = null
+  })
 	.config( $routeProvider =>
 		$routeProvider
-			.when('/', {
+			.when('/login', {
 				controller: 'Login-Register',
 				templateUrl: 'partials/login-register.html'
 			})
@@ -20,10 +23,11 @@ angular
 				controller: 'FindJob',
 				templateUrl: 'partials/findJob.html'
 			})
-			.when('/getData', {
-				controller: 'GetData',
-				templateUrl: 'partials/getData.html'
-			})
+      .when('/getData', {
+        controller: 'GetData',
+        templateUrl: 'partials/getData.html'
+      })
+			.otherwise('/login')
 	)
 	.controller('Login-Register', function($scope, $http, $location, $rootScope) {
 		$scope.loginOrRegister = 'login'
@@ -38,20 +42,20 @@ angular
       return formStatus
     }
 
-    const
-
 //refactor ////////////////////////////////////////////
     const enterSite = () => {
       if ($scope.loginOrRegister === 'login') {
-        console.log('here', $scope.formData);
         return $http.post('/login' , {
           userName: $scope.formData.userName,
           password: $scope.formData.password
         })
         .success( data => {
-          $rootScope.user = data.userName
-          // console.log("root", $rootScope);
-          // $location.path('/home')
+          if (data.userName) {
+            $rootScope.$user = data.userName
+            $location.path('/home')
+          } else {
+            alert(`${data.msg}`)
+          }
         })
         .error( data => {
           alert("There was an error achieving your credentials. Please try again.");
@@ -96,7 +100,8 @@ angular
 
 
 	})
-	.controller('Home', function($scope, $http) {
+	.controller('Home', function($scope, $http, $rootScope) {
+    console.log('root', $rootScope);
 		$http.get('/home')
     .success( data => {
       $scope.recentJobs = data
