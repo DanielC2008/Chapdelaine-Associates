@@ -25,7 +25,7 @@ angular
 				templateUrl: 'partials/getData.html'
 			})
 	)
-	.controller('Login-Register', function($scope, $http, $location) {
+	.controller('Login-Register', function($scope, $http, $location, $rootScope) {
 		$scope.loginOrRegister = 'login'
 
     const legitPassword = (password) => {
@@ -38,6 +38,9 @@ angular
       return formStatus
     }
 
+    const
+
+//refactor ////////////////////////////////////////////
     const enterSite = () => {
       if ($scope.loginOrRegister === 'login') {
         console.log('here', $scope.formData);
@@ -46,11 +49,12 @@ angular
           password: $scope.formData.password
         })
         .success( data => {
-          // console.log('data', data);
+          $rootScope.user = data.userName
+          // console.log("root", $rootScope);
           // $location.path('/home')
         })
         .error( data => {
-          alert("There was an error posting your credentials. Please try again.");
+          alert("There was an error achieving your credentials. Please try again.");
         })
       } else {
         return $http.post('/register' , {

@@ -60,15 +60,16 @@ app.post('/register', (req, res) => {
 		})
 })
 
-app.post('/login', ({body: {userName, suggestedPass}}, res) => {
+app.post('/login', ({body: {userName, password}}, res) => {
   knex('Users')
     .where({ userName: userName})
     .then( user => {
-      // if (suggestedPass === user.password){
-        console.log( user);
-      // } else {
-      // console.log('false');
-      // }
+      let [userObj] = user
+      if (password === userObj.password){
+        res.send({userName: userObj.userName})
+      } else {
+        res.send({msg: "User name and/or password incorrect."})
+      }
     })
 })
 
