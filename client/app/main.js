@@ -1,5 +1,6 @@
 'use strict'
 
+
 angular
 	.module('Database', ['ngRoute'])
   .run(function($rootScope) {
@@ -46,10 +47,8 @@ angular
       return formStatus
     }
 
-//refactor ////////////////////////////////////////////
     const enterSite = () => {
-      if ($scope.loginOrRegister === 'login') {
-        return $http.post('/login' , {
+        return $http.post(`/${$scope.loginOrRegister}` , {
           userName: $scope.formData.userName,
           password: $scope.formData.password
         })
@@ -62,21 +61,8 @@ angular
           }
         })
         .error( data => {
-          alert("There was an error achieving your credentials. Please try again.");
+          alert("There was an error achieving your credentials. Please try again.")
         })
-      } else {
-        return $http.post('/register' , {
-          userName: $scope.formData.userName,
-          password: $scope.formData.password
-        })
-        .success( data => {
-          console.log('data', data);
-          $location.path('/home')
-        })
-        .error( data => {
-          alert("There was an error posting your credentials. Please try again.");
-        })
-      }
 
     }
 
@@ -112,13 +98,35 @@ angular
     .error( () => {
       console.log('error')
     })
-    $scope.title = "Home"
 	})
 	.controller('NewJob', function($scope) {
 		$scope.title = "NewJob"
 	})
 	.controller('FindJob', function($scope) {
-		$scope.title = "FindJob"
+		let numberOfParams = 1
+
+    $scope.searchParams = []
+
+    const addParam = () => {
+        let obj = {}
+        $scope.searchParams.push(obj)
+    }
+
+    addParam()
+
+    $scope.createParam = () => {
+      numberOfParams++
+      addParam()
+      //for materialize select tag >:(
+      $(document).ready(function() {
+        $('select').material_select();
+      })
+    }
+
+    $scope.submit = () => {
+      
+    }
+
 	})
 	.controller('GetData', function($scope) {
 		$scope.title = "GetData"

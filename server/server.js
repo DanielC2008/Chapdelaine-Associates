@@ -52,24 +52,35 @@ app.get('/home', (req, res) => {
   ])
 })
 
-app.post('/register', (req, res) => {
+app.post('/register', ({body}, res) => {
 	knex('Users')
-		.insert(req.body)
-		.then( success => {
-      res.send(success)
+    .returning('userName')
+		.insert(body)
+		.then( data => {
+      res.send({userName: data[0]})
 		})
+    .catch( err => {
+      if (err.code === "EREQUEST") {
+        res.send({msg: "User Name already exists. Please create another."})
+      } else {
+        res.send({msg: "An error has occured. Please try again."})
+      }
+    })
 })
 
 app.post('/login', ({body: {userName, password}}, res) => {
   knex('Users')
     .where({ userName: userName})
-    .then( user => {
-      let [userObj] = user
-      if (password === userObj.password){
-        res.send({userName: userObj.userName})
+    .then( listedUsers => {
+      let [user] = listedUsers
+      if (password === user.password){
+        res.send({userName: user.userName})
       } else {
         res.send({msg: "User name and/or password incorrect."})
       }
+    })
+    .catch( err => {
+      res.send({msg: "An error has occured. Please try again."})
     })
 })
 
