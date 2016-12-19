@@ -103,6 +103,9 @@ angular
 		$scope.title = "NewJob"
 	})
 	.controller('FindJob', function($scope) {
+     $(document).ready(function() {
+        $('select').material_select();
+      })
 		let numberOfParams = 1
 
     $scope.searchParams = []
