@@ -62,6 +62,8 @@ app.post('/register', ({body}, res) => {
     .catch( err => {
       if (err.code === "EREQUEST") {
         res.send({msg: "User Name already exists. Please create another."})
+      } else {
+        res.send({msg: "An error has occured. Please try again."})
       }
     })
 })
@@ -76,6 +78,9 @@ app.post('/login', ({body: {userName, password}}, res) => {
       } else {
         res.send({msg: "User name and/or password incorrect."})
       }
+    })
+    .catch( err => {
+      res.send({msg: "An error has occured. Please try again."})
     })
 })
 

@@ -102,7 +102,22 @@ angular
 		$scope.title = "NewJob"
 	})
 	.controller('FindJob', function($scope) {
-		$scope.title = "FindJob"
+		let numberOfParams = 1
+
+    $scope.displaySearchParams = []
+
+    const addParam = () => {
+        let obj = {}
+        $scope.displaySearchParams.push(obj)
+    }
+
+    addParam()
+
+    $scope.createParam = () => {
+      numberOfParams++
+      addParam()
+    }
+
 	})
 	.controller('GetData', function($scope) {
 		$scope.title = "GetData"
