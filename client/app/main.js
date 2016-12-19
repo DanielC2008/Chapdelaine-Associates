@@ -48,8 +48,7 @@ angular
 
 //refactor ////////////////////////////////////////////
     const enterSite = () => {
-      if ($scope.loginOrRegister === 'login') {
-        return $http.post('/login' , {
+        return $http.post(`/${$scope.loginOrRegister}` , {
           userName: $scope.formData.userName,
           password: $scope.formData.password
         })
@@ -64,20 +63,6 @@ angular
         .error( data => {
           alert("There was an error achieving your credentials. Please try again.");
         })
-      } else {
-        return $http.post('/register' , {
-          userName: $scope.formData.userName,
-          password: $scope.formData.password
-        })
-        .success( data => {
-          console.log('data', data);
-          $rootScope.$user = data.userName
-          $location.path('/home')
-        })
-        .error( data => {
-          alert("There was an error posting your credentials. Please try again.");
-        })
-      }
 
     }
 
