@@ -46,7 +46,6 @@ angular
       return formStatus
     }
 
-//refactor ////////////////////////////////////////////
     const enterSite = () => {
         return $http.post(`/${$scope.loginOrRegister}` , {
           userName: $scope.formData.userName,
@@ -61,7 +60,7 @@ angular
           }
         })
         .error( data => {
-          alert("There was an error achieving your credentials. Please try again.");
+          alert("There was an error achieving your credentials. Please try again.")
         })
 
     }
