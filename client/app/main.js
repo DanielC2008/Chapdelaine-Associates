@@ -71,6 +71,7 @@ angular
         })
         .success( data => {
           console.log('data', data);
+          $rootScope.$user = data.userName
           $location.path('/home')
         })
         .error( data => {
@@ -112,7 +113,6 @@ angular
     .error( () => {
       console.log('error')
     })
-    $scope.title = "Home"
 	})
 	.controller('NewJob', function($scope) {
 		$scope.title = "NewJob"

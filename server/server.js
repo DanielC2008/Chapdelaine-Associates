@@ -52,11 +52,12 @@ app.get('/home', (req, res) => {
   ])
 })
 
-app.post('/register', (req, res) => {
+app.post('/register', ({body}, res) => {
 	knex('Users')
-		.insert(req.body)
-		.then( success => {
-      res.send(success)
+    .returning('userName')
+		.insert(body)
+		.then( data => {
+      res.send({userName: data[0]})
 		})
 })
 
