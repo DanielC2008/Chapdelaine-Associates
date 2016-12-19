@@ -1,12 +1,24 @@
 <h1>Search Jobs...</h1>
 
 <div class="row">
-  <div ng-repeat="params in displaySearchParams">
-    <input type="text" name="param{{$index}}" placeholder="Search Terms...">
-    
+  <div ng-repeat="param in searchParams">
+    <div class="row">  
+      <select class="col m3" ng-model="param.table">
+        <option value="Client">Client</option>
+        <option value="Property">Property</option>
+        <option value="Representative">Representative</option>
+      </select>
+      <input class="col m3" type="text" name="request{{$index}}" ng-model="param.request" placeholder="Search Terms...">
+    </div>
   </div>
+</div>  
+<div class="row"> 
   <div ng-click="createParam()">
     <button type="">Add Search Parameter</button>
+  </div>
+  <div ng-click="submit()">
+    <button type="">Submit</button>
+    
   </div>
 
 

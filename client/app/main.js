@@ -1,5 +1,6 @@
 'use strict'
 
+
 angular
 	.module('Database', ['ngRoute'])
   .run(function($rootScope) {
@@ -104,11 +105,11 @@ angular
 	.controller('FindJob', function($scope) {
 		let numberOfParams = 1
 
-    $scope.displaySearchParams = []
+    $scope.searchParams = []
 
     const addParam = () => {
         let obj = {}
-        $scope.displaySearchParams.push(obj)
+        $scope.searchParams.push(obj)
     }
 
     addParam()
@@ -116,6 +117,14 @@ angular
     $scope.createParam = () => {
       numberOfParams++
       addParam()
+      //for materialize select tag >:(
+      $(document).ready(function() {
+        $('select').material_select();
+      })
+    }
+
+    $scope.submit = () => {
+      
     }
 
 	})
