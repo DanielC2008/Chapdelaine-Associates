@@ -103,16 +103,63 @@ angular
 		$scope.title = "NewJob"
 	})
 	.controller('FindJob', function($scope) {
-     $(document).ready(function() {
+    $scope.selectedTable
+    //materialize stuff :(
+    const materialSelect = () => {
+      $(document).ready(function() {  
         $('select').material_select();
-      })
+      })  
+    }
+
 		let numberOfParams = 1
+
+    $scope.Tables = [
+      'Clients',
+      'Properties',
+      'Representatives'
+    ]
+
+    const values = [
+      {
+        Clients: [
+          'First Name', 'Last Name', 'Address'
+        ]
+      },
+      { Properties: [
+         'Parcel Number', 'Map', 'Address'
+        ]
+      },
+      {
+        Representatives: [
+          'First Name', 'Last Name', 'Address'
+        ]
+      }
+    ]
+
+    $scope.getTableValues = (selected) => {
+      materialSelect() 
+      values.forEach( table => {
+        if (Object.keys(table)[0] === selected) {
+          let values = Object.values(table)[0]
+          createSelect(values)
+        }  
+      })
+    }
+
+    const createSelect = values => {
+      materialSelect() 
+
+      $scope[`selectedTable${numberOfParams}`] = values
+      console.log('values', $scope[`selectedTable${numberOfParams}`]);
+    }
+
 
     $scope.searchParams = []
 
     const addParam = () => {
-        let obj = {}
-        $scope.searchParams.push(obj)
+      materialSelect()
+      let obj = {}
+      $scope.searchParams.push(obj)
     }
 
     addParam()
@@ -120,15 +167,12 @@ angular
     $scope.createParam = () => {
       numberOfParams++
       addParam()
-      //for materialize select tag >:(
-      $(document).ready(function() {
-        $('select').material_select();
-      })
     }
 
     $scope.submit = () => {
       
     }
+
 
 	})
 	.controller('GetData', function($scope) {

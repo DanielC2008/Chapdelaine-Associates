@@ -3,11 +3,12 @@
 <div class="row">
   <div ng-repeat="param in searchParams">
     <div class="row">  
-      <select class="col m3" ng-model="param.table">
-        <option value="Client">Client</option>
-        <option value="Property">Property</option>
-        <option value="Representative">Representative</option>
+      <select class="col m3" ng-change="getTableValues(param.tableName)" ng-model="param.tableName" ng-options="table as table disable when table.notAnOption for table in Tables"> 
       </select>
+      <div class="col m3" ng-if="param.tableName">
+        <select ng-model="param.values" ng-options="values as values disable when values.notAnOption for values in selectedTable{{$index + 1 }}" >
+        </select>
+      </div>
       <input class="col m3" type="text" name="request{{$index}}" ng-model="param.request" placeholder="Search Terms...">
     </div>
   </div>
