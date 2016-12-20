@@ -148,9 +148,7 @@ angular
 
     const createSelect = values => {
       materialSelect() 
-
       $scope[`selectedTable${numberOfParams}`] = values
-      console.log('values', $scope[`selectedTable${numberOfParams}`]);
     }
 
 
@@ -160,6 +158,7 @@ angular
       materialSelect()
       let obj = {}
       $scope.searchParams.push(obj)
+      console.log('params', $scope.searchParams);
     }
 
     addParam()

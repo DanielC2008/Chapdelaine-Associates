@@ -3,8 +3,8 @@
 
 <div class="wrapper">  
   <div class="row">
-    <button class="col m2 offset-m4 btn-large loginRegister" ng-click="login()" autofocus="true">Login</button>
-    <button class="col m2 btn-large loginRegister" ng-click="register()">Register</button>
+    <button class="col m2 offset-m4 btn-large button" ng-click="login()" autofocus="true">Login</button>
+    <button class="col m2 btn-large button" ng-click="register()">Register</button>
   </div>
     
 
@@ -21,6 +21,6 @@
       <label for="confirm">Confirm Password:</label>
       <input type="password" name="confirm" ng-model="formData.confirm">
     </div>
-    <button class="col m2 offset-m5 btn loginRegister" ng-disabled=" loginOrRegister === 'register' && formData.confirm != formData.password">Submit</button>
+    <button class="col m2 offset-m5 btn button" ng-disabled=" loginOrRegister === 'register' && formData.confirm != formData.password">Submit</button>
   </form>
 </div>
