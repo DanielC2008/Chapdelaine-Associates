@@ -64,19 +64,19 @@ body {
 /********************************************/
 
 /*********buttons**********/
-.loginRegister {
+.button {
   color: black;
   background-color: #eceff1;
   margin: 15px 10px 0 10px;
 }
 
 /*********buttons**********/
-.loginRegister:hover {
+.button:hover {
   background-color: #bcaaa4;
   box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
 }
 
-.loginRegister:focus {
+.button:focus {
   background-color: #bcaaa4;
   box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
 }
