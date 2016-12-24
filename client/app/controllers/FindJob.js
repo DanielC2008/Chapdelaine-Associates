@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $http) {
+app.controller('FindJob', function($scope, $http) {  
   $scope.selectedTable
   //materialize stuff :(
   const materialSelect = () => {
@@ -54,8 +54,13 @@ app.controller('FindJob', function($scope, $http) {
 
   const addParam = () => {
     materialSelect()
-    let obj = {}
+    let obj = {
+      request: null,
+      tableName: null,
+      values: "*"
+    }
     $scope.searchParams.push(obj)
+    console.log('params', $scope.searchParams);
   }
 
   addParam()
