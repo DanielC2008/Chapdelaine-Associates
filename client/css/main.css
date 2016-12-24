@@ -61,6 +61,7 @@ body {
   background-color: white;
 }
 
+
 /********************************************/
 
 /*********buttons**********/
@@ -81,8 +82,25 @@ body {
   box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
 }
 
+.btn-floating {
+  color: black;
+  font-size: 2rem !important; 
+}
+
 .wrapper {
   margin-top: 25px;
   border: 15px solid #bcaaa4;
+}
+
+
+/*********select**********/
+.dropdown-content li span { 
+  color: black !important;
+
+}
+
+.dropdown-content li span:hoover {
+  background-color: #bcaaa4;
+  box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
 }
 

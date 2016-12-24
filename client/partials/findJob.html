@@ -3,27 +3,30 @@
 <div class="row">
   <div ng-repeat="param in searchParams">
     <div class="row">  
-      <select class="col m3" ng-change="getTableValues(param.tableName)" ng-model="param.tableName" ng-options="table as table disable when table.notAnOption for table in Tables"> 
-      </select>
-      <div class="col m3" >
-        <select ng-model="param.values" ng-options="values as values disable when values.notAnOption for values in selectedTable{{$index + 1}}" ng-init="param.tableName">
+      <div class="col m3 input-field">
+        <select ng-change="getTableValues(param.tableName)" ng-model="param.tableName" ng-options="table as table disable when table.notAnOption for table in Tables"> 
+          <option value="" label="-- Select option --" disabled selected="selected"> Search by...    
+          </option>
         </select>
       </div>
-      <div class=" col m6 input-field">
-      <input type="text" name="request{{$index}}" ng-model="param.request" placeholder="Search Terms...">
+      <div class="col m3 input-field" >
+        <select ng-model="param.values" ng-options="values as values for values in selectedTable{{$index + 1}}" ng-init="param.tableName">
+          <option value="" label="-- Select option --" selected="selected"> All Fields 
+          </option>
+        </select>
       </div>
-    </div>
+      <div class=" col m5 input-field">
+        <input type="text" name="request{{$index}}" ng-model="param.request" placeholder="Search Terms...">
+      </div> 
+      <div class="col m1" ng-click="createParam()">
+        <button class="btn-floating btn-large waves-effect waves-light button" type="">+</button>
+      </div>  
+    </div>  
   </div>
+</div>
 </div>  
 <div class="row"> 
-  <div ng-click="createParam()">
-    <button class="button btn " type="">Add Search Parameter</button>
-  </div>
-  <div ng-click="submit()">
+  <div class="col m4" ng-click="submit()">
     <button class="button btn " type="">Submit</button>
-    
   </div>
-
-
-  
 </div>
