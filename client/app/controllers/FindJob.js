@@ -60,7 +60,6 @@ app.controller('FindJob', function($scope, $http) {
       values: "*"
     }
     $scope.searchParams.push(obj)
-    console.log('params', $scope.searchParams);
   }
 
   addParam()
@@ -70,8 +69,16 @@ app.controller('FindJob', function($scope, $http) {
     addParam()
   }
 
+  const removeUnusedParams = () => {
+    let params = $scope.searchParams.filter( params => {
+      return params.tableName
+    })
+    return params
+  }
+
   $scope.submit = () => {
-    $http.post('/database', $scope.searchParams)
+    let params = removeUnusedParams()
+    $http.post('/database', params)
     .success( data => {
       $scope.recentJobs = data
     })
