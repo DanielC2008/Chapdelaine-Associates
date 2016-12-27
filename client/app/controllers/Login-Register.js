@@ -15,12 +15,12 @@ app.controller('Login-Register', function($scope, $http, $location, $rootScope) 
 
   const enterSite = () => {
       return $http.post(`/${$scope.loginOrRegister}` , {
-        userName: $scope.formData.userName,
+        user_name: $scope.formData.userName,
         password: $scope.formData.password
       })
       .success( data => {
-        if (data.userName) {
-          $rootScope.$user = data.userName
+        if (data.user_name) {
+          $rootScope.$user = data.user_name
           $location.path('/home')
         } else {
           alert(`${data.msg}`)

@@ -54,10 +54,10 @@ app.get('/home', (req, res) => {
 
 app.post('/register', ({body}, res) => {
 	knex('Users')
-    .returning('userName')
+    .returning('user_name')
 		.insert(body)
 		.then( data => {
-      res.send({userName: data[0]})
+      res.send({user_name: data[0]})
 		})
     .catch( err => {
       if (err.code === "EREQUEST") {
@@ -68,18 +68,19 @@ app.post('/register', ({body}, res) => {
     })
 })
 
-app.post('/login', ({body: {userName, password}}, res) => {
+app.post('/login', ({body: {user_name, password}}, res) => {
   knex('Users')
-    .where({ userName: userName})
+    .where({ user_name: user_name})
     .then( listedUsers => {
       let [user] = listedUsers
       if (password === user.password){
-        res.send({userName: user.userName})
+        res.send({user_name: user.user_name})
       } else {
-        res.send({msg: "User name and/or password incorrect."})
+        res.send({msg: "User Name and/or password incorrect."})
       }
     })
     .catch( err => {
+      console.log('err', err);
       res.send({msg: "An error has occured. Please try again."})
     })
 })
