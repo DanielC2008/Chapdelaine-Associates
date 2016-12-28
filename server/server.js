@@ -15,6 +15,10 @@ var knex = require('knex')({
   connection: DBCreds
 });
 
+//knex test
+knex('Properties').returning("*").then( data => {
+      console.log('data', data);
+    })
 
 //Home
 app.get('/home', (req, res) => {
