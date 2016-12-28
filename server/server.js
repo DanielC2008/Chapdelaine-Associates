@@ -16,7 +16,7 @@ var knex = require('knex')({
 });
 
 //knex test
-knex('Properties').returning("*").then( data => {
+knex('Clients').returning("*").then( data => {
       console.log('data', data);
     })
 
