@@ -35,8 +35,8 @@ body {
   color: black;
 }
 .input-field input {
-  border-bottom: 1px solid black }
- 
+  border-bottom: 1px solid #eceff1;
+  
 }
 /* label focus color */
 .input-field input[type=text]:focus + label {
@@ -60,6 +60,11 @@ body {
   box-shadow: 0 1px 0 0 #000;
   background-color: white;
 }
+
+.input-field input::-webkit-input-placeholder {
+  color: black !important;
+}
+ 
 
 
 /********************************************/
@@ -94,8 +99,12 @@ body {
 
 
 /*********select**********/
+.select-wrapper input.select-dropdown {
+  border-bottom: 1px solid #eceff1;
+}
+
 .dropdown-content li span { 
-  color: black !important;
+  color: black;
 
 }
 
@@ -103,4 +112,3 @@ body {
   background-color: #bcaaa4;
   box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
 }
-
