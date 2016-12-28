@@ -16,7 +16,7 @@ var knex = require('knex')({
 });
 
 //knex test
-knex('Clients').returning("*").then( data => {
+knex('Representatives').where('client_id', 7).then( data => {
       console.log('data', data);
     })
 

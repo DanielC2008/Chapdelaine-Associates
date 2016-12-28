@@ -1,11 +1,12 @@
 
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
-  // return knex('Clients').del()
-    // .then(function () {
+  return knex('Representatives').del()
+    .then(function () {
       return Promise.all([
         // Inserts seed entries
-        knex('Clients').insert({
+        knex('Representatives').insert({
+          'client_id': 7,  
           'first_name': 'test',
           'middle_name': 'test',
           'last_name': 'test',
@@ -21,7 +22,8 @@ exports.seed = function(knex, Promise) {
           'county': 'test',
           'notes': 'test'
         }),
-        knex('Clients').insert({
+        knex('Representatives').insert({
+          'client_id': 8,         
           'first_name': 'test2',
           'middle_name': 'test2',
           'last_name': 'test2',
@@ -38,5 +40,5 @@ exports.seed = function(knex, Promise) {
           'notes': 'test2'
         }),
       ]);
-    // });
+    });
 };
