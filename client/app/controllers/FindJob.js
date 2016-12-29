@@ -1,6 +1,23 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $http) {  
+app.controller('FindJob', function($scope, $http) {
+ //connected to database
+  $http.post('/findJob/getTableNames')
+  .success( tableNames => {
+    $scope.Tables = tableNames.map(table => {
+      return table.table_name
+    })
+  })
+  .error( err => {
+    alert(`${err}`)
+  })
+  // not connected to database
+  // $scope.Tables = [
+  //   'Clients',
+  //   'Properties',
+  //   'Representatives'
+  // ]
+
   $scope.selectedTable
   //materialize stuff :(
   const materialSelect = () => {
@@ -11,11 +28,6 @@ app.controller('FindJob', function($scope, $http) {
 
   let numberOfParams = 1
 
-  $scope.Tables = [
-    'Clients',
-    'Properties',
-    'Representatives'
-  ]
 
   const values = [
     {
@@ -34,7 +46,7 @@ app.controller('FindJob', function($scope, $http) {
     }
   ]
 
-  $scope.getTableValues = (selected) => {
+  $scope.getTableValues = selected => {
     materialSelect() 
     values.forEach( table => {
       if (Object.keys(table)[0] === selected) {

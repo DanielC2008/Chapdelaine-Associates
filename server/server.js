@@ -13,28 +13,7 @@ app.use(bodyParser.json())
 var knex = require('knex')({
   client: 'mssql',
   connection: DBCreds
-});
-
-//knex test
-// Types_Estimates, Types_Invoices many to many
-// knex('Types_Of_Work')
-//   .select('*')
-//   .join('Types_Invoices', 'Types_Of_Work.type_of_work_id', '=', 'Types_Invoices.type_of_work_id')
-//   .join('Invoices', 'Types_Invoices.invoice_id', '=', 'Invoices.invoice_id')
-//   .where('Invoices.invoice_id', 18)
-//   .then( data => {
-//       console.log('data', data);
-//   })
-// Types_Cards many to many
-// knex('Types_Of_Work')
-//   .select('*')
-//   .join('Types_Cards', 'Types_Of_Work.type_of_work_id', '=', 'Types_Cards.type_of_work_id')
-//   .join('Time_Cards', 'Types_Cards.time_card_id', '=', 'Time_Cards.time_card_id')
-//   .join('Invoices', 'Time_Cards.invoice_id', '=', 'Invoices.invoice_id')
-//   .where('Invoices.invoice_id', 15)
-//   .then( data => {
-//       console.log('data', data);
-//   })
+})
 
 //Home
 app.get('/home', (req, res) => {
@@ -103,6 +82,19 @@ app.post('/login', ({body: {user_name, password}}, res) => {
       console.log('err', err);
       res.send({msg: "An error has occured. Please try again."})
     })
+})
+
+app.post('/findJob/getTableNames', (req, res) => {
+  console.log('here');
+  knex('is_Table_Searchable')
+  .select('table_name')
+  .where({find_job: true})
+  .then( tableNames => {
+    res.send(tableNames)
+  })
+  .catch( err => {
+    console.log('err', err)
+  })
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
