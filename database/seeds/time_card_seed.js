@@ -1,22 +1,31 @@
+'use strict'
 
-exports.seed = function(knex, Promise) {
+const knex = require('knex')
+
+module.exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   // return knex('Time_Cards').del()
-    // .then(function () {
+  //   .then(function () {
       return Promise.all([
         // Inserts seed entries
         knex('Time_Cards').insert({
-          'invoice_id': 1,
+          'invoice_id': 15,
           'date': '2004-12-23',
           'travel_time': '12:24AM',
           'notes': 'something special'
         }),
         knex('Time_Cards').insert({
-         'invoice_id': 2,
+         'invoice_id': 15,
          'date': '2004-12-23',
          'travel_time': '12:24AM',
          'notes': 'something special'
         }),
+        knex('Time_Cards').insert({
+         'invoice_id': 15,
+         'date': '2004-12-23',
+         'travel_time': '12:24AM',
+         'notes': 'something special'
+        })
       ]);
     // });
 };

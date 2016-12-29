@@ -1,8 +1,11 @@
+'use strict'
 
-exports.seed = function(knex, Promise) {
+const knex = require('knex')
+
+module.exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   // return knex('Invoices').del()
-    // .then(function () {
+  //   .then(function () {
       return Promise.all([
         // Inserts seed entries
         knex('Invoices').insert({
