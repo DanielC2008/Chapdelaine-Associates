@@ -16,7 +16,16 @@ var knex = require('knex')({
 });
 
 //knex test
-knex('Time_Cards').returning("*").then( data => {
+knex('Types_Of_Work')
+  .select('*')
+  .join('Types_Cards', 'Types_Of_Work.type_of_work_id', '=', 'Types_Cards.type_of_work_id')
+  .join('Time_Cards', 'Types_Cards.time_card_id', '=', 'Time_Cards.time_card_id')
+  .join('Invoices', 'Time_Cards.invoice_id', '=', 'Invoices.invoice_id')
+  .where('Invoices.invoice_id', 15)
+  // .join('Time_Cards', 'invoice_id', '=', 'Invoices.invoice_id')
+  // .select('*').from('Types_Of_Work').where('Types_Of_Work.type_of_work_id', 'Types_Cards.type_of_work_id')
+  // .join('Types_Of_Work.type_of_work_id', 'Types_Cards.type_of_work_id')
+  .then( data => {
       console.log('data', data);
     })
 

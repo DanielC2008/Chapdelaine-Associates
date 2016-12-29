@@ -6,7 +6,7 @@ module.exports.up = (knex, Promise) => {
   return knex.schema.createTable('Types_Of_Work', table => {
       table.increments('type_of_work_id').unique()
       table.string('type_of_work')
-      table.decimal('rate')
+      table.integer('rate')
       table.boolean('hourly')
     }).createTable('Estimates', table => {
       table.increments('estimate_id').unique()
@@ -28,8 +28,7 @@ module.exports.up = (knex, Promise) => {
 }
 
 module.exports.down = (knex, Promise) => {
-  //in reverse order
-   knex.schema.dropTableIfExists('Time_Cards')
+  return knex.schema.dropTableIfExists('Time_Cards')
     .dropTableIfExists('Invoices')
     .dropTableIfExists('Estimates')
     .dropTableIfExists('Types_Of_Work')
