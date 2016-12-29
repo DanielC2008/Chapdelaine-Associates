@@ -13,10 +13,6 @@ app.use(bodyParser.json())
 var knex = require('knex')({
   client: 'mssql',
   connection: DBCreds
-});
-
-knex('is_Table_Searchable').select('*').then( data => {
-  console.log('data', data);
 })
 
 //Home
@@ -86,6 +82,19 @@ app.post('/login', ({body: {user_name, password}}, res) => {
       console.log('err', err);
       res.send({msg: "An error has occured. Please try again."})
     })
+})
+
+app.post('/findJob/getTableNames', (req, res) => {
+  console.log('here');
+  knex('is_Table_Searchable')
+  .select('table_name')
+  .where({find_job: true})
+  .then( tableNames => {
+    res.send(tableNames)
+  })
+  .catch( err => {
+    console.log('err', err)
+  })
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
