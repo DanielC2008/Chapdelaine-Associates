@@ -85,7 +85,6 @@ app.post('/login', ({body: {user_name, password}}, res) => {
 })
 
 app.post('/findJob/getTableNames', (req, res) => {
-  console.log('here');
   knex('is_Table_Searchable')
   .select('table_name')
   .where({find_job: true})
