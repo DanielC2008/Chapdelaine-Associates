@@ -14,9 +14,7 @@ var knex = require('knex')({
   client: 'mssql',
   connection: DBCreds
 })
-knex('Properties').select('*').then( data => {
-  console.log('date', data);
-})
+
 //Home
 app.get('/home', (req, res) => {
   res.send([

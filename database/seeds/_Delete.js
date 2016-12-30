@@ -5,6 +5,8 @@ const knex = require('knex')
 module.exports.seed = function(knex, Promise) {
     return Promise.all([
       //delete tables with refereces first
+      knex('Jobs_Clients').del(),
+      knex('Jobs_Properties').del(),
       knex('Jobs').whereNotIn('job_id', [7,8,9]).del(),
       knex('Types_Cards').del(),
       knex('Types_Invoices').del(),
