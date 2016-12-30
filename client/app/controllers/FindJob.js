@@ -2,21 +2,21 @@
 
 app.controller('FindJob', function($scope, $http) {
  //connected to database
-  $http.post('/findJob/getTableNames')
-  .success( tableNames => {
-    $scope.Tables = tableNames.map(table => {
-      return table.table_name
-    })
-  })
-  .error( err => {
-    alert(`${err}`)
-  })
+  // $http.post('/findJob/getTableNames')
+  // .success( tableNames => {
+  //   $scope.Tables = tableNames.map(table => {
+  //     return table.table_name
+  //   })
+  // })
+  // .error( err => {
+  //   alert(`${err}`)
+  // })
   // not connected to database
-  // $scope.Tables = [
-  //   'Clients',
-  //   'Properties',
-  //   'Representatives'
-  // ]
+  $scope.Tables = [
+    'Clients',
+    'Properties',
+    'Representatives'
+  ]
 
   $scope.selectedTable
   //materialize stuff :(

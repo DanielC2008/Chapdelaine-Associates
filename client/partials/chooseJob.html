@@ -1,0 +1,15 @@
+<h1>Choose Job</h1>
+
+<div ng-repeat="job in Jobs"> 
+  <div class="row">
+    <h3 class="col s4">
+    {{job.client_name}}
+    </h3>
+    <h3  class="col s2" >
+    {{job.job_number}}
+    </h3>
+    <button class="button btn col s2" ng-click="getJob(job.job_number)">
+    Get Job!
+    </button>
+  </div>
+</div>
