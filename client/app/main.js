@@ -32,8 +32,12 @@ const app = angular.module('Database', ['ngRoute'])
         templateUrl: 'partials/getData.html'
       })
       .when('/jobs', {
-        controller: 'Jobs',
-        templateUrl: 'partials/jobs.html'
+        controller: 'ChooseJob',
+        templateUrl: 'partials/chooseJob.html'
+      })
+      .when('/jobs/:job_id', {
+        controller: 'Job',
+        templateUrl: 'partials/job.html'
       })
 			.otherwise('/login')
 	)
