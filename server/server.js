@@ -97,7 +97,6 @@ app.post('/findJob/getTableNames', (req, res) => {
 })
 
 app.post('/getJob', ({body}, res) => {
-  console.log('jobNumber', body);
   //database call to get everything related to this job
   res.send({job:body})
 })
