@@ -20,3 +20,11 @@
 //   .then( data => {
 //       console.log('data', data);
 //   })
+
+
+/* 
+let now = new Date()
+
+knex('Jobs').update({'last_accessed': now }).returning('*').then( data => {
+  console.log('data', data);
+})*/
