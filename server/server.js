@@ -69,7 +69,7 @@ app.post('/register', ({body}, res) => {
 
 app.post('/login', ({body: {user_name, password}}, res) => {
   knex('Users')
-    .where({ user_name: user_name})
+    .where({user_name})
     .then( listedUsers => {
       let [user] = listedUsers
       if (password === user.password){
@@ -94,6 +94,12 @@ app.post('/findJob/getTableNames', (req, res) => {
   .catch( err => {
     console.log('err', err)
   })
+})
+
+app.post('/getJob', ({body}, res) => {
+  console.log('jobNumber', body);
+  //database call to get everything related to this job
+  res.send({job:body})
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
