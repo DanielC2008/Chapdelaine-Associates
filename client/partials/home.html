@@ -1,5 +1,12 @@
 <div class="row">
-  <h1 class="center-align">Recent Jobs</h1>
+  <div ng-controller="ActivePending">
+    <div ng-include="'partials/homePartials/activePending.html'">
+    
+    </div>  
+  </div>    
+</div>
+
+  <!-- <h1 class="center-align">Recent Jobs</h1>
 
   <div class="recentJobDiv" ng-repeat="job in recentJobs">
     <a class="btn recentJobs waves-effect waves-light col s3 offset-s1" type="">
@@ -14,4 +21,4 @@
       </div>
     </a>
   </div>
-</div>
+</div> -->
