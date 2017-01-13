@@ -1,7 +1,21 @@
-<div class="row">
-  <h1 class="center-align">Recent Jobs</h1>
+<div ng-controller="Home as HC">
+  
+  
+  
+  <div ng-controller="FindJob as FJ">
+    <div ng-include="'./partials/findJob.html'"></div>
+  </div>
 
-  <div class="recentJobDiv" ng-repeat="job in recentJobs">
+
+
+</div>
+
+
+
+
+
+
+ <!--  <div class="recentJobDiv" ng-repeat="job in recentJobs">
     <a class="btn recentJobs waves-effect waves-light col s3 offset-s1" type="">
       <div id="lastName">
         {{job.lastName}}
@@ -14,4 +28,4 @@
       </div>
     </a>
   </div>
-</div>
+</div> -->

@@ -1,15 +1,15 @@
-<h1>Search Jobs...</h1>
+<!-- <h1>Search Jobs...</h1> -->
 
 <div class="row">
-  <div ng-repeat="param in searchParams">
+  <div ng-repeat="param in FJ.searchParams" ng-init="FJ.material()">
     <div class="col s3 input-field">
-      <select ng-change="getTableValues(param.tableName)" ng-model="param.tableName" ng-options="table as table disable when table.notAnOption for table in Tables"> 
+      <select ng-change="FJ.getTableValues(param.tableName)" ng-model="param.tableName" ng-options="table as table disable when table.notAnOption for table in FJ.Tables"> 
         <option value="" label="-- Select option --" disabled selected="selected"> Search by...    
         </option>
       </select>
     </div>
     <div class="col s3 input-field" >
-      <select ng-model="param.values" ng-options="values as values for values in selectedTable{{$index + 1}}" ng-init="param.tableName">
+      <select ng-model="param.values" ng-options="values as values for values in FJ.selectedTable{{$index + 1}}" ng-init="param.tableName">
         <option value="" label="-- Select option --" selected="selected"> All Fields 
         </option>
       </select>
@@ -18,13 +18,13 @@
       <input type="text" name="request{{$index}}" ng-model="param.request" placeholder="Search Terms...">
     </div> 
   </div>  
-  <div class="col s1" ng-click="createParam()">
+  <div class="col s1" ng-click="FJ.createParam()">
     <button class="btn-floating btn-large waves-effect waves-light button" type="">+</button>
   </div>  
 </div>
 </div>  
 <div class="row"> 
-  <div class="col s4" ng-click="submit()">
+  <div class="col s4" ng-click="FJ.submit()">
     <button class="button btn " type="">Submit</button>
   </div>
 </div>
