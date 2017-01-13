@@ -10,10 +10,12 @@ app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-var knex = require('knex')({
+let knex = require('knex')({
   client: 'mssql',
   connection: DBCreds
 })
+
+knex.select().from("knex_migrations").then( results => console.log(results))
 
 //Home
 app.get('/home', (req, res) => {
