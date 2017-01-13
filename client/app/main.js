@@ -16,7 +16,7 @@ const app = angular.module('Database', ['ngRoute'])
         templateUrl: 'partials/logout.html'
 			})
 			.when('/home', {
-				controller: 'Home',
+				controller: 'Home as HC',
 				templateUrl: 'partials/home.html'
 			})
 			.when('/newJob', {

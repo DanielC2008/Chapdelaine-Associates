@@ -1,1 +1,10 @@
-<h1>{{LJ.title}}</h1>
+<h5 class="center align">{{LJ.title}}</h1>
+
+<div ng-repeat="job in HC.recentJobs">
+  <div class="row">
+    <div>{{job.firstName}} {{job.lastName}}</div>
+  </div>
+  <div class="row">
+    <div>Job Number: {{job.number}}</div>
+  </div>
+</div>
