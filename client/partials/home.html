@@ -6,12 +6,18 @@
   <div class="row">  
     <div class="col s2">
       <div ng-controller="ListJob as LJ">
-        <div ng-include="'./partials/listJob.html'"></div>
+        <h5 class="center align">Active Jobs</h5>
+        <div ng-repeat="job in HC.activeJobs">
+          <div ng-include="'./partials/listJob.html'"></div>
+        </div>  
       </div>
     </div>
     <div class="col s2">
       <div ng-controller="ListJob as LJ">
+      <h5 class="center align">Pending Jobs</h5>
+      <div ng-repeat="job in HC.pendingJobs">
         <div ng-include="'./partials/listJob.html'"></div>
+      </div>
       </div>
     </div>
     <div class="col s8">
@@ -20,22 +26,3 @@
       </div>
     </div>
   </div> 
-
-
-
-
-
- <!--  <div class="recentJobDiv" ng-repeat="job in recentJobs">
-    <a class="btn recentJobs waves-effect waves-light col s3 offset-s1" type="">
-      <div id="lastName">
-        {{job.lastName}}
-      </div>
-      <div>
-        {{job.firstName}}
-      </div>
-      <div>
-        Job Number: {{job.number}}
-      </div>
-    </a>
-  </div>
-</div> -->

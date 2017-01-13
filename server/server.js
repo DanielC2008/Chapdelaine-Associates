@@ -16,7 +16,7 @@ var knex = require('knex')({
 })
 
 //Home
-app.get('/home', (req, res) => {
+app.get('/activeJobs', (req, res) => {
   res.send([
     {
       firstName: 'Daniel',
@@ -32,7 +32,12 @@ app.get('/home', (req, res) => {
       firstName: 'Daniel',
       lastName: 'youuuuuu',
       number: '45645'
-    },
+    }
+  ])
+})
+
+app.get('/pendingJobs', (req, res) => {
+  res.send([
     {
       firstName: 'Daniel',
       lastName: 'Santafeeee',

@@ -1,10 +1,14 @@
-<h5 class="center align">{{LJ.title}}</h1>
-
-<div ng-repeat="job in HC.recentJobs">
-  <div class="row">
-    <div>{{job.firstName}} {{job.lastName}}</div>
-  </div>
-  <div class="row">
-    <div>Job Number: {{job.number}}</div>
+ <div class="recentJobDiv">
+    <a class="btn recentJobs waves-effect waves-light col s12">
+      <div id="lastName">
+        {{job.lastName}}
+      </div>
+      <div>
+        {{job.firstName}}
+      </div>
+      <div>
+        Job: {{job.number}}
+      </div>
+    </a>
   </div>
 </div>
