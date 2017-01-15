@@ -1,23 +1,22 @@
-  <div class="row">
-    <h4> {{HC.title}} </h4>
-  </div>
-
-
   <div class="row">  
     <div class="col s2">
       <div ng-controller="ListJob as LJ">
         <h5 class="center align">Active Jobs</h5>
-        <div ng-repeat="job in HC.activeJobs">
-          <div ng-include="'./partials/listJob.html'"></div>
-        </div>  
+        <div class="recentJobDiv">
+          <div ng-repeat="job in HC.activeJobs">
+            <div ng-include="'./partials/listJob.html'"></div>
+          </div>  
+        </div>
       </div>
     </div>
     <div class="col s2">
       <div ng-controller="ListJob as LJ">
       <h5 class="center align">Pending Jobs</h5>
-      <div ng-repeat="job in HC.pendingJobs">
-        <div ng-include="'./partials/listJob.html'"></div>
-      </div>
+      <div class="recentJobDiv">
+        <div ng-repeat="job in HC.pendingJobs">
+          <div ng-include="'./partials/listJob.html'"></div>
+        </div>
+      </div>  
       </div>
     </div>
     <div class="col s8">

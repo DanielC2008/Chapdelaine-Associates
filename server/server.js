@@ -32,12 +32,92 @@ app.get('/activeJobs', (req, res) => {
       firstName: 'Daniel',
       lastName: 'youuuuuu',
       number: '45645'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'Chapdelaine',
+      number: '37438'
+    },
+    {
+      firstName: 'wruiwyr',
+      lastName: 'something',
+      number: '23414'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'youuuuuu',
+      number: '45645'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'Chapdelaine',
+      number: '37438'
+    },
+    {
+      firstName: 'wruiwyr',
+      lastName: 'something',
+      number: '23414'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'youuuuuu',
+      number: '45645'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'youuuuuu',
+      number: '45645'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'Chapdelaine',
+      number: '37438'
+    },
+    {
+      firstName: 'wruiwyr',
+      lastName: 'something',
+      number: '23414'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'youuuuuu',
+      number: '45645'
     }
   ])
 })
 
 app.get('/pendingJobs', (req, res) => {
   res.send([
+    {
+      firstName: 'Daniel',
+      lastName: 'Santafeeee',
+      number: '23547'
+    },
+    {
+      firstName: 'you',
+      lastName: 'creeeper',
+      number: '77353'
+    },
+    {
+      firstName: 'dome',
+      lastName: 'domedomedome',
+      number: '57846'
+    },
+    {
+      firstName: 'Daniel',
+      lastName: 'Santafeeee',
+      number: '23547'
+    },
+    {
+      firstName: 'you',
+      lastName: 'creeeper',
+      number: '77353'
+    },
+    {
+      firstName: 'dome',
+      lastName: 'domedomedome',
+      number: '57846'
+    },
     {
       firstName: 'Daniel',
       lastName: 'Santafeeee',
