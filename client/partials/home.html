@@ -3,7 +3,7 @@
       <div ng-controller="ListJob as LJ">
         <h5 class="center align">Active Jobs</h5>
         <div class="recentJobDiv">
-          <div ng-repeat="job in HC.activeJobs">
+          <div ng-repeat="job in activeJobs">
             <div ng-include="'./partials/listJob.html'"></div>
           </div>  
         </div>
@@ -13,7 +13,7 @@
       <div ng-controller="ListJob as LJ">
       <h5 class="center align">Pending Jobs</h5>
       <div class="recentJobDiv">
-        <div ng-repeat="job in HC.pendingJobs">
+        <div ng-repeat="job in pendingJobs">
           <div ng-include="'./partials/listJob.html'"></div>
         </div>
       </div>  
@@ -22,6 +22,9 @@
     <div class="col s8">
       <div ng-controller="FindJob as FJ">
         <div ng-include="'./partials/findJob.html'"></div>
+      </div>
+      <div ng-controller="EstimateJob as EJ">
+        <div ng-include="'./partials/estimateJob.html'"></div>
       </div>
     </div>
   </div> 

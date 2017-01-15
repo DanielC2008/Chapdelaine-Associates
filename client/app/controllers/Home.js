@@ -1,13 +1,16 @@
 'use strict'
 
 app.controller('Home', function($scope, JobFactory) {
-  let HomeScope = this
 
-  HomeScope.title = "home"
+  $scope.material = () => {
+    $(document).ready(function() {  
+      $('select').material_select();
+    })  
+  }
 
     JobFactory.getActiveJobs()
       .success( data => {
-        HomeScope.activeJobs = data
+        $scope.activeJobs = data
       })
       .error( () => {
         console.log('error')
@@ -15,10 +18,10 @@ app.controller('Home', function($scope, JobFactory) {
 
     JobFactory.getPendingJobs()    
       .success( data => {
-        HomeScope.pendingJobs = data
+        $scope.pendingJobs = data
       })
       .error( () => {
         console.log('error')
       })
-      
+
   })

@@ -2,7 +2,7 @@
 
 app.controller('FindJob', function($scope, $http) {
   let FJScope = this
-
+  let HCScope = $scope.$parent
  //connected to database
   // $http.post('/findJob/getTableNames')
   // .success( tableNames => {
@@ -23,11 +23,7 @@ app.controller('FindJob', function($scope, $http) {
   FJScope.selectedTable
 
   //materialize stuff :(
-  FJScope.material = () => {
-    $(document).ready(function() {  
-      $('select').material_select();
-    })  
-  }
+
 
   let numberOfParams = 1
 
@@ -49,7 +45,7 @@ app.controller('FindJob', function($scope, $http) {
   ]
 
   FJScope.getTableValues = selected => {
-    FJScope.material() 
+    HCScope.material() 
     values.forEach( table => {
       if (Object.keys(table)[0] === selected) {
         let values = Object.values(table)[0]

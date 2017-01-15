@@ -1,7 +1,7 @@
 <h5>Search Jobs...</h5>
 
 <div class="row">
-  <div ng-repeat="param in FJ.searchParams" ng-init="FJ.material()">
+  <div ng-repeat="param in FJ.searchParams" ng-init="material()">
     <div class="col s3 input-field">
       <select ng-change="FJ.getTableValues(param.tableName)" ng-model="param.tableName" ng-options="table as table disable when table.notAnOption for table in FJ.Tables"> 
         <option value="" label="-- Select option --" disabled selected="selected"> Search by...    
