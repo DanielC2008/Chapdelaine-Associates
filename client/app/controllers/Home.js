@@ -1,23 +1,24 @@
 'use strict'
 
-app.controller('Home', function($scope, $http, $rootScope) {
+app.controller('Home', function($scope, JobFactory) {
   let HomeScope = this
 
   HomeScope.title = "home"
 
-    $http.get('/activeJobs')
-    .success( data => {
-      HomeScope.activeJobs = data
-    })
-    .error( () => {
-      console.log('error')
-    })
+    JobFactory.getActiveJobs()
+      .success( data => {
+        HomeScope.activeJobs = data
+      })
+      .error( () => {
+        console.log('error')
+      })
 
-    $http.get('/pendingJobs')
-    .success( data => {
-      HomeScope.pendingJobs = data
-    })
-    .error( () => {
-      console.log('error')
-    })
+    JobFactory.getPendingJobs()    
+      .success( data => {
+        HomeScope.pendingJobs = data
+      })
+      .error( () => {
+        console.log('error')
+      })
+      
   })

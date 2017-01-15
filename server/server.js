@@ -183,7 +183,7 @@ app.post('/findJob/getTableNames', (req, res) => {
 
 app.post('/getJob', ({body}, res) => {
   //database call to get everything related to this job
-  res.send({job:body})
+  res.send(body)
 })
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
