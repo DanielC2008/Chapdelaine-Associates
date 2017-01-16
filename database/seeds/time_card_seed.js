@@ -9,19 +9,19 @@ module.exports.seed = function(knex, Promise) {
       return Promise.all([
         // Inserts seed entries
         knex('Time_Cards').insert({
-          'invoice_id': 15,
+          'invoice_id': 18,
           'date': '2004-12-23',
           'travel_time': '12:24AM',
           'notes': 'something special'
         }),
         knex('Time_Cards').insert({
-         'invoice_id': 15,
+         'invoice_id': 18,
          'date': '2004-12-23',
          'travel_time': '12:24AM',
          'notes': 'something special'
         }),
         knex('Time_Cards').insert({
-         'invoice_id': 15,
+         'invoice_id': 18,
          'date': '2004-12-23',
          'travel_time': '12:24AM',
          'notes': 'something special'

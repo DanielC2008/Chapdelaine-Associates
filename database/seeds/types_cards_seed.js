@@ -10,15 +10,15 @@ module.exports.seed = function(knex, Promise) {
         // Inserts seed entries
         knex('Types_Cards').insert({
           'type_of_work_id': 24,
-          'time_card_id': 18
+          'time_card_id': 75
         }),
         knex('Types_Cards').insert({
           'type_of_work_id': 25,
-          'time_card_id': 19
+          'time_card_id': 76
         }),
         knex('Types_Cards').insert({
           'type_of_work_id': 26,
-          'time_card_id': 20
+          'time_card_id': 77
         })
       ])  
     // });

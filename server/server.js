@@ -15,7 +15,6 @@ let knex = require('knex')({
   connection: DBCreds
 })
 
-
 //Home
 app.get('/activeJobs', (req, res) => {
   res.send([
