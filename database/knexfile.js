@@ -7,7 +7,11 @@ module.exports = {
 
   development: {
     client: 'mssql',
-    connection: DBCreds
+    connection: DBCreds,
+    pool: {
+      min: 0,
+      max: 10
+    }
   },
 
   staging: {

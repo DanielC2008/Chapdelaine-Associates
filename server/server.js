@@ -15,7 +15,7 @@ let knex = require('knex')({
   connection: DBCreds
 })
 
-knex.select().from("knex_migrations").then( results => console.log(results))
+knex.delete().from("knex_migrations_lock").then( results => console.log(results))
 
 //Home
 app.get('/home', (req, res) => {

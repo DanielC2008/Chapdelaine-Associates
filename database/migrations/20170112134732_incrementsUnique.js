@@ -15,13 +15,13 @@ module.exports.up = (knex, Promise) => {
 }
 
 module.exports.down = (knex, Promise) => {
-  return knex.schema.table('Users', table => {
+  return knex.schema.alterTable('Users', table => {
     table.dropUnique("user_id")
-  }).table('Employees', table => {
+  }).alterTable('Employees', table => {
     table.dropUnique("employee_id")
-  }).table('Properties', table => {
+  }).alterTable('Properties', table => {
     table.dropUnique("property_id")
-  }).table('Jobs', table => {
+  }).alterTable('Jobs', table => {
     table.dropUnique("job_id")
   })
 }
