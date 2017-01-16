@@ -22,9 +22,6 @@ app.controller('FindJob', function($scope, $http) {
 
   FJScope.selectedTable
 
-  //materialize stuff :(
-
-
   let numberOfParams = 1
 
   const values = [

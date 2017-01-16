@@ -136,8 +136,55 @@ app.get('/pendingJobs', (req, res) => {
   ])
 })
 
+//this will go to database
+app.get('/typesOfWork', (req, res) => {
+  res.send([
+    'Field',
+    'Office',
+    '1 acre',
+    '5 acre',
+    'Replace Corner'
+  ])
+})  
+
+//this will go to database
+app.post('/getTypeOfWork', ({body:{typeOfWork}}, res) => {
+  let allTypes = [
+    {
+      type_of_work: "Field",
+      rate: 10,
+      hourly: true
+    },
+    {
+      type_of_work: "Office",
+      rate: 20,
+      hourly: true
+    },
+    {
+      type_of_work: "1 acre",
+      rate: 450,
+      hourly: false
+    },
+    {
+      type_of_work: "5 acre",
+      rate: 650,
+      hourly: false
+    },
+    {
+      type_of_work: "Replace Corner",
+      rate: 50,
+      hourly: false
+    }
+  ]
+   allTypes.forEach( obj => {
+      if (obj.type_of_work === typeOfWork) {
+        res.send(obj)
+      }
+    })
+})  
+
 app.post('/register', ({body}, res) => {
-	knex('Users')
+  knex('Users')
     .returning('user_name')
 		.insert(body)
 		.then( data => {

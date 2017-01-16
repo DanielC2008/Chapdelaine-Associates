@@ -1,62 +1,44 @@
 'use strict'
 
-app.controller('EstimateJob', function($scope) {
+app.controller('EstimateJob', function($scope, $http) {
   let EJScope = this
+  
+  $http.get('/typesOfWork')
+  .success( data => {
+      EJScope.typesOfWork = data
+    })
+    .error( () => {
+      console.log('error')
+    })
+
+  EJScope.type_of_work = null
+  // let numberOfSelections = 1
 
   EJScope.estimate = []
 
-  const addSelectedType = () => {
-    let obj = {
-      type_of_work: null,
-      rate: null,
-      hourly: null
-    }
-    EJScope.estimate.push(obj)
+  // const addSelectedType = () => {
+  //   let obj = {
+  //     type_of_work: null,
+  //     rate: null,
+  //     hourly: null
+  //   }
+  //   EJScope.estimate.push(obj)
+  // }
+
+  EJScope.getSelectedType = typeOfWork => {
+    //http call to database to get specific type of work
+    $http.post('/getTypeOfWork', {typeOfWork})
+      .success( data => {
+        EJScope.estimate.push(data)
+        EJScope.type_of_work = null
+      })
+      .error( () => {
+        console.log('error')
+      })
   }
 
-  addSelectedType()
+  EJScope.getTotal = () => {
 
-//will come from the database
-  EJScope.something = [
-    {
-      type_of_work: "Field",
-      rate: 10,
-      hourly: true
-    },
-    {
-      type_of_work: "Office",
-      rate: 20,
-      hourly: true
-    },
-    {
-      type_of_work: "1 acre",
-      rate: 450,
-      hourly: false
-    },
-    {
-      type_of_work: "5 acre",
-      rate: 650,
-      hourly: false
-    },
-    {
-      type_of_work: "Replace Corner",
-      rate: 50,
-      hourly: false
-    },
-  ]
-
-  let numberOfSelections = 1
-
-  EJScope.typesOfWork = [
-    'Field',
-    'Office',
-    '1 acre',
-    '5 acre',
-    'Replace Corner'
-  ]
-
-
-
-
+  }
 
 })
