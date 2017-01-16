@@ -3,16 +3,26 @@ body {
   background-color: #B1725E;
 }
 
+.container {
+  margin: 0 5% !important;
+  width: 90%;
+}
+
 
 /*HOME*/
 /*********SASS for all buttons**********/
+.recentJobDiv{
+  overflow-y: scroll;
+  height: 75vh;
+}
 
 .recentJobs {
-  margin: 0 4% 50px 4% !important;
-  height: 80px !important;
-  line-height: 1.7rem;
+  margin: 0 4% 5px 4% ;
+  height: auto;
+  line-height: 1.3rem;
   color: black;
   background-color: #eceff1;
+  word-wrap: break-word;
 }
 
 .recentJobs:hover {

@@ -1,0 +1,30 @@
+<h5>Estimate Job</h5>
+
+  <div class="row">
+    <div class="col s12 input-field" ng-init="material()">
+      <select ng-change="EJ.getSelectedType(EJ.type_of_work)" ng-model="EJ.type_of_work" ng-options="type as type disable when type.notAnOption for type in EJ.typesOfWork"> 
+        <option value="" label="-- Select option --" disabled selected="selected"> Select Type of Work...    
+        </option>
+      </select>
+    </div>
+  </div>
+    <div ng-repeat="selectedType in EJ.estimate track by $index"  ng-if="EJ.estimate" ng-init="material()" >
+      <div class="row">
+        <div class="col s3 input-field" >{{selectedType.type_of_work}}</div>
+        <div class="col s3 input-field">
+          <input ng-model="selectedType.rate">
+        </div>
+        <div class="col s3 input-field">
+          <input  
+            ng-model="selectedType.estimated_hours" 
+            ng-keyup="$event.keyCode == 13 && EJ.getTotal()"
+            ng-if="selectedType.hourly">
+        </div>
+      </div>  
+    </div>
+  <div class="row">
+    <h5 class="col s3 offset-s9 input-field" ng-if="EJ.total">Total: {{EJ.total}}</h5>        
+  </div>  
+<!--     <div class="col s5 input-field" ng-keyup="$event.keyCode == 13 && FJ.submit() ".">
+      <input type="text" name="request{{$index}}" ng-model="param.request" placeholder="Search Terms...">
+    </div> --> 

@@ -1,11 +1,26 @@
 'use strict'
 
-app.controller('Home', function($scope, $http, $rootScope) {
-    // $http.get('/home')
-    // .success( data => {
-    //   $scope.recentJobs = data
-    // })
-    // .error( () => {
-    //   console.log('error')
-    // })
+app.controller('Home', function($scope, JobFactory) {
+
+  $scope.material = () => {
+    $(document).ready(function() {  
+      $('select').material_select();
+    })  
+  }
+
+    JobFactory.getActiveJobs()
+      .success( data => {
+        $scope.activeJobs = data
+      })
+      .error( () => {
+        console.log('error')
+      })
+
+    JobFactory.getPendingJobs()    
+      .success( data => {
+        $scope.pendingJobs = data
+      })
+      .error( () => {
+        console.log('error')
+      })
   })

@@ -1,6 +1,6 @@
 "use strict"
 
-  app.controller('ChooseJob', function($scope, $location) {
+  app.controller('ChooseJob', function($scope, $location, JobFactory) {
 
     $scope.Jobs = [
       {
@@ -17,9 +17,8 @@
       },
     ]
 
-    $scope.getJob = jobNumber => {
-      $location.path(`/jobs/:${jobNumber}`)
-    }
+
+    $scope.getJob = jobNumber => JobFactory.goToJobPage(jobNumber)
 
 
   })
