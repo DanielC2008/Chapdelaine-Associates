@@ -15,6 +15,8 @@ let knex = require('knex')({
   connection: DBCreds
 })
 
+knex('Invoices').whereNotIn('invoice_id', [18, 19, 20]).del().then( data => console.log(data))
+
 //Home
 app.get('/activeJobs', (req, res) => {
   res.send([
