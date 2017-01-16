@@ -23,5 +23,4 @@ app.controller('Home', function($scope, JobFactory) {
       .error( () => {
         console.log('error')
       })
-
   })

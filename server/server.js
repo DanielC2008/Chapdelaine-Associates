@@ -10,10 +10,11 @@ app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-var knex = require('knex')({
+let knex = require('knex')({
   client: 'mssql',
   connection: DBCreds
 })
+
 
 //Home
 app.get('/activeJobs', (req, res) => {
