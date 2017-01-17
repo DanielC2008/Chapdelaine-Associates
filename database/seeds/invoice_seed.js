@@ -14,6 +14,9 @@ module.exports.seed = function(knex, Promise) {
         knex('Invoices').insert({
          'invoice_number': 1235
         }),
+        knex('Invoices').insert({
+         'invoice_number': 1236
+        })
       ]);
     // });
 };

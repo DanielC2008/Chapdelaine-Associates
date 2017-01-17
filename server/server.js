@@ -6,6 +6,11 @@ const app = express()
 const PORT = process.env.PORT || 3000
 const DBCreds = require('../DBCreds.js')
 
+let fs = require('fs');
+
+
+ 
+
 app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
@@ -14,6 +19,7 @@ let knex = require('knex')({
   client: 'mssql',
   connection: DBCreds
 })
+
 
 
 //Home
@@ -233,5 +239,29 @@ app.post('/getJob', ({body}, res) => {
   //database call to get everything related to this job
   res.send(body)
 })
+
+//for attachments
+let sendStreamToDatabase = (file) =>{
+  let stream = fs.createReadStream(file);
+  let bufferArray = []
+
+  stream.on('data', chunk => {
+    bufferArray.push(chunk)
+  });
+
+  stream.on('end', () => {
+    let completeBuffer = Buffer.concat(bufferArray)
+    knex('Attachments')
+    .insert({
+      attachment_name: 'test700MBs',
+      data: completeBuffer 
+    })
+    .then( data => 
+    console.log("done", completeBuffer )
+    )
+  })
+// sendStreamToDatabase('./database/attachmentTest/en.txt')
+// knex('Attachments').then(data => console.log(data))
+}
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
