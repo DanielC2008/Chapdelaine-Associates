@@ -235,7 +235,7 @@ app.post('/getJob', ({body}, res) => {
   res.send(body)
 })
 
-// Attachments.streamToDatabase('./database/attachmentTest/en.txt', 7)
+Attachments.streamFromDatabase('en')
 // knex('Attachments').then(data => console.log(data))
 
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

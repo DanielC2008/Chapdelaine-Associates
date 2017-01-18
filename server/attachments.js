@@ -1,6 +1,6 @@
 'use strict'
 
-const { createReadStream } = require('fs')
+const { createReadStream, createWriteStream } = require('fs')
 const config = require('../database/knexfile').development
 const knex = require('knex')(config)
 
@@ -19,6 +19,7 @@ const getNameAndExtension = fullFile => {
 
 
 module.exports = {
+
   streamToDatabase: (fullFile, job_id) => {
     let { file_name, extension } = getNameAndExtension(fullFile)
     let bufferArray = []
@@ -41,5 +42,21 @@ module.exports = {
       console.log("done")
       )
     })
+
+    stream.on('error', err => console.log('error', err))
+  },
+
+  streamFromDatabase: fileToGet => {
+    knex('Attachments')
+    .where('file_name', fileToGet)
+    .then( data => {
+      let {job_id, file_name, extension, file} = data[0]
+      let writeFile = createWriteStream(`C:\\Users\\Joseph\\Chapdelaine-Associates\\Chapdelaine-Associates\\database\\attachmentTest\\NEW${file_name}${extension}`, {autoClose: true})
+      writeFile.write(file)
+      writeFile.on('error', err => console.log('error', err))
+    })
   }
+
+
+
 }
