@@ -3,22 +3,22 @@
 app.controller('FindJob', function($scope, $http) {
   let FJScope = this
   let HCScope = $scope.$parent
- //connected to database
-  // $http.post('/findJob/getTableNames')
-  // .success( tableNames => {
-  //   $scope.Tables = tableNames.map(table => {
-  //     return table.table_name
-  //   })
-  // })
-  // .error( err => {
-  //   alert(`${err}`)
-  // })
+ // connected to database
+  $http.post('/findJob/getTableNames')
+  .success( tableNames => {
+    FJScope.Tables = tableNames.map( table => {
+      return table.table_name
+    })
+  })
+  .error( err => {
+    alert(`${err}`)
+  })
   // not connected to database
-  FJScope.Tables = [
-    'Clients',
-    'Properties',
-    'Representatives'
-  ]
+  // FJScope.Tables = [
+  //   'Clients',
+  //   'Properties',
+  //   'Representatives'
+  // ]
 
   FJScope.selectedTable
 
