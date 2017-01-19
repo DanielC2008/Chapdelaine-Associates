@@ -1,1 +1,32 @@
-<h1>{{title}}</h1>
+
+<div>
+  <nav class="brown darken-1">
+    <ul>
+      <li><a>Job Info</a></li>
+      <li><a>Attachments</a></li>
+      <li><a>Estimate</a></li>
+      <li><a>Invoice</a></li> <!-- make this modal????? -->
+    </ul>
+  </nav>
+  <div>{{title}}</div>
+  <div ng-controller="JobMain as JM">
+    <div ng-include="'./partials/jobMain.html'">
+
+   </div>
+  </div>
+  <div ng-controller="JobAttachment as JA">
+    <div ng-include="'./partials/jobAttachment.html'">
+
+   </div>
+  </div>
+  <div ng-controller="JobInvoice as JI">
+    <div ng-include="'./partials/jobInvoice.html'">
+
+   </div>
+  </div>
+  <div ng-controller="JobEstimate as JE">
+    <div ng-include="'./partials/jobEstimate.html'">
+
+   </div>
+  </div>
+</div>
