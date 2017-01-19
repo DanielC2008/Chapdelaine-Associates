@@ -2,29 +2,29 @@
 <div>
   <nav class="brown darken-1">
     <ul>
-      <li><a>Job Info</a></li>
-      <li><a>Attachments</a></li>
-      <li><a>Estimate</a></li>
-      <li><a>Invoice</a></li> <!-- make this modal????? -->
+      <li><a ng-click=" showTab = 'JobMain' ">Job Info</a></li>
+      <li><a ng-click=" showTab = 'JobAttachment' ">Attachments</a></li>
+      <li><a ng-click=" showTab = 'JobEstimate' ">Estimate</a></li>
+      <li><a ng-click=" showTab = 'JobInvoice' ">Invoice</a></li> <!-- make this modal????? -->
     </ul>
   </nav>
   <div>{{title}}</div>
-  <div ng-controller="JobMain as JM">
+  <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">
     <div ng-include="'./partials/jobMain.html'">
 
    </div>
   </div>
-  <div ng-controller="JobAttachment as JA">
+  <div ng-if="showTab === 'JobAttachment'" ng-controller="JobAttachment as JA">
     <div ng-include="'./partials/jobAttachment.html'">
 
    </div>
   </div>
-  <div ng-controller="JobInvoice as JI">
+  <div ng-if="showTab === 'JobInvoice'" ng-controller="JobInvoice as JI">
     <div ng-include="'./partials/jobInvoice.html'">
 
    </div>
   </div>
-  <div ng-controller="JobEstimate as JE">
+  <div ng-if="showTab === 'JobEstimate'" ng-controller="JobEstimate as JE">
     <div ng-include="'./partials/jobEstimate.html'">
 
    </div>

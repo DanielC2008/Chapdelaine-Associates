@@ -1,7 +1,7 @@
 "use strict"
 
   app.controller('Job', function($scope, $location, JobFactory) {
-    $scope.title = "Job"
+    $scope.showTab = 'JobMain'
 
     let URL = $location.$$url 
     let jobNumber = URL.slice(parseInt(URL.search(":")) + 1)
