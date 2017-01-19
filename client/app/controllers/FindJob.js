@@ -4,7 +4,7 @@ app.controller('FindJob', function($scope, $http) {
   let FJScope = this
   let HCScope = $scope.$parent
  // connected to database
-  $http.post('/findJob/getTableNames')
+  $http.post('/api/findJob/getTableNames')
   .success( tableNames => {
     FJScope.Tables = tableNames.map( table => {
       return table.table_name
@@ -84,7 +84,7 @@ app.controller('FindJob', function($scope, $http) {
 //submit search parameters
   FJScope.submit = () => {
     let params = removeUnusedParams()
-    $http.post('/database', params)
+    $http.post('/api/database', params)
     .success( data => {
       FJScope.recentJobs = data
     })

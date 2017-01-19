@@ -6,7 +6,7 @@ const knex = require('knex')(config)
 const router = Router()
 
 
-router.post('/register', ({body}, res) => {
+router.post('/api/register', ({body}, res) => {
   knex('Users')
     .returning('user_name')
     .insert(body)
@@ -22,7 +22,7 @@ router.post('/register', ({body}, res) => {
     })
 })
 
-router.post('/login', ({body: {user_name, password}}, res) => {
+router.post('/api/login', ({body: {user_name, password}}, res) => {
   knex('Users')
     .where({user_name})
     .then( listedUsers => {

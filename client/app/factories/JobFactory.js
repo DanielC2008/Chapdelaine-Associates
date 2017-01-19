@@ -8,16 +8,16 @@ app.factory('JobFactory', function($location, $http) {
       $location.path(`/jobs/:${jobNumber}`)
     }  
 
-    factory.getJobFromDatabase = jobNumber => {
-      return $http.post('/getJob', {jobNumber})  
+    factory.getJobFromDatabase = job_number => {
+      return $http.post('/api/getJobInfo', {job_number})  
     }
 
     factory.getActiveJobs = () => {
-      return $http.get('/activeJobs')
+      return $http.get('/api/activeJobs')
     }
 
     factory.getPendingJobs = () => {
-      return $http.get('/pendingJobs')
+      return $http.get('/api/pendingJobs')
     }
 
   return factory

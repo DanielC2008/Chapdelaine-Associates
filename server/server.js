@@ -19,4 +19,5 @@ app.use(bodyParser.json())
 //routes
 app.use(routes)
 
+// knex('Representatives').whereNotIn('representative_id', [45,46]).del().then(data =>{ console.log(data);})
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

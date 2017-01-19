@@ -14,7 +14,7 @@ app.controller('Login-Register', function($scope, $http, $location, $rootScope) 
   }
 
   const enterSite = () => {
-      return $http.post(`/${$scope.loginOrRegister}` , {
+      return $http.post(`/api/${$scope.loginOrRegister}` , {
         user_name: $scope.formData.userName,
         password: $scope.formData.password
       })

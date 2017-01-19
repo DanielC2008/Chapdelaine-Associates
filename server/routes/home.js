@@ -6,7 +6,7 @@ const knex = require('knex')(config)
 const router = Router()
 
 
-router.get('/activeJobs', (req, res) => {
+router.get('/api/activeJobs', (req, res) => {
   res.send([
     {
       firstName: 'Daniel',
@@ -76,7 +76,7 @@ router.get('/activeJobs', (req, res) => {
   ])
 })
 
-router.get('/pendingJobs', (req, res) => {
+router.get('/api/pendingJobs', (req, res) => {
   res.send([
     {
       firstName: 'Daniel',
@@ -127,7 +127,7 @@ router.get('/pendingJobs', (req, res) => {
 })
 
 //this will go to database
-router.get('/typesOfWork', (req, res) => {
+router.get('/api/typesOfWork', (req, res) => {
   res.send([
     'Field',
     'Office',
@@ -138,7 +138,7 @@ router.get('/typesOfWork', (req, res) => {
 })  
 
 //this will go to database
-router.post('/getTypeOfWork', ({body:{typeOfWork}}, res) => {
+router.post('/api/getTypeOfWork', ({body:{typeOfWork}}, res) => {
   let allTypes = [
     {
       type_of_work: "Field",
@@ -174,7 +174,7 @@ router.post('/getTypeOfWork', ({body:{typeOfWork}}, res) => {
 })  
 
 ////////////////////////////////////////////////////////////need to decide whether to use this
-router.post('/findJob/getTableNames', (req, res) => {
+router.post('/api/findJob/getTableNames', (req, res) => {
   knex('is_Table_Searchable')
   .select('table_name')
   .where({find_job: true})

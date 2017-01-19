@@ -3,7 +3,7 @@
 app.controller('EstimateJob', function($scope, $http) {
   let EJScope = this
   
-  $http.get('/typesOfWork')
+  $http.get('/api/typesOfWork')
   .success( data => {
       EJScope.typesOfWork = data
     })
@@ -18,7 +18,7 @@ app.controller('EstimateJob', function($scope, $http) {
 
   EJScope.getSelectedType = typeOfWork => {
     //http call to database to get specific type of work
-    $http.post('/getTypeOfWork', {typeOfWork})
+    $http.post('/api/getTypeOfWork', {typeOfWork})
       .success( data => {
         EJScope.estimate.push(data)
         EJScope.type_of_work = null
