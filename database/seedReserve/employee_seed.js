@@ -22,7 +22,7 @@ module.exports.seed = (knex, Promise) => {
           'start_date': '2008-11-11',
           'end_date': '2012-11-11',
           'position': 'test',
-          'pay_rate': 7.23
+          'pay_rate': '7.23'
         }),
         knex('Employees').insert({
           'user_id': 36,
@@ -38,7 +38,7 @@ module.exports.seed = (knex, Promise) => {
           'start_date': '2008-11-11',
           'end_date': '2012-11-11',
           'position': 'something_else',
-          'pay_rate': 7.23
+          'pay_rate': '7.23'
         })
       ]);
     // });

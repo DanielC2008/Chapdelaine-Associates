@@ -19,5 +19,5 @@ app.use(bodyParser.json())
 //routes
 app.use(routes)
 
-knex('Time_Cards').then(data =>{ console.log(data)})
+// knex('Employees').then(data =>{ console.log(data)})
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
