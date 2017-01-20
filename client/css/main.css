@@ -8,7 +8,14 @@ body {
   max-width: 98%;
 }
 
-
+.job {
+  background-color: #f0f0f5;
+  height: 80vh;
+  margin-top: 1%;
+}
+.jobInfo {
+  padding-left: 1%;
+}
 
 /*HOME*/
 /*********SASS for all buttons**********/
@@ -35,8 +42,6 @@ body {
 #lastName {
   font-size: 1.3rem;
 }
-
-
 
 /*Login/Register*/
 /*********SASS for all inputs**********/
