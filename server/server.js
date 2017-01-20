@@ -19,5 +19,5 @@ app.use(bodyParser.json())
 //routes
 app.use(routes)
 
-// knex('Types_of_Work').update('rate', 9.00).where('type_of_work', 'test5').then(data =>{ console.log(data)})
+knex('Time_Cards').then(data =>{ console.log(data)})
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
