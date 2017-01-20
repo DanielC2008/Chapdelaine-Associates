@@ -14,7 +14,12 @@ body {
   margin-top: 1%;
 }
 .jobInfo {
-  padding-left: 1%;
+  padding: 0 1% !important;
+}
+
+.jobExit {
+  display: inline-block;
+  float: right;
 }
 
 /*HOME*/
