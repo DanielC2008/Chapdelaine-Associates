@@ -7,6 +7,8 @@ const router = Router()
 
 router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   //when connected to database
+
+  //could break this out into multiple database calls
   let Job = {}
 
   return Promise.all([
@@ -54,7 +56,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Representatives.notes as rep_notes'
       )
       .where('job_number', job_number)
-      .join('Jobs_Clients', 'Clients.client_id', '=', 'Jobs_Clients.client_id')
+      .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
       .join('Jobs', 'Jobs_Clients.job_id', '=', 'Jobs.job_id')
       .join('Representatives', 'Clients.client_id', '=', 'Representatives.client_id')
       .then(data => {
@@ -77,10 +79,37 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'sub_division',
         'notes'
       )
-      .join('Jobs_Properties', 'Properties.property_id', '=', 'Jobs_Properties.property_id')
-      .join('Jobs', 'Jobs_Properties.job_id', '=', 'Jobs.job_id')
+      .join('Jobs_Properties', 'Properties.property_id', 'Jobs_Properties.property_id')
+      .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')
       .where('job_number', job_number)
       .then(data => Job.Property = data),
+
+      knex('Estimates')
+        .select(
+          'Estimates.date_created', 
+          'Estimates.notes',
+          'Types_of_Work.type_of_work',
+          'Types_of_Work.rate',
+          'Types_of_Work.hourly'
+        )
+        .join('Jobs', 'Jobs.estimate_id', 'Estimates.estimate_id')
+        .join('Types_Estimates', 'Types_Estimates.estimate_id', 'Estimates.estimate_id')
+        .join('Types_Of_Work', 'Types_Estimates.type_of_work_id', 'Types_Of_Work.type_of_work_id')
+        .where('job_number', job_number)
+        .then(data => Job.Estimate = data),
+
+      knex('Invoices')
+        .select(
+          'Invoices.invoice_number', 
+          'Types_of_Work.type_of_work',
+          'Types_of_Work.rate',
+          'Types_of_Work.hourly'
+        )
+        .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
+        .join('Types_Invoices', 'Types_Invoices.invoice_id', 'Invoices.invoice_id')
+        .join('Types_Of_Work', 'Types_Invoices.type_of_work_id', 'Types_Of_Work.type_of_work_id')
+        .where('job_number', job_number)
+        .then(data => Job.Invoice = data)
 
   ]).then( () => {
     res.send(Job)

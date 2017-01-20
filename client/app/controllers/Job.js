@@ -8,7 +8,6 @@
 
     JobFactory.getJobFromDatabase(jobNumber)
       .success( Job => {
-          //everything job related gets set to the scope
           console.log('Job', Job);
         })
         .error( data => {
