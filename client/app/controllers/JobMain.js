@@ -2,8 +2,9 @@
 
 app.controller('JobMain', function($scope) {
   let JMScope = this
-
-  JMScope.title = 'JobMain'
+  let Scope = $scope.$parent
   
+  JMScope.title = 'JobMain'
+
 
 })

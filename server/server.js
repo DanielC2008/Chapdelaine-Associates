@@ -19,5 +19,5 @@ app.use(bodyParser.json())
 //routes
 app.use(routes)
 
-// knex('Employees').then(data =>{ console.log(data)})
+// knex('Representatives').update('notes', null).where('representative_id', 45).then(data =>{ console.log(data)})
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

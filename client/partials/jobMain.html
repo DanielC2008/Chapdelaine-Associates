@@ -1,1 +1,13 @@
 <h1>{{JM.title}}</h1>
+
+<div class='row'>
+  <div ng-repeat="client in Clients">
+    <div class="row">
+      <div ng-repeat="(key, value) in client">
+        <div class="col s2" ng-if="value">
+          {{key}}: {{value}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
