@@ -12,9 +12,7 @@
           $scope.Estimate = Job.Estimate
           $scope.Invoice = Job.Invoice
           $scope.Property = Job.Property
-          $scope.Job = Job.Job
-
-          console.log($scope.Clients);
+          $scope.Job = Job.Job[0]
         })
         .error( data => {
           alert('Wooops. There doesn\'t seem to be anything here!')
