@@ -19,11 +19,17 @@
         })
 
     $scope.makeChange = (table, id, key, value) => {
+      //make sure user wants to make these changes
       let obj = {}
       //transform key to sql table name
       obj[key.toLowerCase().replace(' ', '_')] = value
       JobFactory.editColumn({table, id, obj})
-    }
+        .success( ({msg}) => {
+          alert(msg);
+        }).error( ({msg}) => {
+          alert(msg);
+        })
+      }
 
     // $scope.editOrSave = () => {
     //   $scope.edit ? $scope.edit = false: $scope.edit = true

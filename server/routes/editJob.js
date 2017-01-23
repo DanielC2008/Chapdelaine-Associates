@@ -13,15 +13,10 @@ router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
     .where(id)
     .then( data => {
       console.log(data);
-      // res.send({user_name: data[0]})
+      res.send({msg: 'Your data was saved successfully!'})
     })
     .catch( err => {
-      console.log(err);
-      // if (err.code === "EREQUEST") {
-      //   res.send({msg: "User Name already exists. Please create another."})
-      // } else {
-      //   res.send({msg: "An error has occured. Please try again."})
-      // }
+      res.send({msg: 'Something went wrong! Please try again.'})
     })
 })
 
