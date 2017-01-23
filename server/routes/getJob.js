@@ -22,7 +22,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'updated_at as Last Updated'
       )
       .where('job_number', job_number)
-      .then(data => Job.Job = data),
+      .then(data => Job.Jobs = data),
 
     knex('Clients')
       .select(
@@ -76,24 +76,24 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
     knex('Properties')
       .select(
         'Properties.property_id',
-        'address',
-        'city',
-        'state',
-        'zip_code',
-        'county',
-        'map',
-        'parcel_number',
-        'plat_page',
-        'plat_book',
-        'deed_book',
-        'deed_page',
-        'sub_division',
-        'notes'
+        'address as Address',
+        'city as City',
+        'state as State',
+        'zip_code as Zip Code',
+        'county as County',
+        'map as Map',
+        'parcel_number as Parcel Number',
+        'plat_book as Plat Book',
+        'plat_page as Plat Page',
+        'deed_book as Deed Book',
+        'deed_page as Deed Page',
+        'sub_division as Sub Division',
+        'notes as Notes'
       )
       .join('Jobs_Properties', 'Properties.property_id', 'Jobs_Properties.property_id')
       .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')
       .where('job_number', job_number)
-      .then(data => Job.Property = data),
+      .then(data => Job.Properties = data),
 
       knex('Estimates')
         .select(
@@ -108,7 +108,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .join('Types_Estimates', 'Types_Estimates.estimate_id', 'Estimates.estimate_id')
         .join('Types_Of_Work', 'Types_Estimates.type_of_work_id', 'Types_Of_Work.type_of_work_id')
         .where('job_number', job_number)
-        .then(data => Job.Estimate = data),
+        .then(data => Job.Estimates = data),
 
       knex('Invoices')
         .select(
@@ -122,7 +122,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .join('Types_Invoices', 'Types_Invoices.invoice_id', 'Invoices.invoice_id')
         .join('Types_Of_Work', 'Types_Invoices.type_of_work_id', 'Types_Of_Work.type_of_work_id')
         .where('job_number', job_number)
-        .then(data => Job.Invoice = data)
+        .then(data => Job.Invoices = data)
 
   ]).then( () => {
     res.send(Job)

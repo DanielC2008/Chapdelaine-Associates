@@ -9,12 +9,11 @@
     JobFactory.getJobFromDatabase(jobNumber)
       .success( Job => {
           $scope.Clients = Job.Clients
-          $scope.Estimate = Job.Estimate
-          $scope.Invoice = Job.Invoice
-          $scope.Property = Job.Property
+          $scope.Estimate = Job.Estimates
+          $scope.Invoice = Job.Invoices
+          $scope.Property = Job.Properties
           $scope.Representatives = Job.Representatives
-          $scope.Job = Job.Job[0]
-          console.log($scope.Representatives);
+          $scope.Job = Job.Jobs[0]
         })
         .error( data => {
           alert('Wooops. There doesn\'t seem to be anything here!')
