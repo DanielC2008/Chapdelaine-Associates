@@ -9,12 +9,16 @@
       <li class="jobExit" ><a href="/#/home">X</a></li>
     </ul>
   </nav>
-  <div class="jobInfo">
-    
-    <div>{{title}}</div>
+  <div class="jobInfo">  
+  <!-- will possibly use mass edit -->
+    <!-- <button 
+      class="button btn align right" 
+      ng-click="editOrSave()">
+      {{edit ? 'Save' : 'Edit'}}
+    </button> -->
     <div class='row'>
       <div ng-repeat='(key, value) in Job'>
-        <div class="col s2">
+        <div ng-if="value" class="col s2">
           {{key}}: {{value}}
         </div class="col s3">
       </div>

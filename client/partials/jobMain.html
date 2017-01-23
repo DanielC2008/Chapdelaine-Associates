@@ -2,8 +2,10 @@
   <div class="col s12" ng-repeat="client in Clients">
     <div class="row">
       <div ng-repeat="(key, value) in client">
-        <div class="col s2" ng-if="value">
-          {{key}}: {{value}}
+        <div ng-dblclick="edit = true" class="col s3" ng-keyup="$event.keyCode == 13 && makeChange(client, key, value)" >
+            {{key}}:
+          <span ng-hide="edit">{{value}}</span> 
+          <input type="text" class="input-field" ng-show="edit" ng-model="value">
         </div>
       </div>
     </div>
@@ -13,8 +15,10 @@
   <div class="col s12" ng-repeat="property in Property">
     <div class="row">
       <div ng-repeat="(key, value) in property">
-        <div class="col s2" ng-if="value">
-          {{key}}: {{value}}
+        <div class="col s3">
+            {{key}}:
+          <span ng-hide="edit">{{value}}</span> 
+          <input type="text" class="input-field" ng-show="edit" ng-model="value">
         </div>
       </div>
     </div>
