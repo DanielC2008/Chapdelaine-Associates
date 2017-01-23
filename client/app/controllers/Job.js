@@ -12,7 +12,9 @@
           $scope.Estimate = Job.Estimate
           $scope.Invoice = Job.Invoice
           $scope.Property = Job.Property
+          $scope.Representatives = Job.Representatives
           $scope.Job = Job.Job[0]
+          console.log($scope.Representatives);
         })
         .error( data => {
           alert('Wooops. There doesn\'t seem to be anything here!')

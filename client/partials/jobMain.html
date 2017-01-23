@@ -1,19 +1,38 @@
+<!-- Clients -->
 <div class='row'>
   <div class="col s12" ng-repeat="client in Clients">
-    <div class="row">
+    <div class="row">Client:
       <div ng-repeat="(key, value) in client" >
         <div  ng-if="key !== 'client_id'" 
               ng-dblclick="editOne = true" 
               class="col s3" 
-              ng-keyup="$event.keyCode == 13 && [makeChange('Clients', {client_id: client.client_id},  key, value), editOne = false]" >
+              ng-keyup="$event.keyCode == 13 && [makeChange('Clients', {client_id: client.client_id}, key, value), editOne = false]" >
             {{key}}:
           <span ng-if="!editOne">{{value}}</span> 
           <input type="text" class="input-field" ng-if="editOne" ng-model="client[key]">
         </div>
       </div>
     </div>
+<!-- Reps -->
+<div class='row'>
+  <div class="col s12" ng-repeat="rep in Representatives">
+    <div class="row" ng-if='client.client_id === rep.client_id'> Representative for {{client['First Name']}} {{client['Last Name']}}:
+      <div ng-repeat="(key, value) in rep" >
+        <div  ng-if="!(key == 'representative_id' || key == 'client_id')" 
+              ng-dblclick="editOne = true" 
+              class="col s3" 
+              ng-keyup="$event.keyCode == 13 && [makeChange('Representatives', {representative_id: rep.representative_id}, key, value), editOne = false]" >
+            {{key}}:
+          <span ng-if="!editOne">{{value}}</span> 
+          <input type="text" class="input-field" ng-if="editOne" ng-model="rep[key]">
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+  </div>
+</div>
+<!-- Properties -->
 <div class='row'>
   <div class="col s12" ng-repeat="property in Property">
     <div class="row">

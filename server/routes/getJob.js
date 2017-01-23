@@ -40,28 +40,38 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.state as State',
         'Clients.zip_code as Zip Code',
         'Clients.county as County',
-        'Clients.notes as Notes',
-        'Representatives.representative_id',
-        'Representatives.first_name as Rep First Name',
-        'Representatives.middle_name as Rep Middle Name',
-        'Representatives.last_name as Rep Last Name',
-        'Representatives.email as Rep Email',
-        'Representatives.business_phone as Rep Business Phone',
-        'Representatives.mobile_phone as Rep Mobile Phone',
-        'Representatives.home_phone as Rep Home Phone',
-        'Representatives.fax_number as Rep Fax Number',
-        'Representatives.address as Rep Address',
-        'Representatives.city as Rep City',
-        'Representatives.state as Rep State',
-        'Representatives.zip_code as Rep Zip Code',
-        'Representatives.county as Rep County',
-        'Representatives.notes as Rep Notes'
+        'Clients.notes as Notes'
       )
       .where('job_number', job_number)
       .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
       .join('Jobs', 'Jobs_Clients.job_id', '=', 'Jobs.job_id')
       .join('Representatives', 'Clients.client_id', '=', 'Representatives.client_id')
       .then(data => Job.Clients = data),
+
+      knex('Clients')
+      .select(
+        'Clients.client_id',
+        'Representatives.representative_id',
+        'Representatives.first_name as First Name',
+        'Representatives.middle_name as Middle Name',
+        'Representatives.last_name as Last Name',
+        'Representatives.email as Email',
+        'Representatives.business_phone as Business Phone',
+        'Representatives.mobile_phone as Mobile Phone',
+        'Representatives.home_phone as Home Phone',
+        'Representatives.fax_number as Fax Number',
+        'Representatives.address as Address',
+        'Representatives.city as City',
+        'Representatives.state as State',
+        'Representatives.zip_code as Zip Code',
+        'Representatives.county as County',
+        'Representatives.notes as Notes'
+      )
+      .where('job_number', job_number)
+      .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
+      .join('Jobs', 'Jobs_Clients.job_id', '=', 'Jobs.job_id')
+      .join('Representatives', 'Clients.client_id', '=', 'Representatives.client_id')
+      .then(data => Job.Representatives = data),
 
     knex('Properties')
       .select(
