@@ -18,15 +18,11 @@
           alert('Wooops. There doesn\'t seem to be anything here!')
         })
 
-    $scope.makeChange = (client, key, value) => {
-      client[key] = value
-      console.log(client);
-      console.log($scope.Clients);
-      console.log($scope.edit)
-      $scope.edit = false
-      console.log($scope.edit);
-      //find a way to close input box.. possibly sending something back to child
-      // save to database////////////////////////////////////////////////
+    $scope.makeChange = (table, id, key, value) => {
+      let obj = {}
+      //transform key to sql table name
+      obj[key.toLowerCase().replace(' ', '_')] = value
+      JobFactory.editColumn({table, id, obj})
     }
 
     // $scope.editOrSave = () => {

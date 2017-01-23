@@ -26,6 +26,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
     knex('Clients')
       .select(
+        'Clients.client_id',
         'Clients.first_name as First Name',
         'Clients.middle_name as Middle Name',
         'Clients.last_name as Last Name',
@@ -40,6 +41,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.zip_code as Zip Code',
         'Clients.county as County',
         'Clients.notes as Notes',
+        'Representatives.representative_id',
         'Representatives.first_name as Rep First Name',
         'Representatives.middle_name as Rep Middle Name',
         'Representatives.last_name as Rep Last Name',
@@ -63,6 +65,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
     knex('Properties')
       .select(
+        'Properties.property_id',
         'address',
         'city',
         'state',
@@ -84,6 +87,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Estimates')
         .select(
+          'Estimates.estimate_id',
           'Estimates.date_created', 
           'Estimates.notes',
           'Types_of_Work.type_of_work',
@@ -98,6 +102,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Invoices')
         .select(
+          'Invoices.invoice_id',
           'Invoices.invoice_number', 
           'Types_of_Work.type_of_work',
           'Types_of_Work.rate',
