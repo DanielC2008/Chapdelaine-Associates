@@ -8,8 +8,11 @@
               class="col s3" 
               ng-keyup="$event.keyCode == 13 && [makeChange('Clients', {client_id: client.client_id}, key, value), editOne = false]" >
             {{key}}:
-          <span ng-if="!editOne">{{value}}</span> 
-          <input type="text" class="input-field" ng-if="editOne" ng-model="client[key]">
+          <span ng-show="!editOne">{{value}}</span> 
+          <span ng-show="editOne">
+            <input type="text" class="input-field columnInput" ng-if="editOne" ng-model="client[key]" autofocus>
+            <button class="button columnButton" ng-click="editOne = false">X</button>            
+          </span>
         </div>
       </div>
     </div>

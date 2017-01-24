@@ -24,8 +24,18 @@ nav ul li {
   height: auto;
   margin-top: 1%;
 }
+
 .jobInfo {
   padding: 0 1% !important;
+}
+
+.columnInput { 
+  max-width: 65%;
+}
+
+.columnButton {
+  display: inline;
+  margin: 0px !important;
 }
 
 .jobExit {
@@ -68,6 +78,7 @@ nav ul li {
 }
 .input-field input {
   border-bottom: 1px solid #eceff1;
+  margin-bottom: 0px;
   
 }
 /* label focus color */
