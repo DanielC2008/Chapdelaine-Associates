@@ -3,14 +3,26 @@
   <div class="col s12" ng-repeat="client in Clients">
     <div class="row">Client:
       <div ng-repeat="(key, value) in client" >
-        <div  ng-if="key !== 'client_id'" 
-              ng-dblclick="editOne = true" 
-              class="col s3" 
-              ng-keyup="$event.keyCode == 13 && [makeChange('Clients', {client_id: client.client_id}, key, value), editOne = false]" >
-            {{key}}:
+        <div  
+          ng-if="key !== 'client_id'" 
+          ng-dblclick="[editOne = true, inputToFocus($index)]" 
+          class="col s3 editCursor" 
+          ng-keyup="$event.keyCode == 13 && [makeChange('Clients', {client_id: client.client_id}, key, value), editOne = false]">{{key}}:
           <span ng-show="!editOne">{{value}}</span> 
           <span ng-show="editOne">
-            <input type="text" class="input-field columnInput" ng-if="editOne" ng-model="client[key]" autofocus>
+            <input 
+              type="text" 
+              class="input-field columnInput" 
+              ng-model="client[key]" 
+              ng-if="$index == inputIndex"
+              focus-if="changeFocus($index)"
+              ng-blur="removeInputIndex()">
+            <!-- incase multiple editOne inputs are open -->
+            <input 
+              type="text" 
+              class="input-field columnInput"
+              ng-model="client[key]" 
+              ng-if="$index != inputIndex">
             <button class="button columnButton" ng-click="editOne = false">X</button>            
           </span>
         </div>
@@ -21,13 +33,26 @@
   <div class="col s12" ng-repeat="rep in Representatives">
     <div class="row" ng-if='client.client_id === rep.client_id'> Representative for {{client['First Name']}} {{client['Last Name']}}:
       <div ng-repeat="(key, value) in rep" >
-        <div  ng-if="!(key == 'representative_id' || key == 'client_id')" 
-              ng-dblclick="editOne = true" 
-              class="col s3" 
-              ng-keyup="$event.keyCode == 13 && [makeChange('Representatives', {representative_id: rep.representative_id}, key, value), editOne = false]" >
-            {{key}}:
-          <span ng-if="!editOne">{{value}}</span> 
-          <input type="text" class="input-field" ng-if="editOne" ng-model="rep[key]">
+        <div  
+          ng-if="!(key == 'representative_id' || key == 'client_id')" 
+          ng-dblclick="[editOne = true, inputToFocus($index)]" 
+          class="col s3 editCursor" 
+          ng-keyup="$event.keyCode == 13 && [makeChange('Representatives', {representative_id: rep.representative_id}, key, value), editOne = false]" >{{key}}:
+          <span ng-show="!editOne">{{value}}</span> 
+          <span ng-show="editOne">
+            <input type="text" 
+              class="input-field columnInput" 
+              ng-model="rep[key]" 
+              ng-if="$index == inputIndex"
+              focus-if="changeFocus($index)"
+              ng-blur="removeInputIndex()">
+            <!-- incase multiple editOne inputs are open -->
+            <input type="text" 
+              class="input-field columnInput"
+              ng-model="rep[key]" 
+              ng-if="$index != inputIndex">
+            <button class="button columnButton" ng-click="editOne = false">X</button>            
+          </span>
         </div>
       </div>
     </div>
@@ -40,13 +65,28 @@
   <div class="col s12" ng-repeat="property in Property">
     <div class="row">Property:
       <div ng-repeat="(key, value) in property" >
-        <div  ng-if="key !== 'property_id'" 
-              ng-dblclick="editOne = true" 
-              class="col s3" 
-              ng-keyup="$event.keyCode == 13 && [makeChange('Properties', {property_id: property.property_id}, key, value), editOne = false]" >
-            {{key}}:
-          <span ng-if="!editOne">{{value}}</span> 
-          <input type="text" class="input-field" ng-if="editOne" ng-model="property[key]">
+        <div 
+          ng-if="key !== 'property_id'" 
+          ng-dblclick="[editOne = true, inputToFocus($index)]" 
+          class="col s3 editCursor" 
+          ng-keyup="$event.keyCode == 13 && [makeChange('Properties', {property_id: property.property_id}, key, value), editOne = false]" >{{key}}:
+          <span ng-show="!editOne">{{value}}</span> 
+          <span ng-show="editOne">
+            <input 
+              type="text" 
+              class="input-field columnInput" 
+              ng-model="property[key]" 
+              ng-if="$index == inputIndex"
+              focus-if="changeFocus($index)"
+              ng-blur="removeInputIndex()">
+            <!-- incase multiple editOne inputs are open -->
+            <input 
+              type="text" 
+              class="input-field columnInput"
+              ng-model="property[key]" 
+              ng-if="$index != inputIndex">
+            <button class="button columnButton" ng-click="editOne = false">X</button>            
+          </span>
         </div>
       </div>
     </div>

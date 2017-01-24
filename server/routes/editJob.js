@@ -16,6 +16,7 @@ router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
       res.send({msg: 'Your data was saved successfully!'})
     })
     .catch( err => {
+      console.log(err);
       res.send({msg: 'Something went wrong! Please try again.'})
     })
 })

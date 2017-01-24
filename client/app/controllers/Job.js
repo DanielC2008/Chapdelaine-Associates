@@ -31,6 +31,20 @@
           alert(msg);
         })
       }
+    //must redigest everytime inorder for input focus to work properly
+    $scope.inputToFocus = index => {
+      $scope.inputIndex = index
+    }
+
+    $scope.removeInputIndex = () => {
+      $scope.inputIndex = null
+    }
+
+    $scope.changeFocus = index => {
+      if (index === $scope.inputIndex) {
+        return true
+      }
+    }
 
     // $scope.editOrSave = () => {
     //   $scope.edit ? $scope.edit = false: $scope.edit = true

@@ -17,6 +17,7 @@
   "dependencies": {
     "angular": "^1.5.8",
     "angular-route": "^1.5.8",
-    "materialize": "^0.97.8"
+    "materialize": "^0.97.8",
+    "ng-focus-if": "^1.0.7"
   }
 }
