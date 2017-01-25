@@ -3,6 +3,7 @@
   app.controller('Job', function($scope, $location, JobFactory) {
     $scope.showTab = 'JobMain'
     $scope.edit = false
+    let editCanceled = {}
     let URL = $location.$$url 
     let jobNumber = URL.slice(parseInt(URL.search(":")) + 1)
 
@@ -32,7 +33,9 @@
         })
       }
     //must redigest everytime inorder for input focus to work properly
-    $scope.inputToFocus = index => {
+    $scope.inputToFocus = (index, key, value) => {
+      editCanceled.key = key
+      editCanceled.value = value
       $scope.inputIndex = index
     }
 
@@ -44,6 +47,11 @@
       if (index === $scope.inputIndex) {
         return true
       }
+    }
+
+    $scope.revertEditChanges = obj => {
+      obj[editCanceled.key] = editCanceled.value
+      console.log(obj);
     }
 
     // $scope.editOrSave = () => {

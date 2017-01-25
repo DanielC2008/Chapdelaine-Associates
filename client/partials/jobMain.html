@@ -5,7 +5,7 @@
       <div ng-repeat="(key, value) in client" >
         <div  
           ng-if="key !== 'client_id'" 
-          ng-dblclick="[editOne = true, inputToFocus($index)]" 
+          ng-dblclick="[editOne = true, inputToFocus($index, key, value)]" 
           class="col s3 editCursor" 
           ng-keyup="$event.keyCode == 13 && [makeChange('Clients', {client_id: client.client_id}, key, value), editOne = false]">{{key}}:
           <span ng-show="!editOne">{{value}}</span> 
@@ -23,7 +23,7 @@
               class="input-field columnInput"
               ng-model="client[key]" 
               ng-if="$index != inputIndex">
-            <button class="button columnButton" ng-click="editOne = false">X</button>            
+            <button class="button columnButton" ng-click="[editOne = false, revertEditChanges(client)]">X</button>            
           </span>
         </div>
       </div>
