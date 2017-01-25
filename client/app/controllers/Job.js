@@ -4,7 +4,7 @@
     let URL = $location.$$url 
     let jobNumber = URL.slice(parseInt(URL.search(":")) + 1)
     $scope.showTab = 'JobMain'
-    $scope.editOne = false
+    $scope.editOne = null
     $scope.table
     $scope.inputIndex
     $scope.tIndex

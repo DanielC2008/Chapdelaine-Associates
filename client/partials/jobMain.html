@@ -6,7 +6,8 @@
         <div
           ng-if="key !== 'client_id'" 
           ng-dblclick="inputToFocus('Clients', tableIndex, $index, key, value)" 
-          class="col s3 editCursor" 
+          class="col s3 editCursor"
+          ng-class="{noPointerEvents: editOne && !($index == inputIndex && tableIndex == tIndex && table == 'Clients')}" 
           ng-keyup="$event.keyCode == 13 && makeChange('Clients', {client_id: client.client_id}, key, value)">{{key}}:
           <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Clients')" >{{value}}</span> 
           <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Clients')" >
@@ -28,7 +29,8 @@
         <div  
           ng-if="!(key == 'representative_id' || key == 'client_id')" 
           ng-dblclick="inputToFocus('Representatives', tableIndex, $index, key, value)" 
-          class="col s3 editCursor" 
+          class="col s3 editCursor"
+          ng-class="{noPointerEvents: editOne && !($index == inputIndex && tableIndex == tIndex && table == 'Representatives')}" 
           ng-keyup="$event.keyCode == 13 && makeChange('Representatives', {representative_id: rep.representative_id}, key, value)" >{{key}}:
           <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Representatives')" >{{value}}</span> 
           <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Representatives')" >
@@ -54,7 +56,8 @@
         <div 
           ng-if="key !== 'property_id'" 
           ng-dblclick="inputToFocus('Properties', tableIndex, $index, key, value)" 
-          class="col s3 editCursor" 
+          class="col s3 editCursor"
+          ng-class="{noPointerEvents: editOne && !($index == inputIndex && tableIndex == tIndex && table == 'Properties')}"  
           ng-keyup="$event.keyCode == 13 && makeChange('Properties', {property_id: property.property_id}, key, value)" >{{key}}:
           <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Properties')" >{{value}}</span> 
           <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Properties')" >
