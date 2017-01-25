@@ -1,11 +1,14 @@
 "use strict"
 
   app.controller('Job', function($scope, $location, JobFactory) {
-    $scope.showTab = 'JobMain'
-    $scope.edit = false
-    let editCanceled = {}
     let URL = $location.$$url 
     let jobNumber = URL.slice(parseInt(URL.search(":")) + 1)
+    $scope.showTab = 'JobMain'
+    $scope.editOne = false
+    $scope.table
+    $scope.inputIndex
+    $scope.tIndex
+    let editCanceled = {}
 
     JobFactory.getJobFromDatabase(jobNumber)
       .success( Job => {
@@ -21,6 +24,10 @@
         })
 
     $scope.makeChange = (table, id, key, value) => {
+      $scope.editOne = false
+      $scope.table = null
+      $scope.tIndex = null
+      $scope.inputIndex = null
       //make sure user wants to make these changes
       let obj = {}
       //transform key to sql table name
@@ -31,28 +38,32 @@
         }).error( ({msg}) => {
           alert(msg);
         })
+
       }
     //must redigest everytime inorder for input focus to work properly
-    $scope.inputToFocus = (index, key, value) => {
+    $scope.inputToFocus = (tableName, tableIndex, index, key, value) => {
+      $scope.editOne = true
       editCanceled.key = key
       editCanceled.value = value
+      $scope.table = tableName
+      $scope.tIndex = tableIndex
       $scope.inputIndex = index
     }
 
-    $scope.removeInputIndex = () => {
-      $scope.inputIndex = null
-    }
-
-    $scope.changeFocus = index => {
-      if (index === $scope.inputIndex) {
+    $scope.changeFocus = (tableName, tableIndex, index) => {
+      if (index == $scope.inputIndex && tableIndex == $scope.tIndex && tableName == $scope.table) {
         return true
       }
     }
 
     $scope.revertEditChanges = obj => {
+      $scope.editOne = false
+      $scope.table = null
+      $scope.tIndex = null
+      $scope.inputIndex = null
       obj[editCanceled.key] = editCanceled.value
-      console.log(obj);
     }
+
 
     // $scope.editOrSave = () => {
     //   $scope.edit ? $scope.edit = false: $scope.edit = true

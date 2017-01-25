@@ -1,57 +1,43 @@
 <!-- Clients -->
 <div class='row'>
-  <div class="col s12" ng-repeat="client in Clients">
+  <div class="col s12" ng-repeat="(tableIndex, client) in Clients">
     <div class="row">Client:
       <div ng-repeat="(key, value) in client" >
-        <div  
+        <div
           ng-if="key !== 'client_id'" 
-          ng-dblclick="[editOne = true, inputToFocus($index, key, value)]" 
+          ng-dblclick="inputToFocus('Clients', tableIndex, $index, key, value)" 
           class="col s3 editCursor" 
-          ng-keyup="$event.keyCode == 13 && [makeChange('Clients', {client_id: client.client_id}, key, value), editOne = false]">{{key}}:
-          <span ng-show="!editOne">{{value}}</span> 
-          <span ng-show="editOne">
+          ng-keyup="$event.keyCode == 13 && makeChange('Clients', {client_id: client.client_id}, key, value)">{{key}}:
+          <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Clients')" >{{value}}</span> 
+          <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Clients')" >
             <input 
               type="text" 
               class="input-field columnInput" 
               ng-model="client[key]" 
-              ng-if="$index == inputIndex"
-              focus-if="changeFocus($index)"
-              ng-blur="removeInputIndex()">
-            <!-- incase multiple editOne inputs are open -->
-            <input 
-              type="text" 
-              class="input-field columnInput"
-              ng-model="client[key]" 
-              ng-if="$index != inputIndex">
-            <button class="button columnButton" ng-click="[editOne = false, revertEditChanges(client)]">X</button>            
+              focus-if="changeFocus('Clients', tableIndex, $index)">
+            <button class="button columnButton" ng-click="revertEditChanges(client)">X</button>            
           </span>
         </div>
       </div>
     </div>
 <!-- Reps -->
 <div class='row'>
-  <div class="col s12" ng-repeat="rep in Representatives">
+  <div class="col s12" ng-repeat="(tableIndex, rep) in Representatives">
     <div class="row" ng-if='client.client_id === rep.client_id'> Representative for {{client['First Name']}} {{client['Last Name']}}:
       <div ng-repeat="(key, value) in rep" >
         <div  
           ng-if="!(key == 'representative_id' || key == 'client_id')" 
-          ng-dblclick="[editOne = true, inputToFocus($index)]" 
+          ng-dblclick="inputToFocus('Representatives', tableIndex, $index, key, value)" 
           class="col s3 editCursor" 
-          ng-keyup="$event.keyCode == 13 && [makeChange('Representatives', {representative_id: rep.representative_id}, key, value), editOne = false]" >{{key}}:
-          <span ng-show="!editOne">{{value}}</span> 
-          <span ng-show="editOne">
-            <input type="text" 
+          ng-keyup="$event.keyCode == 13 && makeChange('Representatives', {representative_id: rep.representative_id}, key, value)" >{{key}}:
+          <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Representatives')" >{{value}}</span> 
+          <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Representatives')" >
+            <input 
+              type="text" 
               class="input-field columnInput" 
               ng-model="rep[key]" 
-              ng-if="$index == inputIndex"
-              focus-if="changeFocus($index)"
-              ng-blur="removeInputIndex()">
-            <!-- incase multiple editOne inputs are open -->
-            <input type="text" 
-              class="input-field columnInput"
-              ng-model="rep[key]" 
-              ng-if="$index != inputIndex">
-            <button class="button columnButton" ng-click="editOne = false">X</button>            
+              focus-if="changeFocus('Representatives', tableIndex, $index)">
+            <button class="button columnButton" ng-click="revertEditChanges(rep)">X</button>            
           </span>
         </div>
       </div>
@@ -62,30 +48,22 @@
 </div>
 <!-- Properties -->
 <div class='row'>
-  <div class="col s12" ng-repeat="property in Property">
+  <div class="col s12" ng-repeat="(tableIndex, property) in Property">
     <div class="row">Property:
       <div ng-repeat="(key, value) in property" >
         <div 
           ng-if="key !== 'property_id'" 
-          ng-dblclick="[editOne = true, inputToFocus($index)]" 
+          ng-dblclick="inputToFocus('Properties', tableIndex, $index, key, value)" 
           class="col s3 editCursor" 
-          ng-keyup="$event.keyCode == 13 && [makeChange('Properties', {property_id: property.property_id}, key, value), editOne = false]" >{{key}}:
-          <span ng-show="!editOne">{{value}}</span> 
-          <span ng-show="editOne">
+          ng-keyup="$event.keyCode == 13 && makeChange('Properties', {property_id: property.property_id}, key, value)" >{{key}}:
+          <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Properties')" >{{value}}</span> 
+          <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Properties')" >
             <input 
               type="text" 
               class="input-field columnInput" 
               ng-model="property[key]" 
-              ng-if="$index == inputIndex"
-              focus-if="changeFocus($index)"
-              ng-blur="removeInputIndex()">
-            <!-- incase multiple editOne inputs are open -->
-            <input 
-              type="text" 
-              class="input-field columnInput"
-              ng-model="property[key]" 
-              ng-if="$index != inputIndex">
-            <button class="button columnButton" ng-click="editOne = false">X</button>            
+              focus-if="changeFocus('Properties', tableIndex, $index)">
+            <button class="button columnButton" ng-click="revertEditChanges(property)">X</button>            
           </span>
         </div>
       </div>
