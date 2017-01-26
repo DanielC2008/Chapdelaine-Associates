@@ -12,7 +12,6 @@ router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
     .update(obj)
     .where(id)
     .then( data => {
-      console.log(data);
       res.send({msg: 'Your data was saved successfully!'})
     })
     .catch( err => {

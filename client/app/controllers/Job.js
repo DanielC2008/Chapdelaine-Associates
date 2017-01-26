@@ -4,12 +4,9 @@
     let URL = $location.$$url 
     let jobNumber = URL.slice(parseInt(URL.search(":")) + 1)
     $scope.showTab = 'JobMain'
-    $scope.editOne = null
-    $scope.table
-    $scope.inputIndex
-    $scope.tIndex
+    $scope.editOptions = {}
     let editCanceled = {}
-
+    //load data from database
     JobFactory.getJobFromDatabase(jobNumber)
       .success( Job => {
           $scope.Clients = Job.Clients
@@ -22,12 +19,9 @@
         .error( data => {
           alert('Wooops. There doesn\'t seem to be anything here!')
         })
-
-    $scope.makeChange = (table, id, key, value) => {
-      $scope.editOne = false
-      $scope.table = null
-      $scope.tIndex = null
-      $scope.inputIndex = null
+    //edit data submited by user    
+    $scope.editDatabase = (table, id, key, value) => {
+      removeEditOptions() 
       //make sure user wants to make these changes
       let obj = {}
       //transform key to sql table name
@@ -38,30 +32,34 @@
         }).error( ({msg}) => {
           alert(msg);
         })
-
       }
-    //must redigest everytime inorder for input focus to work properly
-    $scope.inputToFocus = (tableName, tableIndex, index, key, value) => {
-      $scope.editOne = true
+    //set edit options on obj for easy comparison and edit canceled obj so data isn't lost 
+    $scope.setEditOptions = (editType, tableName, tableIndex, index, key, value) => {
+      $scope.editOptions.editType = editType
+      $scope.editOptions.tableName = tableName
+      $scope.editOptions.tableIndex = tableIndex
+      $scope.editOptions.inputIndex = index
       editCanceled.key = key
       editCanceled.value = value
-      $scope.table = tableName
-      $scope.tIndex = tableIndex
-      $scope.inputIndex = index
     }
-
+    //focuses specific editOne
     $scope.changeFocus = (tableName, tableIndex, index) => {
       if (index == $scope.inputIndex && tableIndex == $scope.tIndex && tableName == $scope.table) {
         return true
       }
     }
-
+    //if user cancels edit, reset ng-model
     $scope.revertEditChanges = obj => {
-      $scope.editOne = false
-      $scope.table = null
-      $scope.tIndex = null
-      $scope.inputIndex = null
+      removeEditOptions()    
       obj[editCanceled.key] = editCanceled.value
+    }
+    //lodash for deep equals
+    $scope.compareObj = currDiv => _.isEqual($scope.editOptions, currDiv)
+    //set editOptions back to null
+    const removeEditOptions = () => {
+      for(let key in $scope.editOptions) {
+          $scope.editOptions[key] = null
+      } 
     }
 
 
