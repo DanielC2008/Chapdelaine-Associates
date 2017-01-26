@@ -21,24 +21,24 @@
         </div>
       </div>
     </div>
-<!-- Reps --> <!-- ///////////////////////////////////////////////////////////////finish editOptions -->
+<!-- Reps -->
 <div class='row'>
   <div class="col s12" ng-repeat="(tableIndex, rep) in Representatives">
     <div class="row" ng-if='client.client_id === rep.client_id'> Representative for {{client['First Name']}} {{client['Last Name']}}:
       <div ng-repeat="(key, value) in rep" >
         <div  
           ng-if="!(key == 'representative_id' || key == 'client_id')" 
-          ng-dblclick="inputToFocus('Representatives', tableIndex, $index, key, value)" 
+          ng-dblclick="setEditOptions('editOne', 'Representatives', tableIndex, $index, key, value)" 
           class="col s3 editCursor"
-          ng-class="{noPointerEvents: editOne && !($index == inputIndex && tableIndex == tIndex && table == 'Representatives')}" 
-          ng-keyup="$event.keyCode == 13 && editDatabase('Representatives', {representative_id: rep.representative_id}, key, value)" >{{key}}:
-          <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Representatives')" >{{value}}</span> 
-          <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Representatives')" >
+          ng-class="{noPointerEvents: (editOptions.editType == 'editOne' && !compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index}))}" 
+          ng-keyup="$event.keyCode == 13 && editDatabase('Representatives', {representative_id: rep.representative_id}, key, value)">{{key}}:
+          <span ng-if="!compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
+          <span ng-if="compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})" >
             <input 
               type="text" 
               class="input-field columnInput" 
               ng-model="rep[key]" 
-              focus-if="changeFocus('Representatives', tableIndex, $index)">
+              focus-if="compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})">
             <button class="button columnButton" ng-click="revertEditChanges(rep)">X</button>            
           </span>
         </div>
@@ -55,17 +55,17 @@
       <div ng-repeat="(key, value) in property" >
         <div 
           ng-if="key !== 'property_id'" 
-          ng-dblclick="inputToFocus('Properties', tableIndex, $index, key, value)" 
+          ng-dblclick="setEditOptions('editOne', 'Properties', tableIndex, $index, key, value)" 
           class="col s3 editCursor"
-          ng-class="{noPointerEvents: editOne && !($index == inputIndex && tableIndex == tIndex && table == 'Properties')}"  
-          ng-keyup="$event.keyCode == 13 && editDatabase('Properties', {property_id: property.property_id}, key, value)" >{{key}}:
-          <span ng-if="!(editOne && $index == inputIndex && tableIndex == tIndex && table == 'Properties')" >{{value}}</span> 
-          <span ng-if="($index == inputIndex && tableIndex == tIndex && table == 'Properties')" >
+          ng-class="{noPointerEvents: (editOptions.editType == 'editOne' && !compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index}))}" 
+          ng-keyup="$event.keyCode == 13 && editDatabase('Properties', {property_id: property.property_id}, key, value)">{{key}}:
+          <span ng-if="!compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
+          <span ng-if="compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})" >
             <input 
               type="text" 
               class="input-field columnInput" 
               ng-model="property[key]" 
-              focus-if="changeFocus('Properties', tableIndex, $index)">
+              focus-if="compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})">
             <button class="button columnButton" ng-click="revertEditChanges(property)">X</button>            
           </span>
         </div>
