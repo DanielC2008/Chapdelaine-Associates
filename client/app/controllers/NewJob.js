@@ -15,7 +15,7 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
       JobFactory.createNewJob({job_number})
         .success( data => {
           console.log(data);
-          // JobFactory.goToJobPage()
+          JobFactory.goToJobPage(job_number)
         })
         .error( err => console.log(err))
     }
