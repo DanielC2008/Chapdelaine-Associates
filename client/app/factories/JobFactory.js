@@ -12,7 +12,9 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.getPendingJobs = () => $http.get('/api/pendingJobs')
 
-    factory.editColumn = (columnInfo) => $http.post('/api/editColumn', columnInfo)
+    factory.editColumn = columnInfo => $http.post('/api/editColumn', columnInfo)
+
+    factory.getMaxJob = () => $http.get('/api/getMaxJob')
 
   return factory
 })

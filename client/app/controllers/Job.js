@@ -1,6 +1,12 @@
 "use strict"
 
   app.controller('Job', function($scope, $location, JobFactory) {
+    //Job or New Job
+    //========goes to database and finds the last Job number used adds one
+    //========asks user if this this is the number they want to use
+    //===========maybe other settings about job as well?
+    //========creates job in database
+    //========brings back info and makes all fields input until save
     let URL = $location.$$url 
     let jobNumber = URL.slice(parseInt(URL.search(":")) + 1)
     $scope.showTab = 'JobMain'
@@ -63,8 +69,8 @@
     }
 
 
-    // $scope.editOrSave = () => {
-    //   $scope.edit ? $scope.edit = false: $scope.edit = true
-    //   //save to database//////////////////////////////////////////////
-    // }
+    $scope.editOrSave = () => {
+      $scope.edit ? $scope.edit = false: $scope.edit = true
+      //save to database//////////////////////////////////////////////
+    }
   })

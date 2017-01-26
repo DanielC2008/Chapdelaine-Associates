@@ -9,6 +9,7 @@ router.use(require('./loginRegister'))
 router.use(require('./home'))
 router.use(require('./getJob'))
 router.use(require('./editJob'))
+router.use(require('./newJob'))
 
 // add gaurd here and 
 // private routes

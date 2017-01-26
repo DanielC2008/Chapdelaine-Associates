@@ -6,17 +6,14 @@ const knex = require('knex')(config)
 const router = Router()
 
 
-router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
-  knex(`${table}`)
-    .returning('*')
-    .update(obj)
-    .where(id)
+router.get('/api/getMaxJob', (req, res) => {
+  knex('Jobs')
+    .max('job_number as last')
     .then( data => {
-      res.send({msg: 'Your data was saved successfully!'})
+      res.send(data[0])
     })
     .catch( err => {
       console.log(err)
-      res.send({msg: 'Something went wrong! Please try again.'})
     })
 })
 

@@ -24,6 +24,11 @@
       </div>
     </div>
 
+    <div ng-if="showTab === 'NewJob'" ng-controller="NewJob as NJ">
+      <div ng-include="'./partials/newJob.html'">
+
+     </div>
+    </div>
     <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">
       <div ng-include="'./partials/jobMain.html'">
 
