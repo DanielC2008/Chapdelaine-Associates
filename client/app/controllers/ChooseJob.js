@@ -1,6 +1,6 @@
 "use strict"
 
-  app.controller('ChooseJob', function($scope, $location, JobFactory) {
+  app.controller('ChooseJob', function($scope, JobFactory) {
 
     $scope.Jobs = [
       {

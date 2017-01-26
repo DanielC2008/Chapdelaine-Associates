@@ -18,7 +18,14 @@ router.get('/api/getMaxJob', (req, res) => {
 })
 
 router.post('/api/createNewJob', ({body}, res) => {
-  console.log(body);
+  knex('Jobs')
+    .insert(body)
+    .then( data => {
+      res.send()
+    })
+    .catch( err => {
+      console.log(err)
+    })
 })
 
 module.exports = router

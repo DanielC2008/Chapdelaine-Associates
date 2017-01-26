@@ -5,7 +5,7 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
     //========goes to database and finds the last Job number used adds one
   JobFactory.getMaxJob()
     .success( data => {
-      $scope.lastJob = parseInt(data['last']) 
+      $scope.recommended = parseInt(data['last']) + 1 
     })
     .error( err => {
       console.log(err)
@@ -13,8 +13,9 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
     //========asks user if this this is the number they want to use
     $scope.createJob =  job_number => {
       JobFactory.createNewJob({job_number})
-        .success( () => {
-
+        .success( data => {
+          console.log(data);
+          // JobFactory.goToJobPage()
         })
         .error( err => console.log(err))
     }

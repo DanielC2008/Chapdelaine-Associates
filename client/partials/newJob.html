@@ -1,5 +1,5 @@
 <h1>{{title}}</h1>
-<div>Your last Job Number was {{lastJob}}, would you like to use {{lastJob + 1}} as your new job number?</div>
-<button type="submit" ng-click="createJob(lastJob)">Yes, that'll do.</button>
+<div>Your last Job Number was {{recommended -  1}}, would you like to use {{recommended}} as your new job number?</div>
+<button type="submit" ng-click="createJob(recommended)">Yes, that'll do.</button>
 <button type="submit" ng-click="createJob(newjob)">Nah, use this number.</button>
 <input type="text" ng-model="newjob" placeholder="Select Job Number">
