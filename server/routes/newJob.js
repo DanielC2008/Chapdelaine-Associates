@@ -17,4 +17,8 @@ router.get('/api/getMaxJob', (req, res) => {
     })
 })
 
+router.post('/api/createNewJob', ({body}, res) => {
+  console.log(body);
+})
+
 module.exports = router
