@@ -16,6 +16,8 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.getMaxJob = () => $http.get('/api/getMaxJob')
 
+    factory.getMinJob = () => $http.get('/api/getMinJob')
+
     factory.createNewJob = job_number => $http.post('/api/createNewJob', job_number)
 
   return factory
