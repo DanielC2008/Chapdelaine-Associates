@@ -1,8 +1,42 @@
 'use strict'
 
 app.controller('NewJob', function($scope, $http, JobFactory) {
+  $scope.newJob = {}
+
+  $scope.addJobStatus = status => {
+    $scope.newJob.job_status = status 
+    if (status === 'Pending') {
+      JobFactory.getMinJob()
+        .success( ({min}) => { 
+          if ( min < 0 ) { 
+            $scope.newJob.job_number = min - 1
+          } else {
+            $scope.newJob.job_number = -1
+          }
+          createNewJob() 
+        })
+        .error( err => console.log(err))
+    }
+  }
+
+
+  //goes to database and finds the last Job number used adds one
   JobFactory.getMaxJob()
-    .success( data => console.log(data))
+    .success( ({max}) => {
+      $scope.recommended = max + 1 
+    })
     .error( err => console.log(err))
-  $scope.title = "NewJob"
+
+  $scope.addJobNumber = job_number => {
+    $scope.newJob.job_number = job_number
+    createNewJob()
+  }
+
+  const createNewJob = () => {
+    JobFactory.createNewJob($scope.newJob)
+      .success( () => {
+        JobFactory.goToJobPage($scope.newJob.job_number)
+      })
+      .error( err => console.log(err))
+  }
 })
