@@ -27,7 +27,7 @@ exports.seed = function(knex, Promise) {
         }),
         knex('is_Table_Searchable').insert({
           table_name: 'Types_Of_Work',
-          find_job: false,
+          find_job: true,
           get_data: true,
         }),
         knex('is_Table_Searchable').insert({

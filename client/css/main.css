@@ -8,6 +8,48 @@ body {
   max-width: 98%;
 }
 
+/*NAV*/
+
+nav {
+  height: 50px;
+}
+nav ul li {
+  line-height: 50px;
+}
+
+/*JOB*/
+
+.job {
+  background-color: #f0f0f5;
+  height: auto;
+  margin-top: 1%;
+}
+
+.jobInfo {
+  padding: 0 1% !important;
+}
+
+.columnInput { 
+  max-width: 50%;
+}
+
+.columnButton {
+  display: inline;
+  margin: 0px !important;
+}
+
+.jobExit {
+  display: inline-block;
+  float: right;
+}
+
+.editCursor {
+  cursor: pointer;
+}
+
+.noPointerEvents {
+  pointer-events: none;
+}
 
 /*HOME*/
 /*********SASS for all buttons**********/
@@ -35,8 +77,6 @@ body {
   font-size: 1.3rem;
 }
 
-
-
 /*Login/Register*/
 /*********SASS for all inputs**********/
 
@@ -46,6 +86,7 @@ body {
 }
 .input-field input {
   border-bottom: 1px solid #eceff1;
+  margin-bottom: 0px;
   
 }
 /* label focus color */

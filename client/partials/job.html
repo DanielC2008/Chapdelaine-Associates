@@ -1,1 +1,53 @@
-<h1>{{title}}</h1>
+
+<div class="job">
+  <nav class="brown darken-1">
+    <ul>
+      <li><a ng-click=" showTab = 'JobMain' ">Job</a></li>
+      <li><a ng-click=" showTab = 'JobAttachment' ">Attachments</a></li>
+      <li><a ng-click=" showTab = 'JobEstimate' ">Estimate</a></li>
+      <li><a ng-click=" showTab = 'JobInvoice' ">Invoice</a></li> <!-- make this modal????? -->
+      <li class="jobExit" ><a href="/#/home">X</a></li>
+    </ul>
+  </nav>
+  <div class="jobInfo">  
+  <!-- will possibly use mass edit -->
+    <!-- <button 
+      class="button btn align right" 
+      ng-click="editOrSave()">
+      {{edit ? 'Save' : 'Edit'}}
+    </button> -->
+    <div class='row'>
+      <div ng-repeat='(key, value) in Job'>
+        <div ng-if="value" class="col s2">
+          {{key}}: {{value}}
+        </div class="col s3">
+      </div>
+    </div>
+
+    <div ng-if="showTab === 'NewJob'" ng-controller="NewJob as NJ">
+      <div ng-include="'./partials/newJob.html'">
+
+     </div>
+    </div>
+    <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">
+      <div ng-include="'./partials/jobMain.html'">
+
+     </div>
+    </div>
+    <div ng-if="showTab === 'JobAttachment'" ng-controller="JobAttachment as JA">
+      <div ng-include="'./partials/jobAttachment.html'">
+
+     </div>
+    </div>
+    <div ng-if="showTab === 'JobInvoice'" ng-controller="JobInvoice as JI">
+      <div ng-include="'./partials/jobInvoice.html'">
+
+     </div>
+    </div>
+    <div ng-if="showTab === 'JobEstimate'" ng-controller="JobEstimate as JE">
+      <div ng-include="'./partials/jobEstimate.html'">
+
+     </div>
+    </div>
+  </div>
+</div>
