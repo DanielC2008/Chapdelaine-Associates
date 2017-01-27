@@ -10,16 +10,19 @@
     //load data from database
     JobFactory.getJobFromDatabase(jobNumber)
       .success( Job => {
-          $scope.Clients = Job.Clients
-          $scope.Estimate = Job.Estimates
-          $scope.Invoice = Job.Invoices
-          $scope.Property = Job.Properties
-          $scope.Representatives = Job.Representatives
-          $scope.Job = Job.Jobs[0]
-        })
-        .error( data => {
-          alert('Wooops. There doesn\'t seem to be anything here!')
-        })
+        if (Job.Jobs[0]['Job Status'] === 'Pending') {
+          Job.Jobs[0]['Job Number'] = 'No Job Number'
+        }
+        $scope.Clients = Job.Clients
+        $scope.Estimate = Job.Estimates
+        $scope.Invoice = Job.Invoices
+        $scope.Property = Job.Properties
+        $scope.Representatives = Job.Representatives
+        $scope.Job = Job.Jobs[0]
+      })
+      .error( data => {
+        alert('Wooops. There doesn\'t seem to be anything here!')
+      })
     //edit data submited by user    
     $scope.editDatabase = (table, id, key, value) => {
       removeEditOptions() 
