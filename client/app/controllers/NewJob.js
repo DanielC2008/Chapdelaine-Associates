@@ -34,8 +34,8 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
 
   const createNewJob = () => {
     JobFactory.createNewJob($scope.newJob)
-      .success( () => {
-        JobFactory.goToJobPage($scope.newJob.job_number)
+      .success( ({edit}) => {
+        JobFactory.goToEditAllJobPage($scope.newJob.job_number)
       })
       .error( err => console.log(err))
   }

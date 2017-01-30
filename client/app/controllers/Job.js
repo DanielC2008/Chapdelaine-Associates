@@ -2,8 +2,10 @@
 
   app.controller('Job', function($scope, $location, JobFactory) {
     //========brings back info and makes all fields input until save
-    let URL = $location.$$url 
-    let jobNumber = URL.slice(parseInt(URL.search(":")) + 1)
+    let URL = $location.$$url
+    $scope.editAll = URL.match('editAll') ? true : false
+    let jobNumber = $scope.editAll === true ? URL.slice(parseInt(URL.search(":") + 1), URL.lastIndexOf('/')) : URL.slice(parseInt(URL.search(":") + 1)) 
+    console.log(jobNumber)
     $scope.showTab = 'JobMain'
     $scope.editOptions = {}
     let editCanceled = {}
