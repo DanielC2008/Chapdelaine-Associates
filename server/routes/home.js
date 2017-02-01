@@ -179,6 +179,7 @@ router.post('/api/findJob/getTableNames', (req, res) => {
   .select('table_name')
   .where({find_job: true})
   .then( tableNames => {
+    console.log(tableNames);
     res.send(tableNames)
   })
   .catch( err => {

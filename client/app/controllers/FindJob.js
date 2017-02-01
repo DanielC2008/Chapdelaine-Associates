@@ -5,20 +5,12 @@ app.controller('FindJob', function($scope, $http) {
   let HCScope = $scope.$parent
  // connected to database
   $http.post('/api/findJob/getTableNames')
-  .success( tableNames => {
-    FJScope.Tables = tableNames.map( table => {
-      return table.table_name
+    .then( ({data}) => {
+      FJScope.Tables = data.map( table => {
+        return table.table_name
+      })
     })
-  })
-  .error( err => {
-    alert(`${err}`)
-  })
-  // not connected to database
-  // FJScope.Tables = [
-  //   'Clients',
-  //   'Properties',
-  //   'Representatives'
-  // ]
+    .catch( ({data}) => alert(data))
 
   FJScope.selectedTable
 
@@ -85,12 +77,10 @@ app.controller('FindJob', function($scope, $http) {
   FJScope.submit = () => {
     let params = removeUnusedParams()
     $http.post('/api/database', params)
-    .success( data => {
-      FJScope.recentJobs = data
-    })
-    .error( () => {
-      console.log('error')
-    })
+      .then( ({data}) => {
+        FJScope.recentJobs = data
+     })
+     .catch( ({data}) => console.log(({data})))
   }
 
 //initiate first parameter

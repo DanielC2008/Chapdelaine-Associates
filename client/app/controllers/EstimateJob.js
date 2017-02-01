@@ -4,12 +4,8 @@ app.controller('EstimateJob', function($scope, $http) {
   let EJScope = this
   
   $http.get('/api/typesOfWork')
-  .success( data => {
-      EJScope.typesOfWork = data
-    })
-    .error( () => {
-      console.log('error')
-    })
+    .then( ({data}) => EJScope.typesOfWork = data)
+    .catch( ({data}) => console.log(data))
 
   EJScope.type_of_work = null
   // let numberOfSelections = 1
@@ -19,14 +15,12 @@ app.controller('EstimateJob', function($scope, $http) {
   EJScope.getSelectedType = typeOfWork => {
     //http call to database to get specific type of work
     $http.post('/api/getTypeOfWork', {typeOfWork})
-      .success( data => {
+      .then( ({data}) => {
         EJScope.estimate.push(data)
         EJScope.type_of_work = null
         EJScope.getTotal()
       })
-      .error( () => {
-        console.log('error')
-      })
+      .catch( ({data}) => console.log(data))
   }
 
   EJScope.getTotal = () => {

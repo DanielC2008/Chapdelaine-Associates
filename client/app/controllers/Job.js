@@ -5,26 +5,25 @@
     let URL = $location.$$url
     $scope.editAll = URL.match('editAll') ? true : false
     let jobNumber = $scope.editAll === true ? URL.slice(parseInt(URL.search(":") + 1), URL.lastIndexOf('/')) : URL.slice(parseInt(URL.search(":") + 1)) 
-    console.log(jobNumber)
     $scope.showTab = 'JobMain'
     $scope.editOptions = {}
     let editCanceled = {}
     //load data from database
     JobFactory.getJobFromDatabase(jobNumber)
-      .success( Job => {
-        if (Job.Jobs[0]['Job Status'] === 'Pending') {
-          Job.Jobs[0]['Job Number'] = 'No Job Number'
+      .then( ({data}) => {
+        if (data.Jobs[0]['Job Status'] === 'Pending') {
+          data.Jobs[0]['Job Number'] = 'No Job Number'
         }
-        $scope.Clients = Job.Clients
-        $scope.Estimate = Job.Estimates
-        $scope.Invoice = Job.Invoices
-        $scope.Property = Job.Properties
-        $scope.Representatives = Job.Representatives
-        $scope.Job = Job.Jobs[0]
+        $scope.Clients = data.Clients
+        $scope.Estimate = data.Estimates
+        $scope.Invoice = data.Invoices
+        $scope.Property = data.Properties
+        $scope.Representatives = data.Representatives
+        $scope.Job = data.Jobs[0]
       })
-      .error( data => {
-        alert('Wooops. There doesn\'t seem to be anything here!')
-      })
+      //can post status with .status and .statusText
+      .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))
+
     //edit data submited by user    
     $scope.editDatabase = (table, id, key, value) => {
       removeEditOptions() 
@@ -33,12 +32,10 @@
       //transform key to sql table name
       obj[key.toLowerCase().replace(' ', '_')] = value
       JobFactory.editColumn({table, id, obj})
-        .success( ({msg}) => {
-          alert(msg);
-        }).error( ({msg}) => {
-          alert(msg);
-        })
-      }
+        .then( ({data: {msg}}) => alert(msg))
+        .catch( ({data: {msg}}) => alert(msg))
+    }
+
     //set edit options on obj for easy comparison and edit canceled obj so data isn't lost 
     $scope.setEditOptions = (editType, tableName, tableIndex, index, key, value) => {
       $scope.editOptions.editType = editType
@@ -48,12 +45,14 @@
       editCanceled.key = key
       editCanceled.value = value
     }
+
     //focuses specific editOne
     $scope.changeFocus = (tableName, tableIndex, index) => {
       if (index == $scope.inputIndex && tableIndex == $scope.tIndex && tableName == $scope.table) {
         return true
       }
     }
+    
     //if user cancels edit, reset ng-model
     $scope.revertEditChanges = obj => {
       removeEditOptions()    
