@@ -21,11 +21,11 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
 
 
   //goes to database and finds the last Job number used adds one
-  JobFactory.getMaxJob()
-    .then( ({data: {max}}) => {
-      $scope.recommended = max + 1 
-    })
-    .catch( ({data}) => console.log(data))
+  // JobFactory.getMaxJob()
+  //   .then( ({data: {max}}) => {
+  //     $scope.recommended = max + 1 
+  //   })
+  //   .catch( ({data}) => console.log(data))
 
   $scope.addJobNumber = job_number => {
     $scope.newJob.job_number = job_number
@@ -39,4 +39,33 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
       })
       .catch( ({data}) => console.log(data))
   }
+
+
+    // $http
+    //   .get('api/getClientNames')//should pass in user_id here
+    //   .then(({data}) => {
+    //     console.log(data);
+
+    //   })
+    //   .catch(err => console.log(err))
+
+
+  $scope.filter = searchText => {
+    return Items.filter( item => item.first_name.search(searchText.toLowerCase()) === 0 || item.last_name.search(searchText.toLowerCase()) === 0)
+  }
+
+  let Items = [
+    {'display': 'Something One', 'first_name': 'something', 'last_name': 'one', 'value': 'one'},
+    {'display': 'Something Two', 'first_name': 'something', 'last_name': 'two','value': 'two'},
+    {'display': 'Something Else Three', 'first_name': 'something else', 'last_name': 'three','value': 'three'} 
+  ]
+
+
+
 })
+
+
+
+
+
+
