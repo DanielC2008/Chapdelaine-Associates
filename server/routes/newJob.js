@@ -33,7 +33,7 @@ router.post('/api/createNewJob', ({body}, res) => {
   knex('Jobs')
     .insert(body)
     .then( () => {
-      res.send({edit: "editAll"})
+      res.send()
     })
     .catch( err => {
       console.log(err)
