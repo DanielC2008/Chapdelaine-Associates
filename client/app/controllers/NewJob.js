@@ -40,25 +40,34 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
       .catch( ({data}) => console.log(data))
   }
 
+let items
 
-    // $http
-    //   .get('api/getClientNames')//should pass in user_id here
-    //   .then(({data}) => {
-    //     console.log(data);
+    $http
+      .get('api/getClientNames')//should pass in user_id here
+      .then(({data}) => {
+        console.log(data);
+        items = makeItemsArray(data)
+      })
+      .catch(err => console.log(err))
 
-    //   })
-    //   .catch(err => console.log(err))
 
+  $scope.filter = searchText => items.filter( item => item.value.search(searchText.toLowerCase()) != -1)
 
-  $scope.filter = searchText => {
-    return Items.filter( item => item.first_name.search(searchText.toLowerCase()) === 0 || item.last_name.search(searchText.toLowerCase()) === 0)
+  const makeItemsArray = itemsObj => {
+    return itemsObj.map( obj => {
+      let newObj = {}
+      newObj.display = `${obj.value}`
+      newObj.value = `${obj.value}`.toLowerCase()
+      return newObj
+    })
   }
 
-  let Items = [
-    {'display': 'Something One', 'first_name': 'something', 'last_name': 'one', 'value': 'one'},
-    {'display': 'Something Two', 'first_name': 'something', 'last_name': 'two','value': 'two'},
-    {'display': 'Something Else Three', 'first_name': 'something else', 'last_name': 'three','value': 'three'} 
-  ]
+  //make Properties separate from Rep and Clients
+  //break this out into its own controller or multiple controllers
+  //eventually introduce this into find job
+
+
+  //maybe instead make a filter factory and ng-include template
 
 
 
