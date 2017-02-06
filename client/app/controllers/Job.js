@@ -4,12 +4,12 @@
     //========brings back info and makes all fields input until save
     let URL = $location.$$url
     $scope.editAll = URL.match('editAll') ? true : false
-    let jobNumber = $scope.editAll === true ? URL.slice(parseInt(URL.search(":") + 1), URL.lastIndexOf('/')) : URL.slice(parseInt(URL.search(":") + 1)) 
+    $scope.jobNumber = $scope.editAll === true ? URL.slice(parseInt(URL.search(":") + 1), URL.lastIndexOf('/')) : URL.slice(parseInt(URL.search(":") + 1)) 
     $scope.showTab = 'JobMain'
     $scope.editOptions = {}
     let editCanceled = {}
     //load data from database
-    JobFactory.getJobFromDatabase(jobNumber)
+    JobFactory.getJobFromDatabase($scope.jobNumber)
       .then( ({data}) => {
         if (data.Jobs[0]['Job Status'] === 'Pending') {
           data.Jobs[0]['Job Number'] = 'No Job Number'
@@ -68,8 +68,23 @@
     }
 
 
-    $scope.editOrSave = () => {
-      $scope.edit ? $scope.edit = false: $scope.edit = true
-      //save to database//////////////////////////////////////////////
+    // $scope.editOrSave = () => {
+    //   $scope.edit ? $scope.edit = false: $scope.edit = true
+    //   //save to database//////////////////////////////////////////////
+    // }
+
+    $scope.removeFromJob = (table, id, job_number) => {
+      let obj = {
+        table,
+        id,
+        job_number
+      }
+      console.log(obj);
+      JobFactory.removeFromJob(obj)
+        //fix this when removing it actually does this
+        .then(JobFactory.goToJobPage($scope.jobNumber))
+        .catch( ({data: {msg}}) => alert(msg))
     }
+
+
   })
