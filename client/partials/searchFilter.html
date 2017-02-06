@@ -1,0 +1,14 @@
+<md-autocomplete 
+  md-no-cache="true" 
+  md-search-text="searchText"
+  md-items="item in SF.filter(searchText)" 
+  md-item-text="item.display"
+  md-selected-item="selectedItem"
+  md-min-length="1">  
+  <md-item-template>
+    <span md-highlight-text="searchText">{{item.display}}</span>
+  </md-item-template>
+  <md-not-found>
+    No matches found for "{{searchText}}".
+  </md-not-found>
+</md-autocomplete>
