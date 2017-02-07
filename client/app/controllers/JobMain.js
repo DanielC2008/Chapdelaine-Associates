@@ -58,7 +58,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $http)
         //set these on this scope so filter function has access to it
         $scope.table = 'Jobs_Clients' 
         $scope.items = data
-        JMScope.addClientBy = 'search'
+        JMScope.addBy = 'searchClients'
       })
       .catch(err => console.log(err))
   }
@@ -68,7 +68,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $http)
       .then(({data}) => {
         $scope.table = 'Jobs_Properties' 
         $scope.items = data
-        JMScope.addPropertyBy = 'search'
+        JMScope.addBy = 'searchProperties'
       })
       .catch(err => console.log(err))
   }
