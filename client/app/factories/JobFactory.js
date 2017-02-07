@@ -26,5 +26,9 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.addToJob = dataObj => $http.post('/api/addToJob', dataObj)
 
+    factory.getClientNames = () => $http.get('/api/getClientNames')
+
+    factory.getPropertyAddresses = () => $http.get('/api/getPropertyAddresses')
+
   return factory
 })
