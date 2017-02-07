@@ -39,4 +39,21 @@ router.post('/api/removeFromJob', ({body: {table, id, job_number}}, res) => {
     })
 })
 
+router.post('/api/addToJob', ({body: {table, id, job_number}}, res) => {
+  knex('Jobs')
+    .select('job_id')
+    .where(job_number)
+    .then( data => {
+      id.job_id = data[0].job_id
+      knex(`${table}`)
+        .insert(id)
+        .then( data => {
+          console.log(data);
+        })
+    })
+})
+
+
+
+
 module.exports = router

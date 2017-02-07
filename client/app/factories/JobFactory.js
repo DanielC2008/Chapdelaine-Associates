@@ -24,5 +24,7 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.removeFromJob = objToRemove => $http.post('/api/removeFromJob', objToRemove)
 
+    factory.addToJob = objToAdd => $http.post('/api/addToJob', objToAdd)
+
   return factory
 })

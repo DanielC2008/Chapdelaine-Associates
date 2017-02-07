@@ -1,16 +1,22 @@
 'use strict'
 
-app.controller('SearchFilter', function($scope) {
+app.controller('SearchFilter', function($scope, JobFactory) {
   let SFscope = this
-  let JMscope = $scope.$parent
 
-  SFscope.filter = searchText => items.filter( item => item.value.search(searchText.toLowerCase()) != -1)
+  SFscope.filter = searchText => items.filter( item => item.value.toLowerCase().search(searchText.toLowerCase()) != -1)
   
-  let items = JMscope.items.map( obj => { 
-    let newObj = {}
-    newObj.display = `${obj.value}`
-    newObj.value = `${obj.value}`.toLowerCase()
-    return newObj
-  })
+  let items = $scope.items
+
+  SFscope.addToJob = obj => {
+    //make sure user wants to do this here........
+    delete obj.value
+    let objToAdd = {
+      table: $scope.table,
+      id: obj,
+      job_number: {job_number: $scope.jobNumber}
+      
+    }
+    JobFactory.addToJob(objToAdd)
+  }
 
 })

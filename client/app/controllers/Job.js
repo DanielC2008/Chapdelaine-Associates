@@ -79,7 +79,6 @@
         id,
         job_number
       }
-      console.log(obj);
       JobFactory.removeFromJob(obj)
         //fix this when removing it actually does this
         .then(JobFactory.goToJobPage($scope.jobNumber))

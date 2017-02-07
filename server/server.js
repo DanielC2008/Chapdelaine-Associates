@@ -16,7 +16,9 @@ app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-
+knex('Jobs_Clients').then( data => {
+    console.log(data);
+  })
 //routes
 app.use(routes)
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

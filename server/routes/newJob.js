@@ -30,8 +30,7 @@ router.post('/api/createNewJob', ({body}, res) => {
 
 router.get('/api/getClientNames', ({body}, res) => {
   knex('Clients')
-    .select(knex.raw(`first_name + ' ' + last_name AS 'value'`))
-    //get id???
+    .select(knex.raw(`first_name + ' ' + last_name AS 'value'`), 'client_id')
     .then( data => res.send(data))
     .catch( err => console.log(err))
 })

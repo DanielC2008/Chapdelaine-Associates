@@ -2,14 +2,15 @@
 
 app.controller('JobMain', function($scope, $http) {
   let JMScope = this
-  let Scope = $scope.$parent
 
   JMScope.addClientBySearch = () => {
     $http
       .get('api/getClientNames')//should pass in user_id here
       .then(({data}) => {
-        JMScope.addClientBy = 'search'      
-        $scope.items = data;
+        //set these on this scope so filter function has access to it
+        $scope.table = 'Jobs_Clients' 
+        $scope.items = data
+        JMScope.addClientBy = 'search'
       })
       .catch(err => console.log(err))
     
