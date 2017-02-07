@@ -9,14 +9,15 @@ app.controller('SearchFilter', function($scope, JobFactory, $route) {
 
   SFscope.addToJob = obj => {
     //make sure user wants to do this here........
+    //value no longer needed, simply delete and recyle obj
     delete obj.value
-    let objToAdd = {
+    let dataObj = {
       table: $scope.table,
-      id: obj,
+      objToAdd: obj,
       job_number: {job_number: $scope.jobNumber}
       
     }
-    JobFactory.addToJob(objToAdd)
+    JobFactory.addToJob(dataObj)
       .then( ({data}) => $route.reload())
       .catch( ({data}) => console.log(data))
   }

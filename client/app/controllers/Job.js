@@ -73,13 +73,13 @@
     //   //save to database//////////////////////////////////////////////
     // }
 
-    $scope.removeFromJob = (table, id, job_number) => {
-      let obj = {
+    $scope.removeFromJob = (table, objToRemove, job_number) => {
+      let dataObj = {
         table,
-        id,
+        objToRemove,
         job_number
       }
-      JobFactory.removeFromJob(obj)
+      JobFactory.removeFromJob(dataObj)
         .then( ({data}) => $route.reload())
         .catch( ({data}) => console.log(data))
     }

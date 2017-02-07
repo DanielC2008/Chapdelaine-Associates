@@ -20,7 +20,7 @@ router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
     })
 })
 
-router.post('/api/removeFromJob', ({body: {table, id, job_number}}, res) => {
+router.post('/api/removeFromJob', ({body: {table, objToRemove, job_number}}, res) => {
   //first get job id
   //-----------------------------------------------------------might end up sending job_id with original obj
   knex('Jobs')
@@ -31,7 +31,7 @@ router.post('/api/removeFromJob', ({body: {table, id, job_number}}, res) => {
       let job_id = data[0]
       knex(`${table}`)
       .del()
-        .where(id)
+        .where(objToRemove)
         .where(job_id)
         .then( data => {
           res.send()
@@ -39,14 +39,14 @@ router.post('/api/removeFromJob', ({body: {table, id, job_number}}, res) => {
     })
 })
 
-router.post('/api/addToJob', ({body: {table, id, job_number}}, res) => {
+router.post('/api/addToJob', ({body: {table, objToAdd, job_number}}, res) => {
   knex('Jobs')
     .select('job_id')
     .where(job_number)
     .then( data => {
-      id.job_id = data[0].job_id
+      objToAdd.job_id = data[0].job_id
       knex(`${table}`)
-        .insert(id)
+        .insert(objToAdd)
         .then( data => {
           res.send(data)
         })
