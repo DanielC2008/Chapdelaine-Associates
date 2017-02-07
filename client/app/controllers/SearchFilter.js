@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('SearchFilter', function($scope, JobFactory) {
+app.controller('SearchFilter', function($scope, JobFactory, $route) {
   let SFscope = this
 
   SFscope.filter = searchText => items.filter( item => item.value.toLowerCase().search(searchText.toLowerCase()) != -1)
@@ -17,6 +17,8 @@ app.controller('SearchFilter', function($scope, JobFactory) {
       
     }
     JobFactory.addToJob(objToAdd)
+      .then( ({data}) => $route.reload())
+      .catch( ({data}) => console.log(data))
   }
 
 })

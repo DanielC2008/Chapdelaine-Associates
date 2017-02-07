@@ -48,7 +48,7 @@ router.post('/api/addToJob', ({body: {table, id, job_number}}, res) => {
       knex(`${table}`)
         .insert(id)
         .then( data => {
-          console.log(data);
+          res.send(data)
         })
     })
 })

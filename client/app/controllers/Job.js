@@ -1,6 +1,6 @@
 "use strict"
 
-  app.controller('Job', function($scope, $location, JobFactory) {
+  app.controller('Job', function($scope, $location, JobFactory, $route) {
     //========brings back info and makes all fields input until save
     let URL = $location.$$url
     $scope.editAll = URL.match('editAll') ? true : false
@@ -80,9 +80,8 @@
         job_number
       }
       JobFactory.removeFromJob(obj)
-        //fix this when removing it actually does this
-        .then(JobFactory.goToJobPage($scope.jobNumber))
-        .catch( ({data: {msg}}) => alert(msg))
+        .then( ({data}) => $route.reload())
+        .catch( ({data}) => console.log(data))
     }
 
 
