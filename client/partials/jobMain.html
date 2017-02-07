@@ -3,7 +3,10 @@
   <div>
     <button  ng-click="JM.addClientBySearch()">Add Existing Client</button>
     <button  ng-click="JM.addClientBy = 'new'">Add New Client</button>  
+    <button  ng-click="JM.addPropertyBySearch()">Add Existing Property</button>
+    <button  ng-click="JM.addPropertyBy = 'new'">Add New Property</button>  
   </div>
+
   <div ng-if="JM.addClientBy === 'search'">
     <div ng-controller="SearchFilter as SF">
       <div ng-include="'./partials/searchFilter.html'">
@@ -12,9 +15,19 @@
   </div>
   <div ng-if="JM.addClientBy == 'new'">
     <div> Create New using inputs
-      
     </div>
   </div>
+  <div ng-if="JM.addPropertyBy === 'search'">
+    <div ng-controller="SearchFilter as SF">
+      <div ng-include="'./partials/searchFilter.html'">
+      </div>
+    </div>
+  </div>
+  <div ng-if="JM.addPropertyBy == 'new'">
+    <div> Create New using inputs
+    </div>
+  </div>
+
 </div>
   </div>
 </div>
@@ -63,6 +76,7 @@
           </span>
         </div>
       </div>
+       <!-- <button type="submit" class="btn button" ng-click="JM.removeFromJob('Jobs_Clients', {client_id: client.client_id}, {job_number: jobNumber})">Remove Client</button> need to put this in when Job_Representatives is added -->
     </div>
   </div>
 </div>
@@ -90,6 +104,7 @@
           </span>
         </div>
       </div>
+      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Jobs_Properties', {property_id: property.property_id}, {job_number: jobNumber})">Remove Property</button>
     </div>
   </div>
 </div>

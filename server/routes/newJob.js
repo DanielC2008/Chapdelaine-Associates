@@ -35,4 +35,11 @@ router.get('/api/getClientNames', ({body}, res) => {
     .catch( err => console.log(err))
 })
 
+router.get('/api/getPropertyAddresses', ({body}, res) => {
+  knex('Properties')
+    .select(knex.raw(`address AS 'value'`), 'property_id')
+    .then( data => res.send(data))
+    .catch( err => console.log(err))
+})
+
 module.exports = router

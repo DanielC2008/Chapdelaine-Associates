@@ -15,7 +15,6 @@ app.controller('SearchFilter', function($scope, JobFactory, $route) {
       table: $scope.table,
       objToAdd: obj,
       job_number: {job_number: $scope.jobNumber}
-      
     }
     JobFactory.addToJob(dataObj)
       .then( ({data}) => $route.reload())

@@ -54,7 +54,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $http)
 /////////////ADD OR REMOVE FROM JOB///////////////
   JMScope.addClientBySearch = () => {
     $http
-      .get('api/getClientNames')//should pass in user_id here
+      .get('/api/getClientNames')//should pass in user_id here
       .then(({data}) => {
         //set these on this scope so filter function has access to it
         $scope.table = 'Jobs_Clients' 
@@ -62,7 +62,17 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $http)
         JMScope.addClientBy = 'search'
       })
       .catch(err => console.log(err))
-    
+  }
+
+  JMScope.addPropertyBySearch = () => {
+    $http
+      .get('/api/getPropertyAddresses')//should pass in user_id here
+      .then(({data}) => {
+        $scope.table = 'Jobs_Properties' 
+        $scope.items = data
+        JMScope.addPropertyBy = 'search'
+      })
+      .catch(err => console.log(err))
   }
 
   JMScope.removeFromJob = (table, objToRemove, job_number) => {
