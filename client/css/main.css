@@ -167,6 +167,10 @@ nav ul li {
 
 /********dialog************/
 .addToJobFromDialog {
-  width:800px;
+  width: 1200px;
   height:810px;
+}
+
+.addToJobNotes {
+    height: 10em;
 }

@@ -6,7 +6,7 @@
         <span>{{client.display != 'Notes' ? client.display : ''}}</span> 
         <input ng-if="key != 'notes'" type="text" ng-model='client[key]'>
       </div>  
-      <textarea class='col s12' ng-if="key == 'notes'" cols="40" rows="40" ng-model='client[key]' placeholder="Special Notes..."></textarea>
+      <textarea class='col s8 offset-s2 addToJobNotes' ng-if="key == 'notes'" ng-model='client[key]' placeholder="Special Notes..."></textarea>
     </div>
   </div>
 </div>
