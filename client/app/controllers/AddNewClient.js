@@ -1,9 +1,11 @@
 'use strict'
 
-app.controller('AddNewClient', function($scope, $mdDialog) {
+app.controller('AddNewClient', function($scope, $mdDialog, table, jobNumber, JobFactory) {
   let NEW = this
+
   NEW.title = 'Client'
-  NEW.Clients = [
+
+  NEW.Client = [
     {
       first_name: '', 
       display: 'First Name' 
@@ -74,11 +76,33 @@ app.controller('AddNewClient', function($scope, $mdDialog) {
       display: 'Notes' 
 
     }
-    ]
+  ]
 
-NEW.create= ()  => {
-  console.log(NEW.Clients);
-}
+  const createClient = () => { 
+    //copy so it does not change scope
+    let arrToAdd = _.cloneDeep(NEW.Client)
+    arrToAdd.forEach( obj => {
+      for (let prop in obj) {
+        if (prop === 'display' || prop === '$$hashKey') {
+          delete obj[prop]
+        }
+      }
+    })
+    return arrToAdd
+  }
+
+  NEW.send = ()  => {
+    let arrToAdd = createClient()
+    let dataObj = {
+      table,
+      arrToAdd,
+      jobNumber
+    }
+  }
+
+  NEW.reject = () => {
+    $mdDialog.cancel()
+  }
 
 
 })
