@@ -163,3 +163,10 @@ nav ul li {
   background-color: #bcaaa4;
   box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
 }
+
+
+/********dialog************/
+.addToJobFromDialog {
+  width:800px;
+  height:810px;
+}

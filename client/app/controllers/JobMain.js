@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobMain', function($scope, $location, JobFactory, $route, $http) {
+app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDialog) {
   let JMScope = this
 
 
@@ -82,6 +82,16 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $http)
     JobFactory.removeFromJob(dataObj)
       .then( ({data}) => $route.reload())
       .catch( ({data}) => console.log(data))
+  }
+
+  JMScope.addNewClient = (ev) => {
+    $mdDialog.show({
+      controller: 'AddNewClient as NEW',
+      templateUrl: '/partials/addNewClient.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:false
+    })
   }
 
 

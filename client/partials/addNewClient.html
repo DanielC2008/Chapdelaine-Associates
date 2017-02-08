@@ -1,0 +1,16 @@
+<div class="addToJobFromDialog row">
+  <h1 class="center align"> Add New {{NEW.title}} </h1>
+  <div ng-repeat='client in NEW.Clients'>
+    <div ng-repeat='(key, value) in client' ng-if='key != "display"'>
+      <div class="col s3">
+        <span>{{client.display != 'Notes' ? client.display : ''}}</span> 
+        <input ng-if="key != 'notes'" type="text" ng-model='client[key]'>
+      </div>  
+      <textarea class='col s12' ng-if="key == 'notes'" cols="40" rows="40" ng-model='client[key]' placeholder="Special Notes..."></textarea>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <button class="button btn" ng-click="NEW.reject()">Exit Without Saving</button>
+  <button class="button btn" ng-click="NEW.create()" >Save {{NEW.title}}</button>
+</div>
