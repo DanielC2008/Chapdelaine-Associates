@@ -54,6 +54,33 @@ router.post('/api/addToJob', ({body: {table, objToAdd, job_number}}, res) => {
 })
 
 
+router.post('/api/addNewToJob', ({body: {table, objToAdd, job_number}}, res) => {
+  let connectTableObj = {}
+  // find job number
+  knex('Jobs')
+    .select('job_id')
+    .where(job_number)
+    .then( data => {
+      connectTableObj.job_id = data[0].job_id
+      //make client
+      knex(`${table}`)
+        .returning('client_id')
+        .insert(objToAdd)
+        .then( data => {
+          connectTableObj.client_id = data[0]
+          //set ids on connecting table
+          knex('Jobs_Clients')
+          .insert(connectTableObj)
+          .then( data => {
+            res.send(data)
+          }).catch( err => console.log(err))
+        }).catch( err => console.log(err))
+    }).catch( err => console.log(err))
+})
+
+
+
+
 
 
 module.exports = router

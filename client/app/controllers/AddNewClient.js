@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('AddNewClient', function($scope, $mdDialog, table, jobNumber, JobFactory) {
+app.controller('AddNewClient', function($scope, $mdDialog, table, job_number, JobFactory, $route) {
   let NEW = this
 
   NEW.title = 'Client'
@@ -79,25 +79,30 @@ app.controller('AddNewClient', function($scope, $mdDialog, table, jobNumber, Job
   ]
 
   const createClient = () => { 
-    //copy so it does not change scope
-    let arrToAdd = _.cloneDeep(NEW.Client)
-    arrToAdd.forEach( obj => {
+    let objToAdd = {}
+    NEW.Client.forEach( obj => {
       for (let prop in obj) {
-        if (prop === 'display' || prop === '$$hashKey') {
-          delete obj[prop]
+        if (prop !== 'display' && prop !== '$$hashKey') {
+          objToAdd[prop] = obj[prop]
         }
       }
     })
-    return arrToAdd
+    return objToAdd
   }
 
   NEW.send = ()  => {
-    let arrToAdd = createClient()
+    let objToAdd = createClient()
     let dataObj = {
       table,
-      arrToAdd,
-      jobNumber
+      objToAdd,
+      job_number
     }
+    JobFactory.addNewToJob(dataObj)
+      .then( ({data}) => {
+        $mdDialog.cancel()
+        $route.reload()
+      })
+      .catch( ({data}) => console.log(data))
   }
 
   NEW.reject = () => {

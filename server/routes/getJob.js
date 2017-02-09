@@ -42,10 +42,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.county as County',
         'Clients.notes as Notes'
       )
-      .where('job_number', job_number)
       .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
-      .join('Jobs', 'Jobs_Clients.job_id', '=', 'Jobs.job_id')
-      .join('Representatives', 'Clients.client_id', '=', 'Representatives.client_id')
+      .join('Jobs', 'Jobs_Clients.job_id', 'Jobs.job_id')
+      .where('job_number', job_number)
       .then(data => Job.Clients = data),
 
       knex('Clients')
@@ -67,10 +66,10 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Representatives.county as County',
         'Representatives.notes as Notes'
       )
-      .where('job_number', job_number)
       .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
       .join('Jobs', 'Jobs_Clients.job_id', '=', 'Jobs.job_id')
       .join('Representatives', 'Clients.client_id', '=', 'Representatives.client_id')
+      .where('job_number', job_number)
       .then(data => Job.Representatives = data),
 
     knex('Properties')

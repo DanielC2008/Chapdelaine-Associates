@@ -86,7 +86,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
 
   JMScope.addNewClient = (ev) => {
     $mdDialog.show({
-      locals: {table: 'Clients', jobNumber: {job_number: $scope.jobNumber}},
+      locals: {table: 'Clients', job_number: {job_number: $scope.jobNumber}},
       controller: 'AddNewClient as NEW',
       templateUrl: '/partials/addNewClient.html',
       parent: angular.element(document.body),
