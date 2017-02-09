@@ -2,11 +2,27 @@
 
 app.controller('AddNewClient', function($scope, $mdDialog, table, job_number, JobFactory, $route) {
   let NEW = this
+  
+  NEW.table = table
 
-  NEW.title = 'Client'
-
-  NEW.Client = 
-    {
+  NEW.Display = {
+    Clients: {
+    'First Name': '', 
+    'Middle Name': '', 
+    'Last Name': '', 
+    'Email': '', 
+    'Business Phone': '', 
+    'Mobile Phone': '', 
+    'Home Phone': '', 
+    'Fax Number': '', 
+    'Address': '', 
+    'City': '', 
+    'State': '', 
+    'Zip Code': '', 
+    'County': '', 
+    'Notes': '', 
+    }, 
+    Representatives: {
       'First Name': '', 
       'Middle Name': '', 
       'Last Name': '', 
@@ -22,9 +38,10 @@ app.controller('AddNewClient', function($scope, $mdDialog, table, job_number, Jo
       'County': '', 
       'Notes': '', 
     }
+  }
 
   NEW.send = ()  => {
-    let objToAdd = _.cloneDeep(NEW.Client)
+    let objToAdd = _.cloneDeep(NEW.Display[`${table}`])
     for (let key in objToAdd){
       objToAdd[key.toLowerCase().replace(' ', '_')] = objToAdd[key]
       delete objToAdd[key]
