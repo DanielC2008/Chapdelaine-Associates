@@ -11,9 +11,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
   JMScope.editDatabase = (table, id, key, value) => {
     removeEditOptions() 
     //make sure user wants to make these changes
-    let obj = {}
-    //transform key to sql table name
-    obj[key.toLowerCase().replace(' ', '_')] = value
+    let obj = JobFactory.matchDatabaseKeys({[key]: value})
     JobFactory.editColumn({table, id, obj})
       .then( ({data: {msg}}) => alert(msg))
       .catch( ({data: {msg}}) => alert(msg))

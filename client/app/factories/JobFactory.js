@@ -31,6 +31,15 @@ app.factory('JobFactory', function($location, $http) {
     factory.getClientNames = () => $http.get('/api/getClientNames')
 
     factory.getPropertyAddresses = () => $http.get('/api/getPropertyAddresses')
+   
+    //might put this elsewhere
+    factory.matchDatabaseKeys = obj => {
+      for (let key in obj){
+        obj[key.toLowerCase().replace(' ', '_')] = obj[key]
+        delete obj[key]
+      }
+      return obj
+    }
 
   return factory
 })

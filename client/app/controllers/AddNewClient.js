@@ -2,7 +2,7 @@
 
 app.controller('AddNewClient', function($scope, $mdDialog, table, job_number, JobFactory, $route) {
   let NEW = this
-  
+
   NEW.table = table
 
   NEW.Display = {
@@ -41,11 +41,7 @@ app.controller('AddNewClient', function($scope, $mdDialog, table, job_number, Jo
   }
 
   NEW.send = ()  => {
-    let objToAdd = _.cloneDeep(NEW.Display[`${table}`])
-    for (let key in objToAdd){
-      objToAdd[key.toLowerCase().replace(' ', '_')] = objToAdd[key]
-      delete objToAdd[key]
-    }
+    let objToAdd = JobFactory.matchDatabaseKeys(_.cloneDeep(NEW.Display[`${table}`]))
     let dataObj = {
       table,
       objToAdd,
