@@ -2,10 +2,11 @@
 
 app.controller('SearchFilter', function($scope, JobFactory, $route) {
   let SFscope = this
-
-  SFscope.filter = searchText => items.filter( item => item.value.toLowerCase().search(searchText.toLowerCase()) != -1)
-  
   let items = $scope.items
+
+
+  SFscope.filter = searchText => items.filter( item => item.value && item.value.toLowerCase().search(searchText.toLowerCase()) != -1 )
+  
 
   SFscope.addToJob = obj => {
     //make sure user wants to do this here........
