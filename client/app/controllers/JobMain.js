@@ -82,16 +82,15 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       .catch( ({data}) => console.log(data))
   }
 
-  JMScope.addNewClient = (ev) => {
+  JMScope.addNew = (table) => {
     $mdDialog.show({
-      locals: {table: 'Clients', job_number: {job_number: $scope.jobNumber}},
-      controller: 'AddNewClient as NEW',
-      templateUrl: '/partials/addNewClient.html',
+      locals: {table: table, job_number: {job_number: $scope.jobNumber}},
+      controller: 'AddNew as NEW',
+      templateUrl: '/partials/addNew.html',
       parent: angular.element(document.body),
-      targetEvent: ev,
       clickOutsideToClose:false
     })
-  }
+  }  
 
 
 })

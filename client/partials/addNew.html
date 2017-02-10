@@ -1,7 +1,7 @@
 <div class="addToJobFromDialog row">
-  <h1 class="center align"> Add New  </h1>
+  <h1 class="center align"> Add New  {{NEW.title}}</h1>
     <div ng-repeat='(KEY, value) in NEW.Display'>
-      <div ng-if="KEY == NEW.table"  ng-repeat='(key, value) in NEW.Display[KEY] as display '>
+      <div ng-if="KEY == NEW.title"  ng-repeat='(key, value) in NEW.Display[KEY] as display '>
         <div ng-if="key != 'Notes'" class="col s3">
           <span>{{key}}</span> 
           <input type="text" ng-model='display[key]'>

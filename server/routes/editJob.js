@@ -56,6 +56,29 @@ router.post('/api/addToJob', ({body: {table, objToAdd, job_number}}, res) => {
 
 router.post('/api/addNewToJob', ({body: {table, objToAdd, job_number}}, res) => {
   let connectTableObj = {}
+  let connectTable = ''
+  let returningId = ''
+
+//might end up needing this info to be broke out
+  switch(table) {
+    case 'Client':
+      table = 'Clients'
+      connectTable = 'Jobs_Clients'
+      returningId = 'client_id'
+      break;
+    case 'Representative':
+      table = 'Representatives'
+      connectTable = 'Clients_Representatives'
+      connectTableObj.clientId = client_id
+      returningId = 'representative_id'
+      break;
+    case 'Property':
+      table = 'Properties'
+      connectTable = 'Jobs_Properties'
+      returningId = 'property_id'
+      break;
+    
+}
   // find job number
   knex('Jobs')
     .select('job_id')
@@ -64,12 +87,12 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, job_number}}, res) => 
       connectTableObj.job_id = data[0].job_id
       //make client
       knex(`${table}`)
-        .returning('client_id')
+        .returning(`${returningId}`)
         .insert(objToAdd)
         .then( data => {
-          connectTableObj.client_id = data[0]
+          connectTableObj[returningId] = data[0]
           //set ids on connecting table
-          knex('Jobs_Clients')
+          knex(`${connectTable}`)
           .insert(connectTableObj)
           .then( data => {
             res.send(data)
