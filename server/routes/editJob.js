@@ -28,11 +28,11 @@ router.post('/api/removeFromJob', ({body: {table, objToRemove, job_number}}, res
     .where(job_number)
     //then remove from the connecting table using both id's
     .then( data => {
-      let job_id = data[0]
+      objToRemove.job_id = data[0].job_id
+      console.log(objToRemove);
       knex(`${table}`)
-      .del()
+        .del()
         .where(objToRemove)
-        .where(job_id)
         .then( data => {
           res.send()
         })
@@ -58,7 +58,7 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_number}}
   let connectTableObj = {}
   let connectTable = ''
   let returningId = ''
-  console.log(clientId);
+
 //might end up needing this info to be broke out
   switch(table) {
     case 'Client':
@@ -91,7 +91,6 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_number}}
         .insert(objToAdd)
         .then( data => {
           connectTableObj[returningId] = data[0]
-          console.log(connectTableObj)
           //set ids on connecting table
           knex(`${connectTable}`)
           .insert(connectTableObj)
