@@ -88,7 +88,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       job_number: {job_number: $scope.jobNumber},
       clientArray: null
     }
-    if (table == 'Representative') {
+    if (table == 'Representatives') {
       locals.clientArray = $scope.Clients.map( client => {
         let obj = {
           client_id: client.client_id,

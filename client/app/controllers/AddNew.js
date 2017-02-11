@@ -10,7 +10,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientAr
 
 
   NEW.Display = {
-    Client: {
+    Clients: {
       'First Name': '', 
       'Middle Name': '', 
       'Last Name': '', 
@@ -26,7 +26,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientAr
       'County': '', 
       'Notes': '', 
     }, 
-    Representative: {
+    Representatives: {
       'First Name': '', 
       'Middle Name': '', 
       'Last Name': '', 
@@ -42,7 +42,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientAr
       'County': '', 
       'Notes': '', 
     }, 
-    Property: {
+    Properties: {
       'Address': '',
       'City': '',
       'State': '',
