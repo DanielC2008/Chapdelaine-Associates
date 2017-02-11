@@ -1,8 +1,13 @@
 'use strict'
 
-app.controller('AddNew', function($scope, $mdDialog, table, job_number, JobFactory, $route) {
+app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientArray, JobFactory, $route) {
   let NEW = this
   NEW.title = table
+
+  if (clientArray) {
+    NEW.ClientNames = clientArray
+  }
+
 
   NEW.Display = {
     Client: {
@@ -60,6 +65,10 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_number, JobFacto
       table,
       objToAdd,
       job_number
+    }
+
+    if(NEW.clientId) {
+      dataObj.clientId = NEW.clientId
     }
     JobFactory.addNewToJob(dataObj)
       .then( ({data}) => {

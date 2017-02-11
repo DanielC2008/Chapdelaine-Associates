@@ -1,7 +1,7 @@
 'use strict'
 
 
-const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial'])
+const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ngMessages'])
   .run(function($rootScope) {
     $rootScope.$user = null
   })

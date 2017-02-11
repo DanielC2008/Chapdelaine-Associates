@@ -54,11 +54,11 @@ router.post('/api/addToJob', ({body: {table, objToAdd, job_number}}, res) => {
 })
 
 
-router.post('/api/addNewToJob', ({body: {table, objToAdd, job_number}}, res) => {
+router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_number}}, res) => {
   let connectTableObj = {}
   let connectTable = ''
   let returningId = ''
-
+  console.log(clientId);
 //might end up needing this info to be broke out
   switch(table) {
     case 'Client':
@@ -69,7 +69,7 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, job_number}}, res) => 
     case 'Representative':
       table = 'Representatives'
       connectTable = 'Clients_Representatives'
-      connectTableObj.clientId = client_id
+      connectTableObj.client_id = clientId
       returningId = 'representative_id'
       break;
     case 'Property':
@@ -91,6 +91,7 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, job_number}}, res) => 
         .insert(objToAdd)
         .then( data => {
           connectTableObj[returningId] = data[0]
+          console.log(connectTableObj)
           //set ids on connecting table
           knex(`${connectTable}`)
           .insert(connectTableObj)

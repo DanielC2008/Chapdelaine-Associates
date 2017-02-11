@@ -10,7 +10,13 @@
       </div>
     </div>
 </div>
+<div ng-if="NEW.ClientNames" class="row"> Add Client:
+  <div ng-repeat="name in NEW.ClientNames"> 
+    <button class="button btn"  ng-click="NEW.clientId = name.client_id">{{name.client_name}}</button>
+  </div>
+</div>
 <div class="row">
   <button class="button btn" ng-click="NEW.reject()">Exit Without Saving</button>
   <button class="button btn" ng-click="NEW.send()" >Save {{NEW.title}}</button>
 </div>
+

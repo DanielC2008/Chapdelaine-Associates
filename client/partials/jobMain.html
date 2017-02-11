@@ -5,6 +5,8 @@
     <button  ng-click="JM.addNew('Client')">Add New Client</button>  
     <button  ng-click="JM.addPropertyBySearch()">Add Existing Property</button>
     <button  ng-click="JM.addNew('Property')">Add New Property</button>  
+    <button  ng-click="JM.addReperesentativeBySearch()">Add Existing Reperesentative</button>
+    <button  ng-click="JM.addNew('Representative')">Add New Representative</button>  
   </div>
    
 
@@ -14,16 +16,10 @@
       </div>
     </div>
   </div>
-  <div ng-if="JM.addBy === 'newClient'">
-  </div>
   <div ng-if="JM.addBy === 'searchProperties'">
     <div ng-controller="SearchFilter as SF">
       <div ng-include="'./partials/searchFilter.html'">
       </div>
-    </div>
-  </div>
-  <div ng-if="JM.addBy === 'newProperty'">
-    <div> Create New using inputs
     </div>
   </div>
 

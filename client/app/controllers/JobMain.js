@@ -83,8 +83,22 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
   }
 
   JMScope.addNew = (table) => {
+    let locals = {
+      table: table, 
+      job_number: {job_number: $scope.jobNumber},
+      clientArray: null
+    }
+    if (table == 'Representative') {
+      locals.clientArray = $scope.Clients.map( client => {
+        let obj = {
+          client_id: client.client_id,
+          client_name : `${client['First Name']} ${client['Last Name']}`
+        }  
+        return obj
+      })
+    }
     $mdDialog.show({
-      locals: {table: table, job_number: {job_number: $scope.jobNumber}},
+      locals,
       controller: 'AddNew as NEW',
       templateUrl: '/partials/addNew.html',
       parent: angular.element(document.body),
