@@ -18,7 +18,7 @@ app.controller('Login-Register', function($scope, $http, $location, $rootScope) 
         user_name: $scope.formData.userName,
         password: $scope.formData.password
       })
-      .success( data => {
+      .then( ({data}) => {
         if (data.user_name) {
           $rootScope.$user = data.user_name
           $location.path('/home')
@@ -26,9 +26,7 @@ app.controller('Login-Register', function($scope, $http, $location, $rootScope) 
           alert(`${data.msg}`)
         }
       })
-      .error( data => {
-        alert("There was an error achieving your credentials. Please try again.")
-      })
+      .catch( () => alert("There was an error achieving your credentials. Please try again."))
   }
 
   $scope.passTests = (password) => {

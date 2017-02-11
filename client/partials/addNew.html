@@ -1,0 +1,22 @@
+<div class="addToJobFromDialog row">
+  <h1 class="center align"> Add New  {{NEW.title}}</h1>
+    <div ng-repeat='(KEY, value) in NEW.Display'>
+      <div ng-if="KEY == NEW.title"  ng-repeat='(key, value) in NEW.Display[KEY] as display '>
+        <div ng-if="key != 'Notes'" class="col s3">
+          <span>{{key}}</span> 
+          <input type="text" ng-model='display[key]'>
+        </div>  
+        <textarea class='col s8 offset-s2 addToJobNotes' ng-if="key == 'Notes'" ng-model='display[key]' placeholder="Special Notes..."></textarea>
+      </div>
+    </div>
+</div>
+<div ng-if="NEW.ClientNames" class="row"> Add Client:
+  <div ng-repeat="name in NEW.ClientNames"> 
+    <button class="button btn"  ng-click="NEW.clientId = name.client_id">{{name.client_name}}</button>
+  </div>
+</div>
+<div class="row">
+  <button class="button btn" ng-click="NEW.reject()">Exit Without Saving</button>
+  <button class="button btn" ng-click="NEW.send()" >Save {{NEW.title}}</button>
+</div>
+

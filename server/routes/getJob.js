@@ -10,6 +10,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
   //could break this out into multiple database calls
   let Job = {}
+  let clientID
 
   return Promise.all([
 
@@ -42,36 +43,13 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.county as County',
         'Clients.notes as Notes'
       )
-      .where('job_number', job_number)
       .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
-      .join('Jobs', 'Jobs_Clients.job_id', '=', 'Jobs.job_id')
-      .join('Representatives', 'Clients.client_id', '=', 'Representatives.client_id')
-      .then(data => Job.Clients = data),
-
-      knex('Clients')
-      .select(
-        'Clients.client_id',
-        'Representatives.representative_id',
-        'Representatives.first_name as First Name',
-        'Representatives.middle_name as Middle Name',
-        'Representatives.last_name as Last Name',
-        'Representatives.email as Email',
-        'Representatives.business_phone as Business Phone',
-        'Representatives.mobile_phone as Mobile Phone',
-        'Representatives.home_phone as Home Phone',
-        'Representatives.fax_number as Fax Number',
-        'Representatives.address as Address',
-        'Representatives.city as City',
-        'Representatives.state as State',
-        'Representatives.zip_code as Zip Code',
-        'Representatives.county as County',
-        'Representatives.notes as Notes'
-      )
+      .join('Jobs', 'Jobs_Clients.job_id', 'Jobs.job_id')
       .where('job_number', job_number)
-      .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
-      .join('Jobs', 'Jobs_Clients.job_id', '=', 'Jobs.job_id')
-      .join('Representatives', 'Clients.client_id', '=', 'Representatives.client_id')
-      .then(data => Job.Representatives = data),
+      .then(data => {
+        clientID = data.map(client => client.client_id)
+        Job.Clients = data
+      }),
 
     knex('Properties')
       .select(
@@ -125,10 +103,36 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .then(data => Job.Invoices = data)
 
   ]).then( () => {
-    res.send(Job)
+    //query this after promise to ensure clientID is set
+    knex('Representatives')
+      .select(
+        'Clients.client_id',
+        'Representatives.representative_id',
+        'Representatives.first_name as First Name',
+        'Representatives.middle_name as Middle Name',
+        'Representatives.last_name as Last Name',
+        'Representatives.email as Email',
+        'Representatives.business_phone as Business Phone',
+        'Representatives.mobile_phone as Mobile Phone',
+        'Representatives.home_phone as Home Phone',
+        'Representatives.fax_number as Fax Number',
+        'Representatives.address as Address',
+        'Representatives.city as City',
+        'Representatives.state as State',
+        'Representatives.zip_code as Zip Code',
+        'Representatives.county as County',
+        'Representatives.notes as Notes'
+      )
+      .join('Clients_Representatives', 'Representatives.representative_id', 'Clients_Representatives.representative_id')
+      .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
+      .join('Clients', 'Clients_Representatives.client_id', 'Clients.client_id')
+      .where('Jobs.job_number', job_number)
+      .whereIn('Clients.client_id', clientID)
+      .then(data => {
+        Job.Representatives = data
+        res.send(Job)
+      })
   })
-
-
 
   //when not 
   // res.send(body)

@@ -17,6 +17,9 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
 
+// knex('Representatives').returning('*').insert({first_name: 'Daniel'}).then(data => console.log(data))
+// knex('Clients_Representatives').then(data => console.log(data))
+
 //routes
 app.use(routes)
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

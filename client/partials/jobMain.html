@@ -1,25 +1,53 @@
 <!-- Clients -->
+<div class="row">
+  <div>
+    <button  ng-click="JM.addClientBySearch()">Add Existing Client</button>
+    <button  ng-click="JM.addNew('Clients')">Add New Client</button>  
+    <button  ng-click="JM.addPropertyBySearch()">Add Existing Property</button>
+    <button  ng-click="JM.addNew('Properties')">Add New Property</button>  
+    <button  ng-click="JM.addReperesentativeBySearch()">Add Existing Representative</button>
+    <button  ng-click="JM.addNew('Representatives')">Add New Representative</button>  
+  </div>
+   
+
+  <div ng-if="JM.addBy === 'searchClients'">
+    <div ng-controller="SearchFilter as SF">
+      <div ng-include="'./partials/searchFilter.html'">
+      </div>
+    </div>
+  </div>
+  <div ng-if="JM.addBy === 'searchProperties'">
+    <div ng-controller="SearchFilter as SF">
+      <div ng-include="'./partials/searchFilter.html'">
+      </div>
+    </div>
+  </div>
+
+</div>
+  </div>
+</div>
 <div class='row'>
   <div class="col s12" ng-repeat="(tableIndex, client) in Clients">
     <div class="row">Client:
       <div ng-repeat="(key, value) in client" >
         <div
           ng-if="key !== 'client_id'" 
-          ng-dblclick="setEditOptions('editOne', 'Clients', tableIndex, $index, key, value)" 
+          ng-dblclick="JM.setEditOptions('editOne', 'Clients', tableIndex, $index, key, value)" 
           class="col s3 editCursor"
-          ng-class="{noPointerEvents: (editOptions.editType == 'editOne' && !compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index}))}" 
-          ng-keyup="$event.keyCode == 13 && editDatabase('Clients', {client_id: client.client_id}, key, value)">{{key}}:
-          <span ng-if="!compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
-          <span ng-if="compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index})" >
+          ng-class="{noPointerEvents: (JM.editOptions.editType == 'editOne' && !JM.compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index}))}" 
+          ng-keyup="$event.keyCode == 13 && JM.editDatabase('Clients', {client_id: client.client_id}, key, value)">{{key}}:
+          <span ng-if="!JM.compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
+          <span ng-if="JM.compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index})" >
             <input 
               type="text" 
               class="input-field columnInput" 
               ng-model="client[key]" 
-              focus-if="compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index})">
-            <button class="button columnButton" ng-click="revertEditChanges(client)">X</button>            
+              focus-if="JM.compareObj({editType: 'editOne', tableName: 'Clients', tableIndex: tableIndex, inputIndex: $index})">
+            <button class="button columnButton" ng-click="JM.revertEditChanges(client)">X</button>            
           </span>
         </div>
       </div>
+      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Clients', {client_id: client.client_id}, {job_number: jobNumber})">Remove Client</button>
     </div>
 <!-- Reps -->
 <div class='row'>
@@ -28,21 +56,22 @@
       <div ng-repeat="(key, value) in rep" >
         <div  
           ng-if="!(key == 'representative_id' || key == 'client_id')" 
-          ng-dblclick="setEditOptions('editOne', 'Representatives', tableIndex, $index, key, value)" 
+          ng-dblclick="JM.setEditOptions('editOne', 'Representatives', tableIndex, $index, key, value)" 
           class="col s3 editCursor"
-          ng-class="{noPointerEvents: (editOptions.editType == 'editOne' && !compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index}))}" 
-          ng-keyup="$event.keyCode == 13 && editDatabase('Representatives', {representative_id: rep.representative_id}, key, value)">{{key}}:
-          <span ng-if="!compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
-          <span ng-if="compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})" >
+          ng-class="{noPointerEvents: (JM.editOptions.editType == 'editOne' && !JM.compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index}))}" 
+          ng-keyup="$event.keyCode == 13 && JM.editDatabase('Representatives', {representative_id: rep.representative_id}, key, value)">{{key}}:
+          <span ng-if="!JM.compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
+          <span ng-if="JM.compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})" >
             <input 
               type="text" 
               class="input-field columnInput" 
               ng-model="rep[key]" 
-              focus-if="compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})">
-            <button class="button columnButton" ng-click="revertEditChanges(rep)">X</button>            
+              focus-if="JM.compareObj({editType: 'editOne', tableName: 'Representatives', tableIndex: tableIndex, inputIndex: $index})">
+            <button class="button columnButton" ng-click="JM.revertEditChanges(rep)">X</button>            
           </span>
         </div>
       </div>
+       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Representatives', {client_id: client.client_id, representative_id: rep.representative_id}, {job_number: jobNumber})">Remove Representative</button>
     </div>
   </div>
 </div>
@@ -55,22 +84,24 @@
       <div ng-repeat="(key, value) in property" >
         <div 
           ng-if="key !== 'property_id'" 
-          ng-dblclick="setEditOptions('editOne', 'Properties', tableIndex, $index, key, value)" 
+          ng-dblclick="JM.setEditOptions('editOne', 'Properties', tableIndex, $index, key, value)" 
           class="col s3 editCursor"
-          ng-class="{noPointerEvents: (editOptions.editType == 'editOne' && !compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index}))}" 
-          ng-keyup="$event.keyCode == 13 && editDatabase('Properties', {property_id: property.property_id}, key, value)">{{key}}:
-          <span ng-if="!compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
-          <span ng-if="compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})" >
+          ng-class="{noPointerEvents: (JM.editOptions.editType == 'editOne' && !JM.compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index}))}" 
+          ng-keyup="$event.keyCode == 13 && JM.editDatabase('Properties', {property_id: property.property_id}, key, value)">{{key}}:
+          <span ng-if="!JM.compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})" >{{value}}</span> 
+          <span ng-if="JM.compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})" >
             <input 
               type="text" 
               class="input-field columnInput" 
               ng-model="property[key]" 
-              focus-if="compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})">
-            <button class="button columnButton" ng-click="revertEditChanges(property)">X</button>            
+              focus-if="JM.compareObj({editType: 'editOne', tableName: 'Properties', tableIndex: tableIndex, inputIndex: $index})">
+            <button class="button columnButton" ng-click="JM.revertEditChanges(property)">X</button>            
           </span>
         </div>
       </div>
-    </div>
+      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id}, {job_number: jobNumber})">Remove Property</button>
     </div>
   </div>
 </div>
+
+

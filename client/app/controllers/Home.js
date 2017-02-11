@@ -9,18 +9,14 @@ app.controller('Home', function($scope, JobFactory) {
   }
 
     JobFactory.getActiveJobs()
-      .success( data => {
+      .then( ({data}) => {
         $scope.activeJobs = data
       })
-      .error( () => {
-        console.log('error')
-      })
+      .catch( ({data}) => console.log(data))
 
     JobFactory.getPendingJobs()    
-      .success( data => {
+      .then( ({data}) => {
         $scope.pendingJobs = data
       })
-      .error( () => {
-        console.log('error')
-      })
+      .catch( ({data}) => console.log(data))
   })

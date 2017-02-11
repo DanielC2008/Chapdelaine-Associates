@@ -1,7 +1,7 @@
 'use strict'
 
 
-const app = angular.module('Database', ['ngRoute', 'focus-if'])
+const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ngMessages'])
   .run(function($rootScope) {
     $rootScope.$user = null
   })
@@ -32,6 +32,10 @@ const app = angular.module('Database', ['ngRoute', 'focus-if'])
         templateUrl: 'partials/chooseJob.html'
       })
       .when('/jobs/:job_id', {
+        controller: 'Job',
+        templateUrl: 'partials/job.html'
+      })
+      .when('/jobs/:job_id/editAll', {
         controller: 'Job',
         templateUrl: 'partials/job.html'
       })
