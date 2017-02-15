@@ -2,7 +2,7 @@
 
   app.controller('Job', function($scope, $location, JobFactory) {
     let URL = $location.$$url
-    $scope.jobNumber =  URL.slice(parseInt(URL.search(":") + 1)) 
+    $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1)) 
     $scope.showTab = 'JobMain'
 
     //load data from database

@@ -50,23 +50,13 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
 
 
 /////////////ADD OR REMOVE FROM JOB///////////////
-  JMScope.addClientBySearch = () => {
-    JobFactory.getClientNames()//should pass in user_id here
+  JMScope.addBySearch = table => {
+    JobFactory[`get${table}BySearch`]()//should pass in user_id here
       .then(({data}) => {
         //set these on this scope so filter function has access to it
-        $scope.table = 'Jobs_Clients' 
+        $scope.table = table 
         $scope.items = data
         JMScope.addBy = 'searchClients'
-      })
-      .catch(err => console.log(err))
-  }
-
-  JMScope.addPropertyBySearch = () => {
-    JobFactory.getPropertyAddresses()//should pass in user_id here
-      .then(({data}) => {
-        $scope.table = 'Jobs_Properties' 
-        $scope.items = data
-        JMScope.addBy = 'searchProperties'
       })
       .catch(err => console.log(err))
   }
@@ -82,7 +72,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       .catch( ({data}) => console.log(data))
   }
 
-  JMScope.addNew = (table) => {
+  JMScope.addNew = table => {
     let locals = {
       table: table, 
       job_number: {job_number: $scope.jobNumber},
