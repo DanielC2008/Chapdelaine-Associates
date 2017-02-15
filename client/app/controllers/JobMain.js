@@ -56,7 +56,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
         //set these on this scope so filter function has access to it
         $scope.table = table 
         $scope.items = data
-        JMScope.addBy = 'searchClients'
+        JMScope.Search = "true"
       })
       .catch(err => console.log(err))
   }
