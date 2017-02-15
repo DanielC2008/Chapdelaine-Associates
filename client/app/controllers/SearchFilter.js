@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('SearchFilter', function($scope, JobFactory, $route) {
+app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
   let SFscope = this
   let items = $scope.items
 
@@ -17,6 +17,25 @@ app.controller('SearchFilter', function($scope, JobFactory, $route) {
       objToAdd: obj,
       job_number: {job_number: $scope.jobNumber}
     }
+
+    if ( $scope.table == 'Representatives') { 
+      let locals = {}
+      locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
+      $mdDialog.show({
+        locals,
+        controller: 'ChooseClient as CC',
+        templateUrl: '/partials/chooseClient.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose:false
+      }).then( clientId => {
+          dataObj.objToAdd.client_id = clientId
+          JobFactory.addToJob(dataObj)
+            .then( ({data}) => $route.reload())
+            .catch( ({data}) => console.log(data))
+        })
+        .catch(err => console.log(err))
+    }
+
     JobFactory.addToJob(dataObj)
       .then( ({data}) => $route.reload())
       .catch( ({data}) => console.log(data))

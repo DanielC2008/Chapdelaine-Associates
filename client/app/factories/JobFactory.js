@@ -26,11 +26,13 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.addNewToJob = dataObj => $http.post('/api/addNewToJob', dataObj)
 
-    factory.getClientsBySearch = () => $http.get('/api/getClientNames')
+    factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
 
-    factory.getPropertiesBySearch = () => $http.get('/api/getPropertyAddresses')
+    factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch')
+
+    factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
    
-    //might put this elsewhere
+    /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {
       for (let key in obj){
         obj[key.toLowerCase().replace(' ', '_')] = obj[key]
@@ -38,6 +40,19 @@ app.factory('JobFactory', function($location, $http) {
       }
       return obj
     }
+
+    factory.createCurrentClientArray = clients => {
+
+      let clientArray = clients.map( client => {
+        let obj = {
+          client_id: client.client_id,
+          client_name : `${client['First Name']} ${client['Last Name']}`
+        }  
+        return obj
+      })
+      return clientArray
+    }
+
 
   return factory
 })
