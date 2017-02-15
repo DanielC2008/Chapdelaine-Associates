@@ -6,10 +6,8 @@ const knex = require('knex')(config)
 const router = Router()
 
 
-
-//might end up needing this info to be broke out
 const getTableInfo = table => {
-console.log(table); 
+  
   let tableObj = {} 
   switch(table) {
     case 'Clients':
@@ -49,8 +47,7 @@ router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
 
 router.post('/api/removeFromJob', ({body: {table, objToRemove, job_number}}, res) => {
   let {connectTable} = getTableInfo(table)
-  console.log(connectTable, table);
-  //first get job id
+
   //-----------------------------------------------------------might end up sending job_id with original obj
   knex('Jobs')
     .select('job_id')
