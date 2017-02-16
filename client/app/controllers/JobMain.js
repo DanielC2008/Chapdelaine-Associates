@@ -69,8 +69,11 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       job_id: {job_id: $scope.jobId},
     }
     JobFactory.removeFromJob(dataObj)
-      .then( () => $route.reload())
-      .catch( ({data}) => console.log(data))
+      .then( ({data: {msg}}) => {
+      JobFactory.toastSuccess(msg)
+      $route.reload()
+    })
+      .catch( () => JobFactory.toastReject())
   }
 
   JMScope.addNew = table => {

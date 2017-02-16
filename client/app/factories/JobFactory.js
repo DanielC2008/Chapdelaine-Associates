@@ -53,7 +53,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       return clientArray
     }
 
-    factory.toastSuccess = msg => {
+    factory.toastSuccess = message => {
+      let msg = message === undefined ? 'Success' : message
       return $mdToast.show(
         $mdToast.simple()
           .textContent(`${msg}`)
@@ -63,7 +64,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       )
     }
 
-    factory.toastReject = msg => {
+    factory.toastReject = message => {
+      let msg = message === undefined ? 'Error' : message
       return $mdToast.show(
         $mdToast.simple()
           .textContent(`${msg}`)

@@ -58,7 +58,7 @@ router.post('/api/removeFromJob', ({body: {table, objToRemove, job_id}}, res) =>
         .del()
         .where(objToRemove)
         .then( data => {
-          res.send()
+          res.send({msg: 'Removed from Job!'})
         }).catch( err => console.log(err))
     }).catch( err => console.log(err))
 })
