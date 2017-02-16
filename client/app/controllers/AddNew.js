@@ -71,12 +71,12 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
       dataObj.clientId = NEW.clientId
     }
     JobFactory.addNewToJob(dataObj)
-      .then( () => $mdDialog.hide())
-      .catch( ({data}) => console.log(data))
+      .then( () => $mdDialog.hide('Data Saved!'))
+      .catch( () => JobFactory.toastReject('Error Saving Data'))
   }
 
   NEW.reject = () => {
-    $mdDialog.cancel()
+    $mdDialog.cancel('Nothing Saved!')
   }
 
 

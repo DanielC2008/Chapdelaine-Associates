@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFactory', function($location, $http) {
+app.factory('JobFactory', function($location, $http, $mdToast) {
 
   const factory = {}
 
@@ -53,6 +53,15 @@ app.factory('JobFactory', function($location, $http) {
       return clientArray
     }
 
+    factory.toastReject = msg => {
+      return $mdToast.show(
+        $mdToast.simple()
+          .textContent(`${msg}`)
+          .position('top right')
+          .hideDelay(3000)
+          .toastClass('toastReject')
+      )
+    }
 
   return factory
 })

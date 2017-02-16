@@ -87,9 +87,13 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       controller: 'AddNew as NEW',
       templateUrl: '/partials/addNew.html',
       parent: angular.element(document.body),
-      clickOutsideToClose:false
-    }).then( () => $route.reload())
-      .catch( ({data}) => console.log(data))
+      clickOutsideToClose: false,
+      escapeToClose: false
+    }).then( msg => {
+      $route.reload()
+      JobFactory.toastReject(msg)
+    })
+      .catch( msg => JobFactory.toastReject(msg))
   }  
 
 
