@@ -69,7 +69,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       job_id: {job_id: $scope.jobId},
     }
     JobFactory.removeFromJob(dataObj)
-      .then( ({data}) => $route.reload())
+      .then( () => $route.reload())
       .catch( ({data}) => console.log(data))
   }
 
@@ -88,7 +88,8 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       templateUrl: '/partials/addNew.html',
       parent: angular.element(document.body),
       clickOutsideToClose:false
-    })
+    }).then( () => $route.reload())
+      .catch( ({data}) => console.log(data))
   }  
 
 

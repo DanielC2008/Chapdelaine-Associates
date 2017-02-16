@@ -1,5 +1,5 @@
 <div class="addToJobFromDialog row">
-  <h1 class="center align"> Add New  {{NEW.title}}</h1>
+  <h1 class="center align"> Add to {{NEW.title}}</h1>
     <div ng-repeat='(KEY, value) in NEW.Display'>
       <div ng-if="KEY == NEW.title"  ng-repeat='(key, value) in NEW.Display[KEY] as display '>
         <div ng-if="key != 'Notes'" class="col s3">

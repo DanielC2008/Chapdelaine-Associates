@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory, $route) {
+app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory) {
   let NEW = this
   NEW.title = table
 
@@ -71,10 +71,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
       dataObj.clientId = NEW.clientId
     }
     JobFactory.addNewToJob(dataObj)
-      .then( ({data}) => {
-        $mdDialog.cancel()
-        $route.reload()
-      })
+      .then( () => $mdDialog.hide())
       .catch( ({data}) => console.log(data))
   }
 
