@@ -57,7 +57,7 @@ router.post('/api/removeFromJob', ({body: {table, objToRemove, job_id}}, res) =>
       knex(`${connectTable}`)
         .del()
         .where(objToRemove)
-        .then( data => {
+        .then( () => {
           res.send({msg: 'Removed from Job!'})
         }).catch( err => console.log(err))
     }).catch( err => console.log(err))
@@ -71,8 +71,8 @@ router.post('/api/addToJob', ({body: {table, objToAdd, job_id}}, res) => {
       objToAdd.job_id = data[0].job_id
       knex(`${connectTable}`)
         .insert(objToAdd)
-        .then( data => {
-          res.send(data)
+        .then( () => {
+          res.send({msg: 'Successfully added to Job!'})
         }).catch( err => console.log(err))
     }).catch( err => console.log(err))
 })
@@ -98,8 +98,8 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, re
           //set ids on connecting table
           knex(`${connectTable}`)
           .insert(connectTableObj)
-          .then( data => {
-            res.send(data)
+          .then( () => {
+            res.send()
           }).catch( err => console.log(err))
         }).catch( err => console.log(err))
     }).catch( err => console.log(err))

@@ -30,14 +30,20 @@ app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
       }).then( clientId => {
           dataObj.objToAdd.client_id = clientId
           JobFactory.addToJob(dataObj)
-            .then( () => $route.reload())
-            .catch( ({data}) => console.log(data))
+            .then( ({data: {msg}}) => {
+              JobFactory.toastSuccess(msg)
+              $route.reload()
+            })
+            .catch( () => JobFactory.toastReject())
         })
         .catch(err => console.log(err))
     } else {
         JobFactory.addToJob(dataObj)
-          .then( () => $route.reload())
-          .catch( ({data}) => console.log(data))
+          .then( ({data: {msg}}) => {
+              JobFactory.toastSuccess(msg)
+              $route.reload()
+            })
+          .catch( () => JobFactory.toastReject())
     }
   }
 
