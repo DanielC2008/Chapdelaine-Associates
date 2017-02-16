@@ -62,11 +62,11 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
 
   }
 
-  JMScope.removeFromJob = (table, objToRemove, job_id) => {
+  JMScope.removeFromJob = (table, objToRemove) => {
     let dataObj = {
       table,
       objToRemove,
-      job_id
+      job_id: {job_id: $scope.jobId},
     }
     JobFactory.removeFromJob(dataObj)
       .then( ({data}) => $route.reload())

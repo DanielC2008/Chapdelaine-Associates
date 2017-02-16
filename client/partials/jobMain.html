@@ -41,7 +41,7 @@
           </span>
         </div>
       </div>
-      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Clients', {client_id: client.client_id}, {job_id: jobId})">Remove Client</button>
+      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Clients', {client_id: client.client_id})">Remove Client</button>
     </div>
 <!-- Reps -->
 <div class='row'>
@@ -65,7 +65,7 @@
           </span>
         </div>
       </div>
-       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Representatives', {client_id: client.client_id, representative_id: rep.representative_id}, {job_id: jobId})">Remove Representative</button>
+       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Representatives', {client_id: client.client_id, representative_id: rep.representative_id})">Remove Representative</button>
     </div>
   </div>
 </div>
@@ -93,7 +93,7 @@
           </span>
         </div>
       </div>
-      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id}, {job_id: jobId})">Remove Property</button>
+      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id})">Remove Property</button>
     </div>
   </div>
 </div>
