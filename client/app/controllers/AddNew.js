@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientArray, JobFactory, $route) {
+app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory, $route) {
   let NEW = this
   NEW.title = table
 
@@ -64,7 +64,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientAr
     let dataObj = {
       table,
       objToAdd,
-      job_number
+      job_id
     }
 
     if(NEW.clientId) {

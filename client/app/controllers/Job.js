@@ -17,6 +17,7 @@
         $scope.Property = data.Properties
         $scope.Representatives = data.Representatives
         $scope.Job = data.Jobs[0]
+        $scope.jobId = $scope.Job.job_id
       })
       //can post status with .status and .statusText
       .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))

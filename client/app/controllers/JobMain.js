@@ -62,11 +62,11 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
 
   }
 
-  JMScope.removeFromJob = (table, objToRemove, job_number) => {
+  JMScope.removeFromJob = (table, objToRemove, job_id) => {
     let dataObj = {
       table,
       objToRemove,
-      job_number
+      job_id
     }
     JobFactory.removeFromJob(dataObj)
       .then( ({data}) => $route.reload())
@@ -76,7 +76,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
   JMScope.addNew = table => {
     let locals = {
       table: table, 
-      job_number: {job_number: $scope.jobNumber},
+      job_id: {job_id: $scope.jobId},
       clientArray: null
     }
     if (table == 'Representatives') {

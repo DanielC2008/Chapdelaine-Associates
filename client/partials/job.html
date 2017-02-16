@@ -18,7 +18,7 @@
     </button> -->
     <div class='row'>
       <div ng-repeat='(key, value) in Job'>
-        <div ng-if="value" class="col s2">
+        <div ng-if="key != 'job_id'" class="col s2">
           {{key}}: {{value}}
         </div class="col s3">
       </div>

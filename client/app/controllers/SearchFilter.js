@@ -15,7 +15,7 @@ app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
     let dataObj = {
       table: $scope.table,
       objToAdd: obj,
-      job_number: {job_number: $scope.jobNumber}
+      job_id: {job_id: $scope.jobId}
     }
 
     if ( $scope.table == 'Representatives') { 

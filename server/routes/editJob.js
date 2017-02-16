@@ -45,13 +45,12 @@ router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
     })
 })
 
-router.post('/api/removeFromJob', ({body: {table, objToRemove, job_number}}, res) => {
+router.post('/api/removeFromJob', ({body: {table, objToRemove, job_id}}, res) => {
   let {connectTable} = getTableInfo(table)
 
   //-----------------------------------------------------------might end up sending job_id with original obj
   knex('Jobs')
-    .select('job_id')
-    .where(job_number)
+    .where(job_id)
     //then remove from the connecting table using both id's
     .then( data => {
       objToRemove.job_id = data[0].job_id
@@ -60,33 +59,31 @@ router.post('/api/removeFromJob', ({body: {table, objToRemove, job_number}}, res
         .where(objToRemove)
         .then( data => {
           res.send()
-        })
-    })
+        }).catch( err => console.log(err))
+    }).catch( err => console.log(err))
 })
 
-router.post('/api/addToJob', ({body: {table, objToAdd, job_number}}, res) => {
+router.post('/api/addToJob', ({body: {table, objToAdd, job_id}}, res) => {
   let {connectTable} = getTableInfo(table)
   knex('Jobs')
-    .select('job_id')
-    .where(job_number)
+    .where(job_id)
     .then( data => {
       objToAdd.job_id = data[0].job_id
       knex(`${connectTable}`)
         .insert(objToAdd)
         .then( data => {
           res.send(data)
-        })
-    })
+        }).catch( err => console.log(err))
+    }).catch( err => console.log(err))
 })
 
 
-router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_number}}, res) => {
+router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, res) => {
   let {name, returningId, connectTable} = getTableInfo(table)
   let connectTableObj = {}
   // find job number
   knex('Jobs')
-    .select('job_id')
-    .where(job_number)
+    .where(job_id)
     .then( data => {
       connectTableObj.job_id = data[0].job_id
       //make client
