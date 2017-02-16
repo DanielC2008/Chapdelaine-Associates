@@ -89,11 +89,11 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       parent: angular.element(document.body),
       clickOutsideToClose: false,
       escapeToClose: false
-    }).then( msg => {
+    }).then( ({msg}) => {
       JobFactory.toastSuccess(msg)
       $route.reload()
     })
-      .catch( data => data.msg ? JobFactory.toastReject(data.msg) : JobFactory.toastReject('There was an error!'))
+      .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   }  
 
 
