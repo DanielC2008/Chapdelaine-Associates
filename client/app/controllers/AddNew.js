@@ -76,7 +76,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
   }
 
   NEW.reject = () => {
-    $mdDialog.cancel('Nothing Saved!')
+    $mdDialog.cancel({msg: 'Nothing Saved!'})
   }
 
 

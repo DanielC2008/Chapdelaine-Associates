@@ -53,6 +53,16 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       return clientArray
     }
 
+    factory.toastSuccess = msg => {
+      return $mdToast.show(
+        $mdToast.simple()
+          .textContent(`${msg}`)
+          .position('top right')
+          .hideDelay(3000)
+          .toastClass('toastSuccess')
+      )
+    }
+
     factory.toastReject = msg => {
       return $mdToast.show(
         $mdToast.simple()

@@ -90,10 +90,10 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       clickOutsideToClose: false,
       escapeToClose: false
     }).then( msg => {
+      JobFactory.toastSuccess(msg)
       $route.reload()
-      JobFactory.toastReject(msg)
     })
-      .catch( msg => JobFactory.toastReject(msg))
+      .catch( data => data.msg ? JobFactory.toastReject(data.msg) : JobFactory.toastReject('There was an error!'))
   }  
 
 
