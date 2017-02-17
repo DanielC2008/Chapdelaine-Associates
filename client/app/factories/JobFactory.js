@@ -1,12 +1,10 @@
 'use strict'
 
-app.factory('JobFactory', function($location, $http) {
+app.factory('JobFactory', function($location, $http, $mdToast) {
 
   const factory = {}
 
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`),
-
-    factory.goToEditAllJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}/editAll`) 
 
     factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
 
@@ -28,17 +26,53 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.addNewToJob = dataObj => $http.post('/api/addNewToJob', dataObj)
 
-    factory.getClientNames = () => $http.get('/api/getClientNames')
+    factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
 
-    factory.getPropertyAddresses = () => $http.get('/api/getPropertyAddresses')
+    factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch')
+
+    factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
    
-    //might put this elsewhere
+    /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {
       for (let key in obj){
         obj[key.toLowerCase().replace(' ', '_')] = obj[key]
         delete obj[key]
       }
       return obj
+    }
+
+    factory.createCurrentClientArray = clients => {
+
+      let clientArray = clients.map( client => {
+        let obj = {
+          client_id: client.client_id,
+          client_name : `${client['First Name']} ${client['Last Name']}`
+        }  
+        return obj
+      })
+      return clientArray
+    }
+
+    factory.toastSuccess = message => {
+      let msg = message === undefined ? 'Success' : message
+      return $mdToast.show(
+        $mdToast.simple()
+          .textContent(`${msg}`)
+          .position('top right')
+          .hideDelay(3000)
+          .toastClass('toastSuccess')
+      )
+    }
+
+    factory.toastReject = message => {
+      let msg = message === undefined ? 'Error' : message
+      return $mdToast.show(
+        $mdToast.simple()
+          .textContent(`${msg}`)
+          .position('top right')
+          .hideDelay(3000)
+          .toastClass('toastReject')
+      )
     }
 
   return factory

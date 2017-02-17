@@ -6,10 +6,8 @@ const knex = require('knex')(config)
 const router = Router()
 
 
-
-//might end up needing this info to be broke out
 const getTableInfo = table => {
-console.log(table); 
+  
   let tableObj = {} 
   switch(table) {
     case 'Clients':
@@ -47,48 +45,45 @@ router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
     })
 })
 
-router.post('/api/removeFromJob', ({body: {table, objToRemove, job_number}}, res) => {
+router.post('/api/removeFromJob', ({body: {table, objToRemove, job_id}}, res) => {
   let {connectTable} = getTableInfo(table)
-  console.log(connectTable, table);
-  //first get job id
+
   //-----------------------------------------------------------might end up sending job_id with original obj
   knex('Jobs')
-    .select('job_id')
-    .where(job_number)
+    .where(job_id)
     //then remove from the connecting table using both id's
     .then( data => {
       objToRemove.job_id = data[0].job_id
       knex(`${connectTable}`)
         .del()
         .where(objToRemove)
-        .then( data => {
-          res.send()
-        })
-    })
+        .then( () => {
+          res.send({msg: 'Removed from Job!'})
+        }).catch( err => console.log(err))
+    }).catch( err => console.log(err))
 })
 
-router.post('/api/addToJob', ({body: {table, objToAdd, job_number}}, res) => {
+router.post('/api/addToJob', ({body: {table, objToAdd, job_id}}, res) => {
+  let {connectTable} = getTableInfo(table)
   knex('Jobs')
-    .select('job_id')
-    .where(job_number)
+    .where(job_id)
     .then( data => {
       objToAdd.job_id = data[0].job_id
-      knex(`${table}`)
+      knex(`${connectTable}`)
         .insert(objToAdd)
-        .then( data => {
-          res.send(data)
-        })
-    })
+        .then( () => {
+          res.send({msg: 'Successfully added to Job!'})
+        }).catch( err => console.log(err))
+    }).catch( err => console.log(err))
 })
 
 
-router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_number}}, res) => {
+router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, res) => {
   let {name, returningId, connectTable} = getTableInfo(table)
   let connectTableObj = {}
   // find job number
   knex('Jobs')
-    .select('job_id')
-    .where(job_number)
+    .where(job_id)
     .then( data => {
       connectTableObj.job_id = data[0].job_id
       //make client
@@ -103,8 +98,8 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_number}}
           //set ids on connecting table
           knex(`${connectTable}`)
           .insert(connectTableObj)
-          .then( data => {
-            res.send(data)
+          .then( () => {
+            res.send()
           }).catch( err => console.log(err))
         }).catch( err => console.log(err))
     }).catch( err => console.log(err))

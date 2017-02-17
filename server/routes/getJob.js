@@ -16,6 +16,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
     knex('Jobs')
       .select(
+        'job_id',
         'job_number as Job Number',
         'job_status as Job Status',
         'start_date as Date Started',

@@ -50,60 +50,53 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
 
 
 /////////////ADD OR REMOVE FROM JOB///////////////
-  JMScope.addClientBySearch = () => {
-    JobFactory.getClientNames()//should pass in user_id here
+  JMScope.addBySearch = table => {
+     JobFactory[`get${table}BySearch`]()//should pass in user_id here
       .then(({data}) => {
         //set these on this scope so filter function has access to it
-        $scope.table = 'Jobs_Clients' 
+        $scope.table = table 
         $scope.items = data
-        JMScope.addBy = 'searchClients'
+        JMScope.search = true
       })
       .catch(err => console.log(err))
+
   }
 
-  JMScope.addPropertyBySearch = () => {
-    JobFactory.getPropertyAddresses()//should pass in user_id here
-      .then(({data}) => {
-        $scope.table = 'Jobs_Properties' 
-        $scope.items = data
-        JMScope.addBy = 'searchProperties'
-      })
-      .catch(err => console.log(err))
-  }
-
-  JMScope.removeFromJob = (table, objToRemove, job_number) => {
+  JMScope.removeFromJob = (table, objToRemove) => {
     let dataObj = {
       table,
       objToRemove,
-      job_number
+      job_id: {job_id: $scope.jobId},
     }
     JobFactory.removeFromJob(dataObj)
-      .then( ({data}) => $route.reload())
-      .catch( ({data}) => console.log(data))
+      .then( ({data: {msg}}) => {
+      JobFactory.toastSuccess(msg)
+      $route.reload()
+    })
+      .catch( () => JobFactory.toastReject())
   }
 
-  JMScope.addNew = (table) => {
+  JMScope.addNew = table => {
     let locals = {
       table: table, 
-      job_number: {job_number: $scope.jobNumber},
+      job_id: {job_id: $scope.jobId},
       clientArray: null
     }
     if (table == 'Representatives') {
-      locals.clientArray = $scope.Clients.map( client => {
-        let obj = {
-          client_id: client.client_id,
-          client_name : `${client['First Name']} ${client['Last Name']}`
-        }  
-        return obj
-      })
+      locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
     }
     $mdDialog.show({
       locals,
       controller: 'AddNew as NEW',
       templateUrl: '/partials/addNew.html',
       parent: angular.element(document.body),
-      clickOutsideToClose:false
+      clickOutsideToClose: false,
+      escapeToClose: false
+    }).then( ({msg}) => {
+      JobFactory.toastSuccess(msg)
+      $route.reload()
     })
+      .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   }  
 
 

@@ -1,22 +1,16 @@
 <!-- Clients -->
 <div class="row">
   <div>
-    <button  ng-click="JM.addClientBySearch()">Add Existing Client</button>
+    <button  ng-click="JM.addBySearch('Clients')">Add Existing Client</button>
     <button  ng-click="JM.addNew('Clients')">Add New Client</button>  
-    <button  ng-click="JM.addPropertyBySearch()">Add Existing Property</button>
+    <button  ng-click="JM.addBySearch('Properties')">Add Existing Property</button>
     <button  ng-click="JM.addNew('Properties')">Add New Property</button>  
-    <button  ng-click="JM.addReperesentativeBySearch()">Add Existing Representative</button>
+    <button  ng-click="JM.addBySearch('Representatives')">Add Existing Representative</button>
     <button  ng-click="JM.addNew('Representatives')">Add New Representative</button>  
   </div>
    
 
-  <div ng-if="JM.addBy === 'searchClients'">
-    <div ng-controller="SearchFilter as SF">
-      <div ng-include="'./partials/searchFilter.html'">
-      </div>
-    </div>
-  </div>
-  <div ng-if="JM.addBy === 'searchProperties'">
+  <div ng-if="JM.search">
     <div ng-controller="SearchFilter as SF">
       <div ng-include="'./partials/searchFilter.html'">
       </div>
@@ -47,7 +41,7 @@
           </span>
         </div>
       </div>
-      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Clients', {client_id: client.client_id}, {job_number: jobNumber})">Remove Client</button>
+      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Clients', {client_id: client.client_id})">Remove Client</button>
     </div>
 <!-- Reps -->
 <div class='row'>
@@ -71,7 +65,7 @@
           </span>
         </div>
       </div>
-       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Representatives', {client_id: client.client_id, representative_id: rep.representative_id}, {job_number: jobNumber})">Remove Representative</button>
+       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Representatives', {client_id: client.client_id, representative_id: rep.representative_id})">Remove Representative</button>
     </div>
   </div>
 </div>
@@ -99,7 +93,7 @@
           </span>
         </div>
       </div>
-      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id}, {job_number: jobNumber})">Remove Property</button>
+      <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id})">Remove Property</button>
     </div>
   </div>
 </div>

@@ -2,7 +2,7 @@
 
   app.controller('Job', function($scope, $location, JobFactory) {
     let URL = $location.$$url
-    $scope.jobNumber = $scope.editAll === true ? URL.slice(parseInt(URL.search(":") + 1), URL.lastIndexOf('/')) : URL.slice(parseInt(URL.search(":") + 1)) 
+    $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1)) 
     $scope.showTab = 'JobMain'
 
     //load data from database
@@ -17,6 +17,7 @@
         $scope.Property = data.Properties
         $scope.Representatives = data.Representatives
         $scope.Job = data.Jobs[0]
+        $scope.jobId = $scope.Job.job_id
       })
       //can post status with .status and .statusText
       .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))

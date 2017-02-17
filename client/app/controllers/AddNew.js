@@ -1,8 +1,21 @@
 'use strict'
 
-app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientArray, JobFactory, $route) {
+app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory) {
   let NEW = this
-  NEW.title = table
+
+  switch(table) {
+    case 'Clients':
+      NEW.title = 'Client'
+      break;
+    case 'Representatives':
+      NEW.title = 'Representative'
+      break;
+    case 'Properties':
+      NEW.title = 'Property'
+      break;
+  }
+
+  NEW.table = table
 
   if (clientArray) {
     NEW.ClientNames = clientArray
@@ -60,26 +73,23 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_number, clientAr
   }
 
   NEW.send = ()  => {
-    let objToAdd = JobFactory.matchDatabaseKeys(_.cloneDeep(NEW.Display[`${NEW.title}`]))
+    let objToAdd = JobFactory.matchDatabaseKeys(_.cloneDeep(NEW.Display[`${NEW.table}`]))
     let dataObj = {
       table,
       objToAdd,
-      job_number
+      job_id
     }
 
     if(NEW.clientId) {
       dataObj.clientId = NEW.clientId
     }
     JobFactory.addNewToJob(dataObj)
-      .then( ({data}) => {
-        $mdDialog.cancel()
-        $route.reload()
-      })
-      .catch( ({data}) => console.log(data))
+      .then( () => $mdDialog.hide({msg: `${NEW.title} Saved!`}))
+      .catch( () => JobFactory.toastReject({msg: `Error: ${NEW.title} not saved!`}))
   }
 
   NEW.reject = () => {
-    $mdDialog.cancel()
+    $mdDialog.cancel({msg: 'Nothing Saved!'})
   }
 
 

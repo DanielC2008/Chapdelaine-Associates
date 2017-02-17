@@ -28,16 +28,23 @@ router.post('/api/createNewJob', ({body}, res) => {
     .catch( err => console.log(err))
 })
 
-router.get('/api/getClientNames', ({body}, res) => {
+router.get('/api/getClientsBySearch', ({body}, res) => {
   knex('Clients')
     .select(knex.raw(`first_name + ' ' + last_name AS 'value'`), 'client_id')
     .then( data => res.send(data))
     .catch( err => console.log(err))
 })
 
-router.get('/api/getPropertyAddresses', ({body}, res) => {
+router.get('/api/getPropertiesBySearch', ({body}, res) => {
   knex('Properties')
     .select(knex.raw(`address AS 'value'`), 'property_id')
+    .then( data => res.send(data))
+    .catch( err => console.log(err))
+})
+
+router.get('/api/getRepresentativesBySearch', ({body}, res) => {
+  knex('Representatives')
+    .select(knex.raw(`first_name + ' ' + last_name AS 'value'`), 'representative_id')
     .then( data => res.send(data))
     .catch( err => console.log(err))
 })

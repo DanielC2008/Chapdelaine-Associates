@@ -174,3 +174,14 @@ nav ul li {
 .addToJobNotes {
     height: 10em;
 }
+
+/********toast************/
+.toastReject .md-toast-content {
+  background-color: #CC3333 !important;
+  color: black !important;
+}
+
+.toastSuccess .md-toast-content {
+  background-color: #CCFFCC !important;
+  color: black !important;
+}

@@ -1,8 +1,12 @@
 'use strict'
 
-app.controller('SearchFilter', function($scope, JobFactory, $route) {
+app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
   let SFscope = this
   let items = $scope.items
+  let dataObj = {
+    table: $scope.table,
+    job_id: {job_id: $scope.jobId}
+  }
 
 
   SFscope.filter = searchText => items.filter( item => item.value && item.value.toLowerCase().search(searchText.toLowerCase()) != -1 )
@@ -12,14 +16,35 @@ app.controller('SearchFilter', function($scope, JobFactory, $route) {
     //make sure user wants to do this here........
     //value no longer needed, simply delete and recyle obj
     delete obj.value
-    let dataObj = {
-      table: $scope.table,
-      objToAdd: obj,
-      job_number: {job_number: $scope.jobNumber}
+    dataObj.objToAdd =  obj
+
+    if ( $scope.table == 'Representatives') { 
+      let locals = {}
+      locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
+      $mdDialog.show({
+        locals,
+        controller: 'ChooseClient as CC',
+        templateUrl: '/partials/chooseClient.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose:false
+      }).then( clientId => {
+          dataObj.objToAdd.client_id = clientId
+          JobFactory.addToJob(dataObj)
+            .then( ({data: {msg}}) => {
+              JobFactory.toastSuccess(msg)
+              $route.reload()
+            })
+            .catch( () => JobFactory.toastReject())
+        })
+        .catch(err => console.log(err))
+    } else {
+        JobFactory.addToJob(dataObj)
+          .then( ({data: {msg}}) => {
+              JobFactory.toastSuccess(msg)
+              $route.reload()
+            })
+          .catch( () => JobFactory.toastReject())
     }
-    JobFactory.addToJob(dataObj)
-      .then( ({data}) => $route.reload())
-      .catch( ({data}) => console.log(data))
   }
 
 })
