@@ -1,8 +1,12 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $http) {
+app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFactory) {
   let FJScope = this
   let HCScope = $scope.$parent
+  let numberOfParams = 1
+  let values = TableAndColumnFactory
+  FJScope.selectedTable
+  
  // connected to database
   $http.post('/api/findJob/getTableNames')
     .then( ({data}) => {
@@ -12,59 +16,7 @@ app.controller('FindJob', function($scope, $http) {
     })
     .catch( ({data}) => alert(data))
 
-  FJScope.selectedTable
 
-  let numberOfParams = 1
-
-  const values = {
-    Clients: {
-      'First Name': '', 
-      'Middle Name': '', 
-      'Last Name': '', 
-      'Email': '', 
-      'Business Phone': '', 
-      'Mobile Phone': '', 
-      'Home Phone': '', 
-      'Fax Number': '', 
-      'Address': '', 
-      'City': '', 
-      'State': '', 
-      'Zip Code': '', 
-      'County': '', 
-      'Notes': '', 
-    }, 
-    Representatives: {
-      'First Name': '', 
-      'Middle Name': '', 
-      'Last Name': '', 
-      'Email': '', 
-      'Business Phone': '', 
-      'Mobile Phone': '', 
-      'Home Phone': '', 
-      'Fax Number': '', 
-      'Address': '', 
-      'City': '', 
-      'State': '', 
-      'Zip Code': '', 
-      'County': '', 
-      'Notes': '', 
-    }, 
-    Properties: {
-      'Address': '',
-      'City': '',
-      'State': '',
-      'Zip Code': '',
-      'County': '',
-      'Map': '',
-      'Parcel Number': '',
-      'Plat Book': '',
-      'Plat Page': '',
-      'Deed Book': '',
-      'Deed Page': '',
-      'Sub Division': '',
-      'Notes': ''
-    }
-  }
 
   FJScope.getTableValues = selected => {
     HCScope.material() 

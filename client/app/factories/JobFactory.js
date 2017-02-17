@@ -31,6 +31,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch')
 
     factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
+
+    factory.getTypesOfWork = () => $http.get('/api/typesOfWork')
    
     /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {
