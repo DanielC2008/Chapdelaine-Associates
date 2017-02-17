@@ -16,31 +16,64 @@ app.controller('FindJob', function($scope, $http) {
 
   let numberOfParams = 1
 
-  const values = [
-    {
-      Clients: [
-        'First Name', 'Last Name', 'Address'
-      ]
-    },
-    { Properties: [
-       'Parcel Number', 'Map', 'Address'
-      ]
-    },
-    {
-      Representatives: [
-        'First Name', 'Last Name', 'Address'
-      ]
+  const values = {
+    Clients: {
+      'First Name': '', 
+      'Middle Name': '', 
+      'Last Name': '', 
+      'Email': '', 
+      'Business Phone': '', 
+      'Mobile Phone': '', 
+      'Home Phone': '', 
+      'Fax Number': '', 
+      'Address': '', 
+      'City': '', 
+      'State': '', 
+      'Zip Code': '', 
+      'County': '', 
+      'Notes': '', 
+    }, 
+    Representatives: {
+      'First Name': '', 
+      'Middle Name': '', 
+      'Last Name': '', 
+      'Email': '', 
+      'Business Phone': '', 
+      'Mobile Phone': '', 
+      'Home Phone': '', 
+      'Fax Number': '', 
+      'Address': '', 
+      'City': '', 
+      'State': '', 
+      'Zip Code': '', 
+      'County': '', 
+      'Notes': '', 
+    }, 
+    Properties: {
+      'Address': '',
+      'City': '',
+      'State': '',
+      'Zip Code': '',
+      'County': '',
+      'Map': '',
+      'Parcel Number': '',
+      'Plat Book': '',
+      'Plat Page': '',
+      'Deed Book': '',
+      'Deed Page': '',
+      'Sub Division': '',
+      'Notes': ''
     }
-  ]
+  }
 
   FJScope.getTableValues = selected => {
     HCScope.material() 
-    values.forEach( table => {
-      if (Object.keys(table)[0] === selected) {
-        let values = Object.values(table)[0]
-        createSelect(values)
-      }  
-    })
+    for(let obj in values) {
+      if (obj === selected) {
+        let getValues = Object.keys(values[obj])
+        createSelect(getValues)
+      }
+    }
   }
 
   const createSelect = values => {
@@ -52,12 +85,7 @@ app.controller('FindJob', function($scope, $http) {
 
 //adds parameter to searchParams obj
   const addParam = () => {
-    let obj = {
-      request: null,
-      tableName: null,
-      values: "*"
-    }
-    FJScope.searchParams.push(obj)
+    FJScope.searchParams.push({})
   }
 
 
@@ -68,19 +96,21 @@ app.controller('FindJob', function($scope, $http) {
   }
 //remove empty params
   const removeUnusedParams = () => {
-    let params = FJScope.searchParams.filter( params => {
-      return params.tableName
+    let params = FJScope.searchParams.filter( param => {
+      delete param.$$hashKey
+      return param.table
     })
     return params
   }
 //submit search parameters
   FJScope.submit = () => {
     let params = removeUnusedParams()
-    $http.post('/api/database', params)
-      .then( ({data}) => {
-        FJScope.recentJobs = data
-     })
-     .catch( ({data}) => console.log(({data})))
+    console.log(params);
+    // $http.post('/api/database', params)
+    //   .then( ({data}) => {
+    //     FJScope.recentJobs = data
+    //  })
+    //  .catch( ({data}) => console.log(({data})))
   }
 
 //initiate first parameter
