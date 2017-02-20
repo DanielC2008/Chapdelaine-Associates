@@ -4,18 +4,12 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
   let FJScope = this
   let HCScope = $scope.$parent
   let numberOfParams = 1
-  let values = TableAndColumnFactory
+  let values
+  TableAndColumnFactory.initialized.then(function() {
+    values = TableAndColumnFactory.getObj()
+    FJScope.Tables = Object.keys(values)
+  })
   FJScope.selectedTable
-  
- // connected to database
-  $http.post('/api/findJob/getTableNames')
-    .then( ({data}) => {
-      FJScope.Tables = data.map( table => {
-        return table.table_name
-      })
-    })
-    .catch( ({data}) => alert(data))
-
 
 
   FJScope.getTableValues = selected => {
