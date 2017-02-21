@@ -54,7 +54,7 @@ router.post('/api/addToJob', ({body: {table, objToAdd, job_id}}, res) => {
 
 
 router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, res) => {
-  let {name, returningId, connectTable} = DBHelper.getTableInfo(table)
+  let {tableName, returningId, connectTable} = DBHelper.getTableInfo(table)
   let connectTableObj = {}
   // find job number
   knex('Jobs')
@@ -62,7 +62,7 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, re
     .then( data => {
       connectTableObj.job_id = data[0].job_id
       //make client
-      knex(`${name}`)
+      knex(`${tableName}`)
         .returning(`${returningId}`)
         .insert(objToAdd)
         .then( data => {

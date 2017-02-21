@@ -48,10 +48,22 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
     })
     return params
   }
+
+  const createObjToFind = dataArr => {
+    dataArr.map( obj => {
+      obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
+      delete obj.objToFind.match
+      delete obj.objToFind.column
+    })
+  }
+
 //submit search parameters
   FJScope.submit = () => {
     let dataArr = removeUnusedParams()
-    console.log(dataArr);
+    createObjToFind(dataArr)
+    dataArr.map( obj => {
+      obj.objToFind = JobFactory.matchDatabaseKeys(obj.objToFind)
+    })
     JobFactory.findJob(dataArr)
   }
 
