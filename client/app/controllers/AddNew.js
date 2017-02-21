@@ -21,7 +21,9 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
     NEW.ClientNames = clientArray
   }
 
-  NEW.Display = TableAndColumnFactory
+  TableAndColumnFactory.initialized.then(function() {
+    NEW.Display = TableAndColumnFactory.getObj()
+  })
 
   NEW.send = ()  => {
     let objToAdd = JobFactory.matchDatabaseKeys(_.cloneDeep(NEW.Display[`${NEW.table}`]))

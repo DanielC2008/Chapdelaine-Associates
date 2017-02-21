@@ -50,13 +50,9 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
   }
 //submit search parameters
   FJScope.submit = () => {
-    let params = removeUnusedParams()
-    console.log(params);
-    // $http.post('/api/database', params)
-    //   .then( ({data}) => {
-    //     FJScope.recentJobs = data
-    //  })
-    //  .catch( ({data}) => console.log(({data})))
+    let dataArr = removeUnusedParams()
+    console.log(dataArr);
+    JobFactory.findJob(dataArr)
   }
 
 //initiate first parameter
