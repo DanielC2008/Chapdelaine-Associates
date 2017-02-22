@@ -74,4 +74,5 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
 
 //initiate first parameter
   addParam()
+  FindJobService.sortJobs([[{job_number: 1234}, {job_number: 1235}], [{job_number: 1234}, {job_number: 1236}], [{job_number: 1236}]])
 })
