@@ -22,10 +22,20 @@ router.post('/api/findJob', ({body}, res) => {
         .where(objToFind)
         .then( data => console.log('data', data))
     } else {
-      knex(`${param.table}`)
-        .select('Jobs.job_number')
-        .where(objToFind)
-        .then( data => console.log('data', data)) 
+      console.log('',Object.keys(objToFind)[0] )
+        if (Object.keys(objToFind)[0] == 'invoice_number') {
+          knex('Invoices')
+            .select('Jobs.job_number')
+            .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
+            .where(objToFind)
+            .then( data => console.log('data', data)) 
+        } else {
+          knex('Jobs')
+            .select('Jobs.job_number')
+            .where(objToFind)
+            .then( data => console.log('data', data))
+        }
+
     }
   })
   // after the results come back i need to find matches that are stored in a param queries

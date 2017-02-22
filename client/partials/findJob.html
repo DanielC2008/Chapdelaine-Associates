@@ -9,13 +9,13 @@
       </select>
     </div>
     <div class="col s3 input-field" >
-      <select ng-model="param.objToFind.column" ng-options="columns as columns for columns in FJ.selectedTable{{$index + 1}}" ng-init="param.table">
-        <option value="" label="-- Select option --" disabled selected="selected"> Search fields... 
+      <select ng-model="param.objToFind.column" ng-options="columns as columns for columns in FJ.selectedTable{{$index + 1}}" ng-init="param.table" ng-disabled='!param.table'>
+        <option value="" label="-- Select option --" selected="selected"> Search fields... 
         </option>
       </select>
     </div>
     <div class="col s5 input-field" ng-keyup="$event.keyCode == 13 && FJ.submit()">
-      <input type="text" name="match{{$index}}" ng-model="param.objToFind.match" ng-disabled='param.table == "Types Of Work"' placeholder="Search Terms...">
+      <input type="text" name="match{{$index}}" ng-model="param.objToFind.match" ng-disabled='!param.table || param.table == "Types Of Work"' placeholder="Search Terms...">
     </div> 
   </div>  
   <div class="col s1" ng-click="FJ.createParam()">

@@ -71,7 +71,6 @@ app.factory('TableAndColumnFactory', function(JobFactory, $q) {
         'Job Number': '',
         'Job Status': '',
         'Invoice Number': '',
-        'Estimate Number': ''
       },
       'Types Of Work': Types_Of_Work
     }
