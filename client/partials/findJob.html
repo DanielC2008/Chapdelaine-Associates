@@ -10,7 +10,7 @@
     </div>
     <div class="col s3 input-field" >
       <select ng-model="param.objToFind.column" ng-options="columns as columns for columns in FJ.selectedTable{{$index + 1}}" ng-init="param.table">
-        <option value="" label="-- Select option --" selected="selected"> Search fields... 
+        <option value="" label="-- Select option --" disabled selected="selected"> Search fields... 
         </option>
       </select>
     </div>
