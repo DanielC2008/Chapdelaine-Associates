@@ -8,11 +8,12 @@ const DBHelper = require('../DBHelper')
 
 
 router.post('/api/findJob', ({body}, res) => {
-  //loop over array and determine what type of query we are making 
-  let paramsArr = body
-  paramsArr.forEach( param => {
-    let objToFind = param.objToFind
 
+  let paramsArr = body
+
+  const querySort = (param, cb) => {
+    console.log('param', param)
+    let objToFind = param.objToFind
     if (param.table != 'Jobs') {
       let {tableName, connectTable, returningId, findJobId} = DBHelper.getTableInfo(param.table)
       knex(`${tableName}`)
@@ -20,26 +21,30 @@ router.post('/api/findJob', ({body}, res) => {
         .join(`${connectTable}`, `${connectTable}.${returningId}`, `${tableName}.${returningId}`)
         .join('Jobs', `Jobs.${findJobId}`, `${connectTable}.${findJobId}`)
         .where(objToFind)
-        .then( data => console.log('data', data))
+        .then( data => cb(data))
     } else {
-      console.log('',Object.keys(objToFind)[0] )
-        if (Object.keys(objToFind)[0] == 'invoice_number') {
-          knex('Invoices')
-            .select('Jobs.job_number')
-            .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
-            .where(objToFind)
-            .then( data => console.log('data', data)) 
-        } else {
-          knex('Jobs')
-            .select('Jobs.job_number')
-            .where(objToFind)
-            .then( data => console.log('data', data))
-        }
-
+      if (Object.keys(objToFind)[0] == 'invoice_number') {
+        knex('Invoices')
+          .select('Jobs.job_number')
+          .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
+          .where(objToFind)
+          .then( data => cb(data)) 
+      } else {
+        knex('Jobs')
+          .select('Jobs.job_number')
+          .where(objToFind)
+          .then( data => cb(data))
+      }
     }
+  }
+
+  let matches = paramsArr.map( param => {
+    return new Promise((resolve) => {
+      querySort(param, resolve)
+    })
   })
-  // after the results come back i need to find matches that are stored in a param queries
-  // send those in two groups //found in all params //found in < all params
+  
+  Promise.all(matches).then( data => res.send(data))
 
 })
 

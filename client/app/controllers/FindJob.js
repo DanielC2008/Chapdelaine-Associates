@@ -67,7 +67,10 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
   FJScope.submit = () => {
     let dataArr = removeUnusedParams()
     createObjToFind(dataArr)
+    console.log('dataArr[0].objToFind', dataArr[0].objToFind)
     JobFactory.findJob(dataArr)
+    .then( ({data}) => console.log('data', data))
+    .catch( ({data}) => console.log('data', data))
   }
 
 //initiate first parameter
