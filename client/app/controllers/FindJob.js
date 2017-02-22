@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFactory) {
+app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFactory, FindJobService) {
   let FJScope = this
   let HCScope = $scope.$parent
   let numberOfParams = 1
@@ -67,9 +67,8 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
   FJScope.submit = () => {
     let dataArr = removeUnusedParams()
     createObjToFind(dataArr)
-    console.log('dataArr[0].objToFind', dataArr[0].objToFind)
     JobFactory.findJob(dataArr)
-    .then( ({data}) => console.log('data', data))
+    .then( ({data}) => FindJobService.setFoundJobs(data))
     .catch( ({data}) => console.log('data', data))
   }
 

@@ -12,7 +12,6 @@ router.post('/api/findJob', ({body}, res) => {
   let paramsArr = body
 
   const querySort = (param, cb) => {
-    console.log('param', param)
     let objToFind = param.objToFind
     if (param.table != 'Jobs') {
       let {tableName, connectTable, returningId, findJobId} = DBHelper.getTableInfo(param.table)
