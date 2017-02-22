@@ -51,8 +51,14 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
 
   const createObjToFind = dataArr => {
     dataArr.map( obj => {
-      obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
-      delete obj.objToFind.match
+      
+      if (obj.table == 'Types Of Work') { //----------------------------type of work: make column the value
+        obj.objToFind.type_of_work = obj.objToFind.column
+      } else {                            //----------------------------everything else make column key and match value and send to matchdbkeys
+        obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
+        delete obj.objToFind.match
+        obj.objToFind = JobFactory.matchDatabaseKeys(obj.objToFind)
+      }
       delete obj.objToFind.column
     })
   }
@@ -61,9 +67,6 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
   FJScope.submit = () => {
     let dataArr = removeUnusedParams()
     createObjToFind(dataArr)
-    dataArr.map( obj => {
-      obj.objToFind = JobFactory.matchDatabaseKeys(obj.objToFind)
-    })
     JobFactory.findJob(dataArr)
   }
 

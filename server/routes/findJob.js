@@ -8,30 +8,45 @@ const DBHelper = require('../DBHelper')
 
 
 router.post('/api/findJob', ({body}, res) => {
-  console.log(body)
   //loop over array and determine what type of query we are making 
   let paramsArr = body
   paramsArr.forEach( param => {
-    let {tableName, connectTable, returningId} = DBHelper.getTableInfo(param.table)
     let objToFind = param.objToFind
 
-  //reps, props, and clients all in one=
-  knex(`${tableName}`)
-    .select('Jobs.job_number')
-    .where(objToFind)
-    .join(`${connectTable}`, `${connectTable}.${returningId}`, `${tableName}.${returningId}`)
-    .join('Jobs', 'Jobs.job_id', `${connectTable}.job_id`)
-    .then( data => console.log('data', data))
-  //job by id 
-  //job by something else
-  //type of work 
-  //maybe a switch statement that directs to database based on table
+    if (param.table != 'Jobs') {
+      var {tableName, connectTable, returningId} = DBHelper.getTableInfo(param.table)
+    }else {
+      var tableName = param.table
+    }
+    
+    if (tableName == 'Clients' || tableName == 'Representatives' || tableName == 'Properties'){
+      knex(`${tableName}`)
+        .select('Jobs.job_number')
+        .join(`${connectTable}`, `${connectTable}.${returningId}`, `${tableName}.${returningId}`)
+        .join('Jobs', 'Jobs.job_id', `${connectTable}.job_id`)
+        .where(objToFind)
+        .then( data => console.log('data', data))
+    } else if (tableName  == 'Jobs') {
+        knex(`${tableName}`)
+          .select('Jobs.job_number')
+          .where(objToFind)
+          .then( data => console.log('data', data)) 
+    } else if (tableName == 'Types_Of_Work') {
+        knex(`${tableName}`)
+          //get type of work id
+          .select('Types_Of_Work.type_of_work_id')
+          .where(objToFind)
+          .then( data => {
+            let type_of_work_id = data[0]
+            knex('Types_Invoices')
+              .select('Jobs.job_number')
+              .join('Jobs', 'Jobs.invoice_id', 'Types_Invoices.invoice_id')
+              .where(type_of_work_id)
+              .then( data => console.log('data', data))
+          })
+
+    }
   
-
-
-
-
-
   })
   // returns a large obj of the thing requested and the job id
 
