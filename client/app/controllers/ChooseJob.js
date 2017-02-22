@@ -1,6 +1,10 @@
 "use strict"
 
-  app.controller('ChooseJob', function($scope, JobFactory) {
+  app.controller('ChooseJob', function($scope, FindJobService, JobFactory) {
+
+    let Jobs = FindJobService.getFoundJobs()
+
+    
 
     $scope.Jobs = [
       {

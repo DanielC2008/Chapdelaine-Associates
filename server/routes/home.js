@@ -126,15 +126,12 @@ router.get('/api/pendingJobs', (req, res) => {
   ])
 })
 
-//this will go to database
 router.get('/api/typesOfWork', (req, res) => {
-  res.send([
-    'Field',
-    'Office',
-    '1 acre',
-    '5 acre',
-    'Replace Corner'
-  ])
+  knex('Types_Of_Work')
+    .select('type_of_work')
+    .then( data => 
+      res.send(data)
+    )
 })  
 
 //this will go to database
@@ -179,7 +176,6 @@ router.post('/api/findJob/getTableNames', (req, res) => {
   .select('table_name')
   .where({find_job: true})
   .then( tableNames => {
-    console.log(tableNames);
     res.send(tableNames)
   })
   .catch( err => {

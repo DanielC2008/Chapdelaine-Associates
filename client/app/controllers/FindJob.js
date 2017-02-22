@@ -1,46 +1,25 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $http) {
+app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFactory, FindJobService) {
   let FJScope = this
   let HCScope = $scope.$parent
- // connected to database
-  $http.post('/api/findJob/getTableNames')
-    .then( ({data}) => {
-      FJScope.Tables = data.map( table => {
-        return table.table_name
-      })
-    })
-    .catch( ({data}) => alert(data))
-
+  let numberOfParams = 1
+  let values
+  TableAndColumnFactory.initialized.then(function() {
+    values = TableAndColumnFactory.getObj()
+    FJScope.Tables = Object.keys(values)
+  })
   FJScope.selectedTable
 
-  let numberOfParams = 1
-
-  const values = [
-    {
-      Clients: [
-        'First Name', 'Last Name', 'Address'
-      ]
-    },
-    { Properties: [
-       'Parcel Number', 'Map', 'Address'
-      ]
-    },
-    {
-      Representatives: [
-        'First Name', 'Last Name', 'Address'
-      ]
-    }
-  ]
 
   FJScope.getTableValues = selected => {
     HCScope.material() 
-    values.forEach( table => {
-      if (Object.keys(table)[0] === selected) {
-        let values = Object.values(table)[0]
-        createSelect(values)
-      }  
-    })
+    for(let obj in values) {
+      if (obj === selected) {
+        let getValues = Object.keys(values[obj])
+        createSelect(getValues)
+      }
+    }
   }
 
   const createSelect = values => {
@@ -52,12 +31,7 @@ app.controller('FindJob', function($scope, $http) {
 
 //adds parameter to searchParams obj
   const addParam = () => {
-    let obj = {
-      request: null,
-      tableName: null,
-      values: "*"
-    }
-    FJScope.searchParams.push(obj)
+    FJScope.searchParams.push({})
   }
 
 
@@ -68,21 +42,37 @@ app.controller('FindJob', function($scope, $http) {
   }
 //remove empty params
   const removeUnusedParams = () => {
-    let params = FJScope.searchParams.filter( params => {
-      return params.tableName
+    let params = FJScope.searchParams.filter( param => {
+      delete param.$$hashKey
+      return param.table
     })
     return params
   }
+
+  const createObjToFind = dataArr => {
+    dataArr.map( obj => {
+      
+      if (obj.table == 'Types Of Work') { //----------------------------type of work: make column the value
+        obj.objToFind.type_of_work = obj.objToFind.column
+      } else {                            //----------------------------everything else make column key and match value and send to matchdbkeys
+        obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
+        delete obj.objToFind.match
+        obj.objToFind = JobFactory.matchDatabaseKeys(obj.objToFind)
+      }
+      delete obj.objToFind.column
+    })
+  }
+
 //submit search parameters
   FJScope.submit = () => {
-    let params = removeUnusedParams()
-    $http.post('/api/database', params)
-      .then( ({data}) => {
-        FJScope.recentJobs = data
-     })
-     .catch( ({data}) => console.log(({data})))
+    let dataArr = removeUnusedParams()
+    createObjToFind(dataArr)
+    JobFactory.findJob(dataArr)
+    .then( ({data}) => FindJobService.setFoundJobs(data))
+    .catch( ({data}) => console.log('data', data))
   }
 
 //initiate first parameter
   addParam()
+  FindJobService.sortJobs([[{job_number: 1234}, {job_number: 1235}], [{job_number: 1234}, {job_number: 1236}], [{job_number: 1236}]])
 })
