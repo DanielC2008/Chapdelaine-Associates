@@ -2,11 +2,18 @@
 
 app.service('FindJobService', function($location) {
   const service = {}
-  const Matches= {
+  const Matches = {
     exact: [],
     other: []
   }
+
   const sorted = []
+
+  const clearMatches = () => {
+      Matches.exact.length = 0
+      Matches.other.length = 0
+      sorted.length = 0
+  }
 
   const pushNew = obj => {
     let newArr = []
@@ -37,6 +44,7 @@ app.service('FindJobService', function($location) {
 
 
   service.setMatches = jobsArr => {
+    clearMatches()
     sortJobsByJobNumber(jobsArr)
     sorted.forEach( sortedArr => {
       if (sortedArr.length === jobsArr.length) { //length is equal to number of parameters entered = exact match

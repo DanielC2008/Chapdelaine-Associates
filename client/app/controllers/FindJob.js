@@ -69,7 +69,7 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
     createObjToFind(dataArr)
     JobFactory.findJob(dataArr)
     .then( ({data}) => FindJobService.setMatches(data))
-    .catch( ({data}) => console.log('data', data))
+    .catch( (data) => console.log('data', data))
   }
 
 //initiate first parameter
