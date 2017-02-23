@@ -33,12 +33,8 @@ app.service('FindJobService', function($location) {
     })
   }
 
-  const reduceObj = sortedArr => {
-    let finishedObj = sortedArr.reduce( (prev, curr) => {
-      return Object.assign({}, prev, curr)
-    },{})
-    return finishedObj
-  }
+  const reduceObj = sortedArr => Object.assign(...sortedArr)
+
 
   service.setMatches = jobsArr => {
     sortJobsByJobNumber(jobsArr)

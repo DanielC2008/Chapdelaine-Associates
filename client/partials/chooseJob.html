@@ -1,5 +1,5 @@
 <h1>Choose Job</h1>
-<h1>Exact Matches</h1>
+<h4>Exact Matches</h4>
 <div ng-repeat="match in Matches.exact"> 
   <div class="row">
     <div class="col s4">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col s6">
-      <div class="col s2" >{{match[job_number]}}</div>
+      <div class="col s4" >Job Number: {{match.job_number}}</div>
       <button class="button btn col s2" ng-click="getJob(match.job_number)">Get Job!</button>
     </div>
   </div>
