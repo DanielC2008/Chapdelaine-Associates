@@ -2,9 +2,10 @@
 
   app.controller('ChooseJob', function($scope, FindJobService, JobFactory) {
 
-    let Jobs = FindJobService.getFoundJobs()
+    let Matches = FindJobService.getMatches()
+    console.log('Matches', Matches)
 
-    
+
 
     $scope.Jobs = [
       {
