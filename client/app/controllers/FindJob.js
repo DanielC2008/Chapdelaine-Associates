@@ -68,11 +68,11 @@ app.controller('FindJob', function($scope, $http, JobFactory, TableAndColumnFact
     let dataArr = removeUnusedParams()
     createObjToFind(dataArr)
     JobFactory.findJob(dataArr)
-    .then( ({data}) => FindJobService.setFoundJobs(data))
-    .catch( ({data}) => console.log('data', data))
+    .then( ({data}) => FindJobService.setMatches(data))
+    .catch( (data) => console.log('data', data))
   }
 
 //initiate first parameter
   addParam()
-  FindJobService.sortJobs([[{job_number: 1234}, {job_number: 1235}], [{job_number: 1234}, {job_number: 1236}], [{job_number: 1236}]])
+  // FindJobService.setMatches([[{job_number: 1234}, {job_number: 1235}], [{job_number: 1234}, {job_number: 1236}], [{job_number: 1236}]])
 })

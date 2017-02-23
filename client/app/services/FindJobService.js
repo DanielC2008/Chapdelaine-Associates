@@ -2,50 +2,66 @@
 
 app.service('FindJobService', function($location) {
   const service = {}
+  const Matches = {
+    exact: [],
+    other: []
+  }
 
-    let jobsArr
+  const sorted = []
 
-    service.setFoundJobs = jobs => {
-      sortJobs(jobs)
-      //pass jobs through sorter
-        //sort based on exact match and other
-      // jobsArr = Object.assign([], jobs)
-      // $location.path(/jobs/)
-    }
+  const clearMatches = () => {
+      Matches.exact.length = 0
+      Matches.other.length = 0
+      sorted.length = 0
+  }
 
-    service.getFoundJobs = () => jobsArr
-    //get both exact and other 
+  const pushNew = obj => {
+    let newArr = []
+    newArr.push(obj)
+    sorted.push(newArr)
+  }
 
-    let sorted = []
-    service.sortJobs = jobs => {
-      //for each array of objs
-      jobs.forEach( array => {
-        checkInSorted(array)
-      })
-      
-    }
-
-    let checkInSorted = array => {
-      //check if obj is in Arr of arrays
+  const sortJobsByJobNumber = jobsArr => {
+    jobsArr.forEach( array => {
       array.forEach( obj => {
         if (sorted.length === 0){          
-          let newArr = []
-          newArr.push(obj)
-          sorted.push(newArr)
+          pushNew(obj)
         }else {
           let index = sorted.findIndex( sortedArr => {
-            return _.isEqual(sortedArr[0], obj)
+            return sortedArr[0].job_number === obj.job_number
           }) 
           if (index !== -1 ){
             sorted[index].push(obj)
           } else{
-            let newArr = []
-            newArr.push(obj)
-            sorted.push(newArr)
+            pushNew(obj)
           }
         }
       })
-    }
+    })
+  }
+
+  const reduceObj = sortedArr => Object.assign(...sortedArr)
+
+
+  service.setMatches = jobsArr => {
+    clearMatches()
+    sortJobsByJobNumber(jobsArr)
+    sorted.forEach( sortedArr => {
+      if (sortedArr.length === jobsArr.length) { //length is equal to number of parameters entered = exact match
+        let obj = reduceObj(sortedArr)
+        Matches.exact.push(obj)
+      } else{
+        let obj = reduceObj(sortedArr)
+        Matches.other.push(obj)
+      } 
+    })
+    $location.path(/jobs/)
+  }
+
+  service.getMatches = () => Matches 
+ 
+
+
 
   return service
 })
