@@ -33,13 +33,22 @@ app.service('FindJobService', function($location) {
     })
   }
 
+  const reduceObj = sortedArr => {
+    let finishedObj = sortedArr.reduce( (prev, curr) => {
+      return Object.assign({}, prev, curr)
+    },{})
+    return finishedObj
+  }
+
   service.setMatches = jobsArr => {
     sortJobsByJobNumber(jobsArr)
     sorted.forEach( sortedArr => {
       if (sortedArr.length === jobsArr.length) { //length is equal to number of parameters entered = exact match
-        Matches.exact.push(sortedArr)
+        let obj = reduceObj(sortedArr)
+        Matches.exact.push(obj)
       } else{
-        Matches.other.push(sortedArr)
+        let obj = reduceObj(sortedArr)
+        Matches.other.push(obj)
       } 
     })
     $location.path(/jobs/)
