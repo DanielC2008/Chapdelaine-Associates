@@ -30,6 +30,14 @@ module.exports = {
         tableObj.returningId = 'type_of_work_id'
         tableObj.findJobId = 'invoice_id'
         break;
+      case 'Jobs':
+        tableObj.tableName = 'Jobs'
+        tableObj.tableNumber = 'job_number'
+        break;
+      case 'Invoices':
+        tableObj.tableName = 'Invoices'
+        tableObj.tableNumber = 'invoice_number'
+        break;
     }
     return tableObj
   }

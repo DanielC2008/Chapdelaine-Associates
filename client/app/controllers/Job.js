@@ -14,6 +14,7 @@
         $scope.Clients = data.Clients
         $scope.Estimate = data.Estimates
         $scope.Invoice = data.Invoices
+        $scope.InvoiceDetails = data.InvoiceDetails
         $scope.Property = data.Properties
         $scope.Representatives = data.Representatives
         $scope.Job = data.Jobs[0]

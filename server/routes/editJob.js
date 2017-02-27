@@ -83,6 +83,4 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, re
 
 
 
-
-
 module.exports = router
