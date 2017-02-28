@@ -40,22 +40,36 @@ app.service('FindJobService', function($location) {
     })
   }
 
+  //reduces an array of objs with different properties into one obj with only one of each property
   const reduceObj = sortedArr => Object.assign(...sortedArr)
+
+  const manyMatches = jobsArrLength => {
+    sorted.forEach( sortedArr => {
+        if (sortedArr.length === jobsArrLength) { //length is equal to number of parameters entered = exact match
+          let obj = reduceObj(sortedArr)
+          Matches.exact.push(obj)
+        } else{
+          let obj = reduceObj(sortedArr)
+          Matches.other.push(obj)
+        } 
+      })
+      $location.path(/jobs/)
+  }
+
+  const oneMatch = () => {
+    $location.path(`/jobs/:${sorted[0][0].job_number}`)
+  }
 
 
   service.setMatches = jobsArr => {
     clearMatches()
     sortJobsByJobNumber(jobsArr)
-    sorted.forEach( sortedArr => {
-      if (sortedArr.length === jobsArr.length) { //length is equal to number of parameters entered = exact match
-        let obj = reduceObj(sortedArr)
-        Matches.exact.push(obj)
-      } else{
-        let obj = reduceObj(sortedArr)
-        Matches.other.push(obj)
-      } 
-    })
-    $location.path(/jobs/)
+    if (sorted.length === 1 ) { //-----------if one match go to that job_number
+      oneMatch()
+    } else {  //-----------------------------if many allow uset to select job
+      manyMatches(jobsArr.length)
+    }  
+
   }
 
   service.getMatches = () => Matches 

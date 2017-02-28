@@ -126,50 +126,6 @@ router.get('/api/pendingJobs', (req, res) => {
   ])
 })
 
-router.get('/api/typesOfWork', (req, res) => {
-  knex('Types_Of_Work')
-    .select('type_of_work')
-    .then( data => 
-      res.send(data)
-    )
-})  
-
-//this will go to database
-router.post('/api/getTypeOfWork', ({body:{typeOfWork}}, res) => {
-  let allTypes = [
-    {
-      type_of_work: "Field",
-      rate: 10,
-      hourly: true
-    },
-    {
-      type_of_work: "Office",
-      rate: 20,
-      hourly: true
-    },
-    {
-      type_of_work: "1 acre",
-      rate: 450,
-      hourly: false
-    },
-    {
-      type_of_work: "5 acre",
-      rate: 650,
-      hourly: false
-    },
-    {
-      type_of_work: "Replace Corner",
-      rate: 50,
-      hourly: false
-    }
-  ]
-   allTypes.forEach( obj => {
-      if (obj.type_of_work === typeOfWork) {
-        res.send(obj)
-      }
-    })
-})  
-
 ////////////////////////////////////////////////////////////need to decide whether to use this
 router.post('/api/findJob/getTableNames', (req, res) => {
   knex('is_Table_Searchable')

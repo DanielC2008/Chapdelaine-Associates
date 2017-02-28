@@ -14,7 +14,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.editColumn = columnInfo => $http.post('/api/editColumn', columnInfo)
 
-    factory.getMaxJob = () => $http.get('/api/getMaxJob')
+    factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
 
     factory.getMinJob = () => $http.get('/api/getMinJob')
 
@@ -32,7 +32,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
 
-    factory.getTypesOfWork = () => $http.get('/api/typesOfWork')
+    factory.getTypesOfWork = () => $http.get('/api/getTypesOfWork')
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
    

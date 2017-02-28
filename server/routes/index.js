@@ -11,6 +11,7 @@ router.use(require('./getJob'))
 router.use(require('./editJob'))
 router.use(require('./newJob'))
 router.use(require('./findJob'))
+router.use(require('./TOWBuilder'))
 
 // add gaurd here and 
 // private routes

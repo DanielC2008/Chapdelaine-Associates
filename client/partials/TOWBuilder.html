@@ -1,0 +1,27 @@
+<div>
+  <div ng-repeat="selectedType in TB.builder track by $index"  ng-if="TB.builder" ng-init="material()" >
+    <div class="row">
+      <div class="col s3 input-field" >{{selectedType.type_of_work}}</div>
+      <div class="col s3 input-field">
+        <input ng-model="selectedType.rate">
+      </div>
+      <div class="col s3 input-field">
+        <input  
+          ng-model="selectedType.time_if_hourly" 
+          ng-keyup="$event.keyCode == 13 && TB.getTotal()"
+          ng-if="selectedType.hourly">
+      </div>
+    </div>  
+  </div>
+  <div class="row">
+    <div class="col s12 input-field" ng-if="TB.types" ng-init="material()">
+      <select ng-change="TB.getSelectedType(TB.type_of_work)" ng-model="TB.type_of_work" ng-options="type as type disable when type.notAnOption for type in TB.types"> 
+        <option value="" label="-- Select option --" disabled selected="selected"> Add Line Item...  
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <h5 class="col s3 offset-s9 input-field" ng-if="TB.total">Total: {{TB.total}}</h5>        
+  </div>  
+</div>

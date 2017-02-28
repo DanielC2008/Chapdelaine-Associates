@@ -9,7 +9,7 @@
 <div ng-if="newJob.job_status && newJob.job_status != 'Pending'">
   <div>Your last Job Number was {{recommended -  1}}, would you like to use {{recommended}} as your new job number?</div>
   <button type="submit" ng-click="addJobNumber(recommended)">Yes, that'll do.</button>
-  <button type="submit" ng-click="addJobNumber(newjob)">Nah, use this number.</button>
-  <input type="text" ng-model="newjob" placeholder="Select Job Number">
+  <button type="submit" ng-click="addJobNumber(newNumber)">Nah, use this number.</button>
+  <input type="text" ng-model="newNumber" placeholder="Select Job Number">
 </div>
 

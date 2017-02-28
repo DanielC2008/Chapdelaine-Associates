@@ -1,8 +1,8 @@
 'use strict'
 
-app.controller('JobInvoice', function($scope) {
+app.controller('JobInvoice', function($scope, JobFactory) {
   let JIScope = this
 
-  JIScope.title = 'JobInvoice'
+
 
 })

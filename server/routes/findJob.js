@@ -44,7 +44,7 @@ router.post('/api/findJob', ({body}, res) => {
     })
   })
   
-  Promise.all(matches).then( data => res.send(data))
+  Promise.all(matches).then( data => data[0].length === 0 ? res.sendStatus(400) : res.send(data))  
 
 })
 

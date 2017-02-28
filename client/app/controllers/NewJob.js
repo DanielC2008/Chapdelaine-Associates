@@ -21,7 +21,7 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
 
 
   //goes to database and finds the last Job number used adds one
-  JobFactory.getMaxJob()
+  JobFactory.getMaxNumber({table:'Jobs'})
     .then( ({data: {max}}) => {
       $scope.recommended = max + 1 
     })
@@ -34,9 +34,7 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
 
   const createNewJob = () => {
     JobFactory.createNewJob($scope.newJob)
-      .then( () => {
-        JobFactory.goToJobPage($scope.newJob.job_number)
-      })
+      .then( () => JobFactory.goToJobPage($scope.newJob.job_number))
       .catch( ({data}) => console.log(data))
   }
 

@@ -4,11 +4,13 @@ const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
+const DBHelper = require('../DBHelper')
 
 
-router.get('/api/getMaxJob', (req, res) => {
-  knex('Jobs')
-    .select(knex.raw('MAX(CAST(job_number AS INT)) AS max'))
+router.post('/api/getMaxNumber', ({body: {table}}, res) => {
+  const {tableName, tableNumber} = DBHelper.getTableInfo(table)
+  knex(`${tableName}`)
+    .select(knex.raw(`MAX(CAST(${tableNumber} AS INT)) AS max`))
     .then( data => res.send(data[0]))
     .catch( err => console.log(err))
 })

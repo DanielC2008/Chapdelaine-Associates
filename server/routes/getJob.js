@@ -92,16 +92,24 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       knex('Invoices')
         .select(
           'Invoices.invoice_id',
-          'Invoices.invoice_number', 
+          'Invoices.invoice_number'
+        )
+        .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
+        .where('job_number', job_number)
+        .then(data => Job.Invoices = data),
+
+      knex('Invoices')
+        .select(
           'Types_of_Work.type_of_work',
           'Types_of_Work.rate',
-          'Types_of_Work.hourly'
+          'Types_of_Work.hourly',
+          'Types_Invoices.time_if_hourly'
         )
         .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
         .join('Types_Invoices', 'Types_Invoices.invoice_id', 'Invoices.invoice_id')
         .join('Types_Of_Work', 'Types_Invoices.type_of_work_id', 'Types_Of_Work.type_of_work_id')
         .where('job_number', job_number)
-        .then(data => Job.Invoices = data)
+        .then(data => Job.InvoiceDetails = data)
 
   ]).then( () => {
     //query this after promise to ensure clientID is set
