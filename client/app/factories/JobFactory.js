@@ -32,7 +32,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
 
-    factory.getTypesOfWork = () => $http.get('/api/typesOfWork')
+    factory.getTypesOfWork = () => $http.get('/api/getTypesOfWork')
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
    
