@@ -5,6 +5,12 @@
     $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1)) 
     $scope.showTab = 'JobMain'
 
+    $scope.material = () => {
+      $(document).ready(function() {  
+        $('select').material_select();
+      })  
+    }
+
     //load data from database
     JobFactory.getJobFromDatabase($scope.jobNumber)
       .then( ({data}) => {
@@ -13,7 +19,7 @@
         }
         $scope.Clients = data.Clients
         $scope.Estimate = data.Estimates
-        $scope.Invoice = data.Invoices
+        $scope.Invoice = data.Invoices[0]
         $scope.InvoiceDetails = data.InvoiceDetails
         $scope.Property = data.Properties
         $scope.Representatives = data.Representatives

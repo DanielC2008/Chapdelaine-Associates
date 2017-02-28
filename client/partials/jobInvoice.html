@@ -1,18 +1,12 @@
-<div ng-if='JI.invoice === false '>
-  <h1> There doesn't seem to be anything here.</h1>
-</div>
+<h3>
+  {{Invoice.invoice_number ? 'Invoice Number' : 'No invoice number assigned'}}
+</h3>
 
-</div>
-
-<div ng-if='JI.invoice === true'>
-  <div ng-repeat=" lineItem in InvoiceDetails">
-    <div class="row">  
-      <div class="col s4">Type of Work: {{lineItem.type_of_work}}</div>
-      <div class="col s4">Rate: {{lineItem.rate}}</div>
-      <div class="col s4" ng-if='lineItem.time_if_hourly'>Time: {{lineItem.time_if_hourly}}</div>
-    </div>
+<div ng-controller="TOWBuilder as TB">
+  <div ng-include="'./partials/TOWBuilder.html'">
   </div>
 </div>
+
 
 
 <!--   <div>Your last Invoice Number was {{recommended -  1}}, would you like to use {{recommended}} as your new invoice number?</div>
