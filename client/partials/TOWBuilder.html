@@ -1,12 +1,15 @@
 <div>
   <div ng-repeat="selectedType in TB.builder track by $index"  ng-if="TB.builder" ng-init="material()" >
     <div class="row">
-      <div class="col s3 input-field" >{{selectedType.type_of_work}}</div>
-      <div class="col s3 input-field">
-        <input ng-model="selectedType.rate">
+      <div class="col s3 input-field" >Type of Work: {{selectedType.type_of_work}}</div>
+      <div class="col s3 ">
+        <label for="rate">Rate: </label>
+        <input value="rate" ng-model="selectedType.rate"/>
       </div>
-      <div class="col s3 input-field">
+      <div class="col s3">
+        <label ng-if="selectedType.hourly" for="hours">Hours: </label>
         <input  
+          value="hours" 
           ng-model="selectedType.time_if_hourly" 
           ng-keyup="$event.keyCode == 13 && TB.getTotal()"
           ng-if="selectedType.hourly">

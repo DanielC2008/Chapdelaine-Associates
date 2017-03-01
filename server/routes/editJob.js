@@ -84,7 +84,6 @@ router.post('/api/updateTable', ({body: {table, idObj, columnsToUpdate}}, res) =
     .where(idObj)
     .then( data => res.send())
     .catch( err => console.log('err', err))
-
 })
 
 
