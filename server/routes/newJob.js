@@ -24,6 +24,7 @@ router.get('/api/getMinJob', (req, res) => {
 })
 
 router.post('/api/createNewJob', ({body}, res) => {
+  //create invoice and estimate
   knex('Jobs')
     .insert(body)
     .then( () => res.send())
