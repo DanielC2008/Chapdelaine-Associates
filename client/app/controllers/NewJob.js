@@ -2,7 +2,7 @@
 
 app.controller('NewJob', function($scope, $http, JobFactory) {
   $scope.newJob = {}
-  $scope.tableForRN = 'Jobs'
+  $scope.tableForDB = 'Jobs'
   $scope.addJobStatus = status => {
     $scope.newJob.job_status = status 
     if (status === 'Pending') {
