@@ -86,6 +86,16 @@ router.post('/api/updateTable', ({body: {table, idObj, columnsToUpdate}}, res) =
     .catch( err => console.log('err', err))
 })
 
+router.post('/api/updateConnectingTable', ({body: {table, idOne, idTwo, columnsToUpdate}}, res) => {
+  let {connectTable} = DBHelper.getTableInfo(table)
+  knex(`${connectTable}`)
+    .update(columnsToUpdate)
+    .where(idOne)
+    .where(idTwo)
+    .then( data => res.send())
+    .catch( err => console.log('err', err))
+})
+
 router.post('/api/addLineItem', ({body: {lineItemArr}}, res) => {
   let lineItems = lineItemArr.map( item => {
     return new Promise( resolve => {

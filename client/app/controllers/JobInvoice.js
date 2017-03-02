@@ -3,7 +3,7 @@
 app.controller('JobInvoice', function($scope, JobFactory) {
   let JIScope = this
 
-  $scope.tableForRN = 'Invoices'
+  $scope.tableForDB = 'Invoices'
 
   $scope.numberSet = invoice_number => {
     let updateObj = {
