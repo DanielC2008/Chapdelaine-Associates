@@ -37,6 +37,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
 
     factory.updateTable = updateObj => $http.post('/api/updateTable', updateObj)
+
+    factory.addLineItem = lineItemArr => $http.post('/api/addLineItem', lineItemArr)
    
     /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {

@@ -86,6 +86,18 @@ router.post('/api/updateTable', ({body: {table, idObj, columnsToUpdate}}, res) =
     .catch( err => console.log('err', err))
 })
 
+router.post('/api/addLineItem', ({body: {lineItemArr}}, res) => {
+  let lineItems = lineItemArr.map( item => {
+    return new Promise( resolve => {
+      knex('Types_Invoices')
+        .insert(item)
+        .then( () => resolve())
+        .catch( err => console.log('err', err))
+    })
+  })
+  Promise.all(lineItems).then( res.send())  
+})
+
 
 
 module.exports = router
