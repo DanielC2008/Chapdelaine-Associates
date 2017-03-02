@@ -96,17 +96,14 @@ router.post('/api/updateConnectingTable', ({body: {table, idOne, idTwo, columnsT
     .catch( err => console.log('err', err))
 })
 
-router.post('/api/addLineItem', ({body: {lineItemArr}}, res) => {
-  let lineItems = lineItemArr.map( item => {
-    return new Promise( resolve => {
-      knex('Types_Invoices')
-        .insert(item)
-        .then( () => resolve())
-        .catch( err => console.log('err', err))
-    })
-  })
-  Promise.all(lineItems).then( res.send())  
+router.post('/api/addLineItem', ({body: {table, objToAdd}}, res) => {
+  let {connectTable} = DBHelper.getTableInfo(table)
+  knex(`${connectTable}`)
+    .insert(objToAdd)
+    .then( data => res.send())
+    .catch( err => console.log('err', err))
 })
+
 
 
 

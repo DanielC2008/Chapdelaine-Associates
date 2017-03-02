@@ -3,8 +3,6 @@
 app.controller('TOWBuilder', function($scope, $http, JobFactory) {
   let TBScope = this
   TBScope.builder = $scope.InvoiceDetails ? _.cloneDeep($scope.InvoiceDetails) : []
-  let invoiceLength = $scope.InvoiceDetails.length
-  TBScope.type_of_work = null
   TBScope.edit = null
 
   JobFactory.getTypesOfWork()
@@ -15,35 +13,36 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
     .catch( ({data}) => console.log(data))
 
   TBScope.getSelectedType = selectedType => {
+    getTotal()
     TBScope.typesOfWork.forEach( type => { 
       if (type.type_of_work == selectedType){
         TBScope.builder.push(type)
+        addLineItem(type)
       }
     })  
-    TBScope.type_of_work = null
-    TBScope.getTotal()
   }
 
-  TBScope.getTotal = () => TBScope.total = TBScope.builder.map( ({rate, time_if_hourly}) => time_if_hourly ? rate * time_if_hourly : rate).reduce( (total, totalPerHour) => total + totalPerHour, 0)
+  const getTotal = () => TBScope.total = TBScope.builder.map( ({rate, time_if_hourly}) => time_if_hourly ? rate * time_if_hourly : rate).reduce( (total, totalPerHour) => total + totalPerHour, 0)
 
-  TBScope.addLineItems = () => {
-    let lineItemArr = TBScope.builder.slice(invoiceLength).reduce( (itemArr, item) => {
-      let obj = {}
-      obj.type_of_work_id = item.type_of_work_id
-      obj.time_if_hourly = item.time_if_hourly ? Number(item.time_if_hourly) : null
-      obj.invoice_id = $scope.Invoice.invoice_id
-      itemArr.push(obj)
-      return itemArr
-    }, [])
-    JobFactory.addLineItem({lineItemArr})
-      .then( () => {
-        JobFactory.toastSuccess()
-        invoiceLength = TBScope.builder.length 
-      })
-      .catch( ({data}) => console.log('data', data))
+  const addLineItem = type => {
+    let lineItemObj = {
+      table: $scope.tableForDB,
+      objToAdd: {
+        invoice_id: $scope.Invoice.invoice_id,
+        type_of_work_id: type.type_of_work_id,
+      }
+    }
+    if (type.hourly) {
+      lineItemObj.objToAdd.time_if_hourly = 1
+      TBScope.edit = TBScope.builder.length - 1
+    }
+    JobFactory.addLineItem(lineItemObj)
+      .then( () => JobFactory.toastSuccess())
+      .catch( (data) => console.log('data', data))
   }
 
   TBScope.updateLineItem = lineItem => {
+    getTotal()
     TBScope.edit = null
     let updateObj = {
       table: $scope.tableForDB,
@@ -52,12 +51,10 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
       columnsToUpdate : {time_if_hourly: lineItem.time_if_hourly}
     }
     JobFactory.updateConnectingTable(updateObj)
-      .then( () => {
-        JobFactory.toastSuccess()
-      })
-      .catch( ({data}) => console.log('data', data))
+      .then( () => JobFactory.toastSuccess())
+      .catch( (data) => console.log('data', data))
   }
 
-  TBScope.getTotal()
+  getTotal()
 
 })
