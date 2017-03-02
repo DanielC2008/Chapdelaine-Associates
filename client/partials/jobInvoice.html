@@ -1,6 +1,12 @@
-<h3>
-  {{Invoice.invoice_number ? 'Invoice Number' : 'No invoice number assigned'}}
-</h3>
+<div ng-switch="Invoice.invoice_number != undefined">
+  <h3 ng-switch-when='true'>Invoice Number: {{Invoice.invoice_number}}</h3>
+  <div ng-switch-when='false'>
+    <h3 >No invoice number assigned</h3>
+    <div ng-controller="RecommendNumber as RN">
+      <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
+  </div>  
+</div>
 
 <div ng-controller="TOWBuilder as TB">
   <div ng-include="'./partials/TOWBuilder.html'">
@@ -8,8 +14,3 @@
 </div>
 
 
-
-<!--   <div>Your last Invoice Number was {{recommended -  1}}, would you like to use {{recommended}} as your new invoice number?</div>
-  <button type="submit" ng-click="addNumber(recommended)">Yes, that'll do.</button>
-  <button type="submit" ng-click="addNumber(newNumber)">Nah, use this number.</button>
-  <input type="text" ng-model="newNumber" placeholder="Select Invoice Number"> -->

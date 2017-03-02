@@ -2,7 +2,7 @@
 
 app.controller('NewJob', function($scope, $http, JobFactory) {
   $scope.newJob = {}
-
+  $scope.tableForDB = 'Jobs'
   $scope.addJobStatus = status => {
     $scope.newJob.job_status = status 
     if (status === 'Pending') {
@@ -19,15 +19,7 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
     }
   }
 
-
-  //goes to database and finds the last Job number used adds one
-  JobFactory.getMaxNumber({table:'Jobs'})
-    .then( ({data: {max}}) => {
-      $scope.recommended = max + 1 
-    })
-    .catch( ({data}) => console.log(data))
-
-  $scope.addJobNumber = job_number => {
+  $scope.numberSet = job_number => {
     $scope.newJob.job_number = job_number
     createNewJob()
   }

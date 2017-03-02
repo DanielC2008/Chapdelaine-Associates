@@ -16,7 +16,6 @@ app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-
 //routes
 app.use(routes)
 app.listen(PORT, () => console.log(`port listening on: ${PORT}`))

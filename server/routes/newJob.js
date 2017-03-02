@@ -24,10 +24,20 @@ router.get('/api/getMinJob', (req, res) => {
 })
 
 router.post('/api/createNewJob', ({body}, res) => {
-  knex('Jobs')
-    .insert(body)
-    .then( () => res.send())
-    .catch( err => console.log(err))
+  //create invoice and estimate
+  let newJob = body
+
+  Promise.all([
+    knex.raw('INSERT INTO Invoices OUTPUT Inserted.invoice_id DEFAULT VALUES')
+      .then(data => newJob.invoice_id = data[0].invoice_id),
+    knex.raw('INSERT INTO Estimates OUTPUT Inserted.estimate_id DEFAULT VALUES')
+      .then(data => newJob.estimate_id = data[0].estimate_id)
+  ]).then( () => {
+    knex('Jobs')
+      .insert(newJob)
+      .then( () => res.send())
+      .catch( err => console.log(err))
+  })
 })
 
 router.get('/api/getClientsBySearch', ({body}, res) => {

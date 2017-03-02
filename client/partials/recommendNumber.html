@@ -1,0 +1,6 @@
+  <div>
+    Your last Job Number was {{RN.recommended -  1}}, would you like to use {{RN.recommended}} as your new job number?
+  </div>
+  <button type="submit" ng-click="RN.addNumber(RN.recommended)">Yes, that'll do.</button>
+  <button type="submit" ng-click="RN.addNumber(newNumber)">Nah, use this number.</button>
+  <input type="text" ng-model="newNumber" placeholder="Choose a Number...">

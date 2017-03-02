@@ -1,19 +1,25 @@
 <div>
   <div ng-repeat="selectedType in TB.builder track by $index"  ng-if="TB.builder" ng-init="material()" >
     <div class="row">
-      <div class="col s3 input-field" >{{selectedType.type_of_work}}</div>
-      <div class="col s3 input-field">
-        <input ng-model="selectedType.rate">
+      <div class="col s3" >
+        Type of Work: {{selectedType.type_of_work}}
       </div>
-      <div class="col s3 input-field">
-        <input  
+      <div class="col s3">
+        Rate: {{selectedType.rate}}
+      </div>
+      <div class="col s3" ng-if="selectedType.hourly" ng-click="TB.edit = $index">           <!--   make input loose focus -->
+       <label for="hours">Hours: </label>
+        <input
+          value="hours" 
+          class="input-field columnInput"  
           ng-model="selectedType.time_if_hourly" 
-          ng-keyup="$event.keyCode == 13 && TB.getTotal()"
-          ng-if="selectedType.hourly">
+          ng-keyup="$event.keyCode == 13 && TB.updateLineItem(TB.builder[TB.edit])"  
+          focus-if="TB.edit === $index"
+          onClick="this.select()">
       </div>
     </div>  
   </div>
-  <div class="row">
+  <div class="row">                                                                          <!-- make this reset to Select option -->
     <div class="col s12 input-field" ng-if="TB.types" ng-init="material()">
       <select ng-change="TB.getSelectedType(TB.type_of_work)" ng-model="TB.type_of_work" ng-options="type as type disable when type.notAnOption for type in TB.types"> 
         <option value="" label="-- Select option --" disabled selected="selected"> Add Line Item...  
@@ -25,3 +31,4 @@
     <h5 class="col s3 offset-s9 input-field" ng-if="TB.total">Total: {{TB.total}}</h5>        
   </div>  
 </div>
+<!-- <button type="submit" ng-click="TB.updateLineItem(TB.builder[TB.edit]) ">SAVE</button> -->

@@ -101,6 +101,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       knex('Invoices')
         .select(
           'Types_of_Work.type_of_work',
+          'Types_of_Work.type_of_work_id',
           'Types_of_Work.rate',
           'Types_of_Work.hourly',
           'Types_Invoices.time_if_hourly'
