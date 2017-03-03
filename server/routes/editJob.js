@@ -86,12 +86,11 @@ router.post('/api/updateTable', ({body: {table, idObj, columnsToUpdate}}, res) =
     .catch( err => console.log('err', err))
 })
 
-router.post('/api/updateConnectingTable', ({body: {table, idOne, idTwo, columnsToUpdate}}, res) => {
-  let {connectTable} = DBHelper.getTableInfo(table)
+router.post('/api/updateConnectingTable', ({body: {table, id, columnsToUpdate}}, res) => {
+  let {connectTable, connectTableId} = DBHelper.getTableInfo(table)
   knex(`${connectTable}`)
     .update(columnsToUpdate)
-    .where(idOne)
-    .where(idTwo)
+    .where(`${connectTableId}`, `${id}`)
     .then( data => res.send())
     .catch( err => console.log('err', err))
 })
@@ -105,12 +104,11 @@ router.post('/api/addLineItem', ({body: {table, objToAdd}}, res) => {
     .catch( err => console.log('err', err))
 })
 
-router.post('/api/deleteFromConnectingTable', ({body: {table, idOne, idTwo}}, res) => {
-  let {connectTable} = DBHelper.getTableInfo(table)
+router.post('/api/deleteFromConnectingTable', ({body: {table, id}}, res) => {
+  let {connectTable, connectTableId} = DBHelper.getTableInfo(table)
   knex(`${connectTable}`)
     .del()
-    .where(idOne)
-    .where(idTwo)
+    .where(`${connectTableId}`, `${id}`)
     .then( data => res.send())
     .catch( err => console.log('err', err))
 })

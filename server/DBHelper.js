@@ -37,6 +37,7 @@ module.exports = {
       case 'Invoices':
         tableObj.tableName = 'Invoices'
         tableObj.connectTable = 'Types_Invoices'
+        tableObj.connectTableId = 'types_invoices_id'
         tableObj.tableNumber = 'invoice_number'
         break;
     }

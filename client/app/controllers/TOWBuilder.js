@@ -48,8 +48,7 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
     TBScope.edit = null
     let updateObj = {
       table: $scope.tableForDB,
-      idOne: {invoice_id: $scope.Invoice.invoice_id},
-      idTwo: {type_of_work_id: lineItem.type_of_work_id},
+      id: lineItem.types_invoices_id,
       columnsToUpdate : {time_if_hourly: lineItem.time_if_hourly}
     }
     JobFactory.updateConnectingTable(updateObj)
@@ -61,8 +60,7 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
     TBScope.builder.splice(index, 1)
     let objToRemove = {
       table: $scope.tableForDB,
-      idOne: {invoice_id: $scope.Invoice.invoice_id},
-      idTwo: {type_of_work_id: lineItem.type_of_work_id}
+      id: lineItem.types_invoices_id
     }
     JobFactory.deleteFromConnectingTable(objToRemove)
       .then( () => JobFactory.toastSuccess())

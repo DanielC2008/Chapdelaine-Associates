@@ -104,7 +104,8 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Types_of_Work.type_of_work_id',
           'Types_of_Work.rate',
           'Types_of_Work.hourly',
-          'Types_Invoices.time_if_hourly'
+          'Types_Invoices.time_if_hourly',
+          'Types_Invoices.types_invoices_id'
         )
         .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
         .join('Types_Invoices', 'Types_Invoices.invoice_id', 'Invoices.invoice_id')

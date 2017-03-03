@@ -15,13 +15,13 @@
             value="hours" 
             class="input-field columnInput"  
             ng-model="selectedType.time_if_hourly" 
-            ng-keyup="$event.keyCode == 13 && TB.updateLineItem(TB.builder[$index], $index)"
+            ng-keyup="$event.keyCode == 13 && TB.updateLineItem(TB.builder[$index])"
             focus-if="TB.edit === $index"
             blur="TB.edit !== $index"
             onClick="this.select()">
         </div>
       </div>
-      <button class="button btn" type="submit" ng-click="TB.deleteLineItem(TB.builder[$index])">Remove</button>
+      <button class="button btn" type="submit" ng-click="TB.deleteLineItem(TB.builder[$index], $index)">Remove</button>
     </div>  
   </div>
   <div class="row">
