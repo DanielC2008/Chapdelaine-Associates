@@ -11,15 +11,15 @@
 <body >
 	<div ng-app='Database' ng-cloak>
 		<nav class="brown darken-1">
-			<a href="/#/home" ng-if="$user != null" class="brand-logo right"> Welcome {{$user}} </a>
+			<a href="/#!/home" ng-if="$user != null" class="brand-logo right"> Welcome {{$user}} </a>
 			<ul ng-if="$user != null">
-				<li><a href="/#/home" title="">Home</a></li>
-				<li><a href="/#/newJob" title="">New Job</a></li>
-				<li><a href="/#/getData" title="">Get Data</a></li>
-				<li><a href="/#/logout" title="">Logout</a></li> <!-- make this modal????? -->
+				<li><a href="/#!/home" title="">Home</a></li>
+				<li><a href="/#!/newJob" title="">New Job</a></li>
+				<li><a href="/#!/getData" title="">Get Data</a></li>
+				<li><a href="/#!/logout" title="">Logout</a></li>
 			</ul>
 			<ul>
-				<li><a ng-if="$user === null" href="/#/login" title="">Login</a></li>
+				<li><a ng-if="$user === null" href="/#!/login" title="">Login</a></li>
 			</ul>
 		</nav>
 		<div class="container">
@@ -67,6 +67,9 @@
 
 	<!-- services -->
 	<script type="text/javascript"  src="app/services/FindJobService.js"></script>
+
+	<!-- directives -->
+	<script type="text/javascript"  src="app/directives/blur.js"></script>
 	
 
 </body>

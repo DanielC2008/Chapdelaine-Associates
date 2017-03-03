@@ -18,8 +18,9 @@
           data.Jobs[0]['Job Number'] = 'No Job Number'
         }
         $scope.Clients = data.Clients
-        $scope.Estimate = data.Estimates
-        $scope.Invoice = data.Invoices[0]
+        $scope.Estimates = data.Estimates[0]
+        $scope.EstimateDetails = data.EstimateDetails
+        $scope.Invoices = data.Invoices[0]
         $scope.InvoiceDetails = data.InvoiceDetails
         $scope.Property = data.Properties
         $scope.Representatives = data.Representatives

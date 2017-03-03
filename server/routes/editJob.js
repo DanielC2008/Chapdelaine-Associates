@@ -8,7 +8,6 @@ const DBHelper = require('../DBHelper')
 
 router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
   knex(`${table}`)
-    .returning('*')
     .update(obj)
     .where(id)
     .then( data => res.send({msg: 'Your data was saved successfully!'}))
@@ -77,33 +76,6 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, re
         }).catch( err => console.log(err))
     }).catch( err => console.log(err))
 })
-
-router.post('/api/updateTable', ({body: {table, idObj, columnsToUpdate}}, res) => {
-  knex(`${table}`)
-    .update(columnsToUpdate)
-    .where(idObj)
-    .then( data => res.send())
-    .catch( err => console.log('err', err))
-})
-
-router.post('/api/updateConnectingTable', ({body: {table, idOne, idTwo, columnsToUpdate}}, res) => {
-  let {connectTable} = DBHelper.getTableInfo(table)
-  knex(`${connectTable}`)
-    .update(columnsToUpdate)
-    .where(idOne)
-    .where(idTwo)
-    .then( data => res.send())
-    .catch( err => console.log('err', err))
-})
-
-router.post('/api/addLineItem', ({body: {table, objToAdd}}, res) => {
-  let {connectTable} = DBHelper.getTableInfo(table)
-  knex(`${connectTable}`)
-    .insert(objToAdd)
-    .then( data => res.send())
-    .catch( err => console.log('err', err))
-})
-
 
 
 
