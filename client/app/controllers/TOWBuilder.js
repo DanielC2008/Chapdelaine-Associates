@@ -4,6 +4,7 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
   let TBScope = this
   TBScope.builder = $scope.InvoiceDetails ? _.cloneDeep($scope.InvoiceDetails) : []
   TBScope.edit = null
+  TBScope.type_of_work = null
 
   JobFactory.getTypesOfWork()
     .then( ({data}) => {
@@ -14,6 +15,7 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
 
   TBScope.getSelectedType = selectedType => {
     getTotal()
+    TBScope.type_of_work = null
     TBScope.typesOfWork.forEach( type => { 
       if (type.type_of_work == selectedType){
         TBScope.builder.push(type)
@@ -41,7 +43,7 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
       .catch( (data) => console.log('data', data))
   }
 
-  TBScope.updateLineItem = lineItem => {
+  TBScope.updateLineItem = lineItem  => {
     getTotal()
     TBScope.edit = null
     let updateObj = {

@@ -5,17 +5,12 @@
       <li><a ng-click=" showTab = 'JobMain' ">Job</a></li>
       <li><a ng-click=" showTab = 'JobAttachment' ">Attachments</a></li>
       <li><a ng-click=" showTab = 'JobEstimate' ">Estimate</a></li>
-      <li><a ng-click=" showTab = 'JobInvoice' ">Invoice</a></li> <!-- make this modal????? -->
-      <li class="jobExit" ><a href="/#/home">X</a></li>
+      <li><a ng-click=" showTab = 'JobInvoice' ">Invoice</a></li>
+      <li class="jobExit" ><a href="/#!/home">X</a></li>
     </ul>
   </nav>
   <div class="jobInfo">  
-  <!-- will possibly use mass edit -->
-    <!-- <button 
-      class="button btn align right" 
-      ng-click="editOrSave()">
-      {{edit ? 'Save' : 'Edit'}}
-    </button> -->
+
     <div class='row'>
       <div ng-repeat='(key, value) in Job'>
         <div ng-if="key != 'job_id'" class="col s2">

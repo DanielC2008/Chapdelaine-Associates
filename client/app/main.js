@@ -35,10 +35,6 @@ const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ng
         controller: 'Job',
         templateUrl: 'partials/job.html'
       })
-      .when('/jobs/:job_id/editAll', {
-        controller: 'Job',
-        templateUrl: 'partials/job.html'
-      })
 			.otherwise('/login')
 	)
 	
