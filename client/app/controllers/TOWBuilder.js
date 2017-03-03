@@ -2,7 +2,8 @@
 
 app.controller('TOWBuilder', function($scope, $http, JobFactory) {
   let TBScope = this
-  TBScope.builder = $scope.InvoiceDetails ? _.cloneDeep($scope.InvoiceDetails) : []
+  let {table, id, connectingTableId} = $scope.DBObj
+  TBScope.builder = $scope.Details ? _.cloneDeep($scope.Details) : []
   TBScope.edit = null
   TBScope.type_of_work = null
 
@@ -26,19 +27,20 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
 
   const addLineItem = type => {
     let lineItemObj = {
-      table: $scope.tableForDB,
-      objToAdd: {
-        invoice_id: $scope.Invoice.invoice_id,
-        type_of_work_id: type.type_of_work_id,
-      }
+      table,
+      objToAdd: {}
     }
+
+    lineItemObj.objToAdd[`${id}`] =  $scope[`${table}`][`${id}`]
+    lineItemObj.objToAdd.type_of_work_id = type.type_of_work_id
+
     if (type.hourly) {
       lineItemObj.objToAdd.time_if_hourly = 1
     }
     JobFactory.insertIntoConnectingTable(lineItemObj)
       .then( ({data}) => {
         let addType = _.cloneDeep(type)
-        addType.types_invoices_id = data[0]
+        addType[`${connectingTableId}`] = data[0]
         TBScope.builder.push(addType)
         TBScope.edit = TBScope.builder.length - 1
         getTotal()
@@ -50,8 +52,8 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
   TBScope.updateLineItem = lineItem  => {
     TBScope.edit = null
     let updateObj = {
-      table: $scope.tableForDB,
-      id: lineItem.types_invoices_id,
+      table,
+      id: lineItem[`${connectingTableId}`],
       columnsToUpdate : {time_if_hourly: lineItem.time_if_hourly}
     }
     JobFactory.updateConnectingTable(updateObj)
@@ -65,8 +67,8 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
   TBScope.deleteLineItem = (lineItem, index) => {
     TBScope.builder.splice(index, 1)
     let objToRemove = {
-      table: $scope.tableForDB,
-      id: lineItem.types_invoices_id
+      table,
+      id: lineItem[`${connectingTableId}`]
     }
     JobFactory.deleteFromConnectingTable(objToRemove)
       .then( () => {

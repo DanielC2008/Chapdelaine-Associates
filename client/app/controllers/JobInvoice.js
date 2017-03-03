@@ -5,14 +5,22 @@ app.controller('JobInvoice', function($scope, JobFactory) {
 
   $scope.tableForDB = 'Invoices'
 
+  $scope.DBObj = {
+    table: 'Invoices',
+    id: 'invoice_id',
+    connectingTableId: 'types_invoices_id'
+  }
+
+  $scope.Details = $scope.InvoiceDetails
+
   $scope.numberSet = invoice_number => {
     let updateObj = {
       table: 'Invoices',
-      idObj: {invoice_id: $scope.Invoice.invoice_id},
+      idObj: {invoice_id: $scope.Invoices.invoice_id},
       columnsToUpdate: {invoice_number: invoice_number}
     }
     JobFactory.updateTable(updateObj)
-    .then(() => $scope.Invoice.invoice_number = invoice_number)
+    .then(() => $scope.Invoices.invoice_number = invoice_number)
     .catch( ({data}) => console.log('data', data))
   }
 

@@ -1,5 +1,5 @@
-<div ng-switch="Invoice.invoice_number != undefined">
-  <h3 ng-switch-when='true'>Invoice Number: {{Invoice.invoice_number}}</h3>
+<div ng-switch="Invoices.invoice_number != undefined">
+  <h3 ng-switch-when='true'>Invoice Number: {{Invoices.invoice_number}}</h3>
   <div ng-switch-when='false'>
     <h3 >No invoice number assigned</h3>
     <div ng-controller="RecommendNumber as RN">

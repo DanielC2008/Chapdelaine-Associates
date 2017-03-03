@@ -24,8 +24,6 @@ router.post('/api/updateConnectingTable', ({body: {table, id, columnsToUpdate}},
     .catch( err => console.log('err', err))
 })
 
-
-
 router.post('/api/deleteFromConnectingTable', ({body: {table, id}}, res) => {
   let {connectTable, connectTableId} = DBHelper.getTableInfo(table)
   knex(`${connectTable}`)

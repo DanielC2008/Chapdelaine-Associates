@@ -76,22 +76,31 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Estimates')
         .select(
-          'Estimates.estimate_id',
-          'Estimates.date_created', 
-          'Estimates.notes',
+          'Estimates.estimate_id'
+        )
+        .join('Jobs', 'Jobs.estimate_id', 'Estimates.estimate_id')
+        .where('job_number', job_number)
+        .then(data => Job.Estimates = data),
+
+      knex('Estimates')
+        .select(
           'Types_of_Work.type_of_work',
+          'Types_of_Work.type_of_work_id',
           'Types_of_Work.rate',
-          'Types_of_Work.hourly'
+          'Types_of_Work.hourly',
+          'Types_Estimates.time_if_hourly',
+          'Types_Estimates.types_estimates_id'
         )
         .join('Jobs', 'Jobs.estimate_id', 'Estimates.estimate_id')
         .join('Types_Estimates', 'Types_Estimates.estimate_id', 'Estimates.estimate_id')
         .join('Types_Of_Work', 'Types_Estimates.type_of_work_id', 'Types_Of_Work.type_of_work_id')
         .where('job_number', job_number)
-        .then(data => Job.Estimates = data),
+        .then(data => Job.EstimateDetails = data),
 
       knex('Invoices')
         .select(
-          'Invoices.invoice_number'
+          'Invoices.invoice_number',
+          'Invoices.invoice_id'
         )
         .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
         .where('job_number', job_number)
