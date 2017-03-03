@@ -38,7 +38,7 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
       lineItemObj.objToAdd.time_if_hourly = 1
       TBScope.edit = TBScope.builder.length - 1
     }
-    JobFactory.addLineItem(lineItemObj)
+    JobFactory.insertIntoConnectingTable(lineItemObj)
       .then( () => JobFactory.toastSuccess())
       .catch( (data) => console.log('data', data))
   }

@@ -40,7 +40,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.updateConnectingTable = updateObj => $http.post('/api/updateConnectingTable', updateObj)
 
-    factory.addLineItem = lineItemObj => $http.post('/api/addLineItem', lineItemObj)
+    factory.insertIntoConnectingTable = lineItemObj => $http.post('/api/insertIntoConnectingTable', lineItemObj)
     
     factory.deleteFromConnectingTable = objToRemove => $http.post('/api/deleteFromConnectingTable', objToRemove)
    
