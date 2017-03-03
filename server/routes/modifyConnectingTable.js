@@ -7,15 +7,15 @@ const router = Router()
 const DBHelper = require('../DBHelper')
 
 router.post('/api/insertIntoConnectingTable', ({body: {table, objToAdd}}, res) => {
-  let {connectTable} = DBHelper.getTableInfo(table)
+  let {connectTable, connectTableId} = DBHelper.getTableInfo(table)
   knex(`${connectTable}`)
+    .returning(`${connectTableId}`)
     .insert(objToAdd)
-    .then( data => res.send())
+    .then( data => res.send(data))
     .catch( err => console.log('err', err))
 })
 
 router.post('/api/updateConnectingTable', ({body: {table, id, columnsToUpdate}}, res) => {
-  console.log('id', id)
   let {connectTable, connectTableId} = DBHelper.getTableInfo(table)
   knex(`${connectTable}`)
     .update(columnsToUpdate)

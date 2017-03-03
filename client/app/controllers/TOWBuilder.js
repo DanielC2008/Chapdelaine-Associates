@@ -14,11 +14,9 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
     .catch( ({data}) => console.log(data))
 
   TBScope.getSelectedType = selectedType => {
-    getTotal()
     TBScope.type_of_work = null
     TBScope.typesOfWork.forEach( type => { 
       if (type.type_of_work == selectedType){
-        TBScope.builder.push(type)
         addLineItem(type)
       }
     })  
@@ -36,15 +34,20 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
     }
     if (type.hourly) {
       lineItemObj.objToAdd.time_if_hourly = 1
-      TBScope.edit = TBScope.builder.length - 1
     }
     JobFactory.insertIntoConnectingTable(lineItemObj)
-      .then( () => JobFactory.toastSuccess())
+      .then( ({data}) => {
+        let addType = _.cloneDeep(type)
+        addType.types_invoices_id = data[0]
+        TBScope.builder.push(addType)
+        TBScope.edit = TBScope.builder.length - 1
+        getTotal()
+        JobFactory.toastSuccess()
+      })
       .catch( (data) => console.log('data', data))
   }
 
   TBScope.updateLineItem = lineItem  => {
-    getTotal()
     TBScope.edit = null
     let updateObj = {
       table: $scope.tableForDB,
@@ -52,7 +55,10 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
       columnsToUpdate : {time_if_hourly: lineItem.time_if_hourly}
     }
     JobFactory.updateConnectingTable(updateObj)
-      .then( () => JobFactory.toastSuccess())
+      .then( () => {
+        getTotal()
+        JobFactory.toastSuccess()
+      })
       .catch( (data) => console.log('data', data))
   }
 
@@ -63,7 +69,10 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
       id: lineItem.types_invoices_id
     }
     JobFactory.deleteFromConnectingTable(objToRemove)
-      .then( () => JobFactory.toastSuccess())
+      .then( () => {
+        getTotal()
+        JobFactory.toastSuccess()
+      })
       .catch( (data) => console.log('data', data))
   }
 
