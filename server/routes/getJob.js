@@ -91,7 +91,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Invoices')
         .select(
-          'Invoices.invoice_id',
           'Invoices.invoice_number'
         )
         .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
