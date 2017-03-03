@@ -7,17 +7,21 @@
       <div class="col s3">
         Rate: {{selectedType.rate}}
       </div>
-      <div class="col s3" ng-if="selectedType.hourly" ng-click="TB.edit = $index">
-       <label for="hours">Hours: </label>
-        <input
-          value="hours" 
-          class="input-field columnInput"  
-          ng-model="selectedType.time_if_hourly" 
-          ng-keyup="$event.keyCode == 13 && TB.updateLineItem(TB.builder[TB.edit])"  
-          focus-if="TB.edit === $index"
-          blur="TB.edit !== $index"
-          onClick="this.select()">
+      <div class="col s3" >
+        <div ng-click="TB.edit = $index" ng-if="selectedType.hourly">
+          <label for="hours">Hours: </label>
+          <input
+            ng-if="selectedType.hourly"
+            value="hours" 
+            class="input-field columnInput"  
+            ng-model="selectedType.time_if_hourly" 
+            ng-keyup="$event.keyCode == 13 && TB.updateLineItem(TB.builder[$index], $index)"
+            focus-if="TB.edit === $index"
+            blur="TB.edit !== $index"
+            onClick="this.select()">
+        </div>
       </div>
+      <button class="button btn" type="submit" ng-click="TB.deleteLineItem(TB.builder[$index])">Remove</button>
     </div>  
   </div>
   <div class="row">

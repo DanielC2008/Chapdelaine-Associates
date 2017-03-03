@@ -57,6 +57,18 @@ app.controller('TOWBuilder', function($scope, $http, JobFactory) {
       .catch( (data) => console.log('data', data))
   }
 
+  TBScope.deleteLineItem = (lineItem, index) => {
+    TBScope.builder.splice(index, 1)
+    let objToRemove = {
+      table: $scope.tableForDB,
+      idOne: {invoice_id: $scope.Invoice.invoice_id},
+      idTwo: {type_of_work_id: lineItem.type_of_work_id}
+    }
+    JobFactory.deleteFromConnectingTable(objToRemove)
+      .then( () => JobFactory.toastSuccess())
+      .catch( (data) => console.log('data', data))
+  }
+
   getTotal()
 
 })

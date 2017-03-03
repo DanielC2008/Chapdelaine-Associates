@@ -41,6 +41,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.updateConnectingTable = updateObj => $http.post('/api/updateConnectingTable', updateObj)
 
     factory.addLineItem = lineItemObj => $http.post('/api/addLineItem', lineItemObj)
+    
+    factory.deleteFromConnectingTable = objToRemove => $http.post('/api/deleteFromConnectingTable', objToRemove)
    
     /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {

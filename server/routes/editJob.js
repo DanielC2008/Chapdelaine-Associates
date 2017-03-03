@@ -96,6 +96,7 @@ router.post('/api/updateConnectingTable', ({body: {table, idOne, idTwo, columnsT
     .catch( err => console.log('err', err))
 })
 
+
 router.post('/api/addLineItem', ({body: {table, objToAdd}}, res) => {
   let {connectTable} = DBHelper.getTableInfo(table)
   knex(`${connectTable}`)
@@ -104,6 +105,15 @@ router.post('/api/addLineItem', ({body: {table, objToAdd}}, res) => {
     .catch( err => console.log('err', err))
 })
 
+router.post('/api/deleteFromConnectingTable', ({body: {table, idOne, idTwo}}, res) => {
+  let {connectTable} = DBHelper.getTableInfo(table)
+  knex(`${connectTable}`)
+    .del()
+    .where(idOne)
+    .where(idTwo)
+    .then( data => res.send())
+    .catch( err => console.log('err', err))
+})
 
 
 
