@@ -121,6 +121,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Attachments')
         .select(
+          'attachment_id',
           'file_name',
           'extension'
         )

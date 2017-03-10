@@ -1,8 +1,12 @@
 'use strict'
 
-app.controller('JobAttachment', function($scope) {
+app.controller('JobAttachment', function($scope, JobFactory) {
   let JAScope = this
 
-  JAScope.title = 'JobAttachment'
+  JAScope.attachments = $scope.Attachments
+
+  JAScope.openFile = id => {
+    JobFactory.openFile({attachment_id: id})
+  }
 
 })

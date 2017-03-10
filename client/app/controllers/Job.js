@@ -27,7 +27,6 @@
         $scope.Attachments = data.Attachments
         $scope.Job = data.Jobs[0]
         $scope.jobId = $scope.Job.job_id
-        console.log('$scope.Attachments', $scope.Attachments)
       })
       //can post status with .status and .statusText
       .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))

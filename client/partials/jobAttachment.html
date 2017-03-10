@@ -1,1 +1,10 @@
-<h1>{{JA.title}}</h1>
+<h3>Attachments</h3>
+
+<div class="row">
+  <div ng-repeat='attachment in JA.attachments'>
+    <div class="col s2">
+      <a><img src="/img/fileImg.jpg" alt="" class="col s12" ng-dblclick="JA.openFile(attachment.attachment_id)"></a>
+      <h5 class="center align">{{attachment.file_name}}{{attachment.extension}}</h5>
+    </div>
+  </div>
+</div>

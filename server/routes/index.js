@@ -14,6 +14,7 @@ router.use(require('./findJob'))
 router.use(require('./TOWBuilder'))
 router.use(require('./modifyConnectingTable'))
 router.use(require('./modifyTable'))
+router.use(require('./attachments'))
 
 // add gaurd here and 
 // private routes
