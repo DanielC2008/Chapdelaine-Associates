@@ -2,16 +2,17 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const busboy = require('connect-busboy')
 const routes = require('./routes/') // same as ./routes/index.js
 const PORT = process.env.PORT || 3000
 
 const config = require('../database/knexfile.js').development
 const knex = require('knex')(config)
 
-
 const app = express()
 
 //middlewares
+app.use(busboy())
 app.use(express.static('client'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
