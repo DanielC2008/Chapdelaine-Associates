@@ -44,7 +44,7 @@ router.post('/api/upload', (req, res) => {
         extension,
         file,
       })  
-      .then( data => res.send('Success'))
+      .then( data => res.send('Upload Complete!'))
     })
   })
 
