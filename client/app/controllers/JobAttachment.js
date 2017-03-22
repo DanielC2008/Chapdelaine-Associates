@@ -17,6 +17,7 @@ app.controller('JobAttachment', function($scope, JobFactory, FileUploader, $rout
 
   JAScope.openFile = id => {
     JobFactory.openFile({attachment_id: id})
+      .then(({data}) => alert(data))
   }
 
 

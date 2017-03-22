@@ -6,9 +6,19 @@ const knex = require('knex')(config)
 const router = Router()
 const attachmentHelper = require('../attachmentHelper')
 const { createReadStream, createWriteStream } = require('fs')
+const open = require('open')
 
 router.post('/api/openFile',  ({body: {attachment_id}}, res) => {
- console.log('attachment_id', attachment_id)
+ knex('Attachments')
+  .select('file_name', 'extension')
+  .where('attachment_id', attachment_id)
+  .then( data => {
+    let {file_name, extension} = data[0]
+    open(`${__dirname}/../uploads/${file_name}${extension}`)
+    res.send("Don't forget to save your work!")
+  })
+  .catch( err => res.send(err))
+
 })
 
 router.post('/api/upload', (req, res) => {
@@ -45,6 +55,7 @@ router.post('/api/upload', (req, res) => {
         file,
       })  
       .then( data => res.send('Upload Complete!'))
+      .catch( err => res.send(err))
     })
   })
 
