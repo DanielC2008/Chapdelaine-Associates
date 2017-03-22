@@ -32,6 +32,7 @@ jspm_packages
 client/lib
 DBCreds.js
 database/attachmentTest
+server/uploads
 
 # Optional npm cache directory
 .npm

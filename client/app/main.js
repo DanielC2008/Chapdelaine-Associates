@@ -1,9 +1,10 @@
 'use strict'
 
 
-const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ngMessages'])
-  .run(function($rootScope) {
-    $rootScope.$user = null
+const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ngMessages', 'angularFileUpload'])
+  .run(function($rootScope, JobFactory) {
+    JobFactory.getUserName()
+      .then(({data}) => $rootScope.$user = data.user_name)
   })
 	.config( $routeProvider =>
 		$routeProvider

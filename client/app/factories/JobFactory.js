@@ -43,6 +43,20 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.insertIntoConnectingTable = lineItemObj => $http.post('/api/insertIntoConnectingTable', lineItemObj)
     
     factory.deleteFromConnectingTable = objToRemove => $http.post('/api/deleteFromConnectingTable', objToRemove)
+
+    factory.openFile = attachment_id => $http.post('/api/openFile', attachment_id)
+
+    factory.deleteFile = attachment_id => $http.post('/api/deleteFile', attachment_id)
+
+    factory.getUserName = () => $http.get('/api/getUserName')
+
+    factory.removeUser = () => $http.get('/api/removeUser')
+
+    factory.getTab = () => $http.get('/api/getTab')
+
+    factory.setTab = jobNumber => $http.post('/api/setTab', jobNumber)
+
+    factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
    
     /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {

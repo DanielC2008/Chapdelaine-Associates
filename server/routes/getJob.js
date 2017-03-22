@@ -6,9 +6,7 @@ const knex = require('knex')(config)
 const router = Router()
 
 router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
-  //when connected to database
 
-  //could break this out into multiple database calls
   let Job = {}
   let clientID
 
@@ -119,7 +117,17 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .join('Types_Invoices', 'Types_Invoices.invoice_id', 'Invoices.invoice_id')
         .join('Types_Of_Work', 'Types_Invoices.type_of_work_id', 'Types_Of_Work.type_of_work_id')
         .where('job_number', job_number)
-        .then(data => Job.InvoiceDetails = data)
+        .then(data => Job.InvoiceDetails = data),
+
+      knex('Attachments')
+        .select(
+          'attachment_id',
+          'file_name',
+          'extension'
+        )
+        .join('Jobs', 'Attachments.job_id', 'Jobs.job_id')
+        .where('job_number', job_number)
+        .then(data => Job.Attachments = data) 
 
   ]).then( () => {
     //query this after promise to ensure clientID is set
@@ -152,9 +160,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         res.send(Job)
       })
   })
-
-  //when not 
-  // res.send(body)
 })
 
 module.exports = router
