@@ -47,6 +47,10 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.openFile = attachment_id => $http.post('/api/openFile', attachment_id)
 
     factory.deleteFile = attachment_id => $http.post('/api/deleteFile', attachment_id)
+
+    factory.getUserName = () => $http.get('/api/getUserName')
+
+    factory.removeUser = () => $http.get('/api/removeUser')
    
     /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {

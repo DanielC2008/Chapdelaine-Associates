@@ -2,8 +2,9 @@
 
 
 const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ngMessages', 'angularFileUpload'])
-  .run(function($rootScope) {
-    $rootScope.$user = null
+  .run(function($rootScope, JobFactory) {
+    JobFactory.getUserName()
+      .then(({data}) => $rootScope.$user = data.user_name)
   })
 	.config( $routeProvider =>
 		$routeProvider

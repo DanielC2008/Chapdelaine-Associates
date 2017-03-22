@@ -43,11 +43,7 @@ app.controller('Login-Register', function($scope, $http, $location, $rootScope) 
 
   }
 
-  $scope.register = () => {
-    $scope.loginOrRegister = 'register'
-  }
+  $scope.register = () => $scope.loginOrRegister = 'register'
 
-  $scope.login = () => {
-    $scope.loginOrRegister = 'login'
-  } 
+  $scope.login = () => $scope.loginOrRegister = 'login'
 })
