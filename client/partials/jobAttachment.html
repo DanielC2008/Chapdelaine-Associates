@@ -3,12 +3,16 @@
 <div class="row">
   <div ng-repeat='attachment in JA.attachments'>
     <div class="col s2">
-      <a><img src="/img/fileImg.jpg" alt="" class="col s12" ng-dblclick="JA.openFile(attachment.attachment_id)"></a>
-      <h5 class="center align">{{attachment.file_name}}{{attachment.extension}}</h5>
+      <a class="editCursor" ng-click="JA.openFile(attachment.attachment_id)" title="">
+        <img src="/img/fileImg.jpg" alt="" class="col s12">
+        <h5 class="center align">{{attachment.file_name}}{{attachment.extension}}</h5>
+      </a>
+      <div class="col s12">
+        <button class="btn button" ng-click="JA.deleteFile(attachment.attachment_id)">Delete</button>
+      </div>
     </div>
   </div>
 </div>
-
 
 <div>  
   <input type="file" nv-file-select uploader="JA.uploader"/><br/>

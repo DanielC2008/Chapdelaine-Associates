@@ -11,14 +11,21 @@ const open = require('open')
 router.post('/api/openFile',  ({body: {attachment_id}}, res) => {
  knex('Attachments')
   .select('file_name', 'extension')
-  .where('attachment_id', attachment_id)
+  .where(attachment_id)
   .then( data => {
     let {file_name, extension} = data[0]
     open(`${__dirname}/../uploads/${file_name}${extension}`)
     res.send("Don't forget to save your work!")
   })
   .catch( err => res.send(err))
+})
 
+router.post('/api/deleteFile', ({body: {attachment_id}}, res) => {
+  knex('Attachments')
+    .del()
+    .where(attachment_id)
+    .then(data => res.send('File removed from job!'))
+    .catch( err => res.send(err))
 })
 
 router.post('/api/upload', (req, res) => {

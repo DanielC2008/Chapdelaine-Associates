@@ -15,10 +15,14 @@ app.controller('JobAttachment', function($scope, JobFactory, FileUploader, $rout
     }
   })
 
-  JAScope.openFile = id => {
-    JobFactory.openFile({attachment_id: id})
-      .then(({data}) => alert(data))
-  }
+  JAScope.openFile = id => JobFactory.openFile({attachment_id: {attachment_id: id}}).then(({data}) => alert(data))
 
+  JAScope.deleteFile = id => {
+    JobFactory.deleteFile({attachment_id: {attachment_id: id}})
+      .then(({data}) => {
+        $route.reload()
+        JobFactory.toastSuccess(data)
+      })
+  }
 
 })
