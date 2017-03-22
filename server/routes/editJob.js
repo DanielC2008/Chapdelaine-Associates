@@ -77,6 +77,36 @@ router.post('/api/addNewToJob', ({body: {table, objToAdd, clientId, job_id}}, re
     }).catch( err => console.log(err))
 })
 
+router.post('/api/setNewTab', ({body:{jobNumber, showTab}, session}, res) => {
+  let jobIndex = session.recentJobs.findIndex( job => job.jobNumber === jobNumber)
+  session.recentJobs[jobIndex].showTab = showTab
+  res.send()
+})
+
+router.post('/api/setTab', ({body:{jobNumber}, session}, res) => {
+  if (session.recentJobs) {
+    let jobExists = session.recentJobs.filter( job => job.jobNumber === jobNumber )
+    if(jobExists[0]) {
+      res.send({showTab: jobExists[0].showTab})
+    } else {
+      let newObj = {
+        jobNumber: jobNumber,
+        showTab: 'JobMain'
+      }
+      session.recentJobs.push(newObj)
+      res.send({showTab: 'JobMain'})
+    }
+  } else {
+    let recentJobs = []
+    let newObj = {
+      jobNumber: jobNumber,
+      showTab: 'JobMain'
+    }
+    recentJobs.push(newObj)
+    session.recentJobs = recentJobs
+    res.send({showTab: 'JobMain'})
+  }
+})
 
 
 module.exports = router

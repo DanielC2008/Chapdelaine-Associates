@@ -51,6 +51,12 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.getUserName = () => $http.get('/api/getUserName')
 
     factory.removeUser = () => $http.get('/api/removeUser')
+
+    factory.getTab = () => $http.get('/api/getTab')
+
+    factory.setTab = jobNumber => $http.post('/api/setTab', jobNumber)
+
+    factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
    
     /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {
