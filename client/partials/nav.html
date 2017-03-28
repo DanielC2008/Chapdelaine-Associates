@@ -7,14 +7,14 @@
     <li><a href="/#!/logout" title="">Logout</a></li>
     <li>Know the Job Number?</li>
     <li>
-        <input 
-            class="navInput" 
-            ng-keyup="$event.keyCode == 13 && NAV.submit(NAV.jobNumber)" 
-            type="text" ng-model="NAV.jobNumber" 
-            blur="NAV.jobNumber === '' "/>
+      <input 
+        class="navInput" 
+        ng-keyup="$event.keyCode == 13 && NAV.submit(NAV.jobNumber)" 
+        type="text" ng-model="NAV.jobNumber" 
+        blur="NAV.jobNumber === '' "/>
     </li>
   </ul>
   <ul>
-    <li><a ng-if="$user === null" href="/#!/login" title="">Login</a></li>
+    <li><a ng-if="$user == null" href="/#!/login" title="">Login</a></li>
   </ul>
 </nav>
