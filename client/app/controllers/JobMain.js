@@ -3,7 +3,6 @@
 app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDialog) {
   let JMScope = this
 
-
 /////////////FOR EDITING A SINGLE COLUMN///////////////
   JMScope.editOptions = {}
   let editCanceled = {}
@@ -51,7 +50,8 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
 
 /////////////ADD OR REMOVE FROM JOB///////////////
   JMScope.addBySearch = table => {
-     JobFactory[`get${table}BySearch`]()//should pass in user_id here
+    JMScope.search = false
+    JobFactory[`get${table}BySearch`]()//should pass in user_id here
       .then(({data}) => {
         //set these on this scope so filter function has access to it
         $scope.table = table 
@@ -59,7 +59,6 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
         JMScope.search = true
       })
       .catch(err => console.log(err))
-
   }
 
   JMScope.removeFromJob = (table, objToRemove) => {
@@ -70,9 +69,9 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
     }
     JobFactory.removeFromJob(dataObj)
       .then( ({data: {msg}}) => {
-      JobFactory.toastSuccess(msg)
-      $route.reload()
-    })
+        JobFactory.toastSuccess(msg)
+        $route.reload()
+      })
       .catch( () => JobFactory.toastReject())
   }
 
@@ -92,11 +91,12 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       parent: angular.element(document.body),
       clickOutsideToClose: false,
       escapeToClose: false
-    }).then( ({msg}) => {
+    })
+    .then( ({msg}) => {
       JobFactory.toastSuccess(msg)
       $route.reload()
     })
-      .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
+    .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   }  
 
 
