@@ -15,6 +15,15 @@ nav {
 }
 nav ul li {
   line-height: 50px;
+  padding: 0 5px;
+}
+
+nav ul li .navInput {
+  border-radius: 5px;
+  background-color: #bcaaa4;
+  margin: 0;
+  width: 100px;
+  text-align: center
 }
 
 /*JOB*/
