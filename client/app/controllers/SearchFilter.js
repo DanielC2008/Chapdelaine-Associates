@@ -8,10 +8,8 @@ app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
     job_id: {job_id: $scope.jobId}
   }
 
-
   SFscope.filter = searchText => items.filter( item => item.value && item.value.toLowerCase().search(searchText.toLowerCase()) != -1 )
   
-
   SFscope.addToJob = obj => {
     //make sure user wants to do this here........
     //value no longer needed, simply delete and recyle obj

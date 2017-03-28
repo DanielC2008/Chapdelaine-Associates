@@ -6,6 +6,17 @@ const router = Router()
 
 // public routes
 router.use(require('./loginRegister'))
+
+// add gaurd here and 
+router.use((req, res, next) => {
+  if(req.session.user) {
+    next()
+  } else {
+    res.status(400).send('Please Log In.');
+  }
+})
+
+// private routes
 router.use(require('./home'))
 router.use(require('./getJob'))
 router.use(require('./editJob'))
@@ -16,7 +27,5 @@ router.use(require('./modifyConnectingTable'))
 router.use(require('./modifyTable'))
 router.use(require('./attachments'))
 
-// add gaurd here and 
-// private routes
 
 module.exports = router
