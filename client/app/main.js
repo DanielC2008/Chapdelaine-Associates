@@ -39,7 +39,7 @@ const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ng
       .then(({data}) => $rootScope.$user = data.user_name)
     // register listener to watch route changes
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-      if ( $rootScope.$user == null ) {
+      if ( $rootScope.$user === null ) {
         if ( next.templateUrl == "partials/login-register.html" ) { //--------- already going to #login, no redirect needed
         } else {  // -----------------------------------------------------------not going to login-register, redirect now
           $location.path( "/login" )
