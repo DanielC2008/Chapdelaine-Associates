@@ -1,11 +1,11 @@
-<a class="btn recentJobs waves-effect waves-light col s12" ng-click="LJ.getJob(job.number)">
+<a class="btn recentJobs waves-effect waves-light col s12" ng-click="LJ.goToJobPage(job.job_number)">
   <div id="lastName">
-    {{job.lastName}}
+    {{job.last_name}}
   </div>
   <div>
-    {{job.firstName}}
+    {{job.first_name}}
   </div>
-  <div>
-    Job: {{job.number}}
+  <div ng-if='job.job_status === "Active"'>
+    Job: {{job.job_number}}
   </div>
 </a>

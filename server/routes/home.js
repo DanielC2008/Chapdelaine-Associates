@@ -7,123 +7,21 @@ const router = Router()
 
 
 router.get('/api/activeJobs', (req, res) => {
-  res.send([
-    {
-      firstName: 'Daniel',
-      lastName: 'Chapdelaine',
-      number: '37438'
-    },
-    {
-      firstName: 'wruiwyr',
-      lastName: 'something',
-      number: '23414'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'youuuuuu',
-      number: '45645'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'Chapdelaine',
-      number: '37438'
-    },
-    {
-      firstName: 'wruiwyr',
-      lastName: 'something',
-      number: '23414'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'youuuuuu',
-      number: '45645'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'Chapdelaine',
-      number: '37438'
-    },
-    {
-      firstName: 'wruiwyr',
-      lastName: 'something',
-      number: '23414'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'youuuuuu',
-      number: '45645'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'youuuuuu',
-      number: '45645'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'Chapdelaine',
-      number: '37438'
-    },
-    {
-      firstName: 'wruiwyr',
-      lastName: 'something',
-      number: '23414'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'youuuuuu',
-      number: '45645'
-    }
-  ])
+ knex('Jobs')
+    .select('Clients.first_name', 'Clients.last_name', 'Jobs.job_status', 'Jobs.job_number')
+    .join('Jobs_Clients', 'Jobs_Clients.job_id', 'Jobs.job_id')
+    .join('Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
+    .where('job_status', 'Active')
+    .then(data => res.send(data))
 })
 
 router.get('/api/pendingJobs', (req, res) => {
-  res.send([
-    {
-      firstName: 'Daniel',
-      lastName: 'Santafeeee',
-      number: '23547'
-    },
-    {
-      firstName: 'you',
-      lastName: 'creeeper',
-      number: '77353'
-    },
-    {
-      firstName: 'dome',
-      lastName: 'domedomedome',
-      number: '57846'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'Santafeeee',
-      number: '23547'
-    },
-    {
-      firstName: 'you',
-      lastName: 'creeeper',
-      number: '77353'
-    },
-    {
-      firstName: 'dome',
-      lastName: 'domedomedome',
-      number: '57846'
-    },
-    {
-      firstName: 'Daniel',
-      lastName: 'Santafeeee',
-      number: '23547'
-    },
-    {
-      firstName: 'you',
-      lastName: 'creeeper',
-      number: '77353'
-    },
-    {
-      firstName: 'dome',
-      lastName: 'domedomedome',
-      number: '57846'
-    } 
-  ])
+  knex('Jobs')
+    .select('Clients.first_name', 'Clients.last_name', 'Jobs.job_status', 'Jobs.job_number')
+    .join('Jobs_Clients', 'Jobs_Clients.job_id', 'Jobs.job_id')
+    .join('Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
+    .where('job_status', 'Pending')
+    .then(data => res.send(data))
 })
 
 ////////////////////////////////////////////////////////////need to decide whether to use this
