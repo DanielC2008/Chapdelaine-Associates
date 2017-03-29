@@ -1,11 +1,14 @@
 <a class="btn recentJobs waves-effect waves-light col s12" ng-click="LJ.goToJobPage(job.job_number)">
   <div id="lastName">
-    {{job.last_name}}
+    {{job.last_name}} 
   </div>
   <div>
     {{job.first_name}}
   </div>
-  <div ng-if='job.job_status === "Active"'>
-    Job: {{job.job_number}}
+  <div ng-if='job.job_number < 0'>
+    'Pending'
+  </div>
+  <div ng-if='job.job_number > 0'>
+    Job #{{job.job_number}}
   </div>
 </a>
