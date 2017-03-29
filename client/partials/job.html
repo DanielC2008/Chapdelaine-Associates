@@ -10,13 +10,12 @@
     </ul>
   </nav>
   <div class="jobInfo">  
-
     <div class='row'>
-      <div ng-repeat='(key, value) in Job'>
-        <div ng-if="key != 'job_id'" class="col s2">
-          {{key}}: {{value}}
-        </div class="col s3">
-      </div>
+      <div class="col s2">Job Number: {{Job['Job Number']}}</div>
+      <div class="col s2">Job Status: {{Job['Job Status']}}</div>
+      <div class="col s2">Date Started: {{Job['Date Started']}}</div>
+      <div class="col s2">Date Completed: {{Job['Date Completed']}}</div>
+      <div class="col s2">Last Updated: {{Job['Last Updated']}}</div>
     </div>
 
     <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">
