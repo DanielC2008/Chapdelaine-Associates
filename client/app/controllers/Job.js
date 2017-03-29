@@ -19,9 +19,6 @@ app.controller('Job', function($scope, $location, JobFactory) {
 
   JobFactory.getJobFromDatabase($scope.jobNumber)
     .then( ({data}) => {
-      if (data.Jobs[0]['Job Status'] === 'Pending') {
-        data.Jobs[0]['Job Number'] = 'No Job Number' //--------------------------------- fix this.. number > 0 in html
-      }
      //could use a refactor
       data.Jobs[0]['Date Started'] = data.Jobs[0]['Date Started'] === null ? '' : formatDate(new Date(data.Jobs[0]['Date Started']))
       data.Jobs[0]['Date Completed'] = data.Jobs[0]['Date Completed'] === null ? '' : formatDate(new Date(data.Jobs[0]['Date Completed']))
