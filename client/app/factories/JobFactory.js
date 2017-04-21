@@ -57,6 +57,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.setTab = jobNumber => $http.post('/api/setTab', jobNumber)
 
     factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
+
+    factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
    
     /////////////////////////////////might put these elsewhere
     factory.matchDatabaseKeys = obj => {

@@ -6,7 +6,7 @@ const knex = require('knex')(config)
 const router = Router()
 
 router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
-
+  
   let Job = {}
   let clientID
 
@@ -19,7 +19,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'job_status as Job Status',
         'start_date as Date Started',
         'complete_date as Date Completed',
-        'updated_at as Last Updated'
+        'last_accessed as Last Accessed'
       )
       .where('job_number', job_number)
       .then(data => Job.Jobs = data),
