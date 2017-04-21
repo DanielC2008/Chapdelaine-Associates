@@ -24,18 +24,5 @@ router.get('/api/pendingJobs', (req, res) => {
     .then(data => res.send(data))
 })
 
-////////////////////////////////////////////////////////////need to decide whether to use this
-router.post('/api/findJob/getTableNames', (req, res) => {
-  knex('is_Table_Searchable')
-  .select('table_name')
-  .where({find_job: true})
-  .then( tableNames => {
-    res.send(tableNames)
-  })
-  .catch( err => {
-    console.log('err', err)
-  })
-})
-
 
 module.exports = router
