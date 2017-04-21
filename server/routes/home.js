@@ -12,6 +12,8 @@ router.get('/api/activeJobs', (req, res) => {
     .join('Jobs_Clients', 'Jobs_Clients.job_id', 'Jobs.job_id')
     .join('Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
     .where('job_status', 'Active')
+    .orderBy('last_accessed', 'desc')
+    .limit(25)
     .then(data => res.send(data))
 })
 
@@ -21,6 +23,8 @@ router.get('/api/pendingJobs', (req, res) => {
     .join('Jobs_Clients', 'Jobs_Clients.job_id', 'Jobs.job_id')
     .join('Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
     .where('job_status', 'Pending')
+    .orderBy('last_accessed', 'desc')
+    .limit(25)
     .then(data => res.send(data))
 })
 
