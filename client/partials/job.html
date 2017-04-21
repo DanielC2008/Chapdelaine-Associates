@@ -13,9 +13,9 @@
     <div class='row'>
       <div class="col s2">Job Number: {{Job['Job Number'] < 0 ? 'None': Job['Job Number']}}</div>
       <div class="col s2">Job Status: {{Job['Job Status']}}</div>
-      <div class="col s2">Date Started: {{Job['Date Started']}}</div>
-      <div class="col s2">Date Completed: {{Job['Date Completed']}}</div>
-      <div class="col s2">Last Accessed: {{Job['Last Accessed']}}</div>
+      <div class="col s2">Date Started: {{Job['Date Started'] | date : 'mediumDate'}}</div>
+      <div class="col s2">Date Completed: {{Job['Date Completed'] | date : 'mediumDate'}}</div>
+      <div class="col s2">Last Accessed: {{Job['Last Accessed'] | date : 'medium'}}</div>
     </div>
 
     <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">
