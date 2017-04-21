@@ -26,7 +26,7 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
 
   const createNewJob = () => {
     JobFactory.createNewJob($scope.newJob)
-      .then( () => JobFactory.goToJobPage($scope.newJob.job_number))
+      .then( ({data}) =>  data.msg ? JobFactory.toastReject(data.msg) : JobFactory.goToJobPage($scope.newJob.job_number))
       .catch( ({data}) => console.log(data))
   }
 

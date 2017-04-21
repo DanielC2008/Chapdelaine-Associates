@@ -36,7 +36,7 @@ router.post('/api/createNewJob', ({body}, res) => {
     knex('Jobs')
       .insert(newJob)
       .then( () => res.send())
-      .catch( err => console.log(err))
+      .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
   })
 })
 

@@ -37,7 +37,12 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
       dataObj.clientId = NEW.clientId
     }
     JobFactory.addNewToJob(dataObj)
-      .then( () => $mdDialog.hide({msg: `${NEW.title} Saved!`}))
+      .then( () => {
+        $mdDialog.hide({msg: `${NEW.title} Saved!`})
+        for( let key in NEW.Display[`${NEW.table}`]) {
+          NEW.Display[`${NEW.table}`][key] = ''
+        }
+      })
       .catch( () => JobFactory.toastReject({msg: `Error: ${NEW.title} not saved!`}))
   }
 
