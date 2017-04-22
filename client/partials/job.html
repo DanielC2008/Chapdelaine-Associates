@@ -6,6 +6,7 @@
       <li><a ng-click="setNewTab('JobAttachment') ">Attachments</a></li>
       <li><a ng-click="setNewTab('JobEstimate') ">Estimate</a></li>
       <li><a ng-click="setNewTab('JobInvoice') ">Invoice</a></li>
+      <li><a ng-if="nextStatus" ng-click="updateStatus()">Make this Job {{nextStatus}}</a></li>
       <li class="jobExit" ><a href="/#!/home">X</a></li>
     </ul>
   </nav>

@@ -2,7 +2,7 @@
 
 app.controller('Job', function($scope, $location, JobFactory) {
   let URL = $location.$$url
-  $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1)) 
+  $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
   $scope.setNewTab = newTab => {
     $scope.showTab = newTab
@@ -19,11 +19,8 @@ app.controller('Job', function($scope, $location, JobFactory) {
 
   JobFactory.getJobFromDatabase($scope.jobNumber)
     .then( ({data}) => {
-     
-      JobFactory.updateLastAccessed($scope.jobNumber)
-        .then()
-        .catch(err => console.log('err', err))
-
+      
+      setNextStatus(data.Jobs[0]['Job Status'])
       $scope.Clients = data.Clients
       $scope.Estimates = data.Estimates[0]
       $scope.EstimateDetails = data.EstimateDetails
@@ -34,12 +31,27 @@ app.controller('Job', function($scope, $location, JobFactory) {
       $scope.Attachments = data.Attachments
       $scope.Job = data.Jobs[0]
       $scope.jobId = $scope.Job.job_id
+      
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
        .then( ({data}) => $scope.showTab = data.showTab)
        .catch( err => console.log('err', err))
+      //last access update
+      JobFactory.updateLastAccessed($scope.jobNumber)
+        .then()
+        .catch(err => console.log('err', err))
     })
     //can post status with .status and .statusText
     .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))
+
+  const setNextStatus = status => {
+    if (status == 'Pending') {
+      $scope.nextStatus = 'Active'
+    } else if ( status == 'Active') {
+      $scope.nextStatus = 'Complete'
+    }
+  }
+
+  $scope.updateStatus = () => console.log('Are you sure???')
 
 })
