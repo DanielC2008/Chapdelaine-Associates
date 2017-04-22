@@ -20,8 +20,12 @@ app.controller('NewJob', function($scope, $http, JobFactory) {
   }
 
   $scope.numberSet = job_number => {
-    $scope.newJob.job_number = job_number
-    createNewJob()
+    if (job_number > 0) {
+      $scope.newJob.job_number = job_number
+      createNewJob()
+    } else {
+      JobFactory.toastReject('Job number must be greater than 0!')
+    }
   }
 
   const createNewJob = () => {
