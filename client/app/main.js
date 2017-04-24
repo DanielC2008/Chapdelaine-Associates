@@ -17,8 +17,8 @@ const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ng
         templateUrl: 'partials/home.html'
       })
       .when('/newJob', {
-        controller: 'NewJob',
-        templateUrl: 'partials/newJob.html'
+        controller: 'JobStatus',
+        templateUrl: 'partials/jobStatus.html'
       })
       .when('/getData', {
         controller: 'GetData',

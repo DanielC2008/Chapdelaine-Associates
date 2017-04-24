@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('NewJob', function($scope, $http, JobFactory) {
+app.controller('JobStatus', function($scope, $http, JobFactory) {
   $scope.newJob = {}
   $scope.tableForDB = 'Jobs'
   $scope.addJobStatus = status => {
