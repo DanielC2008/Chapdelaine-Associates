@@ -1,6 +1,6 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory) {
+app.controller('Job', function($scope, $location, JobFactory, $mdDialog) {
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
@@ -20,7 +20,6 @@ app.controller('Job', function($scope, $location, JobFactory) {
   JobFactory.getJobFromDatabase($scope.jobNumber)
     .then( ({data}) => {
       
-      setNextStatus(data.Jobs[0]['Job Status'])
       $scope.Clients = data.Clients
       $scope.Estimates = data.Estimates[0]
       $scope.EstimateDetails = data.EstimateDetails
@@ -44,14 +43,22 @@ app.controller('Job', function($scope, $location, JobFactory) {
     //can post status with .status and .statusText
     .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))
 
-  const setNextStatus = status => {
-    if (status == 'Pending') {
-      $scope.nextStatus = 'Active'
-    } else if ( status == 'Active') {
-      $scope.nextStatus = 'Complete'
-    }
-  }
+  $scope.updateStatus = () => {
+    let locals = {
+      jobInfo: { 
+        tableForDB: 'Jobs',
+        jobStatus: $scope.Job['Job Status'],
+        jobNumber: $scope.Job['Job Number']
+      }
+    }  
 
-  $scope.updateStatus = () => console.log('Are you sure???')
+    $mdDialog.show({
+      locals,
+      controller: 'UpdateStatus as US',
+      templateUrl: '/partials/updateStatus.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: true
+    })
+  }
 
 })
