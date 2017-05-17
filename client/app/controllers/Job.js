@@ -19,18 +19,18 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog) {
 
   JobFactory.getJobFromDatabase($scope.jobNumber)
     .then( ({data}) => {
-      
+
       $scope.Clients = data.Clients
-      $scope.Estimates = data.Estimates[0]
+      $scope.Estimates = data.Estimates
       $scope.EstimateDetails = data.EstimateDetails
-      $scope.Invoices = data.Invoices[0]
+      $scope.Invoices = data.Invoices
       $scope.InvoiceDetails = data.InvoiceDetails
       $scope.Property = data.Properties
       $scope.Representatives = data.Representatives
       $scope.Attachments = data.Attachments
-      $scope.Job = data.Jobs[0]
+      $scope.Job = data.Jobs
       $scope.jobId = $scope.Job.job_id
-      
+
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
        .then( ({data}) => $scope.showTab = data.showTab)

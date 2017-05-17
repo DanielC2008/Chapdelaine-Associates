@@ -13,7 +13,7 @@ const knex = require('knex')(config)
 
 const app = express()
 
-//middlewares
+//middleware
 app.use(session({
   store: new RedisStore({
     url: process.env.REDIS_URL || "redis://localhost:6379"
