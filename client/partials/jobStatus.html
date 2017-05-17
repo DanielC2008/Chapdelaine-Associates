@@ -1,0 +1,13 @@
+<div>
+  <div>What is the status of this job?</div>
+  <button type="submit" ng-click="JS.addJobStatus('Canceled')">Canceled</button>
+  <button type="submit" ng-click="JS.addJobStatus('Pending')">Pending</button>
+  <button type="submit" ng-click="JS.addJobStatus('Active')">Active</button>
+  <button type="submit" ng-click="JS.addJobStatus('Complete')">Complete</button>
+</div>  
+<div ng-if="Job.job_status && Job.job_status != 'Pending'">
+  <div ng-controller="RecommendNumber as RN">
+    <div ng-include="'./partials/recommendNumber.html'"></div>
+  </div>
+</div>
+

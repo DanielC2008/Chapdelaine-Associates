@@ -12,8 +12,8 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
     //make sure user wants to make these changes
     let obj = JobFactory.matchDatabaseKeys({[key]: value})
     JobFactory.editColumn({table, id, obj})
-      .then( ({data: {msg}}) => alert(msg))
-      .catch( ({data: {msg}}) => alert(msg))
+      .then( ({data: {msg}}) => JobFactory.toastSuccess(msg))
+      .catch( ({data: {msg}}) => JobFactory.toastReject(msg))
   }
 
   //set edit options on obj for easy comparison and edit canceled obj so data isn't lost 

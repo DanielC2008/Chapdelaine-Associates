@@ -1,14 +1,3 @@
-
-
-<div ng-hide="newJob.job_status">
-  <div>What is the status of this job?</div>
-  <button type="submit" ng-click="addJobStatus('Pending')">Pending</button>
-  <button type="submit" ng-click="addJobStatus('Active')">Active</button>
-  <button type="submit" ng-click="addJobStatus('Complete')">Complete</button>
-</div>  
-<div ng-if="newJob.job_status && newJob.job_status != 'Pending'">
-  <div ng-controller="RecommendNumber as RN">
-    <div ng-include="'./partials/recommendNumber.html'"></div>
-  </div>
+<div ng-controller="JobStatus as JS">
+    <div ng-include="'./partials/jobStatus.html'"></div>
 </div>
-
