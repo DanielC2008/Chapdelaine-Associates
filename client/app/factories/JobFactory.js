@@ -4,7 +4,19 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
   const factory = {}
 
-    factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`),
+
+    factory.addNewToJob = dataObj => {
+      if (dataObj.table === 'Clients'){
+        return $http.post('/api/addNewClientToJob', dataObj)
+      }
+      //else if Props
+      //else if Reps
+    }
+    
+
+
+
+    factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
     factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
 
@@ -24,7 +36,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.addToJob = dataObj => $http.post('/api/addToJob', dataObj)
 
-    factory.addNewToJob = dataObj => $http.post('/api/addNewToJob', dataObj)
 
     factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
 

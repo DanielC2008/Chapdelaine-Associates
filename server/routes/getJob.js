@@ -26,6 +26,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       )
       .where('job_number', job_number)
       .then(data => {
+        console.log('data', data)
         jobID = data[0].job_id
         Job.Jobs = data[0]
       }),
@@ -51,14 +52,15 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       )
       .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
       .join('Jobs', 'Jobs_Clients.job_id', 'Jobs.job_id')
-      .join('Client_Types', 'Clients.client_type_id', 'Client_Types.client_type_id')
       .join('Addresses', 'Clients.address_id', 'Addresses.address_id')
+      .join('Client_Types', 'Clients.client_type_id', 'Client_Types.client_type_id')
       .join('Cities', 'Clients.city_id', 'Cities.city_id')
       .join('States', 'Clients.state_id', 'States.state_id')
       .join('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')
       .join('Counties', 'Clients.county_id', 'Counties.county_id')
-      .where('job_number', job_number)
+      .where('Jobs.job_number', job_number)
       .then(data => {
+        console.log('data', data)
         clientID = data.map(client => client.client_id)
         Job.Clients = data
       }),
