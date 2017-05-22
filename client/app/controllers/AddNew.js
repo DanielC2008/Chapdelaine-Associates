@@ -34,7 +34,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
     }
 
     if(NEW.clientId) {
-      dataObj.clientId = NEW.clientId
+      dataObj.client_id = NEW.clientId
     }
 
     JobFactory.addNewToJob(dataObj)

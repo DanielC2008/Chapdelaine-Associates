@@ -1,5 +1,5 @@
 'use strict'
-//-------------------------------------------------------I should only bring back only essential job info when job is loaded and break these out into smaller queries
+
 const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
@@ -187,7 +187,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
             Job.Properties[0].roads = data.map(road => road.road)
           }
         }),  
-      //get Rep for each Client    
+      //get Rep that matches client and job id.    
       knex('Representatives')
         .select(
           'Clients.client_id',
@@ -197,31 +197,15 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Representatives.last_name as Last Name',
           'Representatives.email as Email',
           'Representatives.business_phone as Business Phone',
-          'Representatives.mobile_phone as Mobile Phone',
-          'Representatives.home_phone as Home Phone',
-          'Representatives.fax_number as Fax Number',
-          'Representatives.notes as Notes',
-          'Addresses.address',
-          'Cities.city',
-          'States.state',
-          'Zip_Codes.zip',
-          'Counties.county'
+          'Representatives.mobile_phone as Mobile Phone'
         )
         .join('Clients_Representatives', 'Representatives.representative_id', 'Clients_Representatives.representative_id')
         .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
         .join('Clients', 'Clients_Representatives.client_id', 'Clients.client_id')
-        .join('Addresses', 'Representatives.address_id', 'Addresses.address_id')
-        .join('Cities', 'Representatives.city_id', 'Cities.city_id')
-        .join('States', 'Representatives.state_id', 'States.state_id')
-        .join('Zip_Codes', 'Representatives.zip_id', 'Zip_Codes.zip_id')
-        .join('Counties', 'Representatives.county_id', 'Counties.county_id')
         .where('Jobs.job_number', job_number)
         .whereIn('Clients.client_id', clientID)
-        .then(data => {
-          Job.Representatives = data
-          res.send(Job)
-        })
-    ])  
+        .then(data => Job.Representatives = data)
+    ]).then( () => res.send(Job))
   })
 })
 

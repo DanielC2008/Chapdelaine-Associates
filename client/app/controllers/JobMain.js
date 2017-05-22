@@ -78,7 +78,7 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
   JMScope.addNew = table => {
     let locals = {
       table: table, 
-      job_id: {job_id: $scope.jobId},
+      job_id: $scope.jobId,
       clientArray: null
     }
     if (table == 'Representatives') {

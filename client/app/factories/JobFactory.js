@@ -9,8 +9,10 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       if (dataObj.table === 'Clients'){
         return $http.post('/api/addNewClientToJob', dataObj)
       }
+      if (dataObj.table === 'Representatives'){
+        return $http.post('/api/addNewRepToJob', dataObj)
+      }
       //else if Props
-      //else if Reps
     }
     
     factory.addToJob = dataObj => {
