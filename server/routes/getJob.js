@@ -38,23 +38,10 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.last_name as Last Name',
         'Clients.email as Email',
         'Clients.business_phone as Business Phone',
-        'Clients.mobile_phone as Mobile Phone',
-        'Clients.home_phone as Home Phone',
-        'Clients.fax_number as Fax Number',
-        'Clients.notes as Notes',
-        'Addresses.address',
-        'Cities.city',
-        'States.state',
-        'Zip_Codes.zip',
-        'Counties.county'
+        'Clients.mobile_phone as Mobile Phone'
       )
-      .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
-      .join('Jobs', 'Jobs_Clients.job_id', 'Jobs.job_id')
-      .join('Addresses', 'Clients.address_id', 'Addresses.address_id')
-      .join('Cities', 'Clients.city_id', 'Cities.city_id')
-      .join('States', 'Clients.state_id', 'States.state_id')
-      .join('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')
-      .join('Counties', 'Clients.county_id', 'Counties.county_id')
+      .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
+      .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
       .where('Jobs.job_number', job_number)
       .then(data => {
         clientID = data.map(client => client.client_id)
@@ -158,7 +145,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   ]).then( () => {
     //query this after promise to ensure clientID, jobID and propertyID is set
     return Promise.all([
-
+      //get all Job Types that describe this job
       knex('Jobs')
         .select('Job_Types.job_type')
         .join('Jobs_Job_Types', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
@@ -167,30 +154,40 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .then(data => {
           Job.Jobs.job_types = data.map( type => type.job_type)
         }),
-
-        knex('Properties')
-          .select(
-            'Addresses.address',
-            'Properties_Addresses.is_primary',
-            'Roads.road'
+      //get Client Type of each Client
+      knex('Clients')
+        .select(
+          'Clients.client_id',
+          'Client_Types.client_type'
           )
-          .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
-          .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
-          .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
-          .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
-          .whereIn('Properties.property_id', propertyID)
-          .then(data => {
-            if(Job.Properties[0]) {
-              Job.Properties[0].addresses = data.map(query => {
-                return {
-                  address: query.address,
-                  is_primary: query.is_primary
-                }
-              })
-              Job.Properties[0].roads = data.map(road => road.road)
-            }
-          }),  
-
+        .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
+        .join('Client_Types', 'Clients_Representatives.client_type_id', 'Client_Types.client_type_id')
+        .whereIn('Clients.client_id', clientID)
+        .then(data => Job.Client_Types = data),
+      //get address and road info for the property
+      knex('Properties')
+        .select(
+          'Addresses.address',
+          'Properties_Addresses.is_primary',
+          'Roads.road'
+        )
+        .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
+        .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
+        .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
+        .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
+        .whereIn('Properties.property_id', propertyID)
+        .then(data => {
+          if(Job.Properties[0]) {
+            Job.Properties[0].addresses = data.map(query => {
+              return {
+                address: query.address,
+                is_primary: query.is_primary
+              }
+            })
+            Job.Properties[0].roads = data.map(road => road.road)
+          }
+        }),  
+      //get Rep for each Client    
       knex('Representatives')
         .select(
           'Clients.client_id',
