@@ -36,19 +36,12 @@ const locateOrCreate = require('../locateOrCreate')
 //     }).catch( err => console.log(err))
 // })
 
-// router.post('/api/addToJob', ({body: {table, objToAdd, job_id}}, res) => {
-//   let {connectTable} = DBHelper.getTableInfo(table)
-//   knex('Jobs')
-//     .where(job_id)
-//     .then( data => {
-//       objToAdd.job_id = data[0].job_id
-//       knex(`${connectTable}`)
-//         .insert(objToAdd)
-//         .then( () => {
-//           res.send({msg: 'Successfully added to Job!'})
-//         }).catch( err => console.log(err))
-//     }).catch( err => console.log(err))
-// })
+router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
+  knex('Clients_Representatives')
+    .insert(objToAdd)
+    .then( () => res.send({msg: 'Successfully added to Job!'}))
+    .catch( err => console.log(err))
+})
 
 
 router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
@@ -89,7 +82,11 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
     .then( data => {
       //set ids on connecting table
       knex('Clients_Representatives')
-      .insert({job_id: `${job_id.job_id}`, client_id: `${data[0]}`, client_type_id: client_type_id}) 
+      .insert({
+        job_id: `${job_id.job_id}`,
+        client_id: `${data[0]}`, 
+        client_type_id: client_type_id
+      }) 
       .then( data => res.send({msg: 'Successfully created and added to Job!'}))
       .catch( err => console.log(err))
     }).catch( err => console.log(err))

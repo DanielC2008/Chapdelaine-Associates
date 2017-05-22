@@ -4,9 +4,9 @@ app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
   let SFscope = this
   let items = $scope.items
   let dataObj = {
-    table: $scope.table,
-    job_id: {job_id: $scope.jobId}
+    table: $scope.table
   }
+
 
   SFscope.filter = searchText => items.filter( item => item.value && item.value.toLowerCase().search(searchText.toLowerCase()) != -1 )
   
@@ -14,7 +14,8 @@ app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
     //make sure user wants to do this here........
     //value no longer needed, simply delete and recyle obj
     delete obj.value
-    dataObj.objToAdd =  obj
+    dataObj.objToAdd = obj
+    dataObj.objToAdd.job_id =  $scope.jobId
 
     if ( $scope.table == 'Representatives') { 
       let locals = {}
@@ -36,6 +37,7 @@ app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
         })
         .catch(err => console.log(err))
     } else {
+      //--------------------------------------------could break this apart. If clients add client type
         JobFactory.addToJob(dataObj)
           .then( ({data: {msg}}) => {
               JobFactory.toastSuccess(msg)
