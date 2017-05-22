@@ -4,7 +4,6 @@ const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
-const DBHelper = require('../DBHelper')
 const locateOrCreate = require('../locateOrCreate')
 
 // router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
