@@ -18,23 +18,13 @@ const locateOrCreate = require('../locateOrCreate')
 //     })
 // })
 
-// router.post('/api/removeFromJob', ({body: {table, objToRemove, job_id}}, res) => {
-//   let {connectTable} = DBHelper.getTableInfo(table)
-
-//   //-----------------------------------------------------------might end up sending job_id with original obj
-//   knex('Jobs')
-//     .where(job_id)
-//     //then remove from the connecting table using both id's
-//     .then( data => {
-//       objToRemove.job_id = data[0].job_id
-//       knex(`${connectTable}`)
-//         .del()
-//         .where(objToRemove)
-//         .then( () => {
-//           res.send({msg: 'Removed from Job!'})
-//         }).catch( err => console.log(err))
-//     }).catch( err => console.log(err))
-// })
+router.post('/api/removeClientFromJob', ({body: {table, objToRemove, job_id}}, res) => {
+  knex('Clients_Representatives')
+    .del()
+    .where(objToRemove)
+    .then( data => res.send({msg: 'Removed from Job!'}))
+    .catch( err => console.log(err))
+})
 
 router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
   knex('Clients_Representatives')
