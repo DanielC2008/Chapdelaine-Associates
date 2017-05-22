@@ -64,21 +64,21 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
   JMScope.removeFromJob = (table, objToRemove) => {
     let dataObj = {
       table,
-      objToRemove,
-      job_id: {job_id: $scope.jobId},
+      objToRemove
     }
+    dataObj.objToRemove.job_id = $scope.jobId
     JobFactory.removeFromJob(dataObj)
       .then( ({data: {msg}}) => {
         JobFactory.toastSuccess(msg)
         $route.reload()
       })
-      .catch( () => JobFactory.toastReject())
+      .catch( err => JobFactory.toastReject())
   }
 
   JMScope.addNew = table => {
     let locals = {
       table: table, 
-      job_id: {job_id: $scope.jobId},
+      job_id: $scope.jobId,
       clientArray: null
     }
     if (table == 'Representatives') {

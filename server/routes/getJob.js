@@ -1,5 +1,5 @@
 'use strict'
-//-------------------------------------------------------I should only bring back only essential job info when job is loaded and break these out into smaller queries
+
 const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
@@ -38,26 +38,11 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.last_name as Last Name',
         'Clients.email as Email',
         'Clients.business_phone as Business Phone',
-        'Clients.mobile_phone as Mobile Phone',
-        'Clients.home_phone as Home Phone',
-        'Clients.fax_number as Fax Number',
-        'Clients.notes as Notes',
-        'Addresses.address',
-        'Client_Types.client_type',
-        'Cities.city',
-        'States.state',
-        'Zip_Codes.zip',
-        'Counties.county'
+        'Clients.mobile_phone as Mobile Phone'
       )
-      .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
-      .join('Jobs', 'Jobs_Clients.job_id', 'Jobs.job_id')
-      .join('Client_Types', 'Clients.client_type_id', 'Client_Types.client_type_id')
-      .join('Addresses', 'Clients.address_id', 'Addresses.address_id')
-      .join('Cities', 'Clients.city_id', 'Cities.city_id')
-      .join('States', 'Clients.state_id', 'States.state_id')
-      .join('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')
-      .join('Counties', 'Clients.county_id', 'Counties.county_id')
-      .where('job_number', job_number)
+      .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
+      .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
+      .where('Jobs.job_number', job_number)
       .then(data => {
         clientID = data.map(client => client.client_id)
         Job.Clients = data
@@ -160,7 +145,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   ]).then( () => {
     //query this after promise to ensure clientID, jobID and propertyID is set
     return Promise.all([
-
+      //get all Job Types that describe this job
       knex('Jobs')
         .select('Job_Types.job_type')
         .join('Jobs_Job_Types', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
@@ -169,7 +154,17 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .then(data => {
           Job.Jobs.job_types = data.map( type => type.job_type)
         }),
-
+      //get Client Type of each Client
+      knex('Clients')
+        .select(
+          'Clients.client_id',
+          'Client_Types.client_type'
+          )
+        .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
+        .join('Client_Types', 'Clients_Representatives.client_type_id', 'Client_Types.client_type_id')
+        .whereIn('Clients.client_id', clientID)
+        .then(data => Job.Client_Types = data),
+      //get address and road info for the property
       knex('Properties')
         .select(
           'Addresses.address',
@@ -182,15 +177,17 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
         .whereIn('Properties.property_id', propertyID)
         .then(data => {
-          Job.Properties[0].addresses = data.map(query => {
-            return {
-              address: query.address,
-              is_primary: query.is_primary
-            }
-          })
-          Job.Properties[0].roads = data.map(road => road.road)
-        }),
-
+          if(Job.Properties[0]) {
+            Job.Properties[0].addresses = data.map(query => {
+              return {
+                address: query.address,
+                is_primary: query.is_primary
+              }
+            })
+            Job.Properties[0].roads = data.map(road => road.road)
+          }
+        }),  
+      //get Rep that matches client and job id.    
       knex('Representatives')
         .select(
           'Clients.client_id',
@@ -200,31 +197,15 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Representatives.last_name as Last Name',
           'Representatives.email as Email',
           'Representatives.business_phone as Business Phone',
-          'Representatives.mobile_phone as Mobile Phone',
-          'Representatives.home_phone as Home Phone',
-          'Representatives.fax_number as Fax Number',
-          'Representatives.notes as Notes',
-          'Addresses.address',
-          'Cities.city',
-          'States.state',
-          'Zip_Codes.zip',
-          'Counties.county'
+          'Representatives.mobile_phone as Mobile Phone'
         )
         .join('Clients_Representatives', 'Representatives.representative_id', 'Clients_Representatives.representative_id')
         .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
         .join('Clients', 'Clients_Representatives.client_id', 'Clients.client_id')
-        .join('Addresses', 'Representatives.address_id', 'Addresses.address_id')
-        .join('Cities', 'Representatives.city_id', 'Cities.city_id')
-        .join('States', 'Representatives.state_id', 'States.state_id')
-        .join('Zip_Codes', 'Representatives.zip_id', 'Zip_Codes.zip_id')
-        .join('Counties', 'Representatives.county_id', 'Counties.county_id')
         .where('Jobs.job_number', job_number)
         .whereIn('Clients.client_id', clientID)
-        .then(data => {
-          Job.Representatives = data
-          res.send(Job)
-        })
-    ])  
+        .then(data => Job.Representatives = data)
+    ]).then( () => res.send(Job))
   })
 })
 

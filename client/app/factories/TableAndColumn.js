@@ -33,8 +33,9 @@ app.factory('TableAndColumnFactory', function(JobFactory, $q) {
         'City': '', 
         'State': '', 
         'Zip Code': '', 
-        'County': '', 
-        'Notes': '', 
+        'County': '',
+        'Client Type': '',
+        'Notes': ''
       }, 
       Representatives: {
         'First Name': '', 

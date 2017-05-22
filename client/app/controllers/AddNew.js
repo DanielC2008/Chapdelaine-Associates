@@ -34,11 +34,12 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
     }
 
     if(NEW.clientId) {
-      dataObj.clientId = NEW.clientId
+      dataObj.client_id = NEW.clientId
     }
+
     JobFactory.addNewToJob(dataObj)
-      .then( () => {
-        $mdDialog.hide({msg: `${NEW.title} Saved!`})
+      .then( ({data: msg}) => {
+        $mdDialog.hide(msg)
         for( let key in NEW.Display[`${NEW.table}`]) {
           NEW.Display[`${NEW.table}`][key] = ''
         }

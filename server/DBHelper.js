@@ -49,10 +49,6 @@ module.exports = {
     return tableObj
   }
 
-  
-
-
-
 
 
 
