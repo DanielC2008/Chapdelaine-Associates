@@ -148,34 +148,35 @@ module.exports = {
         })
       }  
     })
+  },
+
+  client_type: client_type => {
+    return new Promise( (resolve, reject) => {
+      if(!client_type) { 
+        resolve(null) 
+        reject()
+      }
+      else {   
+        knex('Client_Types')
+        .select('client_type_id')
+        .where('client_type', client_type)
+        .then( data => {
+          if (data[0]) {
+            resolve(data[0].client_type_id)
+            reject()
+          } 
+          else {
+            knex('Client_Types')
+            .returning('client_type_id')
+            .insert({client_type: client_type})
+            .then( data => {
+              resolve(data[0])
+              reject()
+            })
+          }
+        })
+      }  
+    })
   }
-
-  // state: state => {
-  //   return new Promise( (resolve, reject) => {
-  //     if(!state) { 
-  //       resolve(null) 
-  //       reject()
-  //     }
-  //     else {   
-  //       knex('States').select('state_id').where('state', state)
-  //       .then( data => {
-  //         if (data[0]) {
-  //           resolve(data[0].state_id)
-  //           reject()
-  //         } 
-  //         else {
-  //           knex('States').returning('state_id').insert({state: state})
-  //           .then( data => {
-  //             resolve(data[0].state_id)
-  //             reject()
-  //           })
-  //         }
-  //       })
-  //     }  
-  //   })
-  // }
-
-  
-
 
 }

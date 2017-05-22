@@ -52,7 +52,8 @@ const locateOrCreate = require('../locateOrCreate')
 
 
 router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
-  //get existing state, city, address, county, zip, and client-type
+  let client_type_id
+  //get existing state, city, address, county, zip, and client_type
   return Promise.all([
     locateOrCreate.state(objToAdd.state)
     .then( data => {
@@ -74,22 +75,25 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
     locateOrCreate.zip(objToAdd.zip_code).then( data => { 
       delete objToAdd.zip_code
       objToAdd.zip_id = data
+    }),
+    locateOrCreate.client_type(objToAdd.client_type).then( data => { 
+      delete objToAdd.client_type
+      client_type_id = data
     })
-    // locateOrCreate.client_type(objToAdd.client_type).then( data => { 
-    //   delete objToAdd.client_type
-    //   objToAdd.client_type = data
-    // })
-  ]).then( () => {
-      //make client
-      knex('Clients').returning('client_id').insert(objToAdd)
-      .then( data => {
-        //set ids on connecting table
-        knex('Jobs_Clients')
-        .insert({job_id: `${job_id.job_id}`, client_id: `${data[0]}`}) 
-        .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-        .catch( err => console.log(err))
-      }).catch( err => console.log(err))
-    })
+  ])
+  .then( () => {
+    //make client
+    knex('Clients')
+    .returning('client_id')
+    .insert(objToAdd)
+    .then( data => {
+      //set ids on connecting table
+      knex('Clients_Representatives')
+      .insert({job_id: `${job_id.job_id}`, client_id: `${data[0]}`, client_type_id: client_type_id}) 
+      .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+      .catch( err => console.log(err))
+    }).catch( err => console.log(err))
+  })
 
 })
 
