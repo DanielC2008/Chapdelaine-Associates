@@ -17,7 +17,7 @@ const locateOrCreate = require('../locateOrCreate')
 //     })
 // })
 
-router.post('/api/removeClientFromJob', ({body: {table, objToRemove, job_id}}, res) => {
+router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
   knex('Clients_Representatives')
     .del()
     .where(objToRemove)
@@ -80,37 +80,6 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
   })
 
 })
-////This is all extra info for clients when more info is requested we will load it in a new view
-// knex('Clients')
-//       .select(
-//         'Clients.client_id',
-//         'Clients.first_name as First Name',
-//         'Clients.middle_name as Middle Name',
-//         'Clients.last_name as Last Name',
-//         'Clients.email as Email',
-//         'Clients.business_phone as Business Phone',
-//         'Clients.mobile_phone as Mobile Phone',
-//         'Clients.home_phone as Home Phone',
-//         'Clients.fax_number as Fax Number',
-//         'Clients.notes as Notes'
-//         // 'Addresses.address',
-//         // 'Cities.city',
-//         // 'States.state',
-//         // 'Zip_Codes.zip',
-//         // 'Counties.county'
-//       )
-//       .join('Jobs_Clients', 'Clients.client_id', 'Jobs_Clients.client_id')
-//       .join('Jobs', 'Jobs_Clients.job_id', 'Jobs.job_id')
-//       // .join('Addresses', 'Clients.address_id', 'Addresses.address_id')
-//       // .join('Cities', 'Clients.city_id', 'Cities.city_id')
-//       // .join('States', 'Clients.state_id', 'States.state_id')
-//       // .join('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')
-//       // .join('Counties', 'Clients.county_id', 'Counties.county_id')
-//       .where('Jobs.job_number', job_number)
-//       .then(data => {
-//         clientID = data.map(client => client.client_id)
-//         Job.Clients = data
-//       }),
 
 
 module.exports = router

@@ -29,8 +29,10 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       if (dataObj.table === 'Clients') {        
         return $http.post('/api/removeClientFromJob', dataObj)
       }
+      else if (dataObj.table === 'Representatives') {        
+        return $http.post('/api/removeRepFromJob', dataObj)
+      }
       //else if Props
-      //else if Reps
     }
 
 
