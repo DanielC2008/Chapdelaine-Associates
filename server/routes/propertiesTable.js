@@ -17,13 +17,13 @@ const locateOrCreate = require('../locateOrCreate')
 //     })
 // })
 
-// router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
-//   knex('Clients_Representatives')
-//     .del()
-//     .where(objToRemove)
-//     .then( data => res.send({msg: 'Removed from Job!'}))
-//     .catch( err => console.log(err))
-// })
+router.post('/api/removePropertyFromJob', ({body: {objToRemove}}, res) => {
+  knex('Jobs_Properties')
+    .del()
+    .where(objToRemove)
+    .then( data => res.send({msg: 'Removed from Job!'}))
+    .catch( err => console.log(err))
+})
 
 router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
   let address_id
@@ -61,29 +61,52 @@ router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
     .insert(objToAdd)
     .then( data => {
       let property_id = data[0]
-      return Promise.all([ 
+      if (address_id) {
+        return Promise.all([ 
+          knex('Jobs_Properties') //-----------------set ids on connecting tables
+          .insert({
+            job_id,
+            property_id
+          })
+          .then(), 
+          knex('Properties_Addresses') 
+          .insert({
+            address_id,
+            property_id
+          })
+          .then()
+        ])
+        .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+        .catch( err => console.log(err))
+      }
+      else if (road_id) {
+        return Promise.all([ 
+          knex('Jobs_Properties') //-----------------set ids on connecting tables
+          .insert({
+            job_id,
+            property_id
+          })
+          .then(), 
+          knex('Properties_Roads')
+          .insert({
+            road_id,
+            property_id
+          })
+          .then()
+        ])
+        .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+        .catch( err => console.log(err))
+      } 
+      else {
         knex('Jobs_Properties') //-----------------set ids on connecting tables
         .insert({
           job_id,
           property_id
         })
-        .then(), 
-        knex('Properties_Addresses') 
-        .insert({
-          address_id,
-          property_id
-        })
-        .then(), 
-        knex('Properties_Roads')
-        .insert({
-          road_id,
-          property_id
-        })
-        .then()
-      ])
-      .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-      .catch( err => console.log(err))
-
+        .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+        .catch( err => console.log(err))
+      }
+      
     }).catch( err => console.log(err))
 
   }).catch( err => console.log(err))
