@@ -26,11 +26,8 @@ const locateOrCreate = require('../locateOrCreate')
 // })
 
 router.post('/api/addExistingRepToJob', ({body: {objToAdd: {representative_id, job_id, client_id}}}, res) => {
-  knex('Clients_Representatives')
-      //this update means that there can only be one rep per client per job  
-      .update({
-        representative_id
-      }) 
+  knex('Clients_Representatives')  
+      .update({ representative_id }) //----------------this update means that there can only be one rep per client per job
       .where({
         job_id,
         client_id
@@ -41,8 +38,7 @@ router.post('/api/addExistingRepToJob', ({body: {objToAdd: {representative_id, j
 
 
 router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) => {
-  //get existing state, city, address, county, zip, and client_type
-  return Promise.all([
+  return Promise.all([  //-----------------get existing state, city, address, county, zip
     locateOrCreate.state(objToAdd.state)
     .then( data => {
       delete objToAdd.state
@@ -66,20 +62,16 @@ router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) 
     })
   ])
   .then( () => {
-    //make rep
-    knex('Representatives')
+    knex('Representatives')     //--------------make rep
     .returning('representative_id')
     .insert(objToAdd)
     .then( data => {
-      //set ids on connecting table
-      knex('Clients_Representatives')
-       //this update means that there can only be one rep per client per job  
-      .update({
-        representative_id: `${data[0]}`
-      }) 
+      let representative_id = data[0]
+      knex('Clients_Representatives')  //-------set ids on connecting table
+      .update({ representative_id })   //-------this update means that there can only be one rep per client per job  
       .where({
-        job_id: job_id,
-        client_id: client_id
+        job_id,
+        client_id
       }) 
       .then( data => res.send({msg: 'Successfully created and added to Job!'}))
       .catch( err => console.log(err))

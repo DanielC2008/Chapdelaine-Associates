@@ -35,8 +35,7 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 
 router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
   let client_type_id
-  //get existing state, city, address, county, zip, and client_type
-  return Promise.all([
+  return Promise.all([ //------------------get existing state, city, address, county, zip, and client_type
     locateOrCreate.state(objToAdd.state)
     .then( data => {
       delete objToAdd.state
@@ -64,17 +63,16 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
     })
   ])
   .then( () => {
-    //make client
-    knex('Clients')
+    knex('Clients') //------------------------make client
     .returning('client_id')
     .insert(objToAdd)
     .then( data => {
-      //set ids on connecting table
-      knex('Clients_Representatives')
+      let client_id = data[0]
+      knex('Clients_Representatives')//------set ids on connecting table
       .insert({
-        job_id: `${job_id.job_id}`,
-        client_id: `${data[0]}`, 
-        client_type_id: client_type_id
+        job_id,
+        client_id, 
+        client_type_id
       }) 
       .then( data => res.send({msg: 'Successfully created and added to Job!'}))
       .catch( err => console.log(err))
