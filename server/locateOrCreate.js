@@ -3,6 +3,8 @@
 const config = require('../database/knexfile.js').development
 const knex = require('knex')(config)
 
+//this module is used to locate or create a specific item on a table and return it's id for many to many or one to many relationships
+
 module.exports = {
 
   state: state => {
@@ -140,6 +142,35 @@ module.exports = {
             knex('Addresses')
             .returning('address_id')
             .insert({address: address})
+            .then( data => {
+              resolve(data[0])
+              reject()
+            })
+          }
+        })
+      }  
+    })
+  },
+
+  road: road => {
+    return new Promise( (resolve, reject) => {
+      if(!road) { 
+        resolve(null) 
+        reject()
+      }
+      else {   
+        knex('Roads')
+        .select('road_id')
+        .where('road', road)
+        .then( data => {
+          if (data[0]) {
+            resolve(data[0].road_id)
+            reject()
+          } 
+          else {
+            knex('Roads')
+            .returning('road_id')
+            .insert({road: road})
             .then( data => {
               resolve(data[0])
               reject()

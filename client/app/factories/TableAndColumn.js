@@ -55,6 +55,7 @@ app.factory('TableAndColumnFactory', function(JobFactory, $q) {
       }, 
       Properties: {
         'Address': '',
+        'Road': '',
         'City': '',
         'State': '',
         'Zip Code': '',
@@ -66,6 +67,7 @@ app.factory('TableAndColumnFactory', function(JobFactory, $q) {
         'Deed Book': '',
         'Deed Page': '',
         'Sub Division': '',
+        'Acres': '',
         'Notes': ''
       },
       Jobs: {
