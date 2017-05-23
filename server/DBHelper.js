@@ -14,7 +14,7 @@ module.exports = {
         break;
       case 'Representatives':
         tableObj.tableName = 'Representatives'
-        tableObj.connectTable = 'Clients_Representatives'
+        tableObj.connectTable = 'Client_Specs_Per_Job'
         tableObj.returningId = 'representative_id'
         tableObj.findJobId = 'job_id'
         break;

@@ -18,7 +18,7 @@ const locateOrCreate = require('../locateOrCreate')
 // })
 
 router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
-  knex('Clients_Representatives')
+  knex('Client_Specs_Per_Job')
     .del()
     .where(objToRemove)
     .then( data => res.send({msg: 'Removed from Job!'}))
@@ -26,7 +26,7 @@ router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
 })
 
 router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
-  knex('Clients_Representatives')
+  knex('Client_Specs_Per_Job')
     .insert(objToAdd)
     .then( () => res.send({msg: 'Successfully added to Job!'}))
     .catch( err => console.log(err))
@@ -68,7 +68,7 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
     .insert(objToAdd)
     .then( data => {
       let client_id = data[0]
-      knex('Clients_Representatives')//------set ids on connecting table
+      knex('Client_Specs_Per_Job')//------set ids on connecting table
       .insert({
         job_id,
         client_id, 

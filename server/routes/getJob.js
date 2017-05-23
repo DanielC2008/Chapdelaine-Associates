@@ -40,8 +40,8 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.business_phone as Business Phone',
         'Clients.mobile_phone as Mobile Phone'
       )
-      .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
-      .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
+      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
       .where('Jobs.job_number', job_number)
       .then(data => {
         clientID = data.map(client => client.client_id)
@@ -152,8 +152,8 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Clients.client_id',
           'Client_Types.client_type'
           )
-        .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
-        .join('Client_Types', 'Clients_Representatives.client_type_id', 'Client_Types.client_type_id')
+        .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+        .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
         .whereIn('Clients.client_id', clientID)
         .then(data => Job.Client_Types = data),
       //get address 
@@ -198,9 +198,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Representatives.business_phone as Business Phone',
           'Representatives.mobile_phone as Mobile Phone'
         )
-        .join('Clients_Representatives', 'Representatives.representative_id', 'Clients_Representatives.representative_id')
-        .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
-        .join('Clients', 'Clients_Representatives.client_id', 'Clients.client_id')
+        .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
+        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+        .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
         .where('Jobs.job_number', job_number)
         .whereIn('Clients.client_id', clientID)
         .then(data => Job.Representatives = data)

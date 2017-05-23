@@ -18,7 +18,7 @@ const locateOrCreate = require('../locateOrCreate')
 // })
 
 router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
-  knex('Clients_Representatives')
+  knex('Client_Specs_Per_Job')
     .update('representative_id', null) //-----------------update to null so we keep client associated with job
     .where(objToRemove)
     .then( data => {res.send({msg: 'Removed from Job!'})})
@@ -26,7 +26,7 @@ router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
 })
 
 router.post('/api/addExistingRepToJob', ({body: {objToAdd: {representative_id, job_id, client_id}}}, res) => {
-  knex('Clients_Representatives')  
+  knex('Client_Specs_Per_Job')  
       .update({ representative_id }) //----------------this update means that there can only be one rep per client per job
       .where({
         job_id,
@@ -67,7 +67,7 @@ router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) 
     .insert(objToAdd)
     .then( data => {
       let representative_id = data[0]
-      knex('Clients_Representatives')  //-------set ids on connecting table
+      knex('Client_Specs_Per_Job')  //-------set ids on connecting table
       .update({ representative_id })   //-------this update means that there can only be one rep per client per job  
       .where({
         job_id,
