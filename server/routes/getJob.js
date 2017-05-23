@@ -167,7 +167,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .whereIn('Properties.property_id', propertyID)
         .then(data => {
           if(Job.Properties[0]) {
-            Job.Properties[0].addresses = data.map(query => {
+            Job.PropertyAddresses = data.map(query => {
               return {
                 address: query.address,
                 is_primary: query.is_primary
@@ -183,7 +183,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .whereIn('Properties.property_id', propertyID)
         .then(data => {
           if(Job.Properties[0]) {
-            Job.Properties[0].roads = data.map(road => road.road)
+            Job.PropertiesRoads = data.map(road => road.road)
           }
         }),  
       //get Rep that matches client and job id.    
