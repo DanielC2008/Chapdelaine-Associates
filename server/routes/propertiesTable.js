@@ -61,52 +61,35 @@ router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
     .insert(objToAdd)
     .then( data => {
       let property_id = data[0]
-      if (address_id) {
-        return Promise.all([ 
-          knex('Jobs_Properties') //-----------------set ids on connecting tables
-          .insert({
-            job_id,
-            property_id
-          })
-          .then(), 
+
+      if (address_id) { //-----------------set ids on connecting tables if address
+        new Promise( () => { 
           knex('Properties_Addresses') 
           .insert({
             address_id,
             property_id
-          })
-          .then()
-        ])
-        .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-        .catch( err => console.log(err))
+          }).then().catch(err => console.log(err))
+        }).then().catch( err => console.log(err))
       }
-      else if (road_id) {
-        return Promise.all([ 
-          knex('Jobs_Properties') //-----------------set ids on connecting tables
-          .insert({
-            job_id,
-            property_id
-          })
-          .then(), 
+
+      else if (road_id) { //-----------------set ids on connecting tables if road
+        new Promise( () => {
           knex('Properties_Roads')
           .insert({
             road_id,
             property_id
-          })
-          .then()
-        ])
-        .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-        .catch( err => console.log(err))
+          }).then().catch(err => console.log(err))
+        }).then().catch(err => console.log(err))
       } 
-      else {
-        knex('Jobs_Properties') //-----------------set ids on connecting tables
-        .insert({
-          job_id,
-          property_id
-        })
-        .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-        .catch( err => console.log(err))
-      }
-      
+
+      knex('Jobs_Properties') //----------------- always set ids on connecting tables
+      .insert({
+        job_id,
+        property_id
+      })
+      .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+      .catch( err => console.log(err))
+
     }).catch( err => console.log(err))
 
   }).catch( err => console.log(err))
