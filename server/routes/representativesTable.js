@@ -25,12 +25,19 @@ const locateOrCreate = require('../locateOrCreate')
 //     .catch( err => console.log(err))
 // })
 
-// router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
-//   knex('Clients_Representatives')
-//     .insert(objToAdd)
-//     .then( () => res.send({msg: 'Successfully added to Job!'}))
-//     .catch( err => console.log(err))
-// })
+router.post('/api/addExistingRepToJob', ({body: {objToAdd: {representative_id, job_id, client_id}}}, res) => {
+  knex('Clients_Representatives')
+      //this update means that there can only be one rep per client per job  
+      .update({
+        representative_id
+      }) 
+      .where({
+        job_id,
+        client_id
+      }) 
+    .then( () => res.send({msg: 'Successfully added to Job!'}))
+    .catch( err => console.log(err))
+})
 
 
 router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) => {
@@ -66,6 +73,7 @@ router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) 
     .then( data => {
       //set ids on connecting table
       knex('Clients_Representatives')
+       //this update means that there can only be one rep per client per job  
       .update({
         representative_id: `${data[0]}`
       }) 
