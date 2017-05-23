@@ -24,7 +24,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       else if (dataObj.table === 'Representatives'){
         return $http.post('/api/addExistingRepToJob', dataObj)
       }
-      //else if Props
     }
 
     factory.removeFromJob = dataObj => {
@@ -36,6 +35,13 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
       //else if Props
     }
+
+    factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
+
+    factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch') //usefull but not utilized currently
+
+    factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
+
 
 
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
@@ -57,12 +63,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     
 
-
-    factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
-
-    factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch')
-
-    factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
 
     factory.getTypesOfWork = () => $http.get('/api/getTypesOfWork')
 

@@ -12,7 +12,7 @@ app.controller('SearchFilter', function($scope, JobFactory, $route, $mdDialog) {
   
   SFscope.addToJob = obj => {
     //make sure user wants to do this here........
-    //value no longer needed, simply delete and recyle obj
+    //value no longer needed, delete and recyle obj
     delete obj.value
     dataObj.objToAdd = obj
     dataObj.objToAdd.job_id =  $scope.jobId

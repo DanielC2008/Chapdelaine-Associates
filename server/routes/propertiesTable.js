@@ -25,14 +25,6 @@ const locateOrCreate = require('../locateOrCreate')
 //     .catch( err => console.log(err))
 // })
 
-// router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
-//   knex('Clients_Representatives')
-//     .insert(objToAdd)
-//     .then( () => res.send({msg: 'Successfully added to Job!'}))
-//     .catch( err => console.log(err))
-// })
-
-
 router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
   let address_id
   let road_id

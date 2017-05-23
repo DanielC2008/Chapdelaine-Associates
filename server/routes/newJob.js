@@ -42,21 +42,30 @@ router.post('/api/createNewJob', ({body}, res) => {
 
 router.get('/api/getClientsBySearch', ({body}, res) => {
   knex('Clients')
-    .select(knex.raw(`first_name + ' ' + last_name AS 'value'`), 'client_id')
+    .select(
+      knex.raw(`first_name + ' ' + last_name AS 'value'`),
+      'client_id'
+    )
     .then( data => res.send(data))
     .catch( err => console.log(err))
 })
-
+//this call is still useful for finding properties but no longer useful for adding existing props to jobs
 router.get('/api/getPropertiesBySearch', ({body}, res) => {
-  knex('Properties')
-    .select(knex.raw(`address AS 'value'`), 'property_id')
+  knex('Addresses')
+    .select(
+      knex.raw(`address AS 'value'`),
+      'address_id'
+    )
     .then( data => res.send(data))
     .catch( err => console.log(err))
 })
 
 router.get('/api/getRepresentativesBySearch', ({body}, res) => {
   knex('Representatives')
-    .select(knex.raw(`first_name + ' ' + last_name AS 'value'`), 'representative_id')
+    .select(
+      knex.raw(`first_name + ' ' + last_name AS 'value'`),
+      'representative_id'
+    )
     .then( data => res.send(data))
     .catch( err => console.log(err))
 })
