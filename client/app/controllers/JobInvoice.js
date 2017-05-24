@@ -8,7 +8,7 @@ app.controller('JobInvoice', function($scope, JobFactory) {
   $scope.DBObj = {
     table: 'Invoices',
     id: 'invoice_id',
-    connectingTableId: 'types_invoices_id'
+    connectingTableId: 'invoice_task_id'
   }
 
   $scope.Details = $scope.InvoiceDetails

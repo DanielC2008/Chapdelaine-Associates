@@ -6,7 +6,7 @@ app.controller('JobEstimate', function($scope, JobFactory) {
   $scope.DBObj = {
     table: 'Estimates',
     id: 'estimate_id',
-    connectingTableId: 'types_estimates_id'
+    connectingTableId: 'estimate_task_id'
   }
   $scope.Details = $scope.EstimateDetails
   

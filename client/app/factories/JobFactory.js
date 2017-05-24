@@ -66,7 +66,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     
 
 
-    factory.getTypesOfWork = () => $http.get('/api/getTypesOfWork')
+    factory.getTasks = () => $http.get('/api/getTasks')
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
 

@@ -6,19 +6,19 @@ app.factory('TableAndColumnFactory', function(JobFactory, $q) {
   let _initialized = $q.defer() //wait for data to return
 
 
-  JobFactory.getTypesOfWork()
+  JobFactory.getTasks()
     .then( ({data}) => {
-      let Types_Of_Work = data.reduce( (obj, type) => {
-        obj[type.type_of_work] = ''
+      let Tasks = data.reduce( (obj, task) => {
+        obj[task.task] = ''
         return obj
       }, {}) 
-      tableAndColumnObj = createObj(Types_Of_Work)   
+      tableAndColumnObj = createObj(Tasks)   
       _initialized.resolve(true) //data has returned and obj is finished pass true to resolve
     })
     .catch( (data) => console.log(data))
 
 
-  let createObj = Types_Of_Work => {
+  let createObj = Tasks => {
     return {
       Clients: {
         'First Name': '', 
@@ -75,7 +75,7 @@ app.factory('TableAndColumnFactory', function(JobFactory, $q) {
         'Job Status': '',
         'Invoice Number': '',
       },
-      'Types Of Work': Types_Of_Work
+      'Tasks': Tasks
     }
   }
 

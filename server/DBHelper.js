@@ -8,7 +8,7 @@ module.exports = {
     switch(table) {
       case 'Clients':
         tableObj.tableName = 'Clients'
-        tableObj.connectTable = 'Jobs_Clients'
+        tableObj.connectTable = 'Client_Specs_Per_Job'
         tableObj.returningId = 'client_id'
         tableObj.findJobId = 'job_id'
         break;
@@ -24,10 +24,10 @@ module.exports = {
         tableObj.returningId = 'property_id'
         tableObj.findJobId = 'job_id'
         break;
-      case 'Types Of Work':
-        tableObj.tableName = 'Types_Of_Work'
-        tableObj.connectTable = 'Types_Invoices'
-        tableObj.returningId = 'type_of_work_id'
+      case 'Tasks':
+        tableObj.tableName = 'Tasks'
+        tableObj.connectTable = 'Invoices_Tasks'
+        tableObj.returningId = 'task_id'
         tableObj.findJobId = 'invoice_id'
         break;
       case 'Jobs':
@@ -36,14 +36,14 @@ module.exports = {
         break;
       case 'Invoices':
         tableObj.tableName = 'Invoices'
-        tableObj.connectTable = 'Types_Invoices'
-        tableObj.connectTableId = 'types_invoices_id'
+        tableObj.connectTable = 'Invoices_Tasks'
+        tableObj.connectTableId = 'invoice_task_id'
         tableObj.tableNumber = 'invoice_number'
         break;
       case 'Estimates':
         tableObj.tableName = 'Estimates'
-        tableObj.connectTable = 'Types_Estimates'
-        tableObj.connectTableId = 'types_estimates_id'
+        tableObj.connectTable = 'Estimates_Tasks'
+        tableObj.connectTableId = 'estimate_task_id'
         break;
     }
     return tableObj

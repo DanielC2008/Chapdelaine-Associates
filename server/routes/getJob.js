@@ -81,17 +81,17 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Estimates')
         .select(
-          'Types_of_Work.type_of_work',
-          'Types_of_Work.type_of_work_id',
-          'Types_of_Work.rate',
-          'Types_of_Work.hourly',
-          'Types_Estimates.time_if_hourly',
-          'Types_Estimates.rate_if_modified',
-          'Types_Estimates.types_estimates_id'
+          'Tasks.task',
+          'Tasks.task_id',
+          'Tasks.rate',
+          'Tasks.hourly',
+          'Estimates_Tasks.time_if_hourly',
+          'Estimates_Tasks.rate_if_modified',
+          'Estimates_Tasks.estimate_task_id'
         )
         .join('Jobs', 'Jobs.estimate_id', 'Estimates.estimate_id')
-        .join('Types_Estimates', 'Types_Estimates.estimate_id', 'Estimates.estimate_id')
-        .join('Types_Of_Work', 'Types_Estimates.type_of_work_id', 'Types_Of_Work.type_of_work_id')
+        .join('Estimates_Tasks', 'Estimates_Tasks.estimate_id', 'Estimates.estimate_id')
+        .join('Tasks', 'Estimates_Tasks.task_id', 'Tasks.task_id')
         .where('job_number', job_number)
         .then(data => Job.EstimateDetails = data),
 
@@ -108,19 +108,19 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Invoices')
         .select(
-          'Types_of_Work.type_of_work',
-          'Types_of_Work.type_of_work_id',
-          'Types_of_Work.rate',
-          'Types_of_Work.hourly',
-          'Types_Invoices.time_if_hourly',
-          'Types_Invoices.rate_if_modified',
-          'Types_Invoices.status',
-          'Types_Invoices.target_date',
-          'Types_Invoices.types_invoices_id'
+          'Tasks.task',
+          'Tasks.task_id',
+          'Tasks.rate',
+          'Tasks.hourly',
+          'Invoices_Tasks.time_if_hourly',
+          'Invoices_Tasks.rate_if_modified',
+          'Invoices_Tasks.status',
+          'Invoices_Tasks.target_date',
+          'Invoices_Tasks.invoice_task_id'
         )
         .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
-        .join('Types_Invoices', 'Types_Invoices.invoice_id', 'Invoices.invoice_id')
-        .join('Types_Of_Work', 'Types_Invoices.type_of_work_id', 'Types_Of_Work.type_of_work_id')
+        .join('Invoices_Tasks', 'Invoices_Tasks.invoice_id', 'Invoices.invoice_id')
+        .join('Tasks', 'Invoices_Tasks.task_id', 'Tasks.task_id')
         .where('job_number', job_number)
         .then(data => Job.InvoiceDetails = data),
 
