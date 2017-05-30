@@ -60,7 +60,9 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.getMinJob = () => $http.get('/api/getMinJob')
 
-    factory.createNewJob = job_number => $http.post('/api/createNewJob', job_number)
+    factory.createNewJob = newJobObj => $http.post('/api/createNewJob', newJobObj)
+
+    factory.updateJobStatus = jobObj => $http.post('/api/updateJobStatus', jobObj)
 
 
     
