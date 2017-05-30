@@ -8,28 +8,42 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.addNewToJob = dataObj => {
       if (dataObj.table === 'Clients'){
         return $http.post('/api/addNewClientToJob', dataObj)
-      }
-      if (dataObj.table === 'Representatives'){
+      } 
+      else if (dataObj.table === 'Representatives'){
         return $http.post('/api/addNewRepToJob', dataObj)
+      } 
+      else if (dataObj.table === 'Properties'){
+        return $http.post('/api/addNewPropertyToJob', dataObj)
       }
-      //else if Props
     }
     
     factory.addToJob = dataObj => {
       if (dataObj.table === 'Clients'){
         return $http.post('/api/addExistingClientToJob', dataObj)
       }
-      //else if Props
-      //else if Reps
+      else if (dataObj.table === 'Representatives'){
+        return $http.post('/api/addExistingRepToJob', dataObj)
+      }
     }
 
     factory.removeFromJob = dataObj => {
       if (dataObj.table === 'Clients') {        
         return $http.post('/api/removeClientFromJob', dataObj)
       }
-      //else if Props
-      //else if Reps
+      else if (dataObj.table === 'Representatives') {        
+        return $http.post('/api/removeRepFromJob', dataObj)
+      }
+      else if (dataObj.table === 'Properties') {        
+        return $http.post('/api/removePropertyFromJob', dataObj)
+      }
     }
+
+    factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
+
+    factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch') //usefull but not utilized currently
+
+    factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
+
 
 
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
@@ -46,19 +60,15 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.getMinJob = () => $http.get('/api/getMinJob')
 
-    factory.createNewJob = job_number => $http.post('/api/createNewJob', job_number)
+    factory.createNewJob = newJobObj => $http.post('/api/createNewJob', newJobObj)
+
+    factory.updateJobStatus = jobObj => $http.post('/api/updateJobStatus', jobObj)
 
 
     
 
 
-    factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
-
-    factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch')
-
-    factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
-
-    factory.getTypesOfWork = () => $http.get('/api/getTypesOfWork')
+    factory.getTasks = () => $http.get('/api/getTasks')
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
 

@@ -17,25 +17,18 @@ const locateOrCreate = require('../locateOrCreate')
 //     })
 // })
 
-router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
-  knex('Client_Specs_Per_Job')
+router.post('/api/removePropertyFromJob', ({body: {objToRemove}}, res) => {
+  knex('Jobs_Properties')
     .del()
     .where(objToRemove)
     .then( data => res.send({msg: 'Removed from Job!'}))
     .catch( err => console.log(err))
 })
 
-router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
-  knex('Client_Specs_Per_Job')
-    .insert(objToAdd)
-    .then( () => res.send({msg: 'Successfully added to Job!'}))
-    .catch( err => console.log(err))
-})
-
-
-router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
-  let client_type_id
-  return Promise.all([ //------------------get existing state, city, address, county, zip, and client_type
+router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
+  let address_id
+  let road_id
+  return Promise.all([ //------------------get existing state, city, address, county, zip, and road
     locateOrCreate.state(objToAdd.state)
     .then( data => {
       delete objToAdd.state
@@ -45,10 +38,6 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
       delete objToAdd.city
       objToAdd.city_id = data
     }),
-    locateOrCreate.address(objToAdd.address).then( data => { 
-      delete objToAdd.address
-      objToAdd.address_id = data
-    }),
     locateOrCreate.county(objToAdd.county).then( data => { 
       delete objToAdd.county
       objToAdd.county_id = data
@@ -57,27 +46,53 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
       delete objToAdd.zip_code
       objToAdd.zip_id = data
     }),
-    locateOrCreate.client_type(objToAdd.client_type).then( data => { 
-      delete objToAdd.client_type
-      client_type_id = data
+    locateOrCreate.address(objToAdd.address).then( data => { 
+      delete objToAdd.address
+      address_id = data
+    }),
+    locateOrCreate.road(objToAdd.road).then( data => { 
+      delete objToAdd.road
+      road_id = data
     })
   ])
   .then( () => {
-    knex('Clients') //------------------------make client
-    .returning('client_id')
+    knex('Properties') //------------------------make property
+    .returning('property_id')
     .insert(objToAdd)
     .then( data => {
-      let client_id = data[0]
-      knex('Client_Specs_Per_Job')//------set ids on connecting table
+      let property_id = data[0]
+
+      if (address_id) { //-----------------set ids on connecting tables if address
+        new Promise( () => { 
+          knex('Properties_Addresses') 
+          .insert({
+            address_id,
+            property_id
+          }).then().catch(err => console.log(err))
+        }).then().catch( err => console.log(err))
+      }
+
+      else if (road_id) { //-----------------set ids on connecting tables if road
+        new Promise( () => {
+          knex('Properties_Roads')
+          .insert({
+            road_id,
+            property_id
+          }).then().catch(err => console.log(err))
+        }).then().catch(err => console.log(err))
+      } 
+
+      knex('Jobs_Properties') //----------------- always set ids on connecting tables
       .insert({
         job_id,
-        client_id, 
-        client_type_id
-      }) 
+        property_id
+      })
       .then( data => res.send({msg: 'Successfully created and added to Job!'}))
       .catch( err => console.log(err))
+
     }).catch( err => console.log(err))
-  })
+
+  }).catch( err => console.log(err))
 
 })
 

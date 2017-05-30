@@ -40,8 +40,8 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.business_phone as Business Phone',
         'Clients.mobile_phone as Mobile Phone'
       )
-      .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
-      .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
+      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
       .where('Jobs.job_number', job_number)
       .then(data => {
         clientID = data.map(client => client.client_id)
@@ -59,18 +59,10 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Properties.deed_page as Deed Page',
         'Properties.sub_division as Sub Division',
         'Properties.notes as Notes',
-        'Properties.acres as Acres',
-        'Cities.city',
-        'States.state',
-        'Zip_Codes.zip',
-        'Counties.county'
+        'Properties.acres as Acres'
       )
       .join('Jobs_Properties', 'Properties.property_id', 'Jobs_Properties.property_id')
-      .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')
-      .join('Cities', 'Properties.city_id', 'Cities.city_id')
-      .join('States', 'Properties.state_id', 'States.state_id')
-      .join('Zip_Codes', 'Properties.zip_id', 'Zip_Codes.zip_id')
-      .join('Counties', 'Properties.county_id', 'Counties.county_id')
+      .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')  
       .where('job_number', job_number)
       .then(data => {
         propertyID = data.map(property => property.property_id)
@@ -89,17 +81,17 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Estimates')
         .select(
-          'Types_of_Work.type_of_work',
-          'Types_of_Work.type_of_work_id',
-          'Types_of_Work.rate',
-          'Types_of_Work.hourly',
-          'Types_Estimates.time_if_hourly',
-          'Types_Estimates.rate_if_modified',
-          'Types_Estimates.types_estimates_id'
+          'Tasks.task',
+          'Tasks.task_id',
+          'Tasks.rate',
+          'Tasks.hourly',
+          'Estimates_Tasks.time_if_hourly',
+          'Estimates_Tasks.rate_if_modified',
+          'Estimates_Tasks.estimate_task_id'
         )
         .join('Jobs', 'Jobs.estimate_id', 'Estimates.estimate_id')
-        .join('Types_Estimates', 'Types_Estimates.estimate_id', 'Estimates.estimate_id')
-        .join('Types_Of_Work', 'Types_Estimates.type_of_work_id', 'Types_Of_Work.type_of_work_id')
+        .join('Estimates_Tasks', 'Estimates_Tasks.estimate_id', 'Estimates.estimate_id')
+        .join('Tasks', 'Estimates_Tasks.task_id', 'Tasks.task_id')
         .where('job_number', job_number)
         .then(data => Job.EstimateDetails = data),
 
@@ -116,19 +108,19 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
       knex('Invoices')
         .select(
-          'Types_of_Work.type_of_work',
-          'Types_of_Work.type_of_work_id',
-          'Types_of_Work.rate',
-          'Types_of_Work.hourly',
-          'Types_Invoices.time_if_hourly',
-          'Types_Invoices.rate_if_modified',
-          'Types_Invoices.status',
-          'Types_Invoices.target_date',
-          'Types_Invoices.types_invoices_id'
+          'Tasks.task',
+          'Tasks.task_id',
+          'Tasks.rate',
+          'Tasks.hourly',
+          'Invoices_Tasks.time_if_hourly',
+          'Invoices_Tasks.rate_if_modified',
+          'Invoices_Tasks.status',
+          'Invoices_Tasks.target_date',
+          'Invoices_Tasks.invoice_task_id'
         )
         .join('Jobs', 'Jobs.invoice_id', 'Invoices.invoice_id')
-        .join('Types_Invoices', 'Types_Invoices.invoice_id', 'Invoices.invoice_id')
-        .join('Types_Of_Work', 'Types_Invoices.type_of_work_id', 'Types_Of_Work.type_of_work_id')
+        .join('Invoices_Tasks', 'Invoices_Tasks.invoice_id', 'Invoices.invoice_id')
+        .join('Tasks', 'Invoices_Tasks.task_id', 'Tasks.task_id')
         .where('job_number', job_number)
         .then(data => Job.InvoiceDetails = data),
 
@@ -160,31 +152,38 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Clients.client_id',
           'Client_Types.client_type'
           )
-        .join('Clients_Representatives', 'Clients.client_id', 'Clients_Representatives.client_id')
-        .join('Client_Types', 'Clients_Representatives.client_type_id', 'Client_Types.client_type_id')
+        .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+        .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
         .whereIn('Clients.client_id', clientID)
         .then(data => Job.Client_Types = data),
-      //get address and road info for the property
+      //get address 
       knex('Properties')
         .select(
           'Addresses.address',
-          'Properties_Addresses.is_primary',
-          'Roads.road'
+          'Properties_Addresses.is_primary'
         )
         .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
         .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
-        .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
-        .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
         .whereIn('Properties.property_id', propertyID)
         .then(data => {
           if(Job.Properties[0]) {
-            Job.Properties[0].addresses = data.map(query => {
+            Job.PropertyAddresses = data.map(query => {
               return {
                 address: query.address,
                 is_primary: query.is_primary
               }
             })
-            Job.Properties[0].roads = data.map(road => road.road)
+          }
+        }),  
+      //get roads  
+      knex('Properties')
+        .select('Roads.road')
+        .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
+        .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
+        .whereIn('Properties.property_id', propertyID)
+        .then(data => {
+          if(Job.Properties[0]) {
+            Job.PropertiesRoads = data.map(road => road.road)
           }
         }),  
       //get Rep that matches client and job id.    
@@ -199,9 +198,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Representatives.business_phone as Business Phone',
           'Representatives.mobile_phone as Mobile Phone'
         )
-        .join('Clients_Representatives', 'Representatives.representative_id', 'Clients_Representatives.representative_id')
-        .join('Jobs', 'Clients_Representatives.job_id', 'Jobs.job_id')
-        .join('Clients', 'Clients_Representatives.client_id', 'Clients.client_id')
+        .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
+        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+        .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
         .where('Jobs.job_number', job_number)
         .whereIn('Clients.client_id', clientID)
         .then(data => Job.Representatives = data)

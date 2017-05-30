@@ -1,47 +1,48 @@
 'use strict'
 
-app.controller('TOWBuilder', function($scope, $http, JobFactory) {
+app.controller('TaskBuilder', function($scope, $http, JobFactory) {
   let TBScope = this
   let {table, id, connectingTableId} = $scope.DBObj
+  let allTasks
   TBScope.builder = $scope.Details ? _.cloneDeep($scope.Details) : []
   TBScope.edit = null
-  TBScope.type_of_work = null
+  TBScope.task = null
 
-  JobFactory.getTypesOfWork()
+  JobFactory.getTasks()
     .then( ({data}) => {
-      TBScope.typesOfWork = data
-      TBScope.types = data.map(obj => obj.type_of_work)
+      allTasks = data
+      TBScope.tasks = data.map(obj => obj.task)
    })
     .catch( ({data}) => console.log(data))
 
-  TBScope.getSelectedType = selectedType => {
-    TBScope.type_of_work = null
-    TBScope.typesOfWork.forEach( type => { 
-      if (type.type_of_work == selectedType){
-        addLineItem(type)
+  TBScope.getSelectedTask = selectedTask => {
+    TBScope.task = null
+    allTasks.forEach( task => { 
+      if (task.task == selectedTask){
+        addLineItem(task)
       }
     })  
   }
 
   const getTotal = () => TBScope.total = TBScope.builder.map( ({rate, time_if_hourly}) => time_if_hourly ? rate * time_if_hourly : rate).reduce( (total, totalPerHour) => total + totalPerHour, 0)
 
-  const addLineItem = type => {
+  const addLineItem = task => {
     let lineItemObj = {
       table,
       objToAdd: {}
     }
 
     lineItemObj.objToAdd[`${id}`] =  $scope[`${table}`][`${id}`]
-    lineItemObj.objToAdd.type_of_work_id = type.type_of_work_id
+    lineItemObj.objToAdd.task_id = task.task_id
 
-    if (type.hourly) {
+    if (task.hourly) {
       lineItemObj.objToAdd.time_if_hourly = 1
     }
     JobFactory.insertIntoConnectingTable(lineItemObj)
       .then( ({data}) => {
-        let addType = _.cloneDeep(type)
-        addType[`${connectingTableId}`] = data[0]
-        TBScope.builder.push(addType)
+        let addTask = _.cloneDeep(task)
+        addTask[`${connectingTableId}`] = data[0]
+        TBScope.builder.push(addTask)
         TBScope.edit = TBScope.builder.length - 1
         getTotal()
         JobFactory.toastSuccess()

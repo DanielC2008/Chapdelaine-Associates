@@ -1,20 +1,20 @@
 <div>
-  <div ng-repeat="selectedType in TB.builder track by $index"  ng-if="TB.builder" ng-init="material()" >
+  <div ng-repeat="selectedTask in TB.builder track by $index"  ng-if="TB.builder" ng-init="material()" >
     <div class="row">
       <div class="col s3" >
-        Type of Work: {{selectedType.type_of_work}}
+        Task: {{selectedTask.task}}
       </div>
       <div class="col s3">
-        Rate: {{selectedType.rate}}
+        Rate: {{selectedTask.rate}}
       </div>
       <div class="col s3" >
-        <div ng-click="TB.edit = $index" ng-if="selectedType.hourly">
+        <div ng-click="TB.edit = $index" ng-if="selectedTask.hourly">
           <label for="hours">Hours: </label>
           <input
-            ng-if="selectedType.hourly"
+            ng-if="selectedTask.hourly"
             value="hours" 
             class="input-field columnInput"  
-            ng-model="selectedType.time_if_hourly" 
+            ng-model="selectedTask.time_if_hourly" 
             ng-keyup="$event.keyCode == 13 && TB.updateLineItem(TB.builder[$index])"
             focus-if="TB.edit === $index"
             blur="TB.edit !== $index"
@@ -25,8 +25,8 @@
     </div>  
   </div>
   <div class="row">
-    <div class="col s12 input-field" ng-if="TB.types" ng-init="material()">
-      <select ng-change="TB.getSelectedType(TB.type_of_work)" ng-model="TB.type_of_work" ng-options="type as type disable when type.notAnOption for type in TB.types"> 
+    <div class="col s12 input-field" ng-if="TB.tasks" ng-init="material()">
+      <select ng-change="TB.getSelectedTask(TB.task)" ng-model="TB.task" ng-options="task as task disable when task.notAnOption for task in TB.tasks"> 
         <option value="" label="-- Select option --" disabled selected="selected"> Add Line Item...  
         </option>
       </select>
