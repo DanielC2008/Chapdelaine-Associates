@@ -1,7 +1,19 @@
 'use strict'
 
-app.controller('JobStatus', function($scope, JobFactory) {
+app.controller('JobStatus', function($scope, JobFactory, $mdDialog) {
   let JSscope = this
+
+  $scope.Job = {}
+
+  const submitJobStatus = () => {
+    JobFactory.createNewJob($scope.Job)
+      .then( ({data}) => { 
+        JobFactory.toastSuccess(data.msg)
+        $mdDialog.hide()
+        JobFactory.goToJobPage($scope.Job.job_number)
+      })
+      .catch( ({data}) => JobFactory.toastReject(data.msg))
+  }
 
   JSscope.addJobStatus = status => {
     $scope.Job.job_status = status 
@@ -13,7 +25,7 @@ app.controller('JobStatus', function($scope, JobFactory) {
           } else {
             $scope.Job.job_number = -1
           }
-          $scope.submitJobStatus() 
+          submitJobStatus() 
         })
         .catch( ({data}) => console.log(data))
     }
@@ -22,11 +34,12 @@ app.controller('JobStatus', function($scope, JobFactory) {
   $scope.numberSet = job_number => {
     if (job_number > 0) {
       $scope.Job.job_number = job_number
-      $scope.submitJobStatus()
+      submitJobStatus()
     } else {
       JobFactory.toastReject('Job number must be greater than 0!')
     }
   }
+
 
 })
 

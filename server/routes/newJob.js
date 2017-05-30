@@ -25,7 +25,6 @@ router.get('/api/getMinJob', (req, res) => {
 
 router.post('/api/createNewJob', ({body}, res) => {
   let newJob = body
-
   //create invoice and estimate
   Promise.all([
     knex.raw('INSERT INTO Invoices OUTPUT Inserted.invoice_id DEFAULT VALUES')
@@ -35,7 +34,7 @@ router.post('/api/createNewJob', ({body}, res) => {
   ]).then( () => {
     knex('Jobs')
       .insert(newJob)
-      .then( () => res.send())
+      .then( () => res.send({msg:'Success'}))
       .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
   })
 })
