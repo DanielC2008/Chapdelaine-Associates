@@ -1,15 +1,73 @@
+<div ng-if="JS.currJobStatus === 'New'">
+  <div>
+    <div>What is the status of this job?</div>
+    <button type="submit" ng-click="JS.addJobStatus('Canceled')" ">Canceled</button>
+    <button type="submit" ng-click="JS.addJobStatus('Pending')" ">Pending</button>
+    <button type="submit" ng-click="JS.addJobStatus('Active')" ">Active</button>
+    <button type="submit" ng-click="JS.addJobStatus('Complete')" ">Complete</button>
+  </div>  
 
-<div>
-  <div>What is the status of this job?</div>
-  <button type="submit" ng-click="JS.addJobStatus('Canceled')" ng-if="JS.currJobStatus !== 'Canceled' ">Canceled</button>
-  <button type="submit" ng-click="JS.addJobStatus('Pending')" ng-if="JS.currJobStatus !== 'Pending' ">Pending</button>
-  <button type="submit" ng-click="JS.addJobStatus('Active')" ng-if="JS.currJobStatus !== 'Active' ">Active</button>
-  <button type="submit" ng-click="JS.addJobStatus('Complete')" ng-if="JS.currJobStatus !== 'Complete' ">Complete</button>
-</div>  
+  <div ng-if="newJobNumberRequired">
+    <div ng-controller="RecommendNumber as RN">
+      <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
+  </div>
+</div>
+  
+<div ng-if="JS.currJobStatus === 'Canceled'"> <!-- cant go from Canceled to Complete -->
+  <div>
+    <div>What is the status of this job?</div>
+    <button type="submit" ng-click="JS.addJobStatus('Pending')" ">Pending</button>
+    <button type="submit" ng-click="JS.addJobStatus('Active')" ">Active</button>
+  </div>  
 
-<div ng-if="Job.job_status && Job.job_status != 'Pending'">
-  <div ng-controller="RecommendNumber as RN">
-    <div ng-include="'./partials/recommendNumber.html'"></div>
+  <div ng-if="newJobNumberRequired">
+    <div ng-controller="RecommendNumber as RN">
+      <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-if="JS.currJobStatus === 'Pending'">
+  <div>
+    <div>What is the status of this job?</div>
+    <button type="submit" ng-click="JS.addJobStatus('Canceled')" ">Canceled</button>
+    <button type="submit" ng-click="JS.addJobStatus('Active')" ">Active</button>
+    <button type="submit" ng-click="JS.addJobStatus('Complete')" ">Complete</button>
+  </div>  
+
+  <div ng-if="newJobNumberRequired">
+    <div ng-controller="RecommendNumber as RN">
+      <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-if="JS.currJobStatus === 'Active'">
+  <div>
+    <div>What is the status of this job?</div>
+    <button type="submit" ng-click="JS.addJobStatus('Canceled')" ">Canceled</button>
+    <button type="submit" ng-click="JS.addJobStatus('Pending')" ">Pending</button>
+    <button type="submit" ng-click="JS.addJobStatus('Complete')" ">Complete</button>
+  </div>  
+
+  <div ng-if="newJobNumberRequired">
+    <div ng-controller="RecommendNumber as RN">
+      <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-if="JS.currJobStatus === 'Complete'"> <!-- cant go from Complete to Pending or Canceled -->
+  <div>
+    <div>What is the status of this job?</div>
+    <button type="submit" ng-click="JS.addJobStatus('Active')" ">Active</button> 
+  </div>  
+
+  <div ng-if="newJobNumberRequired">
+    <div ng-controller="RecommendNumber as RN">
+      <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
   </div>
 </div>
 

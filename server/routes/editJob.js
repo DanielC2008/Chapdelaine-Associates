@@ -10,14 +10,8 @@ router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {
   knex('Jobs')
     .update(jobObj)
     .where({job_number: currJobNum})
-    .then( data => {
-      console.log('data', data)
-      res.send({msg:'Success'})
-    })
-    .catch( err => {
-      console.log('err', err)
-      res.send({msg: err})
-    })
+    .then( data => res.send({msg:'Success'}))
+    .catch( err => res.send({msg: err}))
   })
 
 router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
