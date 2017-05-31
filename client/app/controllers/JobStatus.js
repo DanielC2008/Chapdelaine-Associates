@@ -27,6 +27,16 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog) {
     }
   }
 
+
+  const addStartDate = () => $scope.Job.start_date = new Date()
+
+  const addCompleteDate = () => $scope.Job.complete_date = new Date()
+
+  const removeStartDate = () => $scope.Job.start_date = null
+
+  const removeCompleteDate = () => $scope.Job.complete_date = null
+
+
   const addMinJobNumber = () => {
     JobFactory.getMinJob()
       .then( ({data: {min}}) => { 
@@ -41,67 +51,73 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog) {
   }
   
   const followPath = status =>  {
-    if (JSscope.currJobStatus === "Canceled") {
-      if (status === 'Pending') { //status
-        submitJobStatus()
-      }
-      else if (status === 'Active') { //status, JobNumber, and StartDate
-        //Start Date
-        $scope.newJobNumberRequired = true
-      }
-    } 
-
-    else if ( JSscope.currJobStatus === "Pending") {
-      if (status === 'Canceled') { //status, reason
-        //reason
-        submitJobStatus()
-      }
-      else if (status === 'Active') { //status, JobNumber, and StartDate
-        //Start Date
-        $scope.newJobNumberRequired = true
-      }
-      else if (status === 'Complete') { //status, JobNumber, StartDate, completeDate
-        //Start Date
-        //Complete Date
-        $scope.newJobNumberRequired = true
-      }
-    }
-
-    else if ( JSscope.currJobStatus === "Active") {
-      if (status === 'Canceled') { //status, reason
-        addMinJobNumber()
-      }
-      else if (status === 'Pending') { //status, removeStartDate
-        //removeStartDate
-        addMinJobNumber()
-      }
-      else if (status === 'Complete') {  //status, completeDate
-        //Complete Date
-        $scope.newJobNumberRequired = true
-      }
-    }
-
-    else if ( JSscope.currJobStatus === "Complete") {
-      if (status === 'Active') { //status, removeCompleteDate
-        //removeCompleteDate
-        $scope.newJobNumberRequired = true
-      }
-    }
-
-    else if ( JSscope.currJobStatus === "New") {
+    if ( JSscope.currJobStatus === 'New') {
       if (status === 'Canceled') { //status, minJobNumber, reason
         addMinJobNumber()
+        //reason
       }
       else if (status === 'Pending') { //status, minJobNumber
         addMinJobNumber()
       }
-      else if (status === 'Active') {  //status, JobNumber
+      else if (status === 'Active') {  //status, JobNumber, startDate
+        addStartDate()
         $scope.newJobNumberRequired = true
       }
-      else if (status === 'Complete') { //status, JobNumber
+      else if (status === 'Complete') { //status, JobNumber, startDate, completeDate
+        addStartDate()
+        addCompleteDate() 
         $scope.newJobNumberRequired = true
       }
     }
+
+    else if (JSscope.currJobStatus === 'Canceled') {
+      if (status === 'Pending') { //status //--------------------------------broke
+        submitJobStatus()
+      }
+      else if (status === 'Active') { //status, JobNumber, and StartDate
+        addStartDate()
+        $scope.newJobNumberRequired = true
+      }
+    } 
+
+    else if ( JSscope.currJobStatus === 'Pending') {
+      if (status === 'Canceled') { //status, reason //--------------------------------broke
+        //reason
+        submitJobStatus()
+      }
+      else if (status === 'Active') { //status, JobNumber, and StartDate
+        addStartDate()
+        $scope.newJobNumberRequired = true
+      }
+      else if (status === 'Complete') { //status, JobNumber, StartDate, completeDate
+        addStartDate()
+        addCompleteDate()
+        $scope.newJobNumberRequired = true
+      }
+    }
+
+    else if ( JSscope.currJobStatus === 'Active') {
+      if (status === 'Canceled') { //status, reason
+        //reason
+        submitJobStatus()
+      }
+      else if (status === 'Pending') { //status, removeStartDate
+        removeStartDate()
+        addMinJobNumber()
+      }
+      else if (status === 'Complete') {  //status, completeDate //--------------------------------broke
+        addCompleteDate()
+        submitJobStatus() 
+      }
+    }
+
+    else if ( JSscope.currJobStatus === 'Complete') {
+      if (status === 'Active') { //status, removeCompleteDate  //--------------------------------broke
+        removeCompleteDate()
+        submitJobStatus()
+      }
+    }
+
   }   
 
   JSscope.addJobStatus = status => {

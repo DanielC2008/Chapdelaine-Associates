@@ -19,7 +19,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog) {
 
   JobFactory.getJobFromDatabase($scope.jobNumber)
     .then( ({data}) => {
-
+      
       $scope.Clients = data.Clients
       $scope.Estimates = data.Estimates
       $scope.EstimateDetails = data.EstimateDetails
