@@ -135,6 +135,8 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
     }
   }
 
+  $scope.causeSet = cause_id => $scope.Job.cause_id = cause_id
+
 })
 
 

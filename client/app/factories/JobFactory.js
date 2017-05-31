@@ -64,9 +64,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.updateJobStatus = jobObj => $http.post('/api/updateJobStatus', jobObj)
 
-
-    
-
+    factory.getCauses = () => $http.get('api/getCauses')
 
     factory.getTasks = () => $http.get('/api/getTasks')
 

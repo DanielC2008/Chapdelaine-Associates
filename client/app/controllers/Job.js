@@ -13,13 +13,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog) {
 
   $scope.material = () => {
     $(document).ready(function() {  
-      $('select').material_select();
+      $('select').material_select()
     })  
   }
 
   JobFactory.getJobFromDatabase($scope.jobNumber)
     .then( ({data}) => {
-      
+
       $scope.Clients = data.Clients
       $scope.Estimates = data.Estimates
       $scope.EstimateDetails = data.EstimateDetails

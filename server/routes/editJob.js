@@ -13,7 +13,11 @@ router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {
     .where({job_number: currJobNum})
     .then( data => res.send({msg: 'Success', job_number: data[0]}))
     .catch( err => res.send({msg: err}))
-  })
+})
+
+router.get('/api/getCauses', (req, res) => {
+  knex('Cause_For_Cancellation').then( data => res.send(data))
+})
 
 router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
   knex(`${table}`)
