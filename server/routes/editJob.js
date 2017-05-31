@@ -8,9 +8,10 @@ const router = Router()
 
 router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {
   knex('Jobs')
+    .returning('job_number')
     .update(jobObj)
     .where({job_number: currJobNum})
-    .then( data => res.send({msg:'Success'}))
+    .then( data => res.send({msg: 'Success', job_number: data[0]}))
     .catch( err => res.send({msg: err}))
   })
 
