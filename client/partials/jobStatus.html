@@ -12,6 +12,14 @@
       <div ng-include="'./partials/recommendNumber.html'"></div>
     </div>
   </div>
+
+  <div ng-if="jobCanceled">
+    <div ng-controller="JobCanceled as JC">
+      <div ng-include="'./partials/jobCanceled.html'"></div>
+    </div>
+  </div>
+
+
 </div>
   
 <div ng-if="JS.currJobStatus === 'Canceled'"> <!-- cant go from Canceled to Complete -->
@@ -24,6 +32,12 @@
   <div ng-if="newJobNumberRequired">
     <div ng-controller="RecommendNumber as RN">
       <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
+  </div>
+
+  <div ng-if="jobCanceled">
+    <div ng-controller="JobCanceled as JC">
+      <div ng-include="'./partials/jobCanceled.html'"></div>
     </div>
   </div>
 </div>
@@ -41,6 +55,12 @@
       <div ng-include="'./partials/recommendNumber.html'"></div>
     </div>
   </div>
+
+  <div ng-if="jobCanceled">
+    <div ng-controller="JobCanceled as JC">
+      <div ng-include="'./partials/jobCanceled.html'"></div>
+    </div>
+  </div>
 </div>
 
 <div ng-if="JS.currJobStatus === 'Active'">
@@ -56,6 +76,12 @@
       <div ng-include="'./partials/recommendNumber.html'"></div>
     </div>
   </div>
+
+  <div ng-if="jobCanceled">
+    <div ng-controller="JobCanceled as JC">
+      <div ng-include="'./partials/jobCanceled.html'"></div>
+    </div>
+  </div>
 </div>
 
 <div ng-if="JS.currJobStatus === 'Complete'"> <!-- cant go from Complete to Pending or Canceled -->
@@ -67,6 +93,12 @@
   <div ng-if="newJobNumberRequired">
     <div ng-controller="RecommendNumber as RN">
       <div ng-include="'./partials/recommendNumber.html'"></div>
+    </div>
+  </div>
+  
+  <div ng-if="jobCanceled">
+    <div ng-controller="JobCanceled as JC">
+      <div ng-include="'./partials/jobCanceled.html'"></div>
     </div>
   </div>
 </div>

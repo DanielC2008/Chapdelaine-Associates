@@ -6,6 +6,7 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
   JSscope.currJobStatus = $scope.jobInfo ? $scope.jobInfo.jobStatus : 'New' //---if job already exists else 'New'
   $scope.Job = {}
   $scope.newJobNumberRequired = false
+  $scope.jobCanceled = false
 
   const submitJobStatus = () => {
     if (JSscope.currJobStatus === 'New') {
@@ -53,8 +54,8 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
   const statusPath = status =>  {
     if ( JSscope.currJobStatus === 'New') {
       if (status === 'Canceled') { //status, minJobNumber, reason
-        addMinJobNumber()
-        //reason
+        $scope.jobCanceled = true
+        // addMinJobNumber()
       }
       else if (status === 'Pending') { //status, minJobNumber
         addMinJobNumber()
@@ -82,8 +83,8 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
 
     else if ( JSscope.currJobStatus === 'Pending') {
       if (status === 'Canceled') { //status, reason
-        //reason
-        submitJobStatus()
+        $scope.jobCanceled = true
+        // submitJobStatus()
       }
       else if (status === 'Active') { //status, JobNumber, and StartDate
         addStartDate()
@@ -98,8 +99,8 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
 
     else if ( JSscope.currJobStatus === 'Active') {
       if (status === 'Canceled') { //status, reason
-        //reason
-        submitJobStatus()
+        $scope.jobCanceled = true
+        // submitJobStatus()
       }
       else if (status === 'Pending') { //status, removeStartDate
         removeStartDate()
