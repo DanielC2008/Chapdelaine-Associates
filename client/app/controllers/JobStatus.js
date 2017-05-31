@@ -53,12 +53,9 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
   
   const statusPath = status =>  {
     if ( JSscope.currJobStatus === 'New') {
-      if (status === 'Canceled') { //status, minJobNumber, reason
-        $scope.jobCanceled = true
-        // addMinJobNumber()
-      }
-      else if (status === 'Pending') { //status, minJobNumber
+      if (status === 'Pending') { //status, minJobNumber
         addMinJobNumber()
+
       }
       else if (status === 'Active') {  //status, JobNumber, startDate
         addStartDate()
@@ -135,7 +132,10 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
     }
   }
 
-  $scope.causeSet = cause_id => $scope.Job.cause_id = cause_id
+  $scope.causeSet = cause_id => {
+    $scope.Job.cause_id = cause_id
+    submitJobStatus() 
+  }  
 
 })
 

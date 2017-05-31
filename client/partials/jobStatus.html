@@ -1,7 +1,6 @@
-<div ng-if="JS.currJobStatus === 'New'">
+<div ng-if="JS.currJobStatus === 'New'"> <!-- cannot Cancel a  New Job -->
   <div>
     <div>What is the status of this job?</div>
-    <button type="submit" ng-click="JS.addJobStatus('Canceled')" ">Canceled</button>
     <button type="submit" ng-click="JS.addJobStatus('Pending')" ">Pending</button>
     <button type="submit" ng-click="JS.addJobStatus('Active')" ">Active</button>
     <button type="submit" ng-click="JS.addJobStatus('Complete')" ">Complete</button>
