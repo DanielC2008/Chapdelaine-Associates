@@ -303,7 +303,36 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
         .where('Jobs.job_number', job_number)
         .whereIn('Clients.client_id', allClientIds)
         .then(data => jobMain.Representatives = data),
-
+       //get address 
+      knex('Properties')
+        .select(
+          'Addresses.address',
+          'Properties_Addresses.is_primary'
+        )
+        .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
+        .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
+        .whereIn('Properties.property_id', propertyId)
+        .then(data => {
+          if(jobMain.Property) {
+            jobMain.Property.addresses = data.map(query => {
+              return {
+                address: query.address,
+                is_primary: query.is_primary
+              }
+            })
+          }
+        }),  
+      //get roads  
+      knex('Properties')
+        .select('Roads.road')
+        .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
+        .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
+        .whereIn('Properties.property_id', propertyId)
+        .then(data => {
+          if(jobMain.Property) {
+            jobMain.Property.roads = data.map(road => road.road)
+          }
+        }),  
       knex('Representatives')
         .select(
           'Clients.client_id',

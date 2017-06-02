@@ -59,17 +59,21 @@
               </div>
             </div>
           </div>
-        </div>
-          
+        </div>  
+
         <div class="row">
-          <div id="Property">
-            <div class="col s6">
+          <div id="PropTitle">
+            <div class="col s12">
               <div class="row">
                 Owner's Name: {{Owner.first_name}} {{Owner.middle_name}} {{Owner.last_name}} 
               </div>
               <div class="row">
-                Property Address or Road: {{Property.address ? Property.address : Property.road}}
-              </div>
+                Property Address or Road: {{Property.addresses ? Property.addresses : Property.road}}
+              </div> 
+            </div>  
+          </div>
+          <div id="Property">
+            <div class="col s6">
               <div class="row">
                 City: {{Property.city}} 
               </div>
