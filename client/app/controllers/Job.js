@@ -1,6 +1,6 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog) {
+app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope) {
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 

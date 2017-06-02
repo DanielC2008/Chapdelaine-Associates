@@ -31,6 +31,7 @@ const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ng
       .otherwise('/login')
   )
   .run( function($rootScope, $location, JobFactory) {
+    $rootScope.timeZoneOffset = `+${new Date().getTimezoneOffset()}`
     JobFactory.getUserName()
       .then(({data}) => $rootScope.$user = data.user_name)
     // register listener to watch route changes
