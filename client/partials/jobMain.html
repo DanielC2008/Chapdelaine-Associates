@@ -1,13 +1,5 @@
 <!-- Clients -->
 <div class="row">
-  <div>
-    <button  ng-click="JM.addBySearch('Clients')">Add Existing Client</button>
-    <button  ng-click="JM.addNew('Clients')">Add New Client</button>  
-    <button  ng-click="JM.addNew('Properties')">Add New Property</button>  
-    <button  ng-click="JM.addBySearch('Representatives')">Add Existing Representative</button>
-    <button  ng-click="JM.addNew('Representatives')">Add New Representative</button>  
-  </div>
-   
 
   <div ng-if="JM.search">
     <div ng-controller="SearchFilter as SF">
@@ -15,8 +7,116 @@
       </div>
     </div>
   </div>
+  
+  <div class="container">
+    
+    <div class="row">
+      <div id="Items" class="col s10">
 
-</div>
+        <div class="row">
+          <div id="Main">
+            <div class="col s6">
+              <div class="row">
+                Client Name: {{Main.first_name}} {{Main.middle_name}} {{Main.last_name}} 
+              </div>
+              <div class="row">
+                Mailing Address: {{Main.address}}
+              </div>
+              <div class="row">
+                City: {{Main.City}} 
+              </div>
+              <div class="row">
+                State: {{Main.state}} Zip: {{Main.zip}}  
+              </div>
+              <div class="row">
+                Mobile Phone{{Main.mobile_phone}}
+              </div>
+              <div class="row">
+                 Home Phone: {{Main.home_phone}}
+              </div>
+              <div class="row">
+                Email: {{Main.email}} 
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="row">
+                Contact: {{Main.Rep.first_name}} {{Main.Rep.middle_name}} {{Main.Rep.last_name}}
+              </div>
+              <div class="row">
+                Mobile Phone: {{Main.Rep.mobile_phone}}
+              </div>
+              <div class="row">
+                Business Phone: {{Main.Rep.buisness_phone}}
+              </div>
+              <div class="row">
+                Email: {{Main.Rep.email}}
+              </div>
+              <div class="row">
+                Company Name: {{Main.Rep.company_name}}
+              </div>
+              <div class="row">
+                Company Address: {{Main.Rep.company_address}}
+              </div>
+            </div>
+          </div>
+        </div>
+          
+        <div class="row">
+          <div id="Property">
+            
+          </div>
+        </div>  
+
+
+      </div>
+      <div id="Actions" class="col s2"> Actions
+        <div class="row">
+          <button  ng-click="JM.addBySearch('Clients')">Add Existing Client</button>
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addNew('Clients')">Add New Client</button>  
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addBySearch('Representatives')">Add Existing Rep</button>
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addNew('Representatives')">Add New Rep</button>  
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addNew('Properties')">Add New Property</button>  
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- </div>
   </div>
 </div>
 <div class='row'>
@@ -41,9 +141,9 @@
         </div>
       </div>
       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Clients', {client_id: client.client_id})">Remove Client</button>
-    </div>
+    </div> -->
 <!-- Reps -->
-<div class='row'>
+<!-- <div class='row'>
   <div class="col s12" ng-repeat="(tableIndex, rep) in Representatives">
     <div class="row" ng-if='client.client_id === rep.client_id'> Representative for {{client['First Name']}} {{client['Last Name']}}:
       <div ng-repeat="(key, value) in rep" >
@@ -69,9 +169,9 @@
   </div>
 </div>
   </div>
-</div>
+</div> -->
 <!-- Properties -->
-<div class='row'>
+<!-- <div class='row'>
   <div class="col s12" ng-repeat="(tableIndex, property) in Property">
     <div class="row">Property:
       <div ng-repeat="(key, value) in property" >
@@ -94,7 +194,7 @@
       </div>
       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id})">Remove Property</button>
     </div>
-  </div>
+  </div> -->
 </div>
 
 

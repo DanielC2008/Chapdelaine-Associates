@@ -208,4 +208,56 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   })
 })
 
+
+
+router.post('/api/getJobMain', ({body: {job_number} }, res) => {
+  let jobMain = {}
+  let clientId
+
+  return Promise.all([
+
+    knex('Clients')
+        .select(
+          'Clients.client_id',
+          'Clients.first_name',
+          'Clients.middle_name',
+          'Clients.last_name',
+          'Clients.email',
+          'Clients.business_phone',
+          'Clients.mobile_phone'
+        )
+        .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+        .where('Jobs.job_number', job_number)
+        .where('Client_Specs_Per_Job.main', true )
+        .then(data => {
+          clientId = data[0].client_id
+          jobMain.Main = data[0]
+        })
+  ]) 
+  .then( () => {
+
+    knex('Representatives')
+        .select(
+          'Clients.client_id',
+          'Representatives.representative_id',
+          'Representatives.first_name',
+          'Representatives.middle_name',
+          'Representatives.last_name',
+          'Representatives.email',
+          'Representatives.business_phone',
+          'Representatives.mobile_phone'
+        )
+        .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
+        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+        .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
+        .where('Jobs.job_number', job_number)
+        .where('Clients.client_id', clientId)
+        .then( data => {
+          jobMain.Main.Rep = data[0]
+          res.send(jobMain)
+        })
+  })     
+})
+
 module.exports = router

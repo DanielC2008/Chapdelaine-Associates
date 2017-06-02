@@ -48,7 +48,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
-    factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
+    factory.getJobFromDatabase = job_number => $http.post('/api/getJobMain', {job_number})  
 
     factory.getActiveJobs = () => $http.get('/api/activeJobs')
 
