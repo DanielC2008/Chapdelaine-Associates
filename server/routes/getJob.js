@@ -268,7 +268,7 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
     knex('Properties')
       .select(
         'Properties.property_id',
-        'Properties.map',
+        'Properties.Map', 
         'Properties.parcel_number',
         'Properties.plat_book',
         'Properties.plat_page',
@@ -284,7 +284,7 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
       .where('job_number', job_number)
       .then( data => {
         propertyId = data[0].property_id
-        jobMain.Property = data
+        jobMain.Property = data[0]
       }),
   ]) 
   .then( () => {

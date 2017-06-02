@@ -17,7 +17,7 @@
           <div id="Main">
             <div class="col s6">
               <div class="row">
-                Client Name: {{Main.first_name}} {{Main.middle_name}} {{Main.last_name}} 
+                Client's Name: {{Main.first_name}} {{Main.middle_name}} {{Main.last_name}} 
               </div>
               <div class="row">
                 Mailing Address: {{Main.address}}
@@ -63,7 +63,43 @@
           
         <div class="row">
           <div id="Property">
-            
+            <div class="col s6">
+              <div class="row">
+                Owner's Name: {{Owner.first_name}} {{Owner.middle_name}} {{Owner.last_name}} 
+              </div>
+              <div class="row">
+                Property Address or Road: {{Property.address ? Property.address : Property.road}}
+              </div>
+              <div class="row">
+                City: {{Property.city}} 
+              </div>
+              <div class="row">
+                State: {{Property.state}} Zip: {{Property.zip}}  
+              </div>
+              <div class="row">
+                County {{Property.county}}
+              </div>
+              <div class="row">
+                Acrage: {{Property.acres}}
+              </div>
+              <div class="row">
+                Notes: {{Property.notes}} 
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="row">
+                Subdivision: {{Property.sub_division}} {{Property.lot_number}}
+              </div>
+              <div class="row">
+                Platbook: {{Property.plat_book}} Page: {{Property.plat_page}}
+              </div>
+              <div class="row">
+                Map: {{Property.Map}} Parcel: {{Property.parcel}}
+              </div>
+              <div class="row">
+                Deedbook: {{Property.deed_book}} Page: {{Property.deed_page}}
+              </div>
+            </div>
           </div>
         </div>  
 
