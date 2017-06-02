@@ -213,43 +213,79 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 router.post('/api/getJobMain', ({body: {job_number} }, res) => {
   let jobMain = {}
   let mainClientId
+  let propertyId
   let allClientIds
 
   return Promise.all([
+    knex('Clients')
+      .select(
+        'Clients.client_id',
+        'Clients.first_name',
+        'Clients.middle_name',
+        'Clients.last_name'
+      )
+      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+      .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
+      .where('Jobs.job_number', job_number)
+      .where('Client_Types.client_type', 'Owner')
+      .then( data => jobMain.Owner = data[0]),
 
     knex('Clients')
-        .select(
-          'Clients.client_id',
-          'Clients.first_name',
-          'Clients.middle_name',
-          'Clients.last_name'
-        )
-        .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
-        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
-        .where('Jobs.job_number', job_number)
-        .then(data => {
-          allClientIds = data.map(client => client.client_id)
-          jobMain.Clients = data
-        }),
+      .select(
+        'Clients.client_id',
+        'Clients.first_name',
+        'Clients.middle_name',
+        'Clients.last_name'
+      )
+      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+      .where('Jobs.job_number', job_number)
+      .then(data => {
+        allClientIds = data.map(client => client.client_id)
+        jobMain.Clients = data
+      }),
 
     knex('Clients')
-        .select(
-          'Clients.client_id',
-          'Clients.first_name',
-          'Clients.middle_name',
-          'Clients.last_name',
-          'Clients.email',
-          'Clients.business_phone',
-          'Clients.mobile_phone'
-        )
-        .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
-        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
-        .where('Jobs.job_number', job_number)
-        .where('Client_Specs_Per_Job.main', true )
-        .then(data => {
-          mainClientId = data[0].client_id
-          jobMain.Main = data[0]
-        })
+      .select(
+        'Clients.client_id',
+        'Clients.first_name',
+        'Clients.middle_name',
+        'Clients.last_name',
+        'Clients.email',
+        'Clients.business_phone',
+        'Clients.mobile_phone'
+      )
+      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+      .where('Jobs.job_number', job_number)
+      .where('Client_Specs_Per_Job.main', true )
+      .then(data => {
+        mainClientId = data[0].client_id
+        jobMain.Main = data[0]
+      }),
+
+    knex('Properties')
+      .select(
+        'Properties.property_id',
+        'Properties.map',
+        'Properties.parcel_number',
+        'Properties.plat_book',
+        'Properties.plat_page',
+        'Properties.deed_book',
+        'Properties.deed_page',
+        'Properties.sub_division',
+        'Properties.lot_number',
+        'Properties.notes',
+        'Properties.acres'
+      )
+      .join('Jobs_Properties', 'Properties.property_id', 'Jobs_Properties.property_id')
+      .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')  
+      .where('job_number', job_number)
+      .then( data => {
+        propertyId = data[0].property_id
+        jobMain.Property = data
+      }),
   ]) 
   .then( () => {
     return Promise.all([

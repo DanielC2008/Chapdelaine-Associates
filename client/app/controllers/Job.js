@@ -26,7 +26,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       // $scope.EstimateDetails = data.EstimateDetails
       // $scope.Invoices = data.Invoices
       // $scope.InvoiceDetails = data.InvoiceDetails
-      // $scope.Property = data.Properties
+      $scope.Property = data.Property
       $scope.Representatives = data.Representatives
       // $scope.Attachments = data.Attachments
       // $scope.Job = data.Jobs
