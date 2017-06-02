@@ -212,9 +212,25 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
 router.post('/api/getJobMain', ({body: {job_number} }, res) => {
   let jobMain = {}
-  let clientId
+  let mainClientId
+  let allClientIds
 
   return Promise.all([
+
+    knex('Clients')
+        .select(
+          'Clients.client_id',
+          'Clients.first_name',
+          'Clients.middle_name',
+          'Clients.last_name'
+        )
+        .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+        .where('Jobs.job_number', job_number)
+        .then(data => {
+          allClientIds = data.map(client => client.client_id)
+          jobMain.Clients = data
+        }),
 
     knex('Clients')
         .select(
@@ -231,13 +247,28 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
         .where('Jobs.job_number', job_number)
         .where('Client_Specs_Per_Job.main', true )
         .then(data => {
-          clientId = data[0].client_id
+          mainClientId = data[0].client_id
           jobMain.Main = data[0]
         })
   ]) 
   .then( () => {
+    return Promise.all([
+      knex('Representatives')
+        .select(
+          'Clients.client_id',
+          'Representatives.representative_id',
+          'Representatives.first_name as First Name',
+          'Representatives.middle_name as Middle Name',
+          'Representatives.last_name as Last Name'
+        )
+        .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
+        .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+        .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
+        .where('Jobs.job_number', job_number)
+        .whereIn('Clients.client_id', allClientIds)
+        .then(data => jobMain.Representatives = data),
 
-    knex('Representatives')
+      knex('Representatives')
         .select(
           'Clients.client_id',
           'Representatives.representative_id',
@@ -252,11 +283,10 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
         .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
         .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
         .where('Jobs.job_number', job_number)
-        .where('Clients.client_id', clientId)
-        .then( data => {
-          jobMain.Main.Rep = data[0]
-          res.send(jobMain)
-        })
+        .where('Clients.client_id', mainClientId)
+        .then( data => jobMain.Main.Rep = data[0])
+    ])
+    .then( () => res.send(jobMain))     
   })     
 })
 

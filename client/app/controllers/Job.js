@@ -21,16 +21,17 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .then( ({data}) => {
 
       $scope.Main = data.Main
+      $scope.Clients = data.Clients
       // $scope.Estimates = data.Estimates
       // $scope.EstimateDetails = data.EstimateDetails
       // $scope.Invoices = data.Invoices
       // $scope.InvoiceDetails = data.InvoiceDetails
       // $scope.Property = data.Properties
-      // $scope.Representatives = data.Representatives
+      $scope.Representatives = data.Representatives
       // $scope.Attachments = data.Attachments
       // $scope.Job = data.Jobs
       // $scope.jobId = $scope.Job.job_id
-
+      console.log('data', data)
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
        .then( ({data}) => $scope.showTab = data.showTab)
