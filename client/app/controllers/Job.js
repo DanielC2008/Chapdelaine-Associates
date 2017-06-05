@@ -20,8 +20,9 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
   JobFactory.getJobFromDatabase($scope.jobNumber)
     .then( ({data}) => {
 
+      let owner = data.Clients.filter( client => client.client_type === 'Owner')
+      $scope.Owner = owner[0]
       $scope.Main = data.Main
-      $scope.Clients = data.Clients
       // $scope.Estimates = data.Estimates
       // $scope.EstimateDetails = data.EstimateDetails
       // $scope.Invoices = data.Invoices

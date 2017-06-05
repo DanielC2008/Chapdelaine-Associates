@@ -236,10 +236,12 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
         'Clients.client_id',
         'Clients.first_name',
         'Clients.middle_name',
-        'Clients.last_name'
+        'Clients.last_name',
+        'Client_Types.client_type'
       )
       .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
       .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+      .leftJoin('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
       .where('Jobs.job_number', job_number)
       .then(data => {
         allClientIds = data.map(client => client.client_id)
@@ -254,10 +256,18 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
         'Clients.last_name',
         'Clients.email',
         'Clients.business_phone',
-        'Clients.mobile_phone'
+        'Clients.mobile_phone',
+        'Addresses.address',
+        'Cities.city',
+        'States.state',
+        'Zip_Codes.zip'
       )
       .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
       .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+      .leftJoin('Addresses', 'Clients.address_id', 'Addresses.address_id')      
+      .leftJoin('Cities', 'Clients.city_id', 'Cities.city_id') 
+      .leftJoin('States', 'Clients.state_id', 'States.state_id')      
+      .leftJoin('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')      
       .where('Jobs.job_number', job_number)
       .where('Client_Specs_Per_Job.main', true )
       .then(data => {
@@ -277,10 +287,18 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
         'Properties.sub_division',
         'Properties.lot_number',
         'Properties.notes',
-        'Properties.acres'
+        'Properties.acres',
+        'Counties.county',
+        'Cities.city',
+        'States.state',
+        'Zip_Codes.zip'
       )
       .join('Jobs_Properties', 'Properties.property_id', 'Jobs_Properties.property_id')
-      .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')  
+      .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')
+      .leftJoin('Counties', 'Properties.county_id', 'Counties.county_id')      
+      .leftJoin('Cities', 'Properties.city_id', 'Cities.city_id') 
+      .leftJoin('States', 'Properties.state_id', 'States.state_id')      
+      .leftJoin('Zip_Codes', 'Properties.zip_id', 'Zip_Codes.zip_id')    
       .where('job_number', job_number)
       .then( data => {
         propertyId = data[0].property_id
