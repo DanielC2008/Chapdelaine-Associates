@@ -104,11 +104,10 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     }
 
     factory.createCurrentClientArray = clients => {
-
       let clientArray = clients.map( client => {
         let obj = {
           client_id: client.client_id,
-          client_name : `${client['First Name']} ${client['Last Name']}`
+          client_name : `${client.first_name} ${client.last_name}`
         }  
         return obj
       })
