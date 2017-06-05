@@ -10,25 +10,11 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   let Job = {}
   let clientID
   let propertyID
-  let jobID
+
 
   return Promise.all([
 
-    knex('Jobs')
-      .select(
-        'job_id',
-        'job_number as Job Number',
-        'job_status as Job Status',
-        'start_date as Date Started',
-        'complete_date as Date Completed',
-        'last_accessed as Last Accessed',
-        'target_date as Target Date'
-      )
-      .where('job_number', job_number)
-      .then(data => {
-        jobID = data[0].job_id
-        Job.Jobs = data[0]
-      }),
+    
 
     knex('Clients')
       .select(
@@ -215,21 +201,25 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
   let mainClientId
   let propertyId
   let allClientIds
+  let jobId
 
   return Promise.all([
-    knex('Clients')
+
+    knex('Jobs')
       .select(
-        'Clients.client_id',
-        'Clients.first_name',
-        'Clients.middle_name',
-        'Clients.last_name'
+        'Jobs.job_id',
+        'Jobs.job_number',
+        'Jobs.job_status',
+        'Jobs.start_date',
+        'Jobs.complete_date',
+        'Jobs.last_accessed',
+        'Jobs.target_date'
       )
-      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
-      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
-      .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
-      .where('Jobs.job_number', job_number)
-      .where('Client_Types.client_type', 'Owner')
-      .then( data => jobMain.Owner = data[0]),
+      .where('job_number', job_number)
+      .then(data => {
+        jobId = data[0].job_id
+        jobMain.Job = data[0]
+      }),
 
     knex('Clients')
       .select(
@@ -307,6 +297,16 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
   ]) 
   .then( () => {
     return Promise.all([
+
+      knex('Jobs')
+        .select('Job_Types.job_type')
+        .join('Jobs_Job_Types', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
+        .join('Job_Types', 'Jobs_Job_Types.job_type_id', 'Job_Types.job_type_id')
+        .where('Jobs.job_id', jobId)
+        .then(data => {
+          jobMain.Job.job_types = data.map( type => type.job_type)
+        }),
+
       knex('Representatives')
         .select(
           'Clients.client_id',
@@ -360,7 +360,9 @@ router.post('/api/getJobMain', ({body: {job_number} }, res) => {
           'Representatives.last_name',
           'Representatives.email',
           'Representatives.business_phone',
-          'Representatives.mobile_phone'
+          'Representatives.mobile_phone',
+          'Representatives.company_name',
+          'Representatives.company_address'
         )
         .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
         .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
