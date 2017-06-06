@@ -24,16 +24,15 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       $scope.Owner = owner[0]
       $scope.Main = data.Main
       $scope.Clients = data.Clients
-      // $scope.Estimates = data.Estimates
-      // $scope.EstimateDetails = data.EstimateDetails
-      // $scope.Invoices = data.Invoices
-      // $scope.InvoiceDetails = data.InvoiceDetails
+      $scope.Estimates = data.Estimates
+      $scope.EstimateDetails = data.EstimateDetails
+      $scope.Invoices = data.Invoices
+      $scope.InvoiceDetails = data.InvoiceDetails
       $scope.Property = data.Property
       $scope.Representatives = data.Representatives
-      // $scope.Attachments = data.Attachments
+      $scope.Attachments = data.Attachments
       $scope.Job = data.Job
       $scope.jobId = $scope.Job.job_id
-      console.log('data', data)
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
        .then( ({data}) => $scope.showTab = data.showTab)
@@ -46,7 +45,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     //can post status with .status and .statusText
     .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))
 
-  $scope.updateStatus = () => {
+  $scope.updateStatus = () => { /////////////////////////////////////////fix
     let locals = {
       jobInfo: { 
         tableForDB: 'Jobs',
