@@ -1,0 +1,6 @@
+<div ng-if="JC.causes" ng-init="material()">
+  <select ng-change="JC.selected(selectedCause.cause_id)" ng-model="selectedCause" ng-options="cause as cause.cause for cause in JC.causes">
+    <option value="" label="-- Select option --" disabled selected="selected"> Choose One...
+    </option>
+  </select>
+</div>

@@ -1,17 +1,21 @@
 'use strict'
 
-app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory, TableAndColumnFactory) {
+app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory, FormFactory) {
   let NEW = this
+  NEW.Display = {}
 
   switch(table) {
     case 'Clients':
       NEW.title = 'Client'
+      NEW.Display.Clients = FormFactory.getClientForm()
       break;
     case 'Representatives':
       NEW.title = 'Representative'
+      NEW.Display.Representatives = FormFactory.getRepresentativeForm()
       break;
     case 'Properties':
       NEW.title = 'Property'
+      NEW.Display.Properties = FormFactory.getPropertyForm()
       break;
   }
 
@@ -20,10 +24,6 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
   if (clientArray) {
     NEW.ClientNames = clientArray
   }
-
-  TableAndColumnFactory.initialized.then(function() {
-    NEW.Display = TableAndColumnFactory.getObj()
-  })
 
   NEW.send = ()  => {
     let objToAdd = JobFactory.matchDatabaseKeys(_.cloneDeep(NEW.Display[`${NEW.table}`]))

@@ -1,7 +1,7 @@
 'use strict'
 
 
-const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ngMessages', 'angularFileUpload'])
+const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMaterial', 'ngMessages', 'angularFileUpload'])
   .config( $routeProvider =>
     $routeProvider
       .when('/login', {
@@ -30,7 +30,11 @@ const app = angular.module('Database', ['ngRoute', 'focus-if', 'ngMaterial', 'ng
       })
       .otherwise('/login')
   )
+  .config(function($mdAriaProvider) {
+    $mdAriaProvider.disableWarnings() // Globally disables all ARIA warnings.
+  })
   .run( function($rootScope, $location, JobFactory) {
+    $rootScope.timeZoneOffset = `+${new Date().getTimezoneOffset()}`
     JobFactory.getUserName()
       .then(({data}) => $rootScope.$user = data.user_name)
     // register listener to watch route changes

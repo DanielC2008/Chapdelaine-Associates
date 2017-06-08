@@ -1,13 +1,5 @@
 <!-- Clients -->
 <div class="row">
-  <div>
-    <button  ng-click="JM.addBySearch('Clients')">Add Existing Client</button>
-    <button  ng-click="JM.addNew('Clients')">Add New Client</button>  
-    <button  ng-click="JM.addNew('Properties')">Add New Property</button>  
-    <button  ng-click="JM.addBySearch('Representatives')">Add Existing Representative</button>
-    <button  ng-click="JM.addNew('Representatives')">Add New Representative</button>  
-  </div>
-   
 
   <div ng-if="JM.search">
     <div ng-controller="SearchFilter as SF">
@@ -15,8 +7,156 @@
       </div>
     </div>
   </div>
+  
+  <div class="container">
+    
+    <div class="row">
+      <div id="Items" class="col s10">
 
-</div>
+        <div class="row">
+          <div id="Main">
+            <div class="col s6">
+              <div class="row">
+                Client's Name: {{Main.first_name}} {{Main.middle_name}} {{Main.last_name}} 
+              </div>
+              <div class="row">
+                Mailing Address: {{Main.address}}
+              </div>
+              <div class="row">
+                City: {{Main.city}} 
+              </div>
+              <div class="row">
+                State: {{Main.state}} Zip: {{Main.zip}}  
+              </div>
+              <div class="row">
+                Mobile Phone{{Main.mobile_phone}}
+              </div>
+              <div class="row">
+                 Home Phone: {{Main.home_phone}}
+              </div>
+              <div class="row">
+                Email: {{Main.email}} 
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="row">
+                Contact: {{Main.Rep.first_name}} {{Main.Rep.middle_name}} {{Main.Rep.last_name}}
+              </div>
+              <div class="row">
+                Mobile Phone: {{Main.Rep.mobile_phone}}
+              </div>
+              <div class="row">
+                Business Phone: {{Main.Rep.business_phone}}
+              </div>
+              <div class="row">
+                Email: {{Main.Rep.email}}
+              </div>
+              <div class="row">
+                Company Name: {{Main.Rep.company_name}}
+              </div>
+              <div class="row">
+                Company Address: {{Main.Rep.company_address}}
+              </div>
+            </div>
+          </div>
+        </div>  
+
+        <div class="row">
+          <div id="PropTitle">
+            <div class="col s12">
+              <div class="row">
+                Owner's Name: {{Owner.first_name}} {{Owner.middle_name}} {{Owner.last_name}} 
+              </div>
+              <div class="row">
+                Property Address or Road: {{Property.addresses ? Property.addresses : Property.road}}
+              </div> 
+            </div>  
+          </div>
+          <div id="Property">
+            <div class="col s6">
+              <div class="row">
+                City: {{Property.city}} 
+              </div>
+              <div class="row">
+                State: {{Property.state}} Zip: {{Property.zip}}  
+              </div>
+              <div class="row">
+                County {{Property.county}}
+              </div>
+              <div class="row">
+                Acrage: {{Property.acres}}
+              </div>
+              <div class="row">
+                Notes: {{Property.notes}} 
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="row">
+                Subdivision: {{Property.sub_division}} Lot Number: {{Property.lot_number}}
+              </div>
+              <div class="row">
+                Platbook: {{Property.plat_book}} Page: {{Property.plat_page}}
+              </div>
+              <div class="row">
+                Map: {{Property.Map}} Parcel: {{Property.parcel_number}}
+              </div>
+              <div class="row">
+                Deedbook: {{Property.deed_book}} Page: {{Property.deed_page}}
+              </div>
+            </div>
+          </div>
+        </div>  
+
+
+      </div>
+      <div id="Actions" class="col s2"> Actions
+        <div class="row">
+          <button  ng-click="JM.addBySearch('Clients')">Add Existing Client</button>
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addNew('Clients')">Add New Client</button>  
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addBySearch('Representatives')">Add Existing Rep</button>
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addNew('Representatives')">Add New Rep</button>  
+        </div>
+        <div class="row">
+          <button  ng-click="JM.addNew('Properties')">Add New Property</button>  
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- </div>
   </div>
 </div>
 <div class='row'>
@@ -41,9 +181,9 @@
         </div>
       </div>
       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Clients', {client_id: client.client_id})">Remove Client</button>
-    </div>
+    </div> -->
 <!-- Reps -->
-<div class='row'>
+<!-- <div class='row'>
   <div class="col s12" ng-repeat="(tableIndex, rep) in Representatives">
     <div class="row" ng-if='client.client_id === rep.client_id'> Representative for {{client['First Name']}} {{client['Last Name']}}:
       <div ng-repeat="(key, value) in rep" >
@@ -69,9 +209,9 @@
   </div>
 </div>
   </div>
-</div>
+</div> -->
 <!-- Properties -->
-<div class='row'>
+<!-- <div class='row'>
   <div class="col s12" ng-repeat="(tableIndex, property) in Property">
     <div class="row">Property:
       <div ng-repeat="(key, value) in property" >
@@ -94,7 +234,7 @@
       </div>
       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id})">Remove Property</button>
     </div>
-  </div>
+  </div> -->
 </div>
 
 
