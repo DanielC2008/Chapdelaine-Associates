@@ -32,8 +32,6 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'Mobile Phone': '', 
       'Home Phone': '', 
       'Fax Number': '',
-      'Company Name': '',
-      'Company Address': '', 
       'Address': '', 
       'City': '', 
       'State': '', 

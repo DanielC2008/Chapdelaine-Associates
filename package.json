@@ -10,7 +10,8 @@
     "express-session": "^1.15.1",
     "knex": "^0.12.6",
     "mssql": "^3.3.0",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "validate": "^3.0.1"
   },
   "devDependencies": {
     "bower": "^1.8.0",
