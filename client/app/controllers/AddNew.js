@@ -39,7 +39,6 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
       objToAdd.main = NEW.main
     }
 
-    console.log('dataObj', dataObj)
     JobFactory.addNewToJob(dataObj)
       .then( ({data: msg}) => {
         $mdDialog.hide(msg)
