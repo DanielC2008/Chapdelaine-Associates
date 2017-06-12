@@ -10,6 +10,20 @@
       </div>
     </div>
 </div>
+<div class='row' ng-if="NEW.table === 'Clients' "> 
+  <h5 class="col s12">Client Type:</h5>
+  <button class="button btn col s3" type="submit" ng-click='NEW.clientType = "Owner"'>Owner</button> 
+  <button class="button btn col s3" type="submit" ng-click='NEW.clientType = "Buyer"'>Buyer</button>
+  <div class="col s4">
+    <span for="other">Other</span>
+    <input type="text" name="other" ng-model="other" ng-change="NEW.clientType = other"> 
+  </div>
+  <div class="col s12">
+    <h5>Is this your main client?</h5>
+    <button class="button btn col s3" type="submit" ng-click='NEW.main = true'>Yes</button>
+    <button class="button btn col s3" type="submit" ng-click='NEW.main = false'>No</button>
+  </div>
+</div>
 <div ng-if="NEW.ClientNames" class="row"> Add Client:
   <div ng-repeat="name in NEW.ClientNames"> 
     <button class="button btn"  ng-click="NEW.clientId = name.client_id">{{name.client_name}}</button>

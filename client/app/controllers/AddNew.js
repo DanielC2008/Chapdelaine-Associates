@@ -12,6 +12,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
     case 'Representatives':
       NEW.title = 'Representative'
       NEW.Display.Representatives = FormFactory.getRepresentativeForm()
+      NEW.ClientNames = clientArray
       break;
     case 'Properties':
       NEW.title = 'Property'
@@ -21,10 +22,6 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
 
   NEW.table = table
 
-  if (clientArray) {
-    NEW.ClientNames = clientArray
-  }
-
   NEW.send = ()  => {
     let objToAdd = JobFactory.matchDatabaseKeys(_.cloneDeep(NEW.Display[`${NEW.table}`]))
     let dataObj = {
@@ -33,10 +30,16 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
       job_id
     }
 
-    if(NEW.clientId) {
+    if(table === 'Representatives') {
       dataObj.client_id = NEW.clientId
     }
 
+    if(table === 'Clients') {
+      objToAdd.client_type = NEW.clientType
+      objToAdd.main = NEW.main
+    }
+
+    console.log('dataObj', dataObj)
     JobFactory.addNewToJob(dataObj)
       .then( ({data: msg}) => {
         $mdDialog.hide(msg)

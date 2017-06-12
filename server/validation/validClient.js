@@ -62,6 +62,16 @@ const validationHelper = require('./validationHelper')
     address: {
       type: 'string',
       message: 'Address must be a string.'
+    },
+    client_type: {
+      type: 'string',
+      required: true,
+      message: 'Client Type is required.'
+    },
+    main: {
+      type: 'boolean',
+      required: true,
+      message: 'Is this the main Client?'
     }
   })
 

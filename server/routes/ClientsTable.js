@@ -35,8 +35,8 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 
 
 router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
-
   validationHelper.checkNameExists(objToAdd, 'Clients').then( nameExists => {
+
     const errors = validateClient.validate(objToAdd) 
 
     if (errors[0]) {  //------------------------------------checks each type
@@ -47,8 +47,9 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
       res.status(400).send('It appears this name already exists')
       return
     } else {
-      
       let client_type_id
+      let main = objToAdd.main
+      delete objToAdd.main
       return Promise.all([ //------------------get existing state, city, address, county, zip, and client_type
         locateOrCreate.state(objToAdd.state)
         .then( data => {
@@ -75,6 +76,7 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
           delete objToAdd.client_type
           client_type_id = data
         })
+
       ])
       .then( () => {
         knex('Clients') //------------------------make client
@@ -86,7 +88,8 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
           .insert({
             job_id,
             client_id, 
-            client_type_id
+            client_type_id,
+            main
           }) 
           .then( data => res.send({msg: 'Successfully created and added to Job!'}))
           .catch( err => console.log(err))
