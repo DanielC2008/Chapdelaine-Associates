@@ -73,6 +73,10 @@ router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) 
         locateOrCreate.zip(objToAdd.zip_code).then( data => { 
           delete objToAdd.zip_code
           objToAdd.zip_id = data
+        }),
+        locateOrCreate.company_name(objToAdd.company_name, objToAdd.company_address).then( data => { 
+          delete objToAdd.company_name
+          objToAdd.company_id = data
         })
       ])
       .then( () => {

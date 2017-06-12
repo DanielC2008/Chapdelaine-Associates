@@ -208,6 +208,40 @@ module.exports = {
         })
       }  
     })
+  },
+
+  company_name: (company_name, company_address) => {
+    return new Promise( (resolve, reject) => {
+      if(!company_name) { 
+        resolve(null) 
+        reject()
+      }
+      else {   
+        knex('Companies')
+        .select('company_id')
+        .where('company_name', company_name)
+        .then( data => {
+          console.log('data', data)
+          if (data[0]) {
+            resolve(data[0].company_id)
+            reject()
+          } 
+          else {
+            module.exports.address(company_address) // if  new company need to find address on address table first
+            .then( address_id => {   
+              knex('Companies')
+              .returning('company_id')
+              .insert({company_name: company_name, address_id: address_id})
+              .then( data => {
+                console.log('data', data)
+                resolve(data[0])
+                reject()
+              })
+            })
+          }
+        })
+      }  
+    })
   }
 
 }

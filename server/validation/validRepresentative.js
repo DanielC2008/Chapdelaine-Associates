@@ -62,6 +62,14 @@ const validationHelper = require('./validationHelper')
     address: {
       type: 'string',
       message: 'Address must be a string.'
+    },
+    company_name: {
+      type: 'string',
+      message: 'Company name must be a string.'
+    },
+    company_address: {
+      type: 'string',
+      message: 'Company address must be a string.'
     }
   })
 
