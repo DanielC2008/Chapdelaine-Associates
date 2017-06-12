@@ -1,7 +1,7 @@
 'use strict'
 
 const schema = require('validate')
-
+const helper = require('./validationHelper')
 
   const client = schema({
     first_name: {
@@ -20,7 +20,7 @@ const schema = require('validate')
     },
     email: {
       type: 'string',
-      match: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      match: helper.emailChecker,
       message: 'Valid email is required.'
     },
     business_phone: {
