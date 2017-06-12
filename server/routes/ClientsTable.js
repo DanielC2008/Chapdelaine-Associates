@@ -37,15 +37,11 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
 
   const errors = validateClient.validate(objToAdd)
   if (errors[0]) {
-    let errObj = errors.reduce( (arr, err) => {
-      let obj = { message: err.message }
-      arr.push(obj)
-      return arr
-    }, [])
-    res.send(errObj)
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
     return
   }
-  
+
   let client_type_id
   return Promise.all([ //------------------get existing state, city, address, county, zip, and client_type
     locateOrCreate.state(objToAdd.state)

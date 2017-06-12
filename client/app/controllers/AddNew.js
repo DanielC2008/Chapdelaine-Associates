@@ -44,7 +44,13 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
           NEW.Display[`${NEW.table}`][key] = ''
         }
       })
-      .catch( () => JobFactory.toastReject({msg: `Error: ${NEW.title} not saved!`}))
+      .catch( ({data: msg}) => {
+        if (msg) { //------------------------client entered incorrect data type
+          JobFactory.toastReject(msg)
+        } else { //--------------------------database err
+          JobFactory.toastReject({msg: `Error: ${NEW.title} not saved!`})
+        }
+      })
   }
 
   NEW.reject = () => {
