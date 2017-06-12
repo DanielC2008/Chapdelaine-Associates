@@ -5,7 +5,7 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
-
+const validateClient = require('../validation/validClient')
 // router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
 //   knex(`${table}`)
 //     .update(obj)
@@ -34,6 +34,18 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 
 
 router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
+
+  const errors = validateClient.validate(objToAdd)
+  if (errors[0]) {
+    let errObj = errors.reduce( (arr, err) => {
+      let obj = { message: err.message }
+      arr.push(obj)
+      return arr
+    }, [])
+    res.send(errObj)
+    return
+  }
+  
   let client_type_id
   return Promise.all([ //------------------get existing state, city, address, county, zip, and client_type
     locateOrCreate.state(objToAdd.state)
