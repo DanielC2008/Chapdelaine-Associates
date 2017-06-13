@@ -78,7 +78,7 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'Deed Page': '',
       'Sub Division': '',
       'Lot Number': '',
-      'Acres': '',
+      'Acres': null, 
       'Notes': ''
     }
   }   
