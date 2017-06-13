@@ -5,6 +5,7 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
+const validateProperty = require('../validation/validProperty')
 
 // router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
 //   knex(`${table}`)
@@ -26,6 +27,14 @@ router.post('/api/removePropertyFromJob', ({body: {objToRemove}}, res) => {
 })
 
 router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
+
+  const errors = validateProperty.validate(objToAdd, {typecast: true}) //typcast allows me to force a datatype
+
+  if (errors[0]) {  //------------------------------------checks each type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+    return
+  }
   let address_id
   let road_id
   return Promise.all([ //------------------get existing state, city, address, county, zip, and road

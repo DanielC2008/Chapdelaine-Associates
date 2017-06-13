@@ -70,7 +70,7 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'State': '',
       'Zip Code': '',
       'County': '',
-      'Map': '',
+      'Property Map': '',
       'Parcel Number': '',
       'Plat Book': '',
       'Plat Page': '',
@@ -78,7 +78,7 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'Deed Page': '',
       'Sub Division': '',
       'Lot Number': '',
-      'Acres': '',
+      'Acres': null, 
       'Notes': ''
     }
   }   

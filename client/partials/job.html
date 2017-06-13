@@ -6,7 +6,17 @@
       <li><a ng-click="setNewTab('JobAttachment') ">Attachments</a></li>
       <li><a ng-click="setNewTab('JobEstimate') ">Estimate</a></li>
       <li><a ng-click="setNewTab('JobInvoice') ">Invoice</a></li>
-      <li><a ng-click="updateStatus()">Update Status</a></li>
+      <!-- <div class="liDuplicate" ng-init="material()"> -->
+      <div class="col s3 liDuplicate " ng-init="material()">
+        <select class="navSelect" name="select" ng-model='data.select' ng-change="update(data.select)"> 
+          <option value="" disabled>Update Job</option>
+          <option value="updateStatus">Update Status</option>
+          <option value="addClientRep">Add Client/Rep</option>
+          <option value="editClientRep">Edit Client/Rep</option>
+          <option value="{{Property ? 'editProperty' : 'addProperty'}}">{{Property ? 'Edit Property' : 'Add Property'}}</option>
+        </select>   
+      </div>  
+      <!-- <li><a ng-click="updateStatus()">Update Status</a></li> -->
       <li class="jobExit" ><a href="/#!/home">X</a></li>
     </ul>
   </nav>

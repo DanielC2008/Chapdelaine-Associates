@@ -39,6 +39,12 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
       objToAdd.main = NEW.main
     }
 
+    if(table === 'Properties') {
+      if (objToAdd.address === '' && objToAdd.road === '') {
+        JobFactory.toastReject("Please enter an Address or a Road.")
+        return
+      }
+    }
     JobFactory.addNewToJob(dataObj)
       .then( ({data: msg}) => {
         $mdDialog.hide(msg)
