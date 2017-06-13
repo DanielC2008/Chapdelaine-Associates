@@ -83,7 +83,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
     knex('Properties')
       .select(
         'Properties.property_id',
-        'Properties.Map', 
+        'Properties.property_map', 
         'Properties.parcel_number',
         'Properties.plat_book',
         'Properties.plat_page',

@@ -4,9 +4,9 @@ const schema = require('validate')
 const validationHelper = require('./validationHelper')
 
   const property = schema({
-    Map: {
+    property_map: {
       type: 'string',
-      message: 'Map must be a string.'
+      message: 'Property Map must be a string.'
     },
     parcel_number: {
       type: 'string',
