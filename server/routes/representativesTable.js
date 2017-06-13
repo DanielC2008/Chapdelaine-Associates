@@ -76,6 +76,7 @@ router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) 
         }),
         locateOrCreate.company_name(objToAdd.company_name, objToAdd.company_address).then( data => { 
           delete objToAdd.company_name
+          delete objToAdd.company_address
           objToAdd.company_id = data
         })
       ])

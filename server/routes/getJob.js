@@ -57,7 +57,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.middle_name',
         'Clients.last_name',
         'Clients.email',
-        'Clients.business_phone',
+        'Clients.home_phone',
         'Clients.mobile_phone',
         'Addresses.address',
         'Cities.city',
@@ -235,12 +235,14 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
           'Representatives.email',
           'Representatives.business_phone',
           'Representatives.mobile_phone',
-          'Representatives.company_name',
-          'Representatives.company_address'
+          'Companies.company_name',
+          'Addresses.address as company_address'
         )
         .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
         .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
         .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
+        .leftJoin('Companies', 'Representatives.company_id', 'Companies.company_id')
+        .leftJoin('Addresses', 'Companies.address_id', 'Addresses.address_id')
         .where('Jobs.job_number', job_number)
         .where('Clients.client_id', mainClientId)
         .then( data => {
