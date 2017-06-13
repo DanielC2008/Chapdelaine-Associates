@@ -13,6 +13,11 @@ body {
 nav {
   height: 50px;
 }
+
+nav ul{
+  height: inherit;
+}
+
 nav ul li {
   line-height: 50px;
   padding: 0 5px;
@@ -24,6 +29,30 @@ nav ul li .navInput {
   margin: 0;
   width: 100px;
   text-align: center
+}
+
+.liDuplicate {
+  display: inline-block;
+  height: 50px;
+  vertical-align: top;
+  margin: 0;
+}
+
+div.navSelect input.select-dropdown {
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+  display: block;
+  cursor: pointer;
+  padding: 5px 0 0 15px;
+  border-bottom: none;
+}
+
+div.navSelect span.caret {
+  font-size: 1rem;
+  left: 80px;
+  padding: 4px 0 0 15px;
+  color: white;
 }
 
 /*JOB*/

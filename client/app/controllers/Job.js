@@ -41,19 +41,19 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       JobFactory.updateLastAccessed($scope.jobNumber)
         .then()
         .catch(err => console.log('err', err))
+      $scope.material()
     })
     //can post status with .status and .statusText
     .catch( () => alert('Wooops. There doesn\'t seem to be anything here!'))
 
-  $scope.updateStatus = () => { /////////////////////////////////////////fix
+  const updateStatus = () => { 
     let locals = {
       jobInfo: { 
         tableForDB: 'Jobs',
-        jobStatus: $scope.Job['Job Status'],
-        jobNumber: $scope.Job['Job Number']
+        jobStatus: $scope.Job.job_status,
+        jobNumber: $scope.Job.job_number
       }
     }  
-
     $mdDialog.show({
       locals,
       controller: 'UpdateStatus as US',
@@ -61,6 +61,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       parent: angular.element(document.body),
       clickOutsideToClose: true
     })
+  }
+
+  $scope.update = change => {
+    if (change === 'updateStatus') {
+      updateStatus()
+    }
   }
 
 })
