@@ -221,7 +221,6 @@ module.exports = {
         .select('company_id')
         .where('company_name', company_name)
         .then( data => {
-          console.log('data', data)
           if (data[0]) {
             resolve(data[0].company_id)
             reject()
@@ -233,7 +232,6 @@ module.exports = {
               .returning('company_id')
               .insert({company_name: company_name, address_id: address_id})
               .then( data => {
-                console.log('data', data)
                 resolve(data[0])
                 reject()
               })

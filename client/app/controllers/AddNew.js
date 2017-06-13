@@ -37,6 +37,7 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
     if(table === 'Clients') {
       objToAdd.client_type = NEW.clientType
       objToAdd.main = NEW.main
+      console.log('objToAdd.main', objToAdd.main)
     }
 
     if(table === 'Properties') {
