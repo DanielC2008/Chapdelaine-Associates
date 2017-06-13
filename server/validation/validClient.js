@@ -70,7 +70,6 @@ const validationHelper = require('./validationHelper')
     },
     main: {
       type: 'boolean',
-      required: true,
       message: 'Is this the main Client?'
     }
   })
