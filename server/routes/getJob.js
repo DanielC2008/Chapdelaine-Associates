@@ -62,9 +62,11 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Addresses.address',
         'Cities.city',
         'States.state',
-        'Zip_Codes.zip'
+        'Zip_Codes.zip',
+        'Client_Types.client_type'
       )
       .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
       .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
       .leftJoin('Addresses', 'Clients.address_id', 'Addresses.address_id')      
       .leftJoin('Cities', 'Clients.city_id', 'Cities.city_id') 

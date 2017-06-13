@@ -1,6 +1,6 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope) {
+app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope, $route) {
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
@@ -63,10 +63,43 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     })
   }
 
+  const addNew = table => {
+    let locals = {
+      table: table, 
+      job_id: $scope.jobId,
+      clientArray: null
+    }
+    if (table == 'Representatives') {
+      locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
+    }
+    $mdDialog.show({
+      locals,
+      controller: 'AddNew as NEW',
+      templateUrl: '/partials/addNew.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: false,
+      escapeToClose: false
+    })
+    .then( ({msg}) => {
+      JobFactory.toastSuccess(msg)
+      $route.reload()
+    })
+    .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
+  }  
+
+
   $scope.update = change => {
     if (change === 'updateStatus') {
       updateStatus()
+    } else if (change === 'addClient') {
+      addNew('Clients')
+    } else if (change === 'addRep') {
+      addNew('Representatives')
+    } else if (change === 'addProp') {
+      addNew('Properties')
     }
   }
+
+
 
 })

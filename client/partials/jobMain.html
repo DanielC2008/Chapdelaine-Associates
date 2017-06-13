@@ -17,7 +17,7 @@
           <div id="Main">
             <div class="col s6">
               <div class="row">
-                Client's Name: {{Main.first_name}} {{Main.middle_name}} {{Main.last_name}} 
+                Client's Name: {{Main.first_name}} {{Main.middle_name}} {{Main.last_name}} ({{Main.client_type}})
               </div>
               <div class="row">
                 Mailing Address: {{Main.address}}
@@ -106,32 +106,10 @@
             </div>
           </div>
         </div>  
-
-
       </div>
-      <div id="Actions" class="col s2"> Actions
-        <div class="row">
-          <button  ng-click="JM.addBySearch('Clients')">Add Existing Client</button>
-        </div>
-        <div class="row">
-          <button  ng-click="JM.addNew('Clients')">Add New Client</button>  
-        </div>
-        <div class="row">
-          <button  ng-click="JM.addBySearch('Representatives')">Add Existing Rep</button>
-        </div>
-        <div class="row">
-          <button  ng-click="JM.addNew('Representatives')">Add New Rep</button>  
-        </div>
-        <div class="row">
-          <button  ng-click="JM.addNew('Properties')">Add New Property</button>  
-        </div>
-      </div>
-
-
     </div>
   </div>
-
-
+</div>
 
 
 
@@ -235,6 +213,6 @@
       <button type="submit" class="btn button" ng-click="JM.removeFromJob('Properties', {property_id: property.property_id})">Remove Property</button>
     </div>
   </div> -->
-</div>
+
 
 

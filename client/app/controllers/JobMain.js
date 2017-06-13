@@ -75,29 +75,4 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
       .catch( err => JobFactory.toastReject())
   }
 
-  JMScope.addNew = table => {
-    let locals = {
-      table: table, 
-      job_id: $scope.jobId,
-      clientArray: null
-    }
-    if (table == 'Representatives') {
-      locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
-    }
-    $mdDialog.show({
-      locals,
-      controller: 'AddNew as NEW',
-      templateUrl: '/partials/addNew.html',
-      parent: angular.element(document.body),
-      clickOutsideToClose: false,
-      escapeToClose: false
-    })
-    .then( ({msg}) => {
-      JobFactory.toastSuccess(msg)
-      $route.reload()
-    })
-    .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
-  }  
-
-
 })

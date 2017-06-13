@@ -35,6 +35,7 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 
 
 router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
+  
   validationHelper.checkNameExists(objToAdd, 'Clients').then( nameExists => {
 
     const errors = validateClient.validate(objToAdd) 
