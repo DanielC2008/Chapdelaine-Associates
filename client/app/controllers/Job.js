@@ -75,8 +75,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     }
     $mdDialog.show({
       locals,
-      controller: 'AddNew as NEW',
-      templateUrl: '/partials/addNew.html',
+      controller: 'Form as FORM',
+      templateUrl: '/partials/form.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
       escapeToClose: false
@@ -97,11 +97,10 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       clientArray: null,
       editable: $scope.Main
     }
-    console.log('locals', locals)
     $mdDialog.show({
       locals,
-      controller: 'AddNew as NEW',
-      templateUrl: '/partials/addNew.html',
+      controller: 'Form as FORM',
+      templateUrl: '/partials/form.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
       escapeToClose: false
