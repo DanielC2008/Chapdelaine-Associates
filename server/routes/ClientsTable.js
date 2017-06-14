@@ -18,6 +18,41 @@ const validationHelper = require('../validation/validationHelper')
 //     })
 // })
 
+router.post('/api/getFullClient', ({body: {client_id}}, res) => {
+
+  knex('Clients')
+      .select(
+        'Clients.client_id',
+        'Clients.first_name',
+        'Clients.middle_name',
+        'Clients.last_name',
+        'Clients.email',
+        'Clients.home_phone',
+        'Clients.business_phone',
+        'Clients.mobile_phone',
+        'Clients.fax_number',
+        'Clients.notes',
+        'Addresses.address',
+        'Cities.city',
+        'States.state',
+        'Zip_Codes.zip',
+        'Counties.county',
+        'Client_Types.client_type',
+        'Client_Specs_Per_Job.main'
+      )
+      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
+      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
+      .leftJoin('Addresses', 'Clients.address_id', 'Addresses.address_id')      
+      .leftJoin('Cities', 'Clients.city_id', 'Cities.city_id') 
+      .leftJoin('States', 'Clients.state_id', 'States.state_id')      
+      .leftJoin('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')      
+      .leftJoin('Counties', 'Clients.county_id', 'Counties.county_id')      
+      .where({'Clients. client_id': client_id})
+      .then(data => res.send(data[0]))
+      .catch(err => console.log('err', err))
+})
+
 router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
   knex('Client_Specs_Per_Job')
     .del()

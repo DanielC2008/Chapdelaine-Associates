@@ -10,11 +10,4 @@ app.controller('ChooseClient', function($scope, $mdDialog, clientArray) {
     $mdDialog.hide(client)
   }
 
-
-
-
-
-
-
-
 })

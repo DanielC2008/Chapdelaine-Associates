@@ -38,6 +38,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
     }
 
+    factory.getFullClient = client_id => $http.post('/api/getFullClient', client_id)
+
     factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
 
     factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch') //usefull but not utilized currently

@@ -9,6 +9,7 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
       FORM.title = 'Client'
       FORM.Display.Clients = editable ? FormFactory.toClientForm(editable) : FormFactory.getClientForm()
       FORM.clientType = editable ? editable.client_type : null
+      FORM.main = editable ? editable.main : null
       break;
     case 'Representatives':
       FORM.title = 'Representative'

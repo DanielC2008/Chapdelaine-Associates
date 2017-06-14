@@ -90,12 +90,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
 
 
 
-  const editExisiting = table => {
+  const editExisiting = (editable, table) => {
     let locals = {
       table: table, 
       job_id: $scope.jobId,
       clientArray: null,
-      editable: $scope.Main
+      editable: editable
     }
     $mdDialog.show({
       locals,
@@ -112,8 +112,20 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   }  
 
-  //const chooseOne...
-
+  const chooseClient = () => {
+    return new Promise ((resolve, reject) => {
+      let locals = {}
+        locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
+        $mdDialog.show({
+          locals,
+          controller: 'ChooseClient as CC',
+          templateUrl: '/partials/chooseClient.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose:false
+        }).then( clientId => resolve(clientId))
+          .catch(err => console.log(err))
+    })
+  }
 
   $scope.update = change => {
     if (change === 'updateStatus') {
@@ -125,7 +137,11 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } else if (change === 'addProp') {
       addNew('Properties')
     } else if (change === 'editClient') {
-      editExisiting('Clients')
+      chooseClient().then( clientId => {
+        JobFactory.getFullClient({client_id: clientId})
+          .then(({data}) => editExisiting(data, 'Clients'))
+      })
+      // editExisiting('Clients')
     } else if (change === 'editRep') {
       editExisiting('Representatives')
     } else if (change === 'editProp') {
