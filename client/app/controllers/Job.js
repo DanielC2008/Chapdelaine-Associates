@@ -67,7 +67,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     let locals = {
       table: table, 
       job_id: $scope.jobId,
-      clientArray: null
+      clientArray: null,
+      editable: null
     }
     if (table == 'Representatives') {
       locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
@@ -85,7 +86,34 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       $route.reload()
     })
     .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
+  } 
+
+
+
+  const editExisiting = table => {
+    let locals = {
+      table: table, 
+      job_id: $scope.jobId,
+      clientArray: null,
+      editable: $scope.Main
+    }
+    console.log('locals', locals)
+    $mdDialog.show({
+      locals,
+      controller: 'AddNew as NEW',
+      templateUrl: '/partials/addNew.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: false,
+      escapeToClose: false
+    })
+    .then( ({msg}) => {
+      JobFactory.toastSuccess(msg)
+      $route.reload()
+    })
+    .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   }  
+
+  //const chooseOne...
 
 
   $scope.update = change => {
@@ -97,6 +125,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       addNew('Representatives')
     } else if (change === 'addProp') {
       addNew('Properties')
+    } else if (change === 'editClient') {
+      editExisiting('Clients')
+    } else if (change === 'editRep') {
+      editExisiting('Representatives')
+    } else if (change === 'editProp') {
+      editExisiting('Properties')
     }
   }
 

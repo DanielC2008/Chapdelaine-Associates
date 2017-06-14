@@ -39,6 +39,25 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'County': '',
       'Notes': ''
     }
+  }
+
+  factory.toClientForm = client => {
+    return {
+      'First Name': client.first_name, 
+      'Middle Name': client.middle_name, 
+      'Last Name': client.last_name, 
+      'Email': client.email, 
+      'Business Phone': client.business_phone, 
+      'Mobile Phone': client.mobile_phone, 
+      'Home Phone': client.home_phone, 
+      'Fax Number': client.fax_number,
+      'Address': client.address, 
+      'City': client.city, 
+      'State': client.state, 
+      'Zip Code': client.zip, 
+      'County': client.county,
+      'Notes': client.notes
+    }
   }  
 
   factory.getRepresentativeForm = () => {

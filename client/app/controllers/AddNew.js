@@ -1,13 +1,13 @@
 'use strict'
 
-app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory, FormFactory) {
+app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray, JobFactory, FormFactory, editable) {
   let NEW = this
   NEW.Display = {}
 
   switch(table) {
     case 'Clients':
       NEW.title = 'Client'
-      NEW.Display.Clients = FormFactory.getClientForm()
+      NEW.Display.Clients = editable ? FormFactory.toClientForm(editable) : FormFactory.getClientForm()
       break;
     case 'Representatives':
       NEW.title = 'Representative'
@@ -37,7 +37,6 @@ app.controller('AddNew', function($scope, $mdDialog, table, job_id, clientArray,
     if(table === 'Clients') {
       objToAdd.client_type = NEW.clientType
       objToAdd.main = NEW.main
-      console.log('objToAdd.main', objToAdd.main)
     }
 
     if(table === 'Properties') {
