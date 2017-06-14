@@ -138,7 +138,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       addNew('Properties')
     } else if (change === 'editClient') {
       chooseClient().then( clientId => {
-        JobFactory.getFullClient({client_id: clientId})
+        JobFactory.getFullClientById({client_id: clientId})
           .then(({data}) => editExisiting(data, 'Clients'))
       })
       // editExisiting('Clients')

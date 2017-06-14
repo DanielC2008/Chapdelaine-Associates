@@ -6,10 +6,11 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
 
   switch(table) {
     case 'Clients':
-      FORM.title = 'Client'
+      FORM.title = editable ? 'Update Client' : 'Add New Client'
       FORM.Display.Clients = editable ? FormFactory.toClientForm(editable) : FormFactory.getClientForm()
       FORM.clientType = editable ? editable.client_type : null
       FORM.main = editable ? editable.main : null
+      FORM.edit = editable ? true : false
       break;
     case 'Representatives':
       FORM.title = 'Representative'
@@ -65,6 +66,28 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
 
   FORM.reject = () => {
     $mdDialog.cancel({msg: 'Nothing Saved!'})
+  }
+
+  FORM.update = () => {
+    //match DB keys
+    let updates = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+    //add if Clients
+    if(table === 'Clients') {
+      updates.client_type = FORM.clientType
+      updates.main = FORM.main
+    }
+    //create obj with only edited columns
+    let objToUpdate = JobFactory.getEditedColumns(editable, updates)
+    //remove client_id
+    let client_id = objToUpdate.client_id
+    delete objToUpdate.client_id
+    //build obj to send to DB
+    let dataObj = {
+      objToUpdate,
+      client_id: client_id
+    }
+    //send to DB
+    JobFactory.updateClient(dataObj)
   }
 
 

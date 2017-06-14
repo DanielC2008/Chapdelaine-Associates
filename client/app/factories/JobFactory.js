@@ -38,7 +38,9 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
     }
 
-    factory.getFullClient = client_id => $http.post('/api/getFullClient', client_id)
+    factory.updateClient = dataObj => $http.post('/api/updateClient', dataObj)
+
+    factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
 
     factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
 
@@ -101,6 +103,16 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       for (let key in obj){
         obj[key.toLowerCase().replace(' ', '_')] = obj[key]
         delete obj[key]
+      }
+      return obj
+    }
+
+    factory.getEditedColumns = (original, edited) => {
+      let obj  = {}
+      for( let key in original) {
+        if (original[key] != edited[`${key}`]) {
+          obj[`${key}`] = original[key]
+        }
       }
       return obj
     }

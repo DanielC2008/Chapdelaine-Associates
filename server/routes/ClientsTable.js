@@ -18,7 +18,7 @@ const validationHelper = require('../validation/validationHelper')
 //     })
 // })
 
-router.post('/api/getFullClient', ({body: {client_id}}, res) => {
+router.post('/api/getFullClientById', ({body: {client_id}}, res) => {
 
   knex('Clients')
       .select(
@@ -35,7 +35,7 @@ router.post('/api/getFullClient', ({body: {client_id}}, res) => {
         'Addresses.address',
         'Cities.city',
         'States.state',
-        'Zip_Codes.zip',
+        'Zip_Codes.zip_code',
         'Counties.county',
         'Client_Types.client_type',
         'Client_Specs_Per_Job.main'
@@ -86,7 +86,7 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
       let client_type_id
       let main = objToAdd.main
       delete objToAdd.main
-      return Promise.all([ //------------------get existing state, city, address, county, zip, and client_type
+      return Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
         locateOrCreate.state(objToAdd.state)
         .then( data => {
           delete objToAdd.state
@@ -104,7 +104,7 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
           delete objToAdd.county
           objToAdd.county_id = data
         }),
-        locateOrCreate.zip(objToAdd.zip_code).then( data => { 
+        locateOrCreate.zip_code(objToAdd.zip_code).then( data => { 
           delete objToAdd.zip_code
           objToAdd.zip_id = data
         }),
@@ -134,6 +134,75 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
 
     }
   })
+
+})
+
+
+router.post('/api/updateClient', ({body: {objToUpdate, client_id}}, res) => {
+  console.log('objToUpdate, client_id', objToUpdate, client_id)
+  // validationHelper.checkNameExists(objToAdd, 'Clients').then( nameExists => {
+
+  //   const errors = validateClient.validate(objToAdd) 
+
+  //   if (errors[0]) {  //------------------------------------checks each type
+  //     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+  //     res.status(400).send(msg)
+  //     return
+  //   } else if (nameExists) { //-----------------------------checks if name already exists in DB
+  //     res.status(400).send('It appears this name already exists')
+  //     return
+  //   } else {
+  //     let client_type_id
+  //     let main = objToAdd.main ? 
+  //     delete objToAdd.main
+  //     return Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
+  //       locateOrCreate.state(objToAdd.state)
+  //       .then( data => {
+  //         delete objToAdd.state
+  //         objToAdd.state_id = data
+  //       }),
+  //       locateOrCreate.city(objToAdd.city).then( data => { 
+  //         delete objToAdd.city
+  //         objToAdd.city_id = data
+  //       }),
+  //       locateOrCreate.address(objToAdd.address).then( data => { 
+  //         delete objToAdd.address
+  //         objToAdd.address_id = data
+  //       }),
+  //       locateOrCreate.county(objToAdd.county).then( data => { 
+  //         delete objToAdd.county
+  //         objToAdd.county_id = data
+  //       }),
+  //       locateOrCreate.zip_code(objToAdd.zip_code).then( data => { 
+  //         delete objToAdd.zip_code
+  //         objToAdd.zip_id = data
+  //       }),
+  //       locateOrCreate.client_type(objToAdd.client_type).then( data => { 
+  //         delete objToAdd.client_type
+  //         client_type_id = data
+  //       })
+
+  //     ])
+  //     .then( () => {
+  //       knex('Clients') //------------------------make client
+  //       .returning('client_id')
+  //       .insert(objToAdd)
+  //       .then( data => {
+  //         let client_id = data[0]
+  //         knex('Client_Specs_Per_Job')//------set ids on connecting table
+  //         .insert({
+  //           job_id,
+  //           client_id, 
+  //           client_type_id,
+  //           main
+  //         }) 
+  //         .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+  //         .catch( err => console.log(err))
+  //       }).catch( err => console.log(err))
+  //     })
+
+  //   }
+  // })
 
 })
 

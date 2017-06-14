@@ -52,7 +52,7 @@ router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) 
       res.status(400).send('It appears this name already exists')
       return
     } else {
-      return Promise.all([  //-----------------get existing state, city, address, county, zip
+      return Promise.all([  //-----------------get existing state, city, address, county, zip_code
         locateOrCreate.state(objToAdd.state)
         .then( data => {
           delete objToAdd.state
@@ -70,7 +70,7 @@ router.post('/api/addNewRepToJob', ({body: {objToAdd, job_id, client_id}}, res) 
           delete objToAdd.county
           objToAdd.county_id = data
         }),
-        locateOrCreate.zip(objToAdd.zip_code).then( data => { 
+        locateOrCreate.zip_code(objToAdd.zip_code).then( data => { 
           delete objToAdd.zip_code
           objToAdd.zip_id = data
         }),

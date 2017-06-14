@@ -54,7 +54,7 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'Address': client.address, 
       'City': client.city, 
       'State': client.state, 
-      'Zip Code': client.zip, 
+      'Zip Code': client.zip_code, 
       'County': client.county,
       'Notes': client.notes
     }
