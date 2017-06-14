@@ -78,16 +78,26 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
     }
     //create obj with only edited columns
     let objToUpdate = JobFactory.getEditedColumns(editable, updates)
-    //remove client_id
-    let client_id = objToUpdate.client_id
-    delete objToUpdate.client_id
     //build obj to send to DB
     let dataObj = {
       objToUpdate,
-      client_id: client_id
+      id: {client_id: editable.client_id}
     }
     //send to DB
     JobFactory.updateClient(dataObj)
+    .then( ({data: msg}) => {
+      $mdDialog.hide(msg)
+      for( let key in FORM.Display[`${FORM.table}`]) {
+        FORM.Display[`${FORM.table}`][key] = ''
+      }
+    })
+    .catch( ({data: msg}) => {
+      if (msg) { //------------------------client entered incorrect data type
+        JobFactory.toastReject(msg)
+      } else { //--------------------------database err
+        JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+      }
+    })
   }
 
 

@@ -21,6 +21,36 @@ const checkNameExists = (obj, table) => {
   })
 } 
 
+const checkNameExistsOnEdit = (id, edited, table) => {
+  return new Promise( (resolve, reject) => {
+    //first,middle, last exists ? check name: resolve false
+    if (edited.first_name || edited.middle_name || edited.last_name) {
+    // find old name first
+    knex(`${table}`)
+      .select('first_name','middle_name', 'last_name')
+      .where(id)
+      .then(data => {
+        let old = data[0]
+        // set name! if edited.name use that. otherwise use old name
+        let newName = {
+          first_name: edited.first_name ? edited.first_name : old.first_name,
+          middle_name: edited.middle_name ? edited.middle_name : old.middle_name,
+          last_name: edited.last_name ? edited.last_name : old.last_name
+        }
+        // check name
+        knex(`${table}`)
+          .where(newName)
+          .then(data => {
+            let exists = data[0] ? true : false
+            resolve(exists)
+          })
+      })
+    } else {
+      resolve(false)
+    }
+  })
+} 
 
 
-module.exports = {checkEmail, checkNameExists}
+
+module.exports = {checkEmail, checkNameExists, checkNameExistsOnEdit}

@@ -111,7 +111,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       let obj  = {}
       for( let key in original) {
         if (original[key] != edited[`${key}`]) {
-          obj[`${key}`] = original[key]
+          obj[`${key}`] = edited[key]
         }
       }
       return obj
