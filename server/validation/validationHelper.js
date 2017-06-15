@@ -23,21 +23,23 @@ const checkNameExists = (obj, table) => {
 
 const checkNameExistsOnEdit = (id, edited, table) => {
   return new Promise( (resolve, reject) => {
-    //first,middle, last exists ? check name: resolve false
-    if (edited.first_name || edited.middle_name || edited.last_name) {
-    // find old name first
+    //find client's old previous name
     knex(`${table}`)
       .select('first_name','middle_name', 'last_name')
       .where(id)
       .then(data => {
         let old = data[0]
-        // set name! if edited.name use that. otherwise use old name
+        //check if the name has changed
+        if( !nameChanged(old, edited)) {
+          resolve(false)
+        }
+        //build new name 
         let newName = {
           first_name: edited.first_name ? edited.first_name : old.first_name,
           middle_name: edited.middle_name ? edited.middle_name : old.middle_name,
           last_name: edited.last_name ? edited.last_name : old.last_name
         }
-        // check name
+        // check new name
         knex(`${table}`)
           .where(newName)
           .then(data => {
@@ -45,12 +47,16 @@ const checkNameExistsOnEdit = (id, edited, table) => {
             resolve(exists)
           })
       })
-    } else {
-      resolve(false)
-    }
   })
 } 
 
+const nameChanged = (o, n) => {
+  if (o.first_name === n.first_name && o.middle_name === n.middle_name && o.last_name === n.last_name) {
+    return false
+  } else {
+    return true
+  }
+}
 
 
 module.exports = {checkEmail, checkNameExists, checkNameExistsOnEdit}

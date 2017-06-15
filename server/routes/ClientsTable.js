@@ -141,6 +141,7 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
 router.post('/api/updateClient', ({body: {objToUpdate, id}}, res) => {
 
   validationHelper.checkNameExistsOnEdit(id, objToUpdate, 'Clients').then( nameExists => {
+    
     const errors = validateClient.validate(objToUpdate)
     if (errors[0]) {  //------------------------------------checks each type
       let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -149,14 +150,15 @@ router.post('/api/updateClient', ({body: {objToUpdate, id}}, res) => {
     } else if (nameExists) { //-----------------------------checks if name already exists in DB
       res.status(400).send('It appears this name already exists')
     } else {
+
       let specsObj = {} //-----------must seperate main & client_type, they are on a different table
-      if (objToUpdate.client_type) {
-        specsObj.client_type = objToUpdate.client_type
-        delete objToUpdate.client_type
-      } else if (objToUpdate.main) {
-        specsObj.main = objToUpdate.main
-        delete objToUpdate.main
-      }
+
+      specsObj.client_type = objToUpdate.client_type
+      specsObj.main = objToUpdate.main
+
+      delete objToUpdate.client_type
+      delete objToUpdate.main
+
       console.log('objToUpdate', objToUpdate)
       console.log('specsObj', specsObj)
   //     return Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type

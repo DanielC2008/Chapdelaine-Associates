@@ -70,14 +70,14 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
 
   FORM.update = () => {
     //match DB keys
-    let updates = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+    let objToUpdate = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     //add if Clients
     if(table === 'Clients') {
-      updates.client_type = FORM.clientType
-      updates.main = FORM.main
+      objToUpdate.client_type = FORM.clientType
+      objToUpdate.main = FORM.main
     }
-    //create obj with only edited columns
-    let objToUpdate = JobFactory.getEditedColumns(editable, updates)
+    // //create obj with only edited columns
+    // let objToUpdate = JobFactory.getEditedColumns(editable, updates)
     //build obj to send to DB
     let dataObj = {
       objToUpdate,
