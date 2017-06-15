@@ -13,40 +13,41 @@ const checkNameExists = (obj, table) => {
   }
   return new Promise( (resolve, reject) => {
     knex(`${table}`)
-      .where(name)
+    .where(name)
+    .then(data => {
+      let exists = data[0] ? true : false
+      resolve(exists)
+    })
+  })
+} 
+
+const checkNameExistsOnEdit = (idObj, edited, table) => {
+  console.log('idObj', idObj)
+  return new Promise( (resolve, reject) => {
+    //find client's old previous name
+    knex(`${table}`)
+    .select('first_name','middle_name', 'last_name')
+    .where(idObj)
+    .then(data => {
+      let old = data[0]
+      //check if the name has changed
+      if( !nameChanged(old, edited)) {
+        resolve(false)
+      }
+      //build new name 
+      let newName = {
+        first_name: edited.first_name ? edited.first_name : old.first_name,
+        middle_name: edited.middle_name ? edited.middle_name : old.middle_name,
+        last_name: edited.last_name ? edited.last_name : old.last_name
+      }
+      // check new name
+      knex(`${table}`)
+      .where(newName)
       .then(data => {
         let exists = data[0] ? true : false
         resolve(exists)
       })
-  })
-} 
-
-const checkNameExistsOnEdit = (id, edited, table) => {
-  return new Promise( (resolve, reject) => {
-    //find client's old previous name
-    knex(`${table}`)
-      .select('first_name','middle_name', 'last_name')
-      .where(id)
-      .then(data => {
-        let old = data[0]
-        //check if the name has changed
-        if( !nameChanged(old, edited)) {
-          resolve(false)
-        }
-        //build new name 
-        let newName = {
-          first_name: edited.first_name ? edited.first_name : old.first_name,
-          middle_name: edited.middle_name ? edited.middle_name : old.middle_name,
-          last_name: edited.last_name ? edited.last_name : old.last_name
-        }
-        // check new name
-        knex(`${table}`)
-          .where(newName)
-          .then(data => {
-            let exists = data[0] ? true : false
-            resolve(exists)
-          })
-      })
+    })
   })
 } 
 

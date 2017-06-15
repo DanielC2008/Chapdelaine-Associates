@@ -81,7 +81,7 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
     //build obj to send to DB
     let dataObj = {
       objToUpdate,
-      id: {client_id: editable.client_id}
+      idsArr: [{client_id: editable.client_id}, {job_id: job_id}]
     }
     //send to DB
     JobFactory.updateClient(dataObj)

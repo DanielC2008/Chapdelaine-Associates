@@ -112,7 +112,6 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
           delete objToAdd.client_type
           client_type_id = data
         })
-
       ])
       .then( () => {
         knex('Clients') //------------------------make client
@@ -138,10 +137,12 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
 })
 
 
-router.post('/api/updateClient', ({body: {objToUpdate, id}}, res) => {
+router.post('/api/updateClient', ({body: {objToUpdate, idsArr, job_id}}, res) => {
+  const clientId = idsArr[0]
+  const jobId = idsArr[1]
 
-  validationHelper.checkNameExistsOnEdit(id, objToUpdate, 'Clients').then( nameExists => {
-    
+  validationHelper.checkNameExistsOnEdit(clientId, objToUpdate, 'Clients').then( nameExists => {
+
     const errors = validateClient.validate(objToUpdate)
     if (errors[0]) {  //------------------------------------checks each type
       let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -150,63 +151,53 @@ router.post('/api/updateClient', ({body: {objToUpdate, id}}, res) => {
     } else if (nameExists) { //-----------------------------checks if name already exists in DB
       res.status(400).send('It appears this name already exists')
     } else {
-
-      let specsObj = {} //-----------must seperate main & client_type, they are on a different table
-
-      specsObj.client_type = objToUpdate.client_type
-      specsObj.main = objToUpdate.main
-
-      delete objToUpdate.client_type
+      let client_type_id
+      let main = objToUpdate.main
       delete objToUpdate.main
 
-      console.log('objToUpdate', objToUpdate)
-      console.log('specsObj', specsObj)
-  //     return Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
-  //       locateOrCreate.state(objToUpdate.state)
-  //       .then( data => {
-  //         delete objToUpdate.state
-  //         objToUpdate.state_id = data
-  //       }),
-  //       locateOrCreate.city(objToUpdate.city).then( data => { 
-  //         delete objToUpdate.city
-  //         objToUpdate.city_id = data
-  //       }),
-  //       locateOrCreate.address(objToUpdate.address).then( data => { 
-  //         delete objToUpdate.address
-  //         objToUpdate.address_id = data
-  //       }),
-  //       locateOrCreate.county(objToUpdate.county).then( data => { 
-  //         delete objToUpdate.county
-  //         objToUpdate.county_id = data
-  //       }),
-  //       locateOrCreate.zip_code(objToUpdate.zip_code).then( data => { 
-  //         delete objToUpdate.zip_code
-  //         objToUpdate.zip_id = data
-  //       }),
-  //       locateOrCreate.client_type(objToUpdate.client_type).then( data => { 
-  //         delete objToUpdate.client_type
-  //         client_type_id = data
-  //       })
-
-  //     ])
-  //     .then( () => {
-  //       knex('Clients') //------------------------make client
-  //       .returning('client_id')
-  //       .insert(objToUpdate)
-  //       .then( data => {
-  //         let client_id = data[0]
-  //         knex('Client_Specs_Per_Job')//------set ids on connecting table
-  //         .insert({
-  //           job_id,
-  //           client_id, 
-  //           client_type_id,
-  //           main
-  //         }) 
-  //         .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-  //         .catch( err => console.log(err))
-  //       }).catch( err => console.log(err))
-  //     })
-
+      return Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
+        locateOrCreate.state(objToUpdate.state)
+        .then( data => {
+          delete objToUpdate.state
+          objToUpdate.state_id = data
+        }),
+        locateOrCreate.city(objToUpdate.city).then( data => { 
+          delete objToUpdate.city
+          objToUpdate.city_id = data
+        }),
+        locateOrCreate.address(objToUpdate.address).then( data => { 
+          delete objToUpdate.address
+          objToUpdate.address_id = data
+        }),
+        locateOrCreate.county(objToUpdate.county).then( data => { 
+          delete objToUpdate.county
+          objToUpdate.county_id = data
+        }),
+        locateOrCreate.zip_code(objToUpdate.zip_code).then( data => { 
+          delete objToUpdate.zip_code
+          objToUpdate.zip_id = data
+        }),
+        locateOrCreate.client_type(objToUpdate.client_type).then( data => { 
+          delete objToUpdate.client_type
+          client_type_id = data
+        })
+      ])
+      .then( () => {
+        knex('Clients') //------------------------make client
+        .update(objToUpdate)
+        .where(clientId)
+        .then( () => {
+          knex('Client_Specs_Per_Job')//------set ids on connecting table
+          .update({
+            client_type_id, 
+            main
+          })
+          .where(clientId)
+          .andWhere(jobId)
+          .then( data => res.send({msg: 'Successfully updated Job!'}))
+          .catch( err => console.log(err))
+        }).catch( err => console.log(err))
+      })
     }
   })
 
