@@ -73,10 +73,11 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
   const addNew = (table, client_id = null) => {
     let locals = {
       table: table, 
-      job_id: $scope.jobId,
+      ids: {
+        job_id: $scope.jobId,
+        client_id: client_id 
+      },
       editable: null, 
-      client_id: client_id,
-      rep_id: null
     }
     $mdDialog.show({
       locals,
@@ -99,11 +100,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
 
   const editExisiting = (editable, table, rep_id) => {
     let locals = {
-      table: table, 
-      job_id: $scope.jobId,
+      table: table,
+      ids: {
+        job_id: $scope.jobId,
+        rep_id: rep_id
+      },
       editable: editable,
-      client_id: null,
-      rep_id: rep_id
     }
     $mdDialog.show({
       locals,
