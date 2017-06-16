@@ -7,19 +7,8 @@ const router = Router()
 const locateOrCreate = require('../locateOrCreate')
 const validateClient = require('../validation/validClient')
 const validationHelper = require('../validation/validationHelper') 
-// router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
-//   knex(`${table}`)
-//     .update(obj)
-//     .where(id)
-//     .then( data => res.send({msg: 'Your data was saved successfully!'}))
-//     .catch( err => {
-//       console.log(err)
-//       res.send({msg: 'Something went wrong! Please try again.'})
-//     })
-// })
 
 router.post('/api/getFullClientById', ({body: {client_id}}, res) => {
-
   knex('Clients')
       .select(
         'Clients.client_id',
@@ -70,138 +59,120 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 
 
 router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
-  
-  validationHelper.checkNameExists(objToAdd, 'Clients').then( nameExists => {
-
-    const errors = validateClient.validate(objToAdd) 
-
-    if (errors[0]) {  //------------------------------------checks each type
-      let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-      res.status(400).send(msg)
-      return
-    } else if (nameExists) { //-----------------------------checks if name already exists in DB
-      res.status(400).send('It appears this name already exists')
-      return
-    } else {
-      let client_type_id
-      let main = objToAdd.main
-      delete objToAdd.main
-      return Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
-        locateOrCreate.state(objToAdd.state)
-        .then( data => {
-          delete objToAdd.state
-          objToAdd.state_id = data
-        }),
-        locateOrCreate.city(objToAdd.city).then( data => { 
-          delete objToAdd.city
-          objToAdd.city_id = data
-        }),
-        locateOrCreate.address(objToAdd.address).then( data => { 
-          delete objToAdd.address
-          objToAdd.address_id = data
-        }),
-        locateOrCreate.county(objToAdd.county).then( data => { 
-          delete objToAdd.county
-          objToAdd.county_id = data
-        }),
-        locateOrCreate.zip_code(objToAdd.zip_code).then( data => { 
-          delete objToAdd.zip_code
-          objToAdd.zip_id = data
-        }),
-        locateOrCreate.client_type(objToAdd.client_type).then( data => { 
-          delete objToAdd.client_type
-          client_type_id = data
+  const errors = validateClient.validate(objToAdd)
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    validationHelper.checkNameExists(objToAdd, 'Clients').then( nameExists => {//true/false
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send(nameExists)
+      } else {
+        let main = objToAdd.main
+        delete objToAdd.main
+        getConnectTableIds(objToAdd).then( data => {
+          let client_type_id = data.client_type_id
+          let objToAdd = data.obj
+          console.log('objToAdd', objToAdd)
+          knex('Clients') //------------------------make client
+          .returning('client_id')
+          .insert(objToAdd)
+          .then( data => {
+            let client_id = data[0]
+            knex('Client_Specs_Per_Job')//------set ids on connecting table
+            .insert({
+              job_id,
+              client_id, 
+              client_type_id,
+              main
+            }) 
+            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+            .catch( err => console.log(err))
+          }).catch( err => console.log(err))
         })
-      ])
-      .then( () => {
-        knex('Clients') //------------------------make client
-        .returning('client_id')
-        .insert(objToAdd)
-        .then( data => {
-          let client_id = data[0]
-          knex('Client_Specs_Per_Job')//------set ids on connecting table
-          .insert({
-            job_id,
-            client_id, 
-            client_type_id,
-            main
-          }) 
-          .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-          .catch( err => console.log(err))
-        }).catch( err => console.log(err))
-      })
-
-    }
-  })
-
+      } 
+    })   
+  }
 })
 
 
-router.post('/api/updateClient', ({body: {objToUpdate, idsArr, job_id}}, res) => {
+router.post('/api/updateClient', ({body: {objToUpdate, idsArr}}, res) => {
   const clientId = idsArr[0]
   const jobId = idsArr[1]
-
-  validationHelper.checkNameExistsOnEdit(clientId, objToUpdate, 'Clients').then( nameExists => {
-
-    const errors = validateClient.validate(objToUpdate)
-    if (errors[0]) {  //------------------------------------checks each type
-      let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-      res.status(400).send(msg)
-      return
-    } else if (nameExists) { //-----------------------------checks if name already exists in DB
-      res.status(400).send('It appears this name already exists')
-    } else {
-      let client_type_id
-      let main = objToUpdate.main
-      delete objToUpdate.main
-
-      return Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
-        locateOrCreate.state(objToUpdate.state)
-        .then( data => {
-          delete objToUpdate.state
-          objToUpdate.state_id = data
-        }),
-        locateOrCreate.city(objToUpdate.city).then( data => { 
-          delete objToUpdate.city
-          objToUpdate.city_id = data
-        }),
-        locateOrCreate.address(objToUpdate.address).then( data => { 
-          delete objToUpdate.address
-          objToUpdate.address_id = data
-        }),
-        locateOrCreate.county(objToUpdate.county).then( data => { 
-          delete objToUpdate.county
-          objToUpdate.county_id = data
-        }),
-        locateOrCreate.zip_code(objToUpdate.zip_code).then( data => { 
-          delete objToUpdate.zip_code
-          objToUpdate.zip_id = data
-        }),
-        locateOrCreate.client_type(objToUpdate.client_type).then( data => { 
-          delete objToUpdate.client_type
-          client_type_id = data
-        })
-      ])
-      .then( () => {
-        knex('Clients') //------------------------make client
-        .update(objToUpdate)
-        .where(clientId)
-        .then( () => {
-          knex('Client_Specs_Per_Job')//------set ids on connecting table
-          .update({
-            client_type_id, 
-            main
-          })
+  const errors = validateClient.validate(objToUpdate)
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    validationHelper.checkNameExistsOnEdit(clientId, objToUpdate, 'Clients').then( nameExists => {//true/false
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send(nameExists)
+      } else {
+        let main = objToUpdate.main
+        delete objToUpdate.main
+        getConnectTableIds(objToUpdate).then( data => {
+          let client_type_id = data.client_type_id
+          let objToUpdate = data.obj
+          knex('Clients') //------------------------find client
+          .update(objToUpdate)
           .where(clientId)
-          .andWhere(jobId)
-          .then( data => res.send({msg: 'Successfully updated Job!'}))
-          .catch( err => console.log(err))
-        }).catch( err => console.log(err))
-      })
-    }
-  })
-
+          .then( () => {
+            knex('Client_Specs_Per_Job')//------set ids on connecting table
+            .update({
+              client_type_id, 
+              main
+            })
+            .where(clientId)
+            .andWhere(jobId)
+            .then( data => res.send({msg: 'Successfully updated Job!'}))
+            .catch( err => console.log(err))
+          }).catch( err => console.log(err))        
+        })
+      }
+    })
+  }
 })
+
+
+const getConnectTableIds = obj => {
+  let client_type_id
+  return new Promise( (resolve, reject) => {
+    Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
+      locateOrCreate.state(obj.state)
+      .then( data => {
+        delete obj.state
+        obj.state_id = data
+      }),
+      locateOrCreate.city(obj.city).then( data => { 
+        delete obj.city
+        obj.city_id = data
+      }),
+      locateOrCreate.address(obj.address).then( data => { 
+        delete obj.address
+        obj.address_id = data
+      }),
+      locateOrCreate.county(obj.county).then( data => { 
+        delete obj.county
+        obj.county_id = data
+      }),
+      locateOrCreate.zip_code(obj.zip_code).then( data => { 
+        delete obj.zip_code
+        obj.zip_id = data
+      }),
+      locateOrCreate.client_type(obj.client_type).then( data => { 
+        delete obj.client_type
+        client_type_id = data
+      })
+    ])
+    .then( () => {
+      let data = {
+        obj: obj,
+        client_type_id
+      }
+      resolve( data)
+    })
+  })
+}
 
 
 module.exports = router

@@ -15,14 +15,13 @@ const checkNameExists = (obj, table) => {
     knex(`${table}`)
     .where(name)
     .then(data => {
-      let exists = data[0] ? true : false
+      let exists = data[0] ? 'It appears this name already exists.' : false
       resolve(exists)
     })
   })
 } 
 
 const checkNameExistsOnEdit = (idObj, edited, table) => {
-  console.log('idObj', idObj)
   return new Promise( (resolve, reject) => {
     //find client's old previous name
     knex(`${table}`)
@@ -44,7 +43,7 @@ const checkNameExistsOnEdit = (idObj, edited, table) => {
       knex(`${table}`)
       .where(newName)
       .then(data => {
-        let exists = data[0] ? true : false
+        let exists = data[0] ? 'It appears this name already exists.' : false
         resolve(exists)
       })
     })
