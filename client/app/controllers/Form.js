@@ -7,14 +7,14 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, client_id, Job
   switch(table) {
     case 'Clients':
       FORM.title = editable ? 'Update Client' : 'Add New Client'
-      FORM.Display.Clients = editable ? FormFactory.toClientForm(editable) : FormFactory.getClientForm()
+      FORM.Display.Clients = FormFactory.getClientForm(editable)
       FORM.clientType = editable ? editable.client_type : null
       FORM.main = editable ? editable.main : null
       FORM.edit = editable ? true : false
       break;
     case 'Representatives':
       FORM.title = editable ? 'Update Representatives' : 'Add New Representatives'
-      FORM.Display.Representatives = editable ? FormFactory.toRepForm(editable) : FormFactory.getRepForm()
+      FORM.Display.Representatives = FormFactory.getRepForm(editable)
       FORM.client_id = client_id
       break;
     case 'Properties':

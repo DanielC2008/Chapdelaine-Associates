@@ -51,7 +51,7 @@ router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
 
 router.post('/api/addExistingRepToJob', ({body: {objToAdd: {representative_id, job_id, client_id}}}, res) => {
   knex('Client_Specs_Per_Job')  
-      .update({ representative_id }) //----------------this update means that there can only be one rep per client per job
+      .update({ representative_id }) //--------this update means that there can only be one rep per client per job
       .where({
         job_id,
         client_id
