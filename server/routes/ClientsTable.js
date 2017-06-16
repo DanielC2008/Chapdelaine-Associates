@@ -58,25 +58,26 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 })
 
 
-router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
-  const errors = validateClient.validate(objToAdd)
+router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
+  console.log('dbObj, idsArr', dbObj, idsArr)
+  const job_id = idsArr[0].job_id
+  const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExists(objToAdd, 'Clients').then( nameExists => {//true/false
+    validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {
-        let main = objToAdd.main
-        delete objToAdd.main
-        getConnectTableIds(objToAdd).then( data => {
+        let main = dbObj.main
+        delete dbObj.main
+        getConnectTableIds(dbObj).then( data => {
           let client_type_id = data.client_type_id
-          let objToAdd = data.obj
-          console.log('objToAdd', objToAdd)
+          let polishedObj = data.obj
           knex('Clients') //------------------------make client
           .returning('client_id')
-          .insert(objToAdd)
+          .insert(polishedObj)
           .then( data => {
             let client_id = data[0]
             knex('Client_Specs_Per_Job')//------set ids on connecting table
@@ -96,25 +97,25 @@ router.post('/api/addNewClientToJob', ({body: {objToAdd, job_id}}, res) => {
 })
 
 
-router.post('/api/updateClient', ({body: {objToUpdate, idsArr}}, res) => {
+router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
   const clientId = idsArr[0]
   const jobId = idsArr[1]
-  const errors = validateClient.validate(objToUpdate)
+  const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit(clientId, objToUpdate, 'Clients').then( nameExists => {//true/false
+    validationHelper.checkNameExistsOnEdit(clientId, dbObj, 'Clients').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {
-        let main = objToUpdate.main
-        delete objToUpdate.main
-        getConnectTableIds(objToUpdate).then( data => {
+        let main = dbObj.main
+        delete dbObj.main
+        getConnectTableIds(dbObj).then( data => {
           let client_type_id = data.client_type_id
-          let objToUpdate = data.obj
+          let polishedObj = data.obj
           knex('Clients') //------------------------find client
-          .update(objToUpdate)
+          .update(polishedObj)
           .where(clientId)
           .then( () => {
             knex('Client_Specs_Per_Job')//------set ids on connecting table

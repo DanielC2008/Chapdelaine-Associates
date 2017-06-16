@@ -5,15 +5,15 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
   const factory = {}
 
 
-    factory.addNewToJob = dataObj => {
-      if (dataObj.table === 'Clients'){
-        return $http.post('/api/addNewClientToJob', dataObj)
+    factory.addNewToJob = dbPackage => {
+      if (dbPackage.table === 'Clients'){
+        return $http.post('/api/addNewClientToJob', dbPackage)
       } 
-      else if (dataObj.table === 'Representatives'){
-        return $http.post('/api/addNewRepToJob', dataObj)
+      else if (dbPackage.table === 'Representatives'){
+        return $http.post('/api/addNewRepToJob', dbPackage)
       } 
-      else if (dataObj.table === 'Properties'){
-        return $http.post('/api/addNewPropertyToJob', dataObj)
+      else if (dbPackage.table === 'Properties'){
+        return $http.post('/api/addNewPropertyToJob', dbPackage)
       }
     }
     
@@ -38,7 +38,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
     }
 
-    factory.updateClient = dataObj => $http.post('/api/updateClient', dataObj)
+    factory.updateClient = dbPackage => $http.post('/api/updateClient', dbPackage)
 
     factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
 
