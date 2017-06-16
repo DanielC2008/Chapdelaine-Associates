@@ -11,6 +11,11 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       .catch(err => console.log('err', err))
    }
 
+  const resetSelect = () => {
+    $scope.data.select = ''
+    $scope.material()
+  }
+
   $scope.material = () => {
     $(document).ready(function() {  
       $('select').material_select()
@@ -61,18 +66,22 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       parent: angular.element(document.body),
       clickOutsideToClose: true
     })
+    .then( () => {})
+    .catch( () => resetSelect())
   }
 
   const addNew = (table, client_id = null) => {
     let locals = {
       table: table, 
-      job_id: $scope.jobId,
+      ids: {
+        job_id: $scope.jobId,
+        client_id: client_id 
+      },
       editable: null, 
-      client_id: client_id,
-      rep_id: null
     }
     $mdDialog.show({
       locals,
+      fullscreen: true,
       controller: 'Form as FORM',
       templateUrl: '/partials/form.html',
       parent: angular.element(document.body),
@@ -83,19 +92,24 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       JobFactory.toastSuccess(msg)
       $route.reload()
     })
-    .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
+    .catch( data => {
+      resetSelect()
+      data.msg ? JobFactory.toastReject(data.msg) : null
+    }) 
   } 
 
   const editExisiting = (editable, table, rep_id) => {
     let locals = {
-      table: table, 
-      job_id: $scope.jobId,
+      table: table,
+      ids: {
+        job_id: $scope.jobId,
+        rep_id: rep_id
+      },
       editable: editable,
-      client_id: null,
-      rep_id: rep_id
     }
     $mdDialog.show({
       locals,
+      fullscreen: true,
       controller: 'Form as FORM',
       templateUrl: '/partials/form.html',
       parent: angular.element(document.body),
@@ -106,7 +120,10 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       JobFactory.toastSuccess(msg)
       $route.reload()
     })
-    .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
+    .catch( data => {
+      resetSelect()
+      data.msg ? JobFactory.toastReject(data.msg) : null
+    })
   }  
 
   const chooseOne = (table, options) => {
