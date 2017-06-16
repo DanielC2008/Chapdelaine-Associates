@@ -94,16 +94,16 @@ module.exports = {
     })
   },
 
-  zip: zip => {
+  zip_code: zip_code => {
     return new Promise( (resolve, reject) => {
-      if(!zip) { 
+      if(!zip_code) { 
         resolve(null) 
         reject()
       }
       else {   
         knex('Zip_Codes')
         .select('zip_id')
-        .where('zip', zip)
+        .where('zip_code', zip_code)
         .then( data => {
           if (data[0]) {
             resolve(data[0].zip_id)
@@ -112,7 +112,7 @@ module.exports = {
           else {
             knex('Zip_Codes')
             .returning('zip_id')
-            .insert({zip: zip})
+            .insert({zip_code: zip_code})
             .then( data => {
               resolve(data[0])
               reject()

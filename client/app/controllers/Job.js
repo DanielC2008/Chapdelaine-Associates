@@ -35,12 +35,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       $scope.jobId = $scope.Job.job_id
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
-       .then( ({data}) => $scope.showTab = data.showTab)
-       .catch( err => console.log('err', err))
+     .then( ({data}) => $scope.showTab = data.showTab)
+     .catch( err => console.log('err', err))
       //last access update
       JobFactory.updateLastAccessed($scope.jobNumber)
-        .then()
-        .catch(err => console.log('err', err))
+      .then()
+      .catch(err => console.log('err', err))
       $scope.material()
     })
     //can post status with .status and .statusText
@@ -63,19 +63,41 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     })
   }
 
-  const addNew = table => {
+  const addNew = (table, client_id = null) => {
     let locals = {
       table: table, 
       job_id: $scope.jobId,
-      clientArray: null
-    }
-    if (table == 'Representatives') {
-      locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
+      editable: null, 
+      client_id: client_id,
+      rep_id: null
     }
     $mdDialog.show({
       locals,
-      controller: 'AddNew as NEW',
-      templateUrl: '/partials/addNew.html',
+      controller: 'Form as FORM',
+      templateUrl: '/partials/form.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: false,
+      escapeToClose: false
+    })
+    .then( ({msg}) => {
+      JobFactory.toastSuccess(msg)
+      $route.reload()
+    })
+    .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
+  } 
+
+  const editExisiting = (editable, table, rep_id) => {
+    let locals = {
+      table: table, 
+      job_id: $scope.jobId,
+      editable: editable,
+      client_id: null,
+      rep_id: rep_id
+    }
+    $mdDialog.show({
+      locals,
+      controller: 'Form as FORM',
+      templateUrl: '/partials/form.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
       escapeToClose: false
@@ -87,6 +109,20 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   }  
 
+  const chooseOne = (table, options) => {
+    let locals = { optionsArr : JobFactory.createArrForChooseOne(table, options) }
+    return new Promise ((resolve, reject) => {
+      $mdDialog.show({
+        locals,
+        controller: 'ChooseOne as CO',
+        templateUrl: '/partials/chooseOne.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose:false
+      })
+      .then( id => resolve(id))
+      .catch(err => console.log(err))
+    })
+  }
 
   $scope.update = change => {
     if (change === 'updateStatus') {
@@ -94,9 +130,23 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } else if (change === 'addClient') {
       addNew('Clients')
     } else if (change === 'addRep') {
-      addNew('Representatives')
+      chooseOne('Clients', $scope.Clients).then( client_id => {
+        addNew('Representatives', client_id) 
+      })
     } else if (change === 'addProp') {
       addNew('Properties')
+    } else if (change === 'editClient') {
+      chooseOne('Clients', $scope.Clients).then( clientId => {
+        JobFactory.getFullClientById({client_id: clientId})
+          .then(({data}) => editExisiting(data, 'Clients'))
+      })
+    } else if (change === 'editRep') {
+      chooseOne('Representatives', $scope.Representatives).then( rep_id => {
+        JobFactory.getFullRepById({representative_id: rep_id})
+          .then(({data}) => editExisiting(data, 'Representatives', rep_id))
+      })
+    } else if (change === 'editProp') {
+      editExisiting('Properties')
     }
   }
 

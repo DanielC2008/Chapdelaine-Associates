@@ -59,10 +59,12 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Clients.email',
         'Clients.home_phone',
         'Clients.mobile_phone',
+        'Clients.notes',
         'Addresses.address',
         'Cities.city',
         'States.state',
-        'Zip_Codes.zip',
+        'Zip_Codes.zip_code',
+        'Counties.county',
         'Client_Types.client_type'
       )
       .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
@@ -72,6 +74,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       .leftJoin('Cities', 'Clients.city_id', 'Cities.city_id') 
       .leftJoin('States', 'Clients.state_id', 'States.state_id')      
       .leftJoin('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')      
+      .leftJoin('Counties', 'Clients.county_id', 'Counties.county_id')      
       .where('Jobs.job_number', job_number)
       .where('Client_Specs_Per_Job.main', true )
       .then(data => {
@@ -98,7 +101,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Counties.county',
         'Cities.city',
         'States.state',
-        'Zip_Codes.zip'
+        'Zip_Codes.zip_code'
       )
       .join('Jobs_Properties', 'Properties.property_id', 'Jobs_Properties.property_id')
       .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')
@@ -185,9 +188,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .select(
           'Clients.client_id',
           'Representatives.representative_id',
-          'Representatives.first_name as First Name',
-          'Representatives.middle_name as Middle Name',
-          'Representatives.last_name as Last Name'
+          'Representatives.first_name',
+          'Representatives.middle_name',
+          'Representatives.last_name'
         )
         .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
         .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')

@@ -37,7 +37,7 @@ router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
   }
   let address_id
   let road_id
-  return Promise.all([ //------------------get existing state, city, address, county, zip, and road
+  return Promise.all([ //------------------get existing state, city, address, county, zip_code, and road
     locateOrCreate.state(objToAdd.state)
     .then( data => {
       delete objToAdd.state
@@ -51,7 +51,7 @@ router.post('/api/addNewPropertyToJob', ({body: {objToAdd, job_id}}, res) => {
       delete objToAdd.county
       objToAdd.county_id = data
     }),
-    locateOrCreate.zip(objToAdd.zip_code).then( data => { 
+    locateOrCreate.zip_code(objToAdd.zip_code).then( data => { 
       delete objToAdd.zip_code
       objToAdd.zip_id = data
     }),

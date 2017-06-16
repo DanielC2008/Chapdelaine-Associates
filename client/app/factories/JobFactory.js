@@ -5,15 +5,15 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
   const factory = {}
 
 
-    factory.addNewToJob = dataObj => {
-      if (dataObj.table === 'Clients'){
-        return $http.post('/api/addNewClientToJob', dataObj)
+    factory.addNewToJob = dbPackage => {
+      if (dbPackage.table === 'Clients'){
+        return $http.post('/api/addNewClientToJob', dbPackage)
       } 
-      else if (dataObj.table === 'Representatives'){
-        return $http.post('/api/addNewRepToJob', dataObj)
+      else if (dbPackage.table === 'Representatives'){
+        return $http.post('/api/addNewRepToJob', dbPackage)
       } 
-      else if (dataObj.table === 'Properties'){
-        return $http.post('/api/addNewPropertyToJob', dataObj)
+      else if (dbPackage.table === 'Properties'){
+        return $http.post('/api/addNewPropertyToJob', dbPackage)
       }
     }
     
@@ -37,6 +37,31 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
         return $http.post('/api/removePropertyFromJob', dataObj)
       }
     }
+
+    factory.updateExisting = dbPackage => {
+      if (dbPackage.table === 'Clients') {
+        return $http.post('/api/updateClient', dbPackage)
+      } 
+      else if (dbPackage.table === 'Representatives') {
+        return $http.post('/api/updateRep', dbPackage)
+      }
+      else if (dbPackage.table === 'Properties') {        
+        return $http.post('/api/updateProp', dbPackage)
+      }
+    }
+
+
+    factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
+    factory.getFullRepById = rep_id => $http.post('/api/getFullRepById', rep_id)
+
+
+
+
+
+
+
+
+
 
     factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
 
@@ -103,15 +128,23 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       return obj
     }
 
-    factory.createCurrentClientArray = clients => {
-      let clientArray = clients.map( client => {
-        let obj = {
-          client_id: client.client_id,
-          client_name : `${client.first_name} ${client.last_name}`
+    factory.getEditedColumns = (original, edited) => {
+      let obj  = {}
+      for( let key in original) {
+        if (original[key] != edited[`${key}`]) {
+          obj[`${key}`] = edited[key]
+        }
+      }
+      return obj
+    }
+
+    factory.createArrForChooseOne = (table, options) => {
+      return options.map( opt => {
+        return {
+          id: (table === 'Clients') ? opt.client_id : opt.representative_id,
+          name : `${opt.first_name} ${opt.last_name}`
         }  
-        return obj
       })
-      return clientArray
     }
 
     factory.toastSuccess = message => {

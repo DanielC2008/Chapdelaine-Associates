@@ -22,66 +22,66 @@ app.factory('FormFactory', function(JobFactory, $q) {
     })
     .catch( (data) => console.log(data))
 
-  factory.getClientForm = () => {
+  factory.getClientForm = client => {
     return {
-      'First Name': '', 
-      'Middle Name': '', 
-      'Last Name': '', 
-      'Email': '', 
-      'Business Phone': '', 
-      'Mobile Phone': '', 
-      'Home Phone': '', 
-      'Fax Number': '',
-      'Address': '', 
-      'City': '', 
-      'State': '', 
-      'Zip Code': '', 
-      'County': '',
-      'Notes': ''
+      'First Name':     client ? client.first_name : '', 
+      'Middle Name':    client ? client.middle_name : '', 
+      'Last Name':      client ? client.last_name : '', 
+      'Email':          client ? client.email : '', 
+      'Business Phone': client ? client.business_phone : '', 
+      'Mobile Phone':   client ? client.mobile_phone : '', 
+      'Home Phone':     client ? client.home_phone : '', 
+      'Fax Number':     client ? client.fax_number : '',
+      'Address':        client ? client.address : '', 
+      'City':           client ? client.city : '', 
+      'State':          client ? client.state : '', 
+      'Zip Code':       client ? client.zip_code : '', 
+      'County':         client ? client.county : '',
+      'Notes':          client ? client.notes : ''
     }
   }  
 
-  factory.getRepresentativeForm = () => {
+  factory.getRepForm = rep => {
     return {
-      'First Name': '', 
-      'Middle Name': '', 
-      'Last Name': '', 
-      'Email': '', 
-      'Business Phone': '', 
-      'Mobile Phone': '', 
-      'Home Phone': '', 
-      'Fax Number': '',
-      'Company Name': '',
-      'Company Address': '', 
-      'Address': '', 
-      'City': '', 
-      'State': '', 
-      'Zip Code': '', 
-      'County': '', 
-      'Notes': ''
+      'First Name':     rep ? rep.first_name : '', 
+      'Middle Name':    rep ? rep.middle_name : '', 
+      'Last Name':      rep ? rep.last_name : '', 
+      'Email':          rep ? rep.email : '', 
+      'Business Phone': rep ? rep.business_phone : '', 
+      'Mobile Phone':   rep ? rep.mobile_phone : '', 
+      'Home Phone':     rep ? rep.home_phone : '', 
+      'Fax Number':     rep ? rep.fax_number : '',
+      'Address':        rep ? rep.address : '', 
+      'City':           rep ? rep.city : '', 
+      'State':          rep ? rep.state : '', 
+      'Zip Code':       rep ? rep.zip_code : '', 
+      'County':         rep ? rep.county : '',
+      'Company Name':   rep ? rep.company_name : '',
+      'Company Address':rep ? rep.company_address: '',
+      'Notes':          rep ? rep.notes : ''
     }
-  } 
+  }    
 
-  factory.getPropertyForm = () => {
+  factory.getPropertyForm = prop => {
     return {
-      'Address': '',
-      'Road': '',
-      'City': '',
-      'State': '',
-      'Zip Code': '',
-      'County': '',
-      'Property Map': '',
-      'Parcel Number': '',
-      'Plat Book': '',
-      'Plat Page': '',
-      'Deed Book': '',
-      'Deed Page': '',
-      'Sub Division': '',
-      'Lot Number': '',
-      'Acres': null, 
-      'Notes': ''
+      'Address':        prop ? prop.address : '',
+      'Road':           prop ? prop.road : '',
+      'City':           prop ? prop.city : '', 
+      'State':          prop ? prop.state : '', 
+      'Zip Code':       prop ? prop.zip_code : '', 
+      'County':         prop ? prop.county : '',
+      'Property Map':   prop ? prop.property_map : '',
+      'Parcel Number':  prop ? prop.parcel_number : '',
+      'Plat Book':      prop ? prop.plat_book : '',
+      'Plat Page':      prop ? prop.plat_page : '',
+      'Deed Book':      prop ? prop.deed_book : '',  
+      'Deed Page':      prop ? prop.deed_page : '',
+      'Sub Division':   prop ? prop.sub_division : '',
+      'Lot Number':     prop ? prop.lot_number : '',
+      'Acres':          prop ? prop.acres : null,
+      'Notes':          prop ? prop.notes : ''
     }
-  }   
+  }  
 
   factory.getJobForm = () => {
     return {
