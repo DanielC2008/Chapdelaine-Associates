@@ -35,12 +35,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       $scope.jobId = $scope.Job.job_id
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
-       .then( ({data}) => $scope.showTab = data.showTab)
-       .catch( err => console.log('err', err))
+     .then( ({data}) => $scope.showTab = data.showTab)
+     .catch( err => console.log('err', err))
       //last access update
       JobFactory.updateLastAccessed($scope.jobNumber)
-        .then()
-        .catch(err => console.log('err', err))
+      .then()
+      .catch(err => console.log('err', err))
       $scope.material()
     })
     //can post status with .status and .statusText
@@ -64,16 +64,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
   }
 
   const addNew = (table, client_id = null) => {
-    // console.log('id', id)
     let locals = {
       table: table, 
       job_id: $scope.jobId,
       editable: null, 
       client_id: client_id
     }
-    // if (table == 'Representatives') {
-    //   locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
-    // }
     $mdDialog.show({
       locals,
       controller: 'Form as FORM',
@@ -93,7 +89,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     let locals = {
       table: table, 
       job_id: $scope.jobId,
-      editable: editable
+      editable: editable,
+      client_id: null
     }
     $mdDialog.show({
       locals,
@@ -110,17 +107,16 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   }  
 
-  const chooseClient = () => {
+  const chooseOne = (table, options) => {
+    let locals = { optionsArr : JobFactory.createArrForChooseOne(table, options) }
     return new Promise ((resolve, reject) => {
-      let locals = {}
-        locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
         $mdDialog.show({
           locals,
-          controller: 'ChooseClient as CC',
-          templateUrl: '/partials/chooseClient.html',
+          controller: 'ChooseOne as CO',
+          templateUrl: '/partials/chooseOne.html',
           parent: angular.element(document.body),
           clickOutsideToClose:false
-        }).then( clientId => resolve(clientId))
+        }).then( id => resolve(id))
           .catch(err => console.log(err))
     })
   }
@@ -131,13 +127,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } else if (change === 'addClient') {
       addNew('Clients')
     } else if (change === 'addRep') {
-      chooseClient().then( client_id => {
-        addNew('Representatives', client_id) 
+      chooseOne('Representatives', $scope.Representatives).then( rep_id => {
+        addNew('Representatives', rep_id) 
       })
     } else if (change === 'addProp') {
       addNew('Properties')
     } else if (change === 'editClient') {
-      chooseClient().then( clientId => {
+      chooseOne('Clients', $scope.Clients).then( clientId => {
         JobFactory.getFullClientById({client_id: clientId})
           .then(({data}) => editExisiting(data, 'Clients'))
       })

@@ -117,15 +117,13 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       return obj
     }
 
-    factory.createCurrentClientArray = clients => {
-      let clientArray = clients.map( client => {
-        let obj = {
-          client_id: client.client_id,
-          client_name : `${client.first_name} ${client.last_name}`
+    factory.createArrForChooseOne = (table, options) => {
+      return options.map( opt => {
+        return {
+          id: (table === 'Clients') ? opt.client_id : opt.representative_id,
+          name : `${opt.first_name} ${opt.last_name}`
         }  
-        return obj
       })
-      return clientArray
     }
 
     factory.toastSuccess = message => {

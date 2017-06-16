@@ -188,9 +188,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .select(
           'Clients.client_id',
           'Representatives.representative_id',
-          'Representatives.first_name as First Name',
-          'Representatives.middle_name as Middle Name',
-          'Representatives.last_name as Last Name'
+          'Representatives.first_name',
+          'Representatives.middle_name',
+          'Representatives.last_name'
         )
         .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
         .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
