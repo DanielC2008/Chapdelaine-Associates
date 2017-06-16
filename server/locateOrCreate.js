@@ -11,7 +11,7 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!state) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {  
         knex('States')
@@ -20,7 +20,7 @@ module.exports = {
         .then( data => {
           if (data[0]) {
             resolve(data[0].state_id)
-            reject()
+            reject(err => console.log('err', err))
           } 
           else {
             knex('States')
@@ -28,7 +28,7 @@ module.exports = {
             .insert({state: state})
             .then( data => {
               resolve(data[0])
-              reject()
+              reject(err => console.log('err', err))
             })
           }
         })
@@ -40,7 +40,7 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!city) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {   
         knex('Cities')
@@ -49,7 +49,7 @@ module.exports = {
         .then( data => {
           if (data[0]) {
             resolve(data[0].city_id)
-            reject()
+            reject(err => console.log('err', err))
           } 
           else {
             knex('Cities')
@@ -57,7 +57,7 @@ module.exports = {
             .insert({city: city})
             .then( data => {
               resolve(data[0])
-              reject()
+              reject(err => console.log('err', err))
             })
           }
         })
@@ -69,7 +69,7 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!county) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {   
         knex('Counties')
@@ -78,7 +78,7 @@ module.exports = {
         .then( data => {
           if (data[0]) {
             resolve(data[0].county_id)
-            reject()
+            reject(err => console.log('err', err))
           } 
           else {
             knex('Counties')
@@ -86,7 +86,7 @@ module.exports = {
             .insert({county: county})
             .then( data => {
               resolve(data[0])
-              reject()
+              reject(err => console.log('err', err))
             })
           }
         })
@@ -98,7 +98,7 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!zip_code) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {   
         knex('Zip_Codes')
@@ -107,7 +107,7 @@ module.exports = {
         .then( data => {
           if (data[0]) {
             resolve(data[0].zip_id)
-            reject()
+            reject(err => console.log('err', err))
           } 
           else {
             knex('Zip_Codes')
@@ -115,7 +115,7 @@ module.exports = {
             .insert({zip_code: zip_code})
             .then( data => {
               resolve(data[0])
-              reject()
+              reject(err => console.log('err', err))
             })
           }
         })
@@ -127,7 +127,7 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!address) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {   
         knex('Addresses')
@@ -136,7 +136,7 @@ module.exports = {
         .then( data => {
           if (data[0]) {
             resolve(data[0].address_id)
-            reject()
+            reject(err => console.log('err', err))
           } 
           else {
             knex('Addresses')
@@ -144,7 +144,7 @@ module.exports = {
             .insert({address: address})
             .then( data => {
               resolve(data[0])
-              reject()
+              reject(err => console.log('err', err))
             })
           }
         })
@@ -156,7 +156,7 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!road) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {   
         knex('Roads')
@@ -165,7 +165,7 @@ module.exports = {
         .then( data => {
           if (data[0]) {
             resolve(data[0].road_id)
-            reject()
+            reject(err => console.log('err', err))
           } 
           else {
             knex('Roads')
@@ -173,7 +173,7 @@ module.exports = {
             .insert({road: road})
             .then( data => {
               resolve(data[0])
-              reject()
+              reject(err => console.log('err', err))
             })
           }
         })
@@ -185,7 +185,7 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!client_type) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {   
         knex('Client_Types')
@@ -194,7 +194,7 @@ module.exports = {
         .then( data => {
           if (data[0]) {
             resolve(data[0].client_type_id)
-            reject()
+            reject(err => console.log('err', err))
           } 
           else {
             knex('Client_Types')
@@ -202,7 +202,7 @@ module.exports = {
             .insert({client_type: client_type})
             .then( data => {
               resolve(data[0])
-              reject()
+              reject(err => console.log('err', err))
             })
           }
         })
@@ -214,18 +214,34 @@ module.exports = {
     return new Promise( (resolve, reject) => {
       if(!company_name) { 
         resolve(null) 
-        reject()
+        reject(err => console.log('err', err))
       }
       else {   
         knex('Companies')
-        .select('company_id')
+        .select(
+          'Companies.company_id', 
+          'Addresses.address'
+        )
+        .leftJoin('Addresses', 'Companies.address_id', 'Addresses.address_id')
         .where('company_name', company_name)
         .then( data => {
-          if (data[0]) {
-            resolve(data[0].company_id)
-            reject()
-          } 
-          else {
+          if (data[0]) { //----------------------------------------company exists
+            if(data[0] && data[0].address != company_address) { // if company address has changed change it
+              module.exports.address(company_address)
+              .then( address_id => { 
+                knex('Companies')
+                .where('company_name', company_name)
+                .update({address_id: address_id})
+                .then( () => {
+                  resolve(data[0].company_id)
+                  reject(err => console.log('err', err))
+                })
+              })  
+            } else {
+              resolve(data[0].company_id)
+              reject(err => console.log('err', err))  
+            }
+          } else { //------------------------------------create company
             module.exports.address(company_address) // if  new company need to find address on address table first
             .then( address_id => {   
               knex('Companies')
@@ -233,7 +249,7 @@ module.exports = {
               .insert({company_name: company_name, address_id: address_id})
               .then( data => {
                 resolve(data[0])
-                reject()
+                reject(err => console.log('err', err))
               })
             })
           }
