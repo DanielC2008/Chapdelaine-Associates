@@ -27,7 +27,7 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
 
   FORM.send = ()  => {
     let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
-    let dbPackage= prepForDB(dbObj)
+    let dbPackage = prepForDB(dbObj)
     JobFactory.addNewToJob(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
@@ -45,7 +45,7 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, clientArray, J
 
   FORM.update = () => {
     let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
-    let dbPackage= prepForDB(dbObj)
+    let dbPackage = prepForDB(dbObj)
     JobFactory.updateClient(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
