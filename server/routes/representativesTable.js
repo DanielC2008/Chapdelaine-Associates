@@ -8,6 +8,39 @@ const locateOrCreate = require('../locateOrCreate')
 const validateRep = require('../validation/validRepresentative')
 const validationHelper = require('../validation/validationHelper')
 
+router.post('/api/getFullRepById', ({body: {representative_id}}, res) => {
+  knex('Representatives')
+  .select(
+    'Representatives.representative_id',
+    'Representatives.first_name',
+    'Representatives.middle_name',
+    'Representatives.last_name',
+    'Representatives.email',
+    'Representatives.business_phone',
+    'Representatives.mobile_phone',
+    'Representatives.home_phone',
+    'Representatives.fax_number',
+    'Companies.company_name',
+    'Company_Address.address as company_address',
+    'Addresses.address',
+    'Cities.city',
+    'States.state',
+    'Zip_Codes.zip_code',
+    'Counties.county'
+  )
+  .leftJoin('Companies', 'Representatives.company_id', 'Companies.company_id')
+  .leftJoin('Addresses as Company_address', 'Companies.address_id', 'Company_address.address_id')
+  .leftJoin('Addresses', 'Representatives.address_id', 'Addresses.address_id')      
+  .leftJoin('Cities', 'Representatives.city_id', 'Cities.city_id') 
+  .leftJoin('States', 'Representatives.state_id', 'States.state_id')      
+  .leftJoin('Zip_Codes', 'Representatives.zip_id', 'Zip_Codes.zip_id')      
+  .leftJoin('Counties', 'Representatives.county_id', 'Counties.county_id')    
+  .where('Representatives.representative_id', representative_id)
+  .then(data => res.send(data[0]))
+  .catch(err => console.log('err', err))
+})
+
+
 router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
   knex('Client_Specs_Per_Job')
     .update('representative_id', null) //-----------------update to null so we keep client associated with job

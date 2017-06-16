@@ -40,7 +40,18 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.updateClient = dbPackage => $http.post('/api/updateClient', dbPackage)
 
+
     factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
+    factory.getFullRepById = rep_id => $http.post('/api/getFullRepById', rep_id)
+
+
+
+
+
+
+
+
+
 
     factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
 

@@ -127,8 +127,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } else if (change === 'addClient') {
       addNew('Clients')
     } else if (change === 'addRep') {
-      chooseOne('Representatives', $scope.Representatives).then( rep_id => {
-        addNew('Representatives', rep_id) 
+      chooseOne('Clients', $scope.Clients).then( client_id => {
+        addNew('Representatives', client_id) 
       })
     } else if (change === 'addProp') {
       addNew('Properties')
@@ -138,7 +138,10 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
           .then(({data}) => editExisiting(data, 'Clients'))
       })
     } else if (change === 'editRep') {
-      editExisiting('Representatives')
+      chooseOne('Representatives', $scope.Representatives).then( rep_id => {
+        JobFactory.getFullRepById({representative_id: rep_id})
+          .then(({data}) => editExisiting(data, 'Representatives'))
+      })
     } else if (change === 'editProp') {
       editExisiting('Properties')
     }
