@@ -60,7 +60,7 @@ app.factory('FormFactory', function(JobFactory, $q) {
     }
   }  
 
-  factory.getRepresentativeForm = () => {
+  factory.getRepForm = () => {
     return {
       'First Name': '', 
       'Middle Name': '', 
@@ -80,6 +80,25 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'Notes': ''
     }
   } 
+
+  factory.toRepForm = rep => {
+    return {
+      'First Name': rep.first_name, 
+      'Middle Name': rep.middle_name, 
+      'Last Name': rep.last_name, 
+      'Email': rep.email, 
+      'Business Phone': rep.business_phone, 
+      'Mobile Phone': rep.mobile_phone, 
+      'Home Phone': rep.home_phone, 
+      'Fax Number': rep.fax_number,
+      'Address': rep.address, 
+      'City': rep.city, 
+      'State': rep.state, 
+      'Zip Code': rep.zip_code, 
+      'County': rep.county,
+      'Notes': rep.notes
+    }
+  }  
 
   factory.getPropertyForm = () => {
     return {

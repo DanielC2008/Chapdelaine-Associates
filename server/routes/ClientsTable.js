@@ -59,7 +59,6 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 
 
 router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
-  console.log('dbObj, idsArr', dbObj, idsArr)
   const job_id = idsArr[0].job_id
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
@@ -98,14 +97,14 @@ router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
 
 
 router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
-  const clientId = idsArr[0]
-  const jobId = idsArr[1]
+  const client_id = idsArr[1]
+  const job_id = idsArr[0]
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit(clientId, dbObj, 'Clients').then( nameExists => {//true/false
+    validationHelper.checkNameExistsOnEdit(client_id, dbObj, 'Clients').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {
@@ -116,15 +115,15 @@ router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
           let polishedObj = data.obj
           knex('Clients') //------------------------find client
           .update(polishedObj)
-          .where(clientId)
+          .where(client_id)
           .then( () => {
             knex('Client_Specs_Per_Job')//------set ids on connecting table
             .update({
               client_type_id, 
               main
             })
-            .where(clientId)
-            .andWhere(jobId)
+            .where(client_id)
+            .andWhere(job_id)
             .then( data => res.send({msg: 'Successfully updated Job!'}))
             .catch( err => console.log(err))
           }).catch( err => console.log(err))        

@@ -63,16 +63,17 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     })
   }
 
-  const addNew = table => {
+  const addNew = (table, client_id = null) => {
+    // console.log('id', id)
     let locals = {
       table: table, 
       job_id: $scope.jobId,
-      clientArray: null,
-      editable: null
+      editable: null, 
+      client_id: client_id
     }
-    if (table == 'Representatives') {
-      locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
-    }
+    // if (table == 'Representatives') {
+    //   locals.clientArray = JobFactory.createCurrentClientArray($scope.Clients)
+    // }
     $mdDialog.show({
       locals,
       controller: 'Form as FORM',
@@ -88,13 +89,10 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   } 
 
-
-
   const editExisiting = (editable, table) => {
     let locals = {
       table: table, 
       job_id: $scope.jobId,
-      clientArray: null,
       editable: editable
     }
     $mdDialog.show({
@@ -133,7 +131,9 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } else if (change === 'addClient') {
       addNew('Clients')
     } else if (change === 'addRep') {
-      addNew('Representatives')
+      chooseClient().then( client_id => {
+        addNew('Representatives', client_id) 
+      })
     } else if (change === 'addProp') {
       addNew('Properties')
     } else if (change === 'editClient') {
@@ -141,7 +141,6 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
         JobFactory.getFullClientById({client_id: clientId})
           .then(({data}) => editExisiting(data, 'Clients'))
       })
-      // editExisiting('Clients')
     } else if (change === 'editRep') {
       editExisiting('Representatives')
     } else if (change === 'editProp') {
