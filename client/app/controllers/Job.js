@@ -73,6 +73,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     }
     $mdDialog.show({
       locals,
+      fullscreen: true,
       controller: 'Form as FORM',
       templateUrl: '/partials/form.html',
       parent: angular.element(document.body),
@@ -96,6 +97,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     }
     $mdDialog.show({
       locals,
+      fullscreen: true,
       controller: 'Form as FORM',
       templateUrl: '/partials/form.html',
       parent: angular.element(document.body),

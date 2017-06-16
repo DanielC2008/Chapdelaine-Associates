@@ -22,7 +22,6 @@ const checkNameExists = (obj, table) => {
 } 
 
 const checkNameExistsOnEdit = (idObj, edited, table) => {
-  console.log('idObj, edited, table', idObj, edited, table)
   return new Promise( (resolve, reject) => {
     //find client's old previous name
     knex(`${table}`)

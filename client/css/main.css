@@ -210,12 +210,17 @@ div.navSelect span.caret {
 
 /********dialog************/
 .dialog {
-  width: 1200px;
-  height:810px;
+  margin: 0;
 }
 
 .addToJobNotes {
-    height: 10em;
+  height: 10em;
+}
+
+md-dialog.md-dialog-fullscreen {
+  min-height: 95%;
+  min-width: 95%;
+  border-radius: 0;
 }
 
 /********toast************/
