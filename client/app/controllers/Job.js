@@ -68,7 +68,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       table: table, 
       job_id: $scope.jobId,
       editable: null, 
-      client_id: client_id
+      client_id: client_id,
+      rep_id: null
     }
     $mdDialog.show({
       locals,
@@ -85,12 +86,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( data => data.msg ? JobFactory.toastReject(data.msg) : null)
   } 
 
-  const editExisiting = (editable, table) => {
+  const editExisiting = (editable, table, rep_id) => {
     let locals = {
       table: table, 
       job_id: $scope.jobId,
       editable: editable,
-      client_id: null
+      client_id: null,
+      rep_id: rep_id
     }
     $mdDialog.show({
       locals,
@@ -110,14 +112,15 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
   const chooseOne = (table, options) => {
     let locals = { optionsArr : JobFactory.createArrForChooseOne(table, options) }
     return new Promise ((resolve, reject) => {
-        $mdDialog.show({
-          locals,
-          controller: 'ChooseOne as CO',
-          templateUrl: '/partials/chooseOne.html',
-          parent: angular.element(document.body),
-          clickOutsideToClose:false
-        }).then( id => resolve(id))
-          .catch(err => console.log(err))
+      $mdDialog.show({
+        locals,
+        controller: 'ChooseOne as CO',
+        templateUrl: '/partials/chooseOne.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose:false
+      })
+      .then( id => resolve(id))
+      .catch(err => console.log(err))
     })
   }
 
@@ -140,7 +143,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } else if (change === 'editRep') {
       chooseOne('Representatives', $scope.Representatives).then( rep_id => {
         JobFactory.getFullRepById({representative_id: rep_id})
-          .then(({data}) => editExisiting(data, 'Representatives'))
+          .then(({data}) => editExisiting(data, 'Representatives', rep_id))
       })
     } else if (change === 'editProp') {
       editExisiting('Properties')

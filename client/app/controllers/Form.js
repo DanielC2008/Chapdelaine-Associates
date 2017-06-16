@@ -1,8 +1,9 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, table, job_id, client_id, JobFactory, FormFactory, editable) {
+app.controller('Form', function($scope, $mdDialog, table, job_id, client_id, rep_id, JobFactory, FormFactory, editable) {
   let FORM = this
   FORM.Display = {}
+  FORM.edit = editable ? true : false
 
   switch(table) {
     case 'Clients':
@@ -10,7 +11,6 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, client_id, Job
       FORM.Display.Clients = FormFactory.getClientForm(editable)
       FORM.clientType = editable ? editable.client_type : null
       FORM.main = editable ? editable.main : null
-      FORM.edit = editable ? true : false
       break;
     case 'Representatives':
       FORM.title = editable ? 'Update Representatives' : 'Add New Representatives'
@@ -46,7 +46,7 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, client_id, Job
   FORM.update = () => {
     let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-    JobFactory.updateClient(dbPackage)
+    JobFactory.updateExisting(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
       if (msg) { //------------------------client entered incorrect data type
@@ -68,8 +68,8 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, client_id, Job
     } else if (table === 'Representatives') {
       dbPackage.table = table
       dbPackage.dbObj = dbObj
-      dbPackage.idsArr = [{client_id: client_id}, {job_id: job_id}]
-    }else if (table === 'Properties') {
+      dbPackage.idsArr = editable ? [{representative_id: rep_id}] : [{client_id: client_id}, {job_id: job_id}]
+    } else if (table === 'Properties') {
       if (!dbObj.address && !dbObj.road) {
         JobFactory.toastReject("Please enter an Address or a Road.")
       }   

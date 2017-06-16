@@ -20,6 +20,7 @@ router.post('/api/getFullRepById', ({body: {representative_id}}, res) => {
     'Representatives.mobile_phone',
     'Representatives.home_phone',
     'Representatives.fax_number',
+    'Representatives.notes',
     'Companies.company_name',
     'Company_Address.address as company_address',
     'Addresses.address',
@@ -68,7 +69,7 @@ router.post('/api/addNewRepToJob', ({body: {dbObj, idsArr}}, res) => {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {//true/false
+    validationHelper.checkNameExists(dbObj, 'Representatives').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {
@@ -93,42 +94,29 @@ router.post('/api/addNewRepToJob', ({body: {dbObj, idsArr}}, res) => {
 })
 
 
-// router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
-//   const clientId = idsArr[1]
-//   const jobId = idsArr[0]
-//   const errors = validateClient.validate(dbObj)
-//   if (errors[0]) {  //------------------------------------checks each data type
-//     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-//     res.status(400).send(msg)
-//   } else {
-//     validationHelper.checkNameExistsOnEdit(clientId, dbObj, 'Clients').then( nameExists => {//true/false
-//       if (nameExists) { //-----------------------------checks if name already exists in DB
-//         res.status(400).send(nameExists)
-//       } else {
-//         let main = dbObj.main
-//         delete dbObj.main
-//         getConnectTableIds(dbObj).then( data => {
-//           let client_type_id = data.client_type_id
-//           let polishedObj = data.obj
-//           knex('Clients') //------------------------find client
-//           .update(polishedObj)
-//           .where(clientId)
-//           .then( () => {
-//             knex('Client_Specs_Per_Job')//------set ids on connecting table
-//             .update({
-//               client_type_id, 
-//               main
-//             })
-//             .where(clientId)
-//             .andWhere(jobId)
-//             .then( data => res.send({msg: 'Successfully updated Job!'}))
-//             .catch( err => console.log(err))
-//           }).catch( err => console.log(err))        
-//         })
-//       }
-//     })
-//   }
-// })
+router.post('/api/updateRep', ({body: {dbObj, idsArr}}, res) => {
+  const representative_id = idsArr[0]
+  const errors = validateRep.validate(dbObj)
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives').then( nameExists => {
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send(nameExists)
+      } else {
+        getConnectTableIds(dbObj).then( data => {
+          let polishedObj = data.obj
+          knex('Representatives') //---------------------find client
+          .update(polishedObj)
+          .where(representative_id)
+          .then( () => res.send({msg: 'Successfully updated Job!'}))
+          .catch( err => console.log(err))        
+        })
+      }
+    })
+  }
+})
 
 
 const getConnectTableIds = obj => {

@@ -38,7 +38,17 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
     }
 
-    factory.updateClient = dbPackage => $http.post('/api/updateClient', dbPackage)
+    factory.updateExisting = dbPackage => {
+      if (dbPackage.table === 'Clients') {
+        return $http.post('/api/updateClient', dbPackage)
+      } 
+      else if (dbPackage.table === 'Representatives') {
+        return $http.post('/api/updateRep', dbPackage)
+      }
+      else if (dbPackage.table === 'Properties') {        
+        return $http.post('/api/updateProp', dbPackage)
+      }
+    }
 
 
     factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
