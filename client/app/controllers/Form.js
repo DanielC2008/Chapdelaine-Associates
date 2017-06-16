@@ -39,9 +39,7 @@ app.controller('Form', function($scope, $mdDialog, table, job_id, client_id, rep
     })
   }
 
-  FORM.reject = () => {
-    $mdDialog.cancel({msg: 'Nothing Saved!'})
-  }
+  FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
 
   FORM.update = () => {
     let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
