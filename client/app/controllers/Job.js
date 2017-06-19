@@ -163,7 +163,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
           .then(({data}) => editExisiting(data, 'Representatives', rep_id))
       })
     } else if (change === 'editProp') {
-      editExisiting('Properties')
+      editExisiting($scope.Property, 'Properties')
     }
   }
 

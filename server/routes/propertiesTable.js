@@ -36,7 +36,8 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
             knex('Properties_Addresses') 
             .insert({
               address_id,
-              property_id
+              property_id,
+              is_primary: true
             }).then().catch(err => console.log(err))
           }).then().catch( err => console.log(err))
         }

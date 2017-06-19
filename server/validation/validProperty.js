@@ -66,7 +66,7 @@ const validationHelper = require('./validationHelper')
     },
     acres: {
       type: 'number',
-      use: acre => (typeof acre === 'number') ? true : false,
+      use: acre => (typeof acre === 'number') ? true : false, //---allows 0 but not null
       message: 'Acres must be number'
     }
   })

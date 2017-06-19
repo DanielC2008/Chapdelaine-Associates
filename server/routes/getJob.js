@@ -210,7 +210,10 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .whereIn('Properties.property_id', propertyId)
         .then(data => {
           if(jobMain.Property) {
-            jobMain.Property.addresses = data.map(query => {
+            jobMain.Addresses = data.map(query => {
+              if(query.is_primary === true) {
+                jobMain.Property.address = query.address
+              }
               return {
                 address: query.address,
                 is_primary: query.is_primary
