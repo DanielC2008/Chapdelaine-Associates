@@ -26,7 +26,6 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
       let polishedObj = data.obj
       let address_id = data.address_id  ? data.address_id : null
       let road_id = data.road_id ? data.road_id : null
-      console.log('polishedObj', polishedObj)
       knex('Properties') //------------------------make property
       .returning('property_id')
       .insert(polishedObj)

@@ -78,7 +78,7 @@ app.factory('FormFactory', function(JobFactory, $q) {
       'Deed Page':      prop ? prop.deed_page : '',
       'Sub Division':   prop ? prop.sub_division : '',
       'Lot Number':     prop ? prop.lot_number : '',
-      'Acres':          prop ? prop.acres : null,    //--want null not string for db type number columns
+      'Acres':          prop ? prop.acres : 0,
       'Notes':          prop ? prop.notes : ''
     }
   }  

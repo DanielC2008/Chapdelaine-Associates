@@ -64,9 +64,9 @@ const validationHelper = require('./validationHelper')
       type: 'string',
       message: 'Road must be a string.'
     },
-    acres: { //---------------------------this allows me to require a number only if the user enters something
+    acres: {
       type: 'number',
-      use: acre => acre === null || typeof acre === 'number' ? true : false,
+      use: acre => (typeof acre === 'number') ? true : false,
       message: 'Acres must be number'
     }
   })
