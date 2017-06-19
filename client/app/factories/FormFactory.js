@@ -64,8 +64,8 @@ app.factory('FormFactory', function(JobFactory, $q) {
 
   factory.getPropertyForm = prop => {
     return {
-      'Address':        prop ? prop.address : '',
-      'Road':           prop ? prop.road : '',
+      'Primary Address':prop ? prop.address : '',
+      'Primary Road':   prop ? prop.road : '',
       'City':           prop ? prop.city : '', 
       'State':          prop ? prop.state : '', 
       'Zip Code':       prop ? prop.zip_code : '', 

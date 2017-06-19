@@ -37,6 +37,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       $scope.Representatives = data.Representatives
       $scope.Attachments = data.Attachments
       $scope.Job = data.Job
+      $scope.Addresses = data.Addresses
+      $scope.Roads = data.Roads
       $scope.jobId = $scope.Job.job_id
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
@@ -103,7 +105,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       table: table,
       ids: {
         job_id: $scope.jobId,
-        rep_id: rep_id
+        rep_id: rep_id,
+        property_id: $scope.Property.property_id
       },
       editable: editable,
     }

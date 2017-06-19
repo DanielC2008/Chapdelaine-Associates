@@ -56,11 +56,11 @@ const validationHelper = require('./validationHelper')
       type: 'string',
       message: 'Zip Code must be a string.'
     },
-    address: {
+    primary_address: {
       type: 'string',
       message: 'Address must be a string.'
     },
-    road: {
+    primary_road: {
       type: 'string',
       message: 'Road must be a string.'
     },

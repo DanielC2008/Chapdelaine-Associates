@@ -46,7 +46,7 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
         return $http.post('/api/updateRep', dbPackage)
       }
       else if (dbPackage.table === 'Properties') {        
-        return $http.post('/api/updateProp', dbPackage)
+        return $http.post('/api/updateProperty', dbPackage)
       }
     }
 

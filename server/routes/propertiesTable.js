@@ -24,8 +24,8 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   } else {
     getConnectTableIds(dbObj).then( data => {
       let polishedObj = data.obj
-      let address_id = data.address_id  ? data.address_id : null
-      let road_id = data.road_id ? data.road_id : null
+      let address_id = data.obj.primary_address_id  ? data.obj.primary_address_id : null
+      let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
       knex('Properties') //------------------------make property
       .returning('property_id')
       .insert(polishedObj)
@@ -36,8 +36,7 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
             knex('Properties_Addresses') 
             .insert({
               address_id,
-              property_id,
-              is_primary: true
+              property_id
             }).then().catch(err => console.log(err))
           }).then().catch( err => console.log(err))
         }
@@ -60,7 +59,47 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
       }).catch( err => console.log(err))
     }).catch( err => console.log(err))
   }
+})
 
+
+
+router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
+  const job_id = ids.job_id
+  const property_id = ids.property_id
+  const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
+  if (errors[0]) {  //------------------------------------checks each type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    getConnectTableIds(dbObj).then( data => {
+      let polishedObj = data.obj
+      let address_id = data.obj.primary_address_id  ? data.obj.primary_address_id : null
+      let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
+      knex('Properties') //------------------------make property
+      .update(polishedObj)
+      .then( data => {
+        if (address_id) { //-----------------set ids on connecting tables if address
+          new Promise( () => { 
+            knex('Properties_Addresses') 
+            .insert({
+              address_id,
+              property_id
+            }).then().catch(err => console.log(err))
+          }).then().catch( err => console.log(err))
+        }
+        if (road_id) { //-----------------set ids on connecting tables if road
+          new Promise( () => {
+            knex('Properties_Roads')
+            .insert({
+              road_id,
+              property_id
+            }).then().catch(err => console.log(err))
+          }).then().catch(err => console.log(err))
+        } 
+        res.send({msg: 'Successfully created and added to Job!'})
+      }).catch( err => console.log(err))
+    }).catch( err => console.log(err))
+  }
 })
 
 
@@ -84,13 +123,13 @@ const getConnectTableIds = obj => {
         delete obj.zip_code
         obj.zip_id = data
       }),
-      locateOrCreate.address(obj.address).then( data => { 
-        delete obj.address
-        dbPackage.address_id = data
+      locateOrCreate.address(obj.primary_address).then( data => { 
+        delete obj.primary_address
+        obj.primary_address_id = data
       }),
-      locateOrCreate.road(obj.road).then( data => { 
-        delete obj.road
-        dbPackage.road_id = data
+      locateOrCreate.road(obj.primary_road).then( data => { 
+        delete obj.primary_road
+        obj.primary_road_id = data
       })
     ])
     .then( () => {
