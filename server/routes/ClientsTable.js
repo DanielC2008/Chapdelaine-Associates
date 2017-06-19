@@ -58,8 +58,8 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 })
 
 
-router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
-  const job_id = idsArr[0]
+router.post('/api/addNewClientToJob', ({body: {dbObj, ids}}, res) => {
+  const job_id = ids.job_id
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -96,15 +96,16 @@ router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
 })
 
 
-router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
-  const client_id = idsArr[1]
-  const job_id = idsArr[0]
+router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
+  const client_id = {client_id: ids.client_id}
+  const job_id = {job_id: ids.job_id}
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit(client_id, dbObj, 'Clients').then( nameExists => {//true/false
+    validationHelper.checkNameExistsOnEdit(client_id, dbObj, 'Clients')
+    .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {

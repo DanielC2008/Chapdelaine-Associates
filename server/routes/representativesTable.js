@@ -61,9 +61,9 @@ router.post('/api/addExistingRepToJob', ({body: {objToAdd: {representative_id, j
     .catch( err => console.log(err))
 })
 
-router.post('/api/addNewRepToJob', ({body: {dbObj, idsArr}}, res) => {
-  const job_id = idsArr[0]
-  const client_id = idsArr[1]
+router.post('/api/addNewRepToJob', ({body: {dbObj, ids}}, res) => {
+  const job_id = {job_id: ids.job_id}
+  const client_id = {client_id: ids.client_id}
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -94,14 +94,15 @@ router.post('/api/addNewRepToJob', ({body: {dbObj, idsArr}}, res) => {
 })
 
 
-router.post('/api/updateRep', ({body: {dbObj, idsArr}}, res) => {
-  const representative_id = idsArr[0]
+router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
+  const representative_id = {representative_id: ids.representative_id}
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives').then( nameExists => {
+    validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives')
+    .then( nameExists => {
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {

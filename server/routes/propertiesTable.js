@@ -15,8 +15,8 @@ router.post('/api/removePropertyFromJob', ({body: {objToRemove}}, res) => {
     .catch( err => console.log(err))
 })
 
-router.post('/api/addNewPropertyToJob', ({body: {dbObj, idsArr}}, res) => {
-  const job_id = idsArr[0].job_id
+router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
+  const job_id = ids.job_id
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
   if (errors[0]) {  //------------------------------------checks each type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -26,6 +26,7 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, idsArr}}, res) => {
       let polishedObj = data.obj
       let address_id = data.address_id  ? data.address_id : null
       let road_id = data.road_id ? data.road_id : null
+      console.log('polishedObj', polishedObj)
       knex('Properties') //------------------------make property
       .returning('property_id')
       .insert(polishedObj)
