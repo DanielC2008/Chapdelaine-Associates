@@ -59,7 +59,7 @@ router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
 
 
 router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
-  const job_id = idsArr[0].job_id
+  const job_id = idsArr[0]
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -135,11 +135,11 @@ router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
 
 
 const getConnectTableIds = obj => {
+  let dbPackage = {}
   let client_type_id
   return new Promise( (resolve, reject) => {
     Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
-      locateOrCreate.state(obj.state)
-      .then( data => {
+      locateOrCreate.state(obj.state).then( data => {
         delete obj.state
         obj.state_id = data
       }),
@@ -161,15 +161,12 @@ const getConnectTableIds = obj => {
       }),
       locateOrCreate.client_type(obj.client_type).then( data => { 
         delete obj.client_type
-        client_type_id = data
+        dbPackage.client_type_id = data
       })
     ])
     .then( () => {
-      let data = {
-        obj: obj,
-        client_type_id
-      }
-      resolve( data)
+      dbPackage.obj = obj
+      resolve(dbPackage)
     })
   })
 }

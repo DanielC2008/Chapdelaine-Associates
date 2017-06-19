@@ -74,20 +74,20 @@ router.post('/api/addNewRepToJob', ({body: {dbObj, idsArr}}, res) => {
         res.status(400).send(nameExists)
       } else {
         getConnectTableIds(dbObj).then( data => {
-        let polishedObj = data.obj
-        knex('Representatives')     //----------make rep
-        .returning('representative_id')
-        .insert(polishedObj)
-        .then( data => {
-          let representative_id = data[0]
-          knex('Client_Specs_Per_Job')  //-----set ids on connecting table
-          .update({ representative_id })   //--this update means that there can only be one rep per client per job  
-          .where(client_id)
-          .andWhere(job_id)
-          .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-          .catch( err => console.log(err))
-        }).catch( err => console.log(err))
-      })
+          let polishedObj = data.obj
+          knex('Representatives')     //----------make rep
+          .returning('representative_id')
+          .insert(polishedObj)
+          .then( data => {
+            let representative_id = data[0]
+            knex('Client_Specs_Per_Job')  //-----set ids on connecting table
+            .update({ representative_id })   //this update means that there can only be one rep per client per job  
+            .where(client_id)
+            .andWhere(job_id)
+            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+            .catch( err => console.log(err))
+          }).catch( err => console.log(err))
+        })
       } 
     })   
   }
@@ -120,10 +120,10 @@ router.post('/api/updateRep', ({body: {dbObj, idsArr}}, res) => {
 
 
 const getConnectTableIds = obj => {
+  let dbPackage = {}
   return new Promise( (resolve, reject) => {
     Promise.all([  //-----------------get existing state, city, address, county, zip_code
-      locateOrCreate.state(obj.state)
-      .then( data => {
+      locateOrCreate.state(obj.state).then( data => {
         delete obj.state
         obj.state_id = data
       }),
@@ -150,8 +150,8 @@ const getConnectTableIds = obj => {
       })
     ])
     .then( () => {
-      let data = {obj: obj}
-      resolve( data)
+      dbPackage.obj = obj
+      resolve(dbPackage)
     })
   })
 }
