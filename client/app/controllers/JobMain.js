@@ -49,17 +49,6 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
 
 
 /////////////ADD OR REMOVE FROM JOB///////////////
-  JMScope.addBySearch = table => {
-    JMScope.search = false
-    JobFactory[`get${table}BySearch`]()//should pass in user_id here
-      .then(({data}) => {
-        //set these on this scope so filter function has access to it
-        $scope.table = table 
-        $scope.items = data
-        JMScope.search = true
-      })
-      .catch(err => console.log(err))
-  }
 
   JMScope.removeFromJob = (table, objToRemove) => {
     let dataObj = {

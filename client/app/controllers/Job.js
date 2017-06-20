@@ -72,6 +72,30 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( () => resetSelect())
   }
 
+  const addBySearch = table => {
+    return new Promise ((resolve, reject) => {
+      JobFactory[`get${table}BySearch`]()//should pass in user_id here
+      .then(({data}) => {
+        let locals = {items: data}
+        $mdDialog.show({
+          locals,
+          controller: 'SearchFilter as SF',
+          templateUrl: '/partials/searchFilter.html',
+          parent: angular.element(document.body),
+          scope: $scope,
+          clickOutsideToClose: false,
+          escapeToClose: false
+        })
+        .then( id => resolve(id))
+        .catch( data => { 
+          // resetSelect()
+          // data.msg ? JobFactory.toastReject(data.msg) : null
+        }) 
+      })
+      .catch(err => console.log(err))
+    })  
+  }
+
   const addNew = (table, client_id = null) => {
     let locals = {
       table: table, 
@@ -100,7 +124,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     }) 
   } 
 
-  const editExisiting = (editable, table, rep_id) => {
+   const editExisiting = (editable, table, rep_id) => {
     let locals = {
       table: table,
       ids: {
@@ -148,7 +172,9 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     if (change === 'updateStatus') {
       updateStatus()
     } else if (change === 'addClient') {
-      addNew('Clients')
+      addBySearch('Clients').then(id => {
+        console.log('id', id)
+      }) 
     } else if (change === 'addRep') {
       chooseOne('Clients', $scope.Clients).then( client_id => {
         addNew('Representatives', client_id) 
@@ -169,7 +195,6 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       editExisiting($scope.Property, 'Properties')
     }
   }
-
 
 
 })
