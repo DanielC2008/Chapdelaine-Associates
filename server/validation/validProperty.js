@@ -56,17 +56,17 @@ const validationHelper = require('./validationHelper')
       type: 'string',
       message: 'Zip Code must be a string.'
     },
-    address: {
+    primary_address: {
       type: 'string',
       message: 'Address must be a string.'
     },
-    road: {
+    primary_road: {
       type: 'string',
       message: 'Road must be a string.'
     },
-    acres: { //---------------------------this allows me to require a number only if the user enters something
+    acres: {
       type: 'number',
-      use: acre => acre === null || typeof acre === 'number' ? true : false,
+      use: acre => (typeof acre === 'number') ? true : false, //---allows 0 but not null
       message: 'Acres must be number'
     }
   })

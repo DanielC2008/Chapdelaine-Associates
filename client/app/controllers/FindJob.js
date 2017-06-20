@@ -8,7 +8,7 @@ app.controller('FindJob', function($scope, $http, JobFactory, FormFactory, FindJ
 
   FormFactory.initialized.then(function() {
     values.Clients = FormFactory.getClientForm()
-    values.Representatives = FormFactory.getRepresentativeForm()
+    values.Representatives = FormFactory.getRepForm()
     values.Properties = FormFactory.getPropertyForm()
     values.Job = FormFactory.getJobForm()
     values.Tasks = FormFactory.getTaskForm()

@@ -8,7 +8,9 @@ const locateOrCreate = require('../locateOrCreate')
 const validateClient = require('../validation/validClient')
 const validationHelper = require('../validation/validationHelper') 
 
-router.post('/api/getFullClientById', ({body: {client_id}}, res) => {
+router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc includes jobid
+  const client_id = ids.client_id
+  const job_id = ids.job_id
   knex('Clients')
   .select(
     'Clients.client_id',
@@ -37,7 +39,37 @@ router.post('/api/getFullClientById', ({body: {client_id}}, res) => {
   .leftJoin('States', 'Clients.state_id', 'States.state_id')      
   .leftJoin('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')      
   .leftJoin('Counties', 'Clients.county_id', 'Counties.county_id')      
-  .where({'Clients.client_id': client_id}) //----------------------------------fix
+  .where({'Clients.client_id': client_id})
+  .andWhere({'Jobs.job_id': job_id})
+  .then(data => res.send(data[0]))
+  .catch(err => console.log('err', err))
+}) 
+
+router.post('/api/getFullClientById', ({body: {client_id}}, res) => { //on new bc no job associated yet
+  knex('Clients')
+  .select(
+    'Clients.client_id',
+    'Clients.first_name',
+    'Clients.middle_name',
+    'Clients.last_name',
+    'Clients.email',
+    'Clients.home_phone',
+    'Clients.business_phone',
+    'Clients.mobile_phone',
+    'Clients.fax_number',
+    'Clients.notes',
+    'Addresses.address',
+    'Cities.city',
+    'States.state',
+    'Zip_Codes.zip_code',
+    'Counties.county'
+  )
+  .leftJoin('Addresses', 'Clients.address_id', 'Addresses.address_id')      
+  .leftJoin('Cities', 'Clients.city_id', 'Cities.city_id') 
+  .leftJoin('States', 'Clients.state_id', 'States.state_id')      
+  .leftJoin('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')      
+  .leftJoin('Counties', 'Clients.county_id', 'Counties.county_id')      
+  .where({'Clients.client_id': client_id})
   .then(data => res.send(data[0]))
   .catch(err => console.log('err', err))
 })
@@ -50,16 +82,8 @@ router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
     .catch( err => console.log(err))
 })
 
-router.post('/api/addExistingClientToJob', ({body: {objToAdd}}, res) => {
-  knex('Client_Specs_Per_Job')
-    .insert(objToAdd)
-    .then( () => res.send({msg: 'Successfully added to Job!'}))
-    .catch( err => console.log(err))
-})
-
-
-router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
-  const job_id = idsArr[0].job_id
+router.post('/api/addNewClientToJob', ({body: {dbObj, ids}}, res) => {
+  const job_id = ids.job_id
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -95,16 +119,54 @@ router.post('/api/addNewClientToJob', ({body: {dbObj, idsArr}}, res) => {
   }
 })
 
-
-router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
-  const client_id = idsArr[1]
-  const job_id = idsArr[0]
+router.post('/api/addExistingClientToJob', ({body: {dbObj, ids}}, res) => {
+  const client_id = ids.client_id
+  const job_id = ids.job_id
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit(client_id, dbObj, 'Clients').then( nameExists => {//true/false
+    validationHelper.checkNameExistsOnEdit({client_id: ids.client_id}, dbObj, 'Clients')
+    .then( nameExists => {//true/false
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send(nameExists)
+      } else {
+        let main = dbObj.main
+        delete dbObj.main
+        getConnectTableIds(dbObj).then( data => {
+          let client_type_id = data.client_type_id
+          let polishedObj = data.obj
+          knex('Clients') //------------------------find client
+          .update(polishedObj)
+          .where({client_id: client_id})
+          .then( () => {
+            knex('Client_Specs_Per_Job')//------set ids on connecting table
+            .insert({
+              job_id,
+              client_id, 
+              client_type_id,
+              main
+            }) 
+            .then( data => res.send({msg: 'Successfully added to Job!'}))
+            .catch( err => console.log(err))
+          }).catch( err => console.log(err))        
+        })
+      }
+    })
+  }
+})
+
+router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => { // start here
+  const client_id = {client_id: ids.client_id}
+  const job_id = {job_id: ids.job_id}
+  const errors = validateClient.validate(dbObj)
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    validationHelper.checkNameExistsOnEdit(client_id, dbObj, 'Clients')
+    .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {
@@ -133,13 +195,22 @@ router.post('/api/updateClient', ({body: {dbObj, idsArr}}, res) => {
   }
 })
 
+router.get('/api/getClientsBySearch', ({body}, res) => {
+  knex('Clients')
+  .select(
+    knex.raw(`first_name + ' ' + last_name AS 'value'`),
+    'client_id AS id'
+  )
+  .then( data => res.send(data))
+  .catch( err => console.log(err))
+})
 
 const getConnectTableIds = obj => {
+  let dbPackage = {}
   let client_type_id
   return new Promise( (resolve, reject) => {
     Promise.all([ //------------------get existing state, city, address, county, zip_code, and client_type
-      locateOrCreate.state(obj.state)
-      .then( data => {
+      locateOrCreate.state(obj.state).then( data => {
         delete obj.state
         obj.state_id = data
       }),
@@ -161,15 +232,12 @@ const getConnectTableIds = obj => {
       }),
       locateOrCreate.client_type(obj.client_type).then( data => { 
         delete obj.client_type
-        client_type_id = data
+        dbPackage.client_type_id = data
       })
     ])
     .then( () => {
-      let data = {
-        obj: obj,
-        client_type_id
-      }
-      resolve( data)
+      dbPackage.obj = obj
+      resolve(dbPackage)
     })
   })
 }

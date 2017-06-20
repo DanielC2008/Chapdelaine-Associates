@@ -101,7 +101,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Counties.county',
         'Cities.city',
         'States.state',
-        'Zip_Codes.zip_code'
+        'Zip_Codes.zip_code',
+        'Addresses.address',
+        'Roads.road'
       )
       .join('Jobs_Properties', 'Properties.property_id', 'Jobs_Properties.property_id')
       .join('Jobs', 'Jobs_Properties.job_id', 'Jobs.job_id')
@@ -109,6 +111,8 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       .leftJoin('Cities', 'Properties.city_id', 'Cities.city_id') 
       .leftJoin('States', 'Properties.state_id', 'States.state_id')      
       .leftJoin('Zip_Codes', 'Properties.zip_id', 'Zip_Codes.zip_id')    
+      .leftJoin('Addresses', 'Properties.primary_address_id', 'Addresses.address_id')    
+      .leftJoin('Roads', 'Properties.primary_road_id', 'Roads.road_id')    
       .where('job_number', job_number)
       .then( data => {
         if (data[0]) {
@@ -201,34 +205,20 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .catch(err => console.log('err', err)),
 
       knex('Properties')
-        .select(
-          'Addresses.address',
-          'Properties_Addresses.is_primary'
-        )
+        .select('Addresses.address')
         .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
         .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
         .whereIn('Properties.property_id', propertyId)
-        .then(data => {
-          if(jobMain.Property) {
-            jobMain.Property.addresses = data.map(query => {
-              return {
-                address: query.address,
-                is_primary: query.is_primary
-              }
-            })
-          }
-        }).catch(err => console.log('err', err)),
+        .then(data => jobMain.Addresses = data.map( query => query.address))
+        .catch(err => console.log('err', err)),
    
       knex('Properties')
         .select('Roads.road')
         .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
         .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
         .whereIn('Properties.property_id', propertyId)
-        .then(data => {
-          if(jobMain.Property) {
-            jobMain.Property.roads = data.map(road => road.road)
-          }
-        }).catch(err => console.log('err', err)),
+        .then(data => jobMain.Roads = data.map( query => query.road))
+        .catch(err => console.log('err', err)),
 
       knex('Representatives')
         .select(

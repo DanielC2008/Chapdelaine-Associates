@@ -37,6 +37,8 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       $scope.Representatives = data.Representatives
       $scope.Attachments = data.Attachments
       $scope.Job = data.Job
+      $scope.Addresses = data.Addresses
+      $scope.Roads = data.Roads
       $scope.jobId = $scope.Job.job_id
       //redis saves previous tab accesses
       JobFactory.setTab({jobNumber: $scope.jobNumber})
@@ -70,42 +72,38 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( () => resetSelect())
   }
 
-  const addNew = (table, client_id = null) => {
-    let locals = {
-      table: table, 
-      ids: {
-        job_id: $scope.jobId,
-        client_id: client_id 
-      },
-      editable: null, 
-    }
-    $mdDialog.show({
-      locals,
-      fullscreen: true,
-      controller: 'Form as FORM',
-      templateUrl: '/partials/form.html',
-      parent: angular.element(document.body),
-      clickOutsideToClose: false,
-      escapeToClose: false
-    })
-    .then( ({msg}) => {
-      JobFactory.toastSuccess(msg)
-      $route.reload()
-    })
-    .catch( data => {
-      resetSelect()
-      data.msg ? JobFactory.toastReject(data.msg) : null
-    }) 
-  } 
+  const addBySearch = table => {
+    return new Promise ((resolve, reject) => {
+      JobFactory[`get${table}BySearch`]()//should pass in user_id here
+      .then(({data}) => {
+        let locals = {items: data}
+        $mdDialog.show({
+          locals,
+          controller: 'SearchFilter as SF',
+          templateUrl: '/partials/searchFilter.html',
+          parent: angular.element(document.body),
+          scope: $scope,
+          clickOutsideToClose: false,
+          escapeToClose: false
+        })
+        .then( id => resolve(id))
+        .catch( err => reject(err)) 
+      })
+      .catch(err => console.log(err))
+    })  
+  }
 
-  const editExisiting = (editable, table, rep_id) => {
+   const addOrEdit = (editable, table, client_id, rep_id, edit) => {
     let locals = {
       table: table,
       ids: {
         job_id: $scope.jobId,
-        rep_id: rep_id
+        client_id: client_id ? client_id : null,
+        rep_id: rep_id ? rep_id: null,
+        property_id: $scope.Property? $scope.Property.property_id : null
       },
       editable: editable,
+      edit: edit
     }
     $mdDialog.show({
       locals,
@@ -120,9 +118,9 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       JobFactory.toastSuccess(msg)
       $route.reload()
     })
-    .catch( data => {
+    .catch( err => {
       resetSelect()
-      data.msg ? JobFactory.toastReject(data.msg) : null
+      err.msg ? JobFactory.toastReject(err.msg) : null
     })
   }  
 
@@ -144,29 +142,69 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
   $scope.update = change => {
     if (change === 'updateStatus') {
       updateStatus()
-    } else if (change === 'addClient') {
-      addNew('Clients')
-    } else if (change === 'addRep') {
+    }
+
+    else if (change === 'addClient') {
+      addBySearch('Clients')
+      .then( client_id => {
+        if (client_id) {
+          JobFactory.getFullClientById({client_id: client_id}).then(({data}) => { 
+            addOrEdit(data, 'Clients', client_id) //------------------------------------add Existing
+          })
+        } else {
+          addOrEdit(null, 'Clients') //-------------------------------------------------add New
+        }
+      })
+      .catch( err => {
+        resetSelect()
+        err.msg ? JobFactory.toastReject(err.msg) : null
+      })
+    } 
+
+    else if (change === 'editClient') {
       chooseOne('Clients', $scope.Clients).then( client_id => {
-        addNew('Representatives', client_id) 
+        let ids = {job_id: $scope.jobId, client_id: client_id}
+        JobFactory.getFullClientOnJob({ids})
+        .then(({data}) => {
+          addOrEdit(data, 'Clients', client_id, null, true) //---------------------------Update Existing
+        })
       })
-    } else if (change === 'addProp') {
-      addNew('Properties')
-    } else if (change === 'editClient') {
-      chooseOne('Clients', $scope.Clients).then( clientId => {
-        JobFactory.getFullClientById({client_id: clientId})
-          .then(({data}) => editExisiting(data, 'Clients'))
+    } 
+
+    else if (change === 'addRep') {
+      chooseOne('Clients', $scope.Clients).then( client_id => {
+        addBySearch('Representatives')
+        .then( rep_id => {
+          if (rep_id) {
+            JobFactory.getFullRepById({representative_id: rep_id}).then(({data}) => { 
+              addOrEdit(data, 'Representatives', client_id, rep_id) //--------------------add Existing
+            })
+          } else {
+            addOrEdit(null, 'Representatives', client_id) //------------------------------add New
+          }
+        })
+        .catch( err => {
+          resetSelect()
+          err.msg ? JobFactory.toastReject(err.msg) : null
+        })
       })
-    } else if (change === 'editRep') {
+    } 
+
+    else if (change === 'editRep') {
       chooseOne('Representatives', $scope.Representatives).then( rep_id => {
         JobFactory.getFullRepById({representative_id: rep_id})
-          .then(({data}) => editExisiting(data, 'Representatives', rep_id))
+          .then(({data}) => addOrEdit(data, 'Representatives', null, rep_id, true)) //------Update Existing
       })
-    } else if (change === 'editProp') {
-      editExisiting('Properties')
+    }
+
+    else if (change === 'addProp') {
+      addOrEdit(null, 'Properties')
+    } 
+
+    else if (change === 'editProp') {
+      addOrEdit($scope.Property, 'Properties', null, null, true)
     }
   }
-
 
 
 })

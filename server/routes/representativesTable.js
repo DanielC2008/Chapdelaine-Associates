@@ -41,7 +41,6 @@ router.post('/api/getFullRepById', ({body: {representative_id}}, res) => {
   .catch(err => console.log('err', err))
 })
 
-
 router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
   knex('Client_Specs_Per_Job')
     .update('representative_id', null) //-----------------update to null so we keep client associated with job
@@ -50,20 +49,9 @@ router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
     .catch( err => console.log(err))
 })
 
-router.post('/api/addExistingRepToJob', ({body: {objToAdd: {representative_id, job_id, client_id}}}, res) => {
-  knex('Client_Specs_Per_Job')  
-      .update({ representative_id }) //--------this update means that there can only be one rep per client per job
-      .where({
-        job_id,
-        client_id
-      }) 
-    .then( () => res.send({msg: 'Successfully added to Job!'}))
-    .catch( err => console.log(err))
-})
-
-router.post('/api/addNewRepToJob', ({body: {dbObj, idsArr}}, res) => {
-  const job_id = idsArr[0]
-  const client_id = idsArr[1]
+router.post('/api/addNewRepToJob', ({body: {dbObj, ids}}, res) => {
+  const job_id = {job_id: ids.job_id}
+  const client_id = {client_id: ids.client_id}
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -74,34 +62,67 @@ router.post('/api/addNewRepToJob', ({body: {dbObj, idsArr}}, res) => {
         res.status(400).send(nameExists)
       } else {
         getConnectTableIds(dbObj).then( data => {
-        let polishedObj = data.obj
-        knex('Representatives')     //----------make rep
-        .returning('representative_id')
-        .insert(polishedObj)
-        .then( data => {
-          let representative_id = data[0]
-          knex('Client_Specs_Per_Job')  //-----set ids on connecting table
-          .update({ representative_id })   //--this update means that there can only be one rep per client per job  
-          .where(client_id)
-          .andWhere(job_id)
-          .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-          .catch( err => console.log(err))
-        }).catch( err => console.log(err))
-      })
+          let polishedObj = data.obj
+          knex('Representatives')     //----------make rep
+          .returning('representative_id')
+          .insert(polishedObj)
+          .then( data => {
+            let representative_id = data[0]
+            knex('Client_Specs_Per_Job')  //-----set ids on connecting table
+            .update({ representative_id })   //this update means that there can only be one rep per client per job  
+            .where(client_id)
+            .andWhere(job_id)
+            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+            .catch( err => console.log(err))
+          }).catch( err => console.log(err))
+        })
       } 
     })   
   }
 })
 
-
-router.post('/api/updateRep', ({body: {dbObj, idsArr}}, res) => {
-  const representative_id = idsArr[0]
+router.post('/api/addExistingRepToJob', ({body: {dbObj, ids}}, res) => {
+  const job_id = {job_id: ids.job_id}
+  const client_id = {client_id: ids.client_id}
+  const representative_id = {representative_id: ids.representative_id}
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives').then( nameExists => {
+    validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives')
+    .then( nameExists => {
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send(nameExists)
+      } else {
+        getConnectTableIds(dbObj).then( data => {
+          let polishedObj = data.obj
+          knex('Representatives') //---------------------find client
+          .update(polishedObj)
+          .where(representative_id)
+          .then( data => {
+            knex('Client_Specs_Per_Job')  //-----set ids on connecting table
+            .update(representative_id)   //this update means that there can only be one rep per client per job  
+            .where(client_id)
+            .andWhere(job_id)
+            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+            .catch( err => console.log(err))
+          }).catch( err => console.log(err))     
+        })
+      }
+    })
+  }
+})
+
+router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
+  const representative_id = {representative_id: ids.representative_id}
+  const errors = validateRep.validate(dbObj)
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives')
+    .then( nameExists => {
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
       } else {
@@ -118,12 +139,21 @@ router.post('/api/updateRep', ({body: {dbObj, idsArr}}, res) => {
   }
 })
 
+router.get('/api/getRepresentativesBySearch', ({body}, res) => {
+  knex('Representatives')
+    .select(
+      knex.raw(`first_name + ' ' + last_name AS 'value'`),
+      'representative_id AS id'
+    )
+    .then( data => res.send(data))
+    .catch( err => console.log(err))
+})
 
 const getConnectTableIds = obj => {
+  let dbPackage = {}
   return new Promise( (resolve, reject) => {
     Promise.all([  //-----------------get existing state, city, address, county, zip_code
-      locateOrCreate.state(obj.state)
-      .then( data => {
+      locateOrCreate.state(obj.state).then( data => {
         delete obj.state
         obj.state_id = data
       }),
@@ -150,8 +180,8 @@ const getConnectTableIds = obj => {
       })
     ])
     .then( () => {
-      let data = {obj: obj}
-      resolve( data)
+      dbPackage.obj = obj
+      resolve(dbPackage)
     })
   })
 }
