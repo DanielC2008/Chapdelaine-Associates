@@ -29,7 +29,8 @@
 </div>
 <div class="row">
   <button class="button btn" ng-click="FORM.reject()">Exit Without Saving</button>
-  <button ng-if="!FORM.edit" class="button btn" ng-click="FORM.send()" >Save</button>
-  <button ng-if="FORM.edit" class="button btn" ng-click="FORM.update()" >Update</button>
+  <button ng-if="FORM.addNew" class="button btn" ng-click="FORM.addNewToJob()" >Add to Job</button>
+  <button ng-if="FORM.addExisting" class="button btn" ng-click="FORM.addExistingToJob()" >Add to Job</button>
+  <button ng-if="FORM.editExisting" class="button btn" ng-click="FORM.updateExisting()" >Update</button>
 </div>
 

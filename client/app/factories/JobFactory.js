@@ -17,12 +17,12 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
     }
     
-    factory.addToJob = dataObj => {
-      if (dataObj.table === 'Clients'){
-        return $http.post('/api/addExistingClientToJob', dataObj)
+    factory.addExistingToJob = dbPackage => {
+      if (dbPackage.table === 'Clients'){
+        return $http.post('/api/addExistingClientToJob', dbPackage)
       }
-      else if (dataObj.table === 'Representatives'){
-        return $http.post('/api/addExistingRepToJob', dataObj)
+      else if (dbPackage.table === 'Representatives'){
+        return $http.post('/api/addExistingRepToJob', dbPackage)
       }
     }
 
@@ -52,6 +52,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
 
     factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
+    factory.getFullClientOnJob = client_id => $http.post('/api/getFullClientOnJob', client_id)
+
     factory.getFullRepById = rep_id => $http.post('/api/getFullRepById', rep_id)
 
 

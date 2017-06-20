@@ -1,31 +1,38 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormFactory, editable) {
+app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormFactory, editable, edit) {
   let FORM = this
   FORM.Display = {}
-  FORM.edit = editable ? true : false
+
+  if (!edit && !editable) {
+    FORM.addNew = true
+  } else if (!edit && editable) {
+    FORM.addExisting = true
+  } else if (edit && editable) {
+    FORM.editExisting = true
+  }
 
   switch(table) {
     case 'Clients':
-      FORM.title = editable ? 'Update Client' : 'Add New Client'
+      FORM.title = edit ? 'Update Client' : 'Add New Client'
       FORM.Display.Clients = FormFactory.getClientForm(editable)
       FORM.clientType = editable ? editable.client_type : null
       FORM.main = editable ? editable.main : null
       break;
     case 'Representatives':
-      FORM.title = editable ? 'Update Representatives' : 'Add New Representatives'
+      FORM.title = edit ? 'Update Representatives' : 'Add New Representatives'
       FORM.Display.Representatives = FormFactory.getRepForm(editable)
       FORM.client_id = ids.client_id
       break;
     case 'Properties':
-      FORM.title = editable ? 'Update Property' : 'Add New Property'
+      FORM.title = edit ? 'Update Property' : 'Add New Property'
       FORM.Display.Properties = FormFactory.getPropertyForm(editable)
       break;
   }
 
   FORM.table = table
 
-  FORM.send = ()  => {
+  FORM.addNewToJob = ()  => {
     let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
       if (dbPackage) {
@@ -41,9 +48,23 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
     }
   }
 
-  FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
 
-  FORM.update = () => {
+  FORM.addExistingToJob = () => {
+    let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+    let dbPackage = prepForDB(dbObj)
+    JobFactory.addExistingToJob(dbPackage)
+    .then( ({data: msg}) => $mdDialog.hide(msg))
+    .catch( ({data: msg}) => {
+      if (msg) { //------------------------client entered incorrect data type
+        JobFactory.toastReject(msg)
+      } else { //--------------------------database err
+        JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+      }
+    })
+  }
+
+
+  FORM.updateExisting = () => {
     let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
     JobFactory.updateExisting(dbPackage)
@@ -56,6 +77,9 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
       }
     })
   }
+
+  FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
+
 
   const prepForDB = dbObj => {
     let dbPackage = {}

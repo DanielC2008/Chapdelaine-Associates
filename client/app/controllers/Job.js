@@ -87,52 +87,23 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
           escapeToClose: false
         })
         .then( id => resolve(id))
-        .catch( data => { 
-          // resetSelect()
-          // data.msg ? JobFactory.toastReject(data.msg) : null
-        }) 
+        .catch( err => reject(err)) 
       })
       .catch(err => console.log(err))
     })  
   }
 
-  const addNew = (table, client_id = null) => {
-    let locals = {
-      table: table, 
-      ids: {
-        job_id: $scope.jobId,
-        client_id: client_id 
-      },
-      editable: null, 
-    }
-    $mdDialog.show({
-      locals,
-      fullscreen: true,
-      controller: 'Form as FORM',
-      templateUrl: '/partials/form.html',
-      parent: angular.element(document.body),
-      clickOutsideToClose: false,
-      escapeToClose: false
-    })
-    .then( ({msg}) => {
-      JobFactory.toastSuccess(msg)
-      $route.reload()
-    })
-    .catch( data => {
-      resetSelect()
-      data.msg ? JobFactory.toastReject(data.msg) : null
-    }) 
-  } 
-
-   const editExisiting = (editable, table, rep_id) => {
+   const addOrEdit = (editable, table, client_id, rep_id, edit) => {
     let locals = {
       table: table,
       ids: {
         job_id: $scope.jobId,
-        rep_id: rep_id,
-        property_id: $scope.Property.property_id
+        client_id: client_id ? client_id : null,
+        rep_id: rep_id ? rep_id: null,
+        property_id: $scope.Property? $scope.Property.property_id : null
       },
       editable: editable,
+      edit: edit
     }
     $mdDialog.show({
       locals,
@@ -147,9 +118,9 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       JobFactory.toastSuccess(msg)
       $route.reload()
     })
-    .catch( data => {
+    .catch( err => {
       resetSelect()
-      data.msg ? JobFactory.toastReject(data.msg) : null
+      err.msg ? JobFactory.toastReject(err.msg) : null
     })
   }  
 
@@ -172,20 +143,34 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     if (change === 'updateStatus') {
       updateStatus()
     } else if (change === 'addClient') {
-      addBySearch('Clients').then(id => {
-        console.log('id', id)
-      }) 
+      addBySearch('Clients')
+      .then( id => {
+        if (id) {
+          JobFactory.getFullClientById({client_id: id}).then(({data}) => { 
+            addOrEdit(data, 'Clients', id) //---------------------------------add Existing
+          })
+        } else {
+          addOrEdit(null, 'Clients') //---------------------------------------add New
+        }
+      })
+      .catch( err => {
+        resetSelect()
+        err.msg ? JobFactory.toastReject(err.msg) : null
+      })
+    } else if (change === 'editClient') {
+      chooseOne('Clients', $scope.Clients).then( client_id => {
+        let ids = {job_id: $scope.jobId, client_id: client_id}
+        JobFactory.getFullClientOnJob({ids})
+        .then(({data}) => {
+          addOrEdit(data, 'Clients', null, null, true) //---------------------------------Update Existing
+        })
+      })
     } else if (change === 'addRep') {
       chooseOne('Clients', $scope.Clients).then( client_id => {
         addNew('Representatives', client_id) 
       })
     } else if (change === 'addProp') {
       addNew('Properties')
-    } else if (change === 'editClient') {
-      chooseOne('Clients', $scope.Clients).then( clientId => {
-        JobFactory.getFullClientById({client_id: clientId})
-          .then(({data}) => editExisiting(data, 'Clients'))
-      })
     } else if (change === 'editRep') {
       chooseOne('Representatives', $scope.Representatives).then( rep_id => {
         JobFactory.getFullRepById({representative_id: rep_id})
