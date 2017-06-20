@@ -197,10 +197,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       })
     }
 
-     else if (change === 'addProp') {
-      addNew('Properties')
-    } else if (change === 'editProp') {
-      editExisiting($scope.Property, 'Properties')
+    else if (change === 'addProp') {
+      addOrEdit(null, 'Properties')
+    } 
+
+    else if (change === 'editProp') {
+      addOrEdit($scope.Property, 'Properties', null, null, true)
     }
   }
 
