@@ -87,13 +87,13 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
       dbObj.client_type = FORM.clientType
       dbObj.main = FORM.main
       dbPackage.dbObj = dbObj
-      dbPackage.ids = editable ? {job_id: ids.job_id, client_id: editable.client_id} : {job_id: ids.job_id}
+      dbPackage.ids = {job_id: ids.job_id, client_id: ids.client_id}
       dbPackage.table = table
       return dbPackage
     } else if (table === 'Representatives') {
       dbPackage.table = table
       dbPackage.dbObj = dbObj
-      dbPackage.ids = editable ? {representative_id: ids.rep_id} : {job_id: ids.job_id, client_id: ids.client_id}
+      dbPackage.ids = {representative_id: ids.rep_id, job_id: ids.job_id, client_id: ids.client_id}
       return dbPackage
     } else if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
@@ -101,7 +101,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
       } else {
         dbPackage.dbObj = dbObj
         dbPackage.table = table
-        dbPackage.ids = editable ? {job_id: ids.job_id, property_id: ids.property_id} : {job_id: ids.job_id}
+        dbPackage.ids = {job_id: ids.job_id, property_id: ids.property_id}
         return dbPackage
       }   
     }

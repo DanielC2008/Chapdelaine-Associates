@@ -195,7 +195,15 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => { // start here
   }
 })
 
-
+router.get('/api/getClientsBySearch', ({body}, res) => {
+  knex('Clients')
+  .select(
+    knex.raw(`first_name + ' ' + last_name AS 'value'`),
+    'client_id AS id'
+  )
+  .then( data => res.send(data))
+  .catch( err => console.log(err))
+})
 
 const getConnectTableIds = obj => {
   let dbPackage = {}
