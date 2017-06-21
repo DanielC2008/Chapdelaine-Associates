@@ -7,7 +7,7 @@
       <li><a ng-click="setNewTab('JobEstimate') ">Estimate</a></li>
       <li><a ng-click="setNewTab('JobInvoice') ">Invoice</a></li>
       <div class="liDuplicate " ng-init="material()">
-        <select class="navSelect" name="select" ng-model='data.select' ng-change="update(data.select)"> 
+        <select class="navSelect" name="select" ng-model='select' ng-change="update(select)"> 
           <option value="" disabled>Update Job</option>
           <option value="updateStatus">Update Status</option>
           <option value="addClient">Add Client</option>

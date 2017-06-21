@@ -1,20 +1,20 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope, $route) {
+app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope, $route, ClientFactory) {
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
   $scope.setNewTab = newTab => {
     $scope.showTab = newTab
     JobFactory.setNewTab({jobNumber: $scope.jobNumber, showTab: newTab})
-      .then()
-      .catch(err => console.log('err', err))
+    .then()
+    .catch(err => console.log('err', err))
    }
 
   const resetSelect = () => {
-    $scope.data.select = ''
+    $scope.select = ''
     $scope.material()
-  }
+   }
 
   $scope.material = () => {
     $(document).ready(function() {  
@@ -69,62 +69,10 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
       clickOutsideToClose: true
     })
     .then( () => {})
-    .catch( () => resetSelect())
+    .catch( () => {})
   }
 
-  const addBySearch = table => {
-    return new Promise ((resolve, reject) => {
-      JobFactory[`get${table}BySearch`]()//should pass in user_id here
-      .then(({data}) => {
-        let locals = {items: data}
-        $mdDialog.show({
-          locals,
-          controller: 'SearchFilter as SF',
-          templateUrl: '/partials/searchFilter.html',
-          parent: angular.element(document.body),
-          scope: $scope,
-          clickOutsideToClose: false,
-          escapeToClose: false
-        })
-        .then( id => resolve(id))
-        .catch( err => reject(err)) 
-      })
-      .catch(err => console.log(err))
-    })  
-  }
-
-   const addOrEdit = (editable, table, client_id, rep_id, edit) => {
-    let locals = {
-      table: table,
-      ids: {
-        job_id: $scope.jobId,
-        client_id: client_id ? client_id : null,
-        rep_id: rep_id ? rep_id: null,
-        property_id: $scope.Property? $scope.Property.property_id : null
-      },
-      editable: editable,
-      edit: edit
-    }
-    $mdDialog.show({
-      locals,
-      fullscreen: true,
-      controller: 'Form as FORM',
-      templateUrl: '/partials/form.html',
-      parent: angular.element(document.body),
-      clickOutsideToClose: false,
-      escapeToClose: false
-    })
-    .then( ({msg}) => {
-      JobFactory.toastSuccess(msg)
-      $route.reload()
-    })
-    .catch( err => {
-      resetSelect()
-      err.msg ? JobFactory.toastReject(err.msg) : null
-    })
-  }  
-
-  const chooseOne = (table, options) => {
+  const chooseOne = (table, options) => { //FF userSelectForId
     let locals = { optionsArr : JobFactory.createArrForChooseOne(table, options) }
     return new Promise ((resolve, reject) => {
       $mdDialog.show({
@@ -140,28 +88,24 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
   }
 
   $scope.update = change => {
+      console.log('$scope.select', $scope.select)
     if (change === 'updateStatus') {
       updateStatus()
     }
 
     else if (change === 'addClient') {
-      addBySearch('Clients')
-      .then( client_id => {
-        if (client_id) {
-          JobFactory.getFullClientById({client_id: client_id}).then(({data}) => { 
-            addOrEdit(data, 'Clients', client_id) //------------------------------------add Existing
-          })
-        } else {
-          addOrEdit(null, 'Clients') //-------------------------------------------------add New
-        }
-      })
+      let ids = { job_id: $scope.jobId}
+      ClientFactory.addClient(ids)
+      .then( ({msg}) => {
+        $route.reload()
+        JobFactory.toastSuccess(msg)
+      })  
       .catch( err => {
-        resetSelect()
-        err.msg ? JobFactory.toastReject(err.msg) : null
+        err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err)
       })
     } 
 
-    else if (change === 'editClient') {
+    else if (change === 'editClient') { 
       chooseOne('Clients', $scope.Clients).then( client_id => {
         let ids = {job_id: $scope.jobId, client_id: client_id}
         JobFactory.getFullClientOnJob({ids})
@@ -204,6 +148,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     else if (change === 'editProp') {
       addOrEdit($scope.Property, 'Properties', null, null, true)
     }
+    resetSelect()
   }
 
 

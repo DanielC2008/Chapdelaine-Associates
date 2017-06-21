@@ -50,29 +50,12 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
     }
 
-
-    factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
-    factory.getFullClientOnJob = client_id => $http.post('/api/getFullClientOnJob', client_id)
-
     factory.getFullRepById = rep_id => $http.post('/api/getFullRepById', rep_id)
 
 
 
 
-
-
-
-
-
-
-    factory.getClientsBySearch = () => $http.get('/api/getClientsBySearch')
-
-    factory.getPropertiesBySearch = () => $http.get('/api/getPropertiesBySearch') //usefull but not utilized currently
-
-    factory.getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
-
-
-
+    //Job Factory
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
     factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
@@ -81,21 +64,37 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.getPendingJobs = () => $http.get('/api/pendingJobs')
 
-    factory.editColumn = columnInfo => $http.post('/api/editColumn', columnInfo)
-
-    factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
-
-    factory.getMinJob = () => $http.get('/api/getMinJob')
-
     factory.createNewJob = newJobObj => $http.post('/api/createNewJob', newJobObj)
 
     factory.updateJobStatus = jobObj => $http.post('/api/updateJobStatus', jobObj)
 
+    factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
+    
     factory.getCauses = () => $http.get('api/getCauses')
 
+    factory.getTab = () => $http.get('/api/getTab')
+
+    factory.setTab = jobNumber => $http.post('/api/setTab', jobNumber)
+
+    factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
+
+    factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
+
+
+    //Task Factory or FF
     factory.getTasks = () => $http.get('/api/getTasks')
 
-    factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
+    //Attachment Factory
+
+    factory.openFile = attachment_id => $http.post('/api/openFile', attachment_id)
+
+    factory.deleteFile = attachment_id => $http.post('/api/deleteFile', attachment_id)
+
+
+    //????
+    factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
+
+    factory.getMinJob = () => $http.get('/api/getMinJob')
 
     factory.updateTable = updateObj => $http.post('/api/updateTable', updateObj)
 
@@ -105,42 +104,13 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     
     factory.deleteFromConnectingTable = objToRemove => $http.post('/api/deleteFromConnectingTable', objToRemove)
 
-    factory.openFile = attachment_id => $http.post('/api/openFile', attachment_id)
 
-    factory.deleteFile = attachment_id => $http.post('/api/deleteFile', attachment_id)
-
+    //User Factory
     factory.getUserName = () => $http.get('/api/getUserName')
 
     factory.removeUser = () => $http.get('/api/removeUser')
 
-    factory.getTab = () => $http.get('/api/getTab')
-
-    factory.setTab = jobNumber => $http.post('/api/setTab', jobNumber)
-
-    factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
-
-    factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
-   
-    /////////////////////////////////might put these elsewhere
-    factory.matchDatabaseKeys = obj => {
-      for (let key in obj){
-        obj[key.toLowerCase().replace(' ', '_')] = obj[key]
-        delete obj[key]
-      }
-      return obj
-    }
-
-    factory.getEditedColumns = (original, edited) => {
-      let obj  = {}
-      for( let key in original) {
-        if (original[key] != edited[`${key}`]) {
-          obj[`${key}`] = edited[key]
-        }
-      }
-      return obj
-    }
-
-    factory.createArrForChooseOne = (table, options) => {
+    factory.createArrForChooseOne = (table, options) => { //FF
       return options.map( opt => {
         return {
           id: (table === 'Clients') ? opt.client_id : opt.representative_id,
@@ -149,6 +119,8 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       })
     }
 
+
+    // Toast Factory
     factory.toastSuccess = message => {
       let msg = message === undefined ? 'Success' : message
       return $mdToast.show(

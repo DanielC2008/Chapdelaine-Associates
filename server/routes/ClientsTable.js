@@ -195,7 +195,7 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => { // start here
   }
 })
 
-router.get('/api/getClientsBySearch', ({body}, res) => {
+router.get('/api/getClientsForSearch', ({body}, res) => {
   knex('Clients')
   .select(
     knex.raw(`first_name + ' ' + last_name AS 'value'`),
