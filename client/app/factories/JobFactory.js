@@ -31,10 +31,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.getMinJob = () => $http.get('/api/getMinJob')
 
-
-    //Task Factory or FF
-    factory.getTasks = () => $http.get('/api/getTasks')
-
     //Attachment Factory
     factory.openFile = attachment_id => $http.post('/api/openFile', attachment_id)
 

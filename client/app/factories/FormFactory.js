@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('FormFactory', function(JobFactory, $q, $mdDialog) {
+app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
   let factory = {}
   let taskObj 
   let _initialized = $q.defer() //wait for data to return
@@ -11,7 +11,7 @@ app.factory('FormFactory', function(JobFactory, $q, $mdDialog) {
     }
   }  
 
-  JobFactory.getTasks()
+  TaskFactory.getTasks()
     .then( ({data}) => {
       let Tasks = data.reduce( (obj, task) => {
         obj[task.task] = ''

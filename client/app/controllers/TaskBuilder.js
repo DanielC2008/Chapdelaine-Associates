@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('TaskBuilder', function($scope, $http, JobFactory, DBFactory) {
+app.controller('TaskBuilder', function($scope, JobFactory, TaskFactory, DBFactory) {
   let TBScope = this
   let {table, id, connectingTableId} = $scope.DBObj
   let allTasks
@@ -8,7 +8,7 @@ app.controller('TaskBuilder', function($scope, $http, JobFactory, DBFactory) {
   TBScope.edit = null
   TBScope.task = null
 
-  JobFactory.getTasks()
+  TaskFactory.getTasks()
     .then( ({data}) => {
       allTasks = data
       TBScope.tasks = data.map(obj => obj.task)
