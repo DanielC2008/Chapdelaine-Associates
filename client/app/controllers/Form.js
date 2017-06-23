@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormFactory, editable, edit) {
+app.controller('Form', function($scope, $mdDialog, JobFactory, FormFactory, DBFactory, table, ids, editable, edit) {
 
   let FORM = this
   FORM.Display = {}
@@ -37,7 +37,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
       if (dbPackage) {
-      JobFactory.addNewToJob(dbPackage)
+      DBFactory.addNewToJob(dbPackage)
       .then( ({data: msg}) => $mdDialog.hide(msg))
       .catch( ({data: msg}) => {
         //if msg: client entered incorrect data type else database err
@@ -50,7 +50,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
   FORM.addExistingToJob = () => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-    JobFactory.addExistingToJob(dbPackage)
+    DBFactory.addExistingToJob(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
       //if msg: client entered incorrect data type else database err
@@ -62,7 +62,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
   FORM.updateExisting = () => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-    JobFactory.updateExisting(dbPackage)
+    DBFactory.updateExisting(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
       //if msg: client entered incorrect data type else database err

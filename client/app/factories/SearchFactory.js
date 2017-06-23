@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('SearchFactory', function($http, $mdDialog, JobFactory) {
+app.factory('SearchFactory', function($mdDialog) {
 
   const factory = {}
 

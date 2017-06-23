@@ -1,9 +1,9 @@
 'use strict'
 
-app.controller('RecommendNumber', function($scope, JobFactory) {
+app.controller('RecommendNumber', function($scope, DBFactory) {
   let RNScope = this
 
-  JobFactory.getMaxNumber({table: $scope.tableForDB })
+  DBFactory.getMaxNumber({table: $scope.tableForDB })
     .then( ({data: {max}}) => RNScope.recommended = max + 1 )
     .catch( ({data}) => console.log(data))
 

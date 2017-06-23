@@ -4,60 +4,14 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
   const factory = {}
 
-
-    factory.addNewToJob = dbPackage => {
-      if (dbPackage.table === 'Clients'){
-        return $http.post('/api/addNewClientToJob', dbPackage)
-      } 
-      else if (dbPackage.table === 'Representatives'){
-        return $http.post('/api/addNewRepToJob', dbPackage)
-      } 
-      else if (dbPackage.table === 'Properties'){
-        return $http.post('/api/addNewPropertyToJob', dbPackage)
-      }
-    }
-    
-    factory.addExistingToJob = dbPackage => {
-      if (dbPackage.table === 'Clients'){
-        return $http.post('/api/addExistingClientToJob', dbPackage)
-      }
-      else if (dbPackage.table === 'Representatives'){
-        return $http.post('/api/addExistingRepToJob', dbPackage)
-      }
-    }
-
-    factory.removeFromJob = dataObj => {
-      if (dataObj.table === 'Clients') {        
-        return $http.post('/api/removeClientFromJob', dataObj)
-      }
-      else if (dataObj.table === 'Representatives') {        
-        return $http.post('/api/removeRepFromJob', dataObj)
-      }
-      else if (dataObj.table === 'Properties') {        
-        return $http.post('/api/removePropertyFromJob', dataObj)
-      }
-    }
-
-    factory.updateExisting = dbPackage => {
-      if (dbPackage.table === 'Clients') {
-        return $http.post('/api/updateClient', dbPackage)
-      } 
-      else if (dbPackage.table === 'Representatives') {
-        return $http.post('/api/updateRep', dbPackage)
-      }
-      else if (dbPackage.table === 'Properties') {        
-        return $http.post('/api/updateProperty', dbPackage)
-      }
-    }
-
     //Job Factory
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
     factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
 
-    factory.getActiveJobs = () => $http.get('/api/activeJobs')
+    factory.getActiveJobs = () => $http.get('/api/activeJobs') //will remove
 
-    factory.getPendingJobs = () => $http.get('/api/pendingJobs')
+    factory.getPendingJobs = () => $http.get('/api/pendingJobs') //will remove
 
     factory.createNewJob = newJobObj => $http.post('/api/createNewJob', newJobObj)
 
@@ -75,29 +29,16 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
 
+    factory.getMinJob = () => $http.get('/api/getMinJob')
+
 
     //Task Factory or FF
     factory.getTasks = () => $http.get('/api/getTasks')
 
     //Attachment Factory
-
     factory.openFile = attachment_id => $http.post('/api/openFile', attachment_id)
 
     factory.deleteFile = attachment_id => $http.post('/api/deleteFile', attachment_id)
-
-
-    //????
-    factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
-
-    factory.getMinJob = () => $http.get('/api/getMinJob')
-
-    factory.updateTable = updateObj => $http.post('/api/updateTable', updateObj)
-
-    factory.updateConnectingTable = updateObj => $http.post('/api/updateConnectingTable', updateObj)
-
-    factory.insertIntoConnectingTable = lineItemObj => $http.post('/api/insertIntoConnectingTable', lineItemObj)
-    
-    factory.deleteFromConnectingTable = objToRemove => $http.post('/api/deleteFromConnectingTable', objToRemove)
 
 
     //User Factory

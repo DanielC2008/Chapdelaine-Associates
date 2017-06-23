@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('TaskBuilder', function($scope, $http, JobFactory) {
+app.controller('TaskBuilder', function($scope, $http, JobFactory, DBFactory) {
   let TBScope = this
   let {table, id, connectingTableId} = $scope.DBObj
   let allTasks
@@ -38,7 +38,7 @@ app.controller('TaskBuilder', function($scope, $http, JobFactory) {
     if (task.hourly) {
       lineItemObj.objToAdd.time_if_hourly = 1
     }
-    JobFactory.insertIntoConnectingTable(lineItemObj)
+    DBFactory.insertIntoConnectingTable(lineItemObj)
       .then( ({data}) => {
         let addTask = _.cloneDeep(task)
         addTask[`${connectingTableId}`] = data[0]
@@ -57,7 +57,7 @@ app.controller('TaskBuilder', function($scope, $http, JobFactory) {
       id: lineItem[`${connectingTableId}`],
       columnsToUpdate : {time_if_hourly: lineItem.time_if_hourly}
     }
-    JobFactory.updateConnectingTable(updateObj)
+    DBFactory.updateConnectingTable(updateObj)
       .then( () => {
         getTotal()
         JobFactory.toastSuccess()
@@ -71,7 +71,7 @@ app.controller('TaskBuilder', function($scope, $http, JobFactory) {
       table,
       id: lineItem[`${connectingTableId}`]
     }
-    JobFactory.deleteFromConnectingTable(objToRemove)
+    DBFactory.deleteFromConnectingTable(objToRemove)
       .then( () => {
         getTotal()
         JobFactory.toastSuccess()
