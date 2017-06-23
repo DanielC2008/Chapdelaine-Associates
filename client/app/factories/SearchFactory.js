@@ -22,7 +22,7 @@ app.factory('SearchFactory', function($http, $mdDialog, JobFactory) {
 
 
   factory.chooseOne = (table, options) => {
-    let locals = { optionsArr : JobFactory.createArrForChooseOne(table, options) }
+    let locals = { optionsArr : createArrForChooseOne(table, options) }
     return new Promise ((resolve, reject) => {
       $mdDialog.show({
         locals,
@@ -36,7 +36,15 @@ app.factory('SearchFactory', function($http, $mdDialog, JobFactory) {
     })
   }
 
-  const getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')
+
+  const createArrForChooseOne = (table, options) => {
+    return options.map( opt => {
+      return {
+        id: (table === 'Clients') ? opt.client_id : opt.representative_id,
+        name : `${opt.first_name} ${opt.last_name}`
+      }  
+    })
+  }
 
   return factory
 })

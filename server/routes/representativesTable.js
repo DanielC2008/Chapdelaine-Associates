@@ -97,7 +97,7 @@ router.post('/api/addExistingRepToJob', ({body: {dbObj, ids}}, res) => {
       } else {
         getConnectTableIds(dbObj).then( data => {
           let polishedObj = data.obj
-          knex('Representatives') //---------------------find client
+          knex('Representatives') //---------------------find rep
           .update(polishedObj)
           .where(representative_id)
           .then( data => {
@@ -139,7 +139,7 @@ router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.get('/api/getRepresentativesBySearch', ({body}, res) => {
+router.get('/api/getRepsForSearch', ({body}, res) => {
   knex('Representatives')
     .select(
       knex.raw(`first_name + ' ' + last_name AS 'value'`),

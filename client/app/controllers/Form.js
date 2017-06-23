@@ -21,7 +21,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
       FORM.main = editable ? editable.main : null
       break;
     case 'Representatives':
-      FORM.title = edit ? 'Update Representatives' : 'Add New Representatives'
+      FORM.title = edit ? 'Update Representative' : 'Add New Representative'
       FORM.Display.Representatives = FormFactory.getRepForm(editable)
       FORM.client_id = ids.client_id
       break;
@@ -85,7 +85,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
     } else if (table === 'Representatives') {
       dbPackage.table = table
       dbPackage.dbObj = dbObj
-      dbPackage.ids = {representative_id: ids.rep_id, job_id: ids.job_id, client_id: ids.client_id}
+      dbPackage.ids = ids
       return dbPackage
     } else if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {

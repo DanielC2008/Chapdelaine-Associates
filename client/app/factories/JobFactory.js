@@ -110,16 +110,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.removeUser = () => $http.get('/api/removeUser')
 
-    factory.createArrForChooseOne = (table, options) => { //FF
-      return options.map( opt => {
-        return {
-          id: (table === 'Clients') ? opt.client_id : opt.representative_id,
-          name : `${opt.first_name} ${opt.last_name}`
-        }  
-      })
-    }
-
-
     // Toast Factory
     factory.toastSuccess = message => {
       let msg = message === undefined ? 'Success' : message

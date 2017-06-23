@@ -1,6 +1,6 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope, $route, ClientFactory) {
+app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope, $route, ClientFactory, RepFactory) {
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
@@ -84,9 +84,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
         $route.reload()
         JobFactory.toastSuccess(msg)
       })  
-      .catch( err => {
-        err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err)
-      })
+      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editClient') { 
@@ -100,22 +98,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } 
 
     else if (change === 'addRep') {
-      chooseOne('Clients', $scope.Clients).then( client_id => {
-        addBySearch('Representatives')
-        .then( rep_id => {
-          if (rep_id) {
-            JobFactory.getFullRepById({representative_id: rep_id}).then(({data}) => { 
-              addOrEdit(data, 'Representatives', client_id, rep_id) //--------------------add Existing
-            })
-          } else {
-            addOrEdit(null, 'Representatives', client_id) //------------------------------add New
-          }
-        })
-        .catch( err => {
-          resetSelect()
-          err.msg ? JobFactory.toastReject(err.msg) : null
-        })
-      })
+      let ids = { job_id: $scope.jobId}
+      RepFactory.addRep(ids, $scope.Clients)
+      .then( ({msg}) => {
+        $route.reload()
+        JobFactory.toastSuccess(msg)
+      })  
+      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editRep') {
