@@ -72,23 +72,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     .catch( () => {})
   }
 
-  const chooseOne = (table, options) => { //FF userSelectForId
-    let locals = { optionsArr : JobFactory.createArrForChooseOne(table, options) }
-    return new Promise ((resolve, reject) => {
-      $mdDialog.show({
-        locals,
-        controller: 'ChooseOne as CO',
-        templateUrl: '/partials/chooseOne.html',
-        parent: angular.element(document.body),
-        clickOutsideToClose:false
-      })
-      .then( id => resolve(id))
-      .catch(err => console.log(err))
-    })
-  }
-
   $scope.update = change => {
-      console.log('$scope.select', $scope.select)
     if (change === 'updateStatus') {
       updateStatus()
     }
@@ -106,13 +90,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } 
 
     else if (change === 'editClient') { 
-      chooseOne('Clients', $scope.Clients).then( client_id => {
-        let ids = {job_id: $scope.jobId, client_id: client_id}
-        JobFactory.getFullClientOnJob({ids})
-        .then(({data}) => {
-          addOrEdit(data, 'Clients', client_id, null, true) //---------------------------Update Existing
-        })
-      })
+      let ids = { job_id: $scope.jobId}
+      ClientFactory.editClient(ids, $scope.Clients)
+      .then( ({msg}) => {
+        $route.reload()
+        JobFactory.toastSuccess(msg)
+      })  
+      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'addRep') {

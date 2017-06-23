@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('SearchFactory', function($http, $mdDialog) {
+app.factory('SearchFactory', function($http, $mdDialog, JobFactory) {
 
   const factory = {}
 
@@ -18,6 +18,22 @@ app.factory('SearchFactory', function($http, $mdDialog) {
       .then( id => resolve(id))
       .catch( err => reject(err)) 
     })  
+  }
+
+
+  factory.chooseOne = (table, options) => {
+    let locals = { optionsArr : JobFactory.createArrForChooseOne(table, options) }
+    return new Promise ((resolve, reject) => {
+      $mdDialog.show({
+        locals,
+        controller: 'ChooseOne as CO',
+        templateUrl: '/partials/chooseOne.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose:false
+      })
+      .then( id => resolve(id))
+      .catch(err => console.log(err))
+    })
   }
 
   const getRepresentativesBySearch = () => $http.get('/api/getRepresentativesBySearch')

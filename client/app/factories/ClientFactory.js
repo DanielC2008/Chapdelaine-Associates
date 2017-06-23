@@ -16,8 +16,7 @@ app.factory('ClientFactory', function($http, SearchFactory, FormFactory) {
       return new Promise ((resolve, reject) => {
         getClientsForSearch().then( ({data}) => {
           let clientNames = data
-          SearchFactory.addBySearch(clientNames)
-          .then( client_id => {
+          SearchFactory.addBySearch(clientNames).then( client_id => {
             ids.client_id = client_id
             if (client_id) { 
               // edit existing client
@@ -34,6 +33,20 @@ app.factory('ClientFactory', function($http, SearchFactory, FormFactory) {
             }
           }).catch( err => reject(err))
         }).catch( () => reject({msg:'Nothing Saved'})) 
+      })
+    }
+
+
+    factory.editClient = (ids , clients) => {
+      return new Promise ((resolve, reject) => {
+        SearchFactory.chooseOne('Clients', clients).then( client_id => {
+          ids.client_id = client_id
+          getFullClientOnJob({ids}).then( ({data}) => {
+            FormFactory.updateForm('Clients', data, ids, true).then( msg => {
+              resolve(msg)
+            }).catch( err => reject({msg:'Nothing Saved'}))
+          }).catch( err => console.log('err', err))
+        }).catch( err => reject({msg:'Nothing Saved'}))
       })
     }
 
