@@ -96,7 +96,7 @@ router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
             }).then().catch(err => console.log(err))
           }).then().catch(err => console.log(err))
         } 
-        res.send({msg: 'Successfully created and added to Job!'})
+        res.send({msg: 'Successfully updated Job!'})
       }).catch( err => console.log(err))
     }).catch( err => console.log(err))
   }

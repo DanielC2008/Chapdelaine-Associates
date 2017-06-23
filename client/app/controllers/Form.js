@@ -93,7 +93,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
       } else {
         dbPackage.dbObj = dbObj
         dbPackage.table = table
-        dbPackage.ids = {job_id: ids.job_id, property_id: ids.property_id}
+        dbPackage.ids = ids
         return dbPackage
       }   
     }

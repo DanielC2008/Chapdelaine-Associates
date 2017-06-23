@@ -50,11 +50,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
       }
     }
 
-    factory.getFullRepById = rep_id => $http.post('/api/getFullRepById', rep_id)
-
-
-
-
     //Job Factory
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 

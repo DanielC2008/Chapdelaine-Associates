@@ -1,6 +1,6 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootScope, $route, ClientFactory, RepFactory) {
+app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route, ClientFactory, RepFactory,PropertyFactory) {
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
@@ -73,12 +73,12 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
   }
 
   $scope.update = change => {
+    let ids = { job_id: $scope.jobId }
     if (change === 'updateStatus') {
       updateStatus()
     }
 
     else if (change === 'addClient') {
-      let ids = { job_id: $scope.jobId}
       ClientFactory.addClient(ids)
       .then( ({msg}) => {
         $route.reload()
@@ -88,7 +88,6 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } 
 
     else if (change === 'editClient') { 
-      let ids = { job_id: $scope.jobId}
       ClientFactory.editClient(ids, $scope.Clients)
       .then( ({msg}) => {
         $route.reload()
@@ -98,7 +97,6 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } 
 
     else if (change === 'addRep') {
-      let ids = { job_id: $scope.jobId}
       RepFactory.addRep(ids, $scope.Clients)
       .then( ({msg}) => {
         $route.reload()
@@ -108,7 +106,6 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } 
 
     else if (change === 'editRep') {
-      let ids = { job_id: $scope.jobId}
       RepFactory.editRep(ids, $scope.Representatives)
       .then( ({msg}) => {
         $route.reload()
@@ -118,11 +115,22 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     }
 
     else if (change === 'addProp') {
-      addOrEdit(null, 'Properties')
+      PropertyFactory.addProperty(ids)
+      .then( ({msg}) => {
+        $route.reload()
+        JobFactory.toastSuccess(msg)
+      })  
+      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editProp') {
-      addOrEdit($scope.Property, 'Properties', null, null, true)
+      ids.property_id = $scope.Property.property_id
+      PropertyFactory.editProperty(ids, $scope.Property)
+      .then( ({msg}) => {
+        $route.reload()
+        JobFactory.toastSuccess(msg)
+      })  
+      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
     }
     resetSelect()
   }
