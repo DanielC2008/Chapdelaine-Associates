@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDialog) {
+app.controller('JobMain', function($scope, $location, JobFactory, ToastFactory, $route, $mdDialog) {
   let JMScope = this
 
 /////////////FOR EDITING A SINGLE COLUMN///////////////
@@ -12,8 +12,8 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
   //   //make sure user wants to make these changes
   //   let obj = JobFactory.matchDatabaseKeys({[key]: value})
   //   JobFactory.editColumn({table, id, obj})
-  //     .then( ({data: {msg}}) => JobFactory.toastSuccess(msg))
-  //     .catch( ({data: {msg}}) => JobFactory.toastReject(msg))
+  //     .then( ({data: {msg}}) => ToastFactory.toastSuccess(msg))
+  //     .catch( ({data: {msg}}) => ToastFactory.toastReject(msg))
   // }
 
   //set edit options on obj for easy comparison and edit canceled obj so data isn't lost 
@@ -58,10 +58,10 @@ app.controller('JobMain', function($scope, $location, JobFactory, $route, $mdDia
     dataObj.objToRemove.job_id = $scope.jobId
     JobFactory.removeFromJob(dataObj)
       .then( ({data: {msg}}) => {
-        JobFactory.toastSuccess(msg)
+        ToastFactory.toastSuccess(msg)
         $route.reload()
       })
-      .catch( err => JobFactory.toastReject())
+      .catch( err => ToastFactory.toastReject())
   }
 
 })

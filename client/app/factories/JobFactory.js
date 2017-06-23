@@ -1,10 +1,9 @@
 'use strict'
 
-app.factory('JobFactory', function($location, $http, $mdToast) {
+app.factory('JobFactory', function($location, $http) {
 
   const factory = {}
 
-    //Job Factory
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
     factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
@@ -28,31 +27,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
     factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
 
     factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
-
-    factory.getMinJob = () => $http.get('/api/getMinJob')
-
-    // Toast Factory
-    factory.toastSuccess = message => {
-      let msg = message === undefined ? 'Success' : message
-      return $mdToast.show(
-        $mdToast.simple()
-          .textContent(`${msg}`)
-          .position('top right')
-          .hideDelay(3000)
-          .toastClass('toastSuccess')
-      )
-    }
-
-    factory.toastReject = message => {
-      let msg = message === undefined ? 'Error' : message
-      return $mdToast.show(
-        $mdToast.simple()
-          .textContent(`${msg}`)
-          .position('top right')
-          .hideDelay(3000)
-          .toastClass('toastReject')
-      )
-    }
 
   return factory
 })

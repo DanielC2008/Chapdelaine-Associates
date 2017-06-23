@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobAttachment', function($scope, JobFactory, FileUploader, $route, AttachmentFactory) {
+app.controller('JobAttachment', function($scope, ToastFactory, FileUploader, $route, AttachmentFactory) {
   let JAScope = this
 
   JAScope.attachments = $scope.Attachments
@@ -11,7 +11,7 @@ app.controller('JobAttachment', function($scope, JobFactory, FileUploader, $rout
     },
     onSuccessItem(item, response, status, headers) {
       $route.reload()
-      JobFactory.toastSuccess(response)  // on reload needs to go to Attachment, either change url or variable
+      ToastFactory.toastSuccess(response)  // on reload needs to go to Attachment, either change url or variable
     }
   })
 
@@ -21,7 +21,7 @@ app.controller('JobAttachment', function($scope, JobFactory, FileUploader, $rout
     AttachmentFactory.deleteFile({attachment_id: {attachment_id: id}})
       .then(({data}) => {
         $route.reload()
-        JobFactory.toastSuccess(data)
+        ToastFactory.toastSuccess(data)
       })
   }
 

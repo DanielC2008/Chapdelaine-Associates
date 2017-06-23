@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
+app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory, $mdDialog, $route) {
   let JSscope = this
   $scope.Job = {}
   JSscope.currStatus = $scope.jobInfo ? $scope.jobInfo.jobStatus : 'New' //---if job already exists else 'New'
@@ -9,19 +9,19 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
     if (JSscope.currStatus === 'New') {
       JobFactory.createNewJob($scope.Job)
         .then( ({data}) => {
-          JobFactory.toastSuccess(data.msg)
+          ToastFactory.toastSuccess(data.msg)
           $mdDialog.hide()
           JobFactory.goToJobPage($scope.Job.job_number)
         })
-        .catch( (data) => data.data ? JobFactory.toastReject(data.msg) : console.log('data', data))
+        .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
     } else {
       JobFactory.updateJobStatus({jobObj: $scope.Job, currJobNum: $scope.jobInfo.jobNumber})
         .then( ({data}) => {  
-          JobFactory.toastSuccess(data.msg)
+          ToastFactory.toastSuccess(data.msg)
           $mdDialog.hide()
           $scope.jobInfo.jobNumber == data.job_number ? $route.reload() : JobFactory.goToJobPage(data.job_number)
         })
-        .catch( (data) => data.data ? JobFactory.toastReject(data.msg) : console.log('data', data))
+        .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
     }
   }
 
@@ -34,12 +34,12 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
   const removeCompleteDate = () => $scope.Job.complete_date = null
 
   const addMinJobNumber = () => {
-    JobFactory.getMinJob()
+    DBFactory.getMinNumber({table: 'Jobs'})
       .then( ({data: {min}}) => { 
         (min < 0) ? $scope.Job.job_number = min - 1 : $scope.Job.job_number = -1
         submitJobStatus() 
       })
-      .catch( (data) => data.data ? JobFactory.toastReject(data.msg) : console.log('data', data))
+      .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
   }
   
   JSscope.jobCanceled = () => {
@@ -88,7 +88,7 @@ app.controller('JobStatus', function($scope, JobFactory, $mdDialog, $route) {
       $scope.Job.job_number = job_number
       submitJobStatus()
     } else {
-      JobFactory.toastReject('Job number must be greater than 0!')
+      ToastFactory.toastReject('Job number must be greater than 0!')
     }
   }
 

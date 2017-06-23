@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, JobFactory, FormFactory, DBFactory, table, ids, editable, edit) {
+app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DBFactory, table, ids, editable, edit) {
 
   let FORM = this
   FORM.Display = {}
@@ -41,7 +41,7 @@ app.controller('Form', function($scope, $mdDialog, JobFactory, FormFactory, DBFa
       .then( ({data: msg}) => $mdDialog.hide(msg))
       .catch( ({data: msg}) => {
         //if msg: client entered incorrect data type else database err
-        msg ? JobFactory.toastReject(msg) : JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+        msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
       })
     }
   }
@@ -54,7 +54,7 @@ app.controller('Form', function($scope, $mdDialog, JobFactory, FormFactory, DBFa
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
       //if msg: client entered incorrect data type else database err
-      msg ? JobFactory.toastReject(msg) : JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+      msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
     })
   }
 
@@ -66,7 +66,7 @@ app.controller('Form', function($scope, $mdDialog, JobFactory, FormFactory, DBFa
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
       //if msg: client entered incorrect data type else database err
-      msg ? JobFactory.toastReject(msg) : JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+      msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
     })
   }
 
@@ -89,7 +89,7 @@ app.controller('Form', function($scope, $mdDialog, JobFactory, FormFactory, DBFa
       return dbPackage
     } else if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
-        JobFactory.toastReject("Please enter an Address or a Road.")
+        ToastFactory.toastReject("Please enter an Address or a Road.")
       } else {
         dbPackage.dbObj = dbObj
         dbPackage.table = table

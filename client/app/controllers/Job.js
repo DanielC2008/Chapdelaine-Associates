@@ -1,6 +1,8 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route, ClientFactory, RepFactory,PropertyFactory) {
+app.controller('Job', function(
+  $scope, $location, JobFactory, ToastFactory, $mdDialog, $route, ClientFactory, RepFactory, PropertyFactory) {
+
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
@@ -82,45 +84,45 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route,
       ClientFactory.addClient(ids)
       .then( ({msg}) => {
         $route.reload()
-        JobFactory.toastSuccess(msg)
+        ToastFactory.toastSuccess(msg)
       })  
-      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
+      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editClient') { 
       ClientFactory.editClient(ids, $scope.Clients)
       .then( ({msg}) => {
         $route.reload()
-        JobFactory.toastSuccess(msg)
+        ToastFactory.toastSuccess(msg)
       })  
-      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
+      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'addRep') {
       RepFactory.addRep(ids, $scope.Clients)
       .then( ({msg}) => {
         $route.reload()
-        JobFactory.toastSuccess(msg)
+        ToastFactory.toastSuccess(msg)
       })  
-      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
+      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editRep') {
       RepFactory.editRep(ids, $scope.Representatives)
       .then( ({msg}) => {
         $route.reload()
-        JobFactory.toastSuccess(msg)
+        ToastFactory.toastSuccess(msg)
       })  
-      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
+      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }
 
     else if (change === 'addProp') {
       PropertyFactory.addProperty(ids)
       .then( ({msg}) => {
         $route.reload()
-        JobFactory.toastSuccess(msg)
+        ToastFactory.toastSuccess(msg)
       })  
-      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
+      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editProp') {
@@ -128,9 +130,9 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route,
       PropertyFactory.editProperty(ids, $scope.Property)
       .then( ({msg}) => {
         $route.reload()
-        JobFactory.toastSuccess(msg)
+        ToastFactory.toastSuccess(msg)
       })  
-      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
+      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }
     resetSelect()
   }

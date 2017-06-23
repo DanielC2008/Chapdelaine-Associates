@@ -51,6 +51,8 @@ app.factory('DBFactory', function($http) {
 
   factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
 
+  factory.getMinNumber = table => $http.post('/api/getMinNumber', table)
+
   factory.updateTable = updateObj => $http.post('/api/updateTable', updateObj)
 
   factory.updateConnectingTable = updateObj => $http.post('/api/updateConnectingTable', updateObj)
