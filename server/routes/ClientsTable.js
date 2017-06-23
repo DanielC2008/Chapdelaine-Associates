@@ -45,7 +45,8 @@ router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc
   .catch(err => console.log('err', err))
 }) 
 
-router.post('/api/getFullClientById', ({body: {client_id}}, res) => { //on new bc no job associated yet
+router.post('/api/getFullClientById', ({body: {ids}}, res) => { //on new bc no job associated yet
+  const client_id = ids.client_id
   knex('Clients')
   .select(
     'Clients.client_id',

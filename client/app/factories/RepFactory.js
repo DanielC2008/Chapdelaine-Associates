@@ -8,8 +8,6 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
 
     const getFullRepById = rep_id => $http.post('/api/getFullRepById', rep_id)
 
-    const getFullRepOnJob = rep_id => $http.post('/api/getFullRepOnJob', rep_id)
-
     const getRepsForSearch = () => $http.get('/api/getRepsForSearch')
 
     factory.addRep = (ids, clients) => {
@@ -22,7 +20,7 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
               ids.representative_id = rep_id
               if (rep_id) { 
                 // edit existing rep
-                getFullRepById({representative_id: rep_id}).then(({data}) => { 
+                getFullRepById({ids}).then(({data}) => { 
                   FormFactory.updateForm('Representatives', data, ids, false).then( msg => {
                     resolve(msg)
                   }).catch( err => reject(err))
@@ -40,18 +38,18 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
     }
 
 
-    // factory.editRep = (ids , clients) => {
-    //   return new Promise ((resolve, reject) => {
-    //     SearchFactory.chooseOne('Representatives', clients).then( rep_id => {
-    //       ids.representative_id = rep_id
-    //       getFullRepOnJob({ids}).then( ({data}) => {
-    //         FormFactory.updateForm('Representatives', data, ids, true).then( msg => {
-    //           resolve(msg)
-    //         }).catch( err => reject({msg:'Nothing Saved'}))
-    //       }).catch( err => console.log('err', err))
-    //     }).catch( err => reject({msg:'Nothing Saved'}))
-    //   })
-    // }
+    factory.editRep = (ids , reps) => {
+      return new Promise ((resolve, reject) => {
+        SearchFactory.chooseOne('Representatives', reps).then( rep_id => {
+          ids.representative_id = rep_id
+          getFullRepById({ids}).then( ({data}) => {
+            FormFactory.updateForm('Representatives', data, ids, true).then( msg => {
+              resolve(msg)
+            }).catch( err => reject({msg:'Nothing Saved'}))
+          }).catch( err => console.log('err', err))
+        }).catch( err => reject({msg:'Nothing Saved'}))
+      })
+    }
 
   return factory
 })

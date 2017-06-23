@@ -108,10 +108,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $rootSc
     } 
 
     else if (change === 'editRep') {
-      chooseOne('Representatives', $scope.Representatives).then( rep_id => {
-        JobFactory.getFullRepById({representative_id: rep_id})
-          .then(({data}) => addOrEdit(data, 'Representatives', null, rep_id, true)) //------Update Existing
-      })
+      let ids = { job_id: $scope.jobId}
+      RepFactory.editRep(ids, $scope.Representatives)
+      .then( ({msg}) => {
+        $route.reload()
+        JobFactory.toastSuccess(msg)
+      })  
+      .catch( err => err.msg ? JobFactory.toastReject(err.msg) : console.log('err', err))
     }
 
     else if (change === 'addProp') {

@@ -8,7 +8,8 @@ const locateOrCreate = require('../locateOrCreate')
 const validateRep = require('../validation/validRepresentative')
 const validationHelper = require('../validation/validationHelper')
 
-router.post('/api/getFullRepById', ({body: {representative_id}}, res) => {
+router.post('/api/getFullRepById', ({body: {ids}}, res) => {
+  const representative_id = ids.representative_id
   knex('Representatives')
   .select(
     'Representatives.representative_id',

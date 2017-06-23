@@ -20,7 +20,7 @@ app.factory('ClientFactory', function($http, SearchFactory, FormFactory) {
             ids.client_id = client_id
             if (client_id) { 
               // edit existing client
-              getFullClientById({client_id: client_id}).then(({data}) => { 
+              getFullClientById({ids}).then(({data}) => { 
                 FormFactory.updateForm('Clients', data, ids, false).then( msg => {
                   resolve(msg)
                 }).catch( err => reject(err))
