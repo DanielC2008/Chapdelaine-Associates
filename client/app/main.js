@@ -33,9 +33,9 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
   .config(function($mdAriaProvider) {
     $mdAriaProvider.disableWarnings() // Globally disables all ARIA warnings.
   })
-  .run( function($rootScope, $location, JobFactory) {
+  .run( function($rootScope, $location, UserFactory) {
     $rootScope.timeZoneOffset = `+${new Date().getTimezoneOffset()}`
-    JobFactory.getUserName()
+    UserFactory.getUserName()
       .then(({data}) => $rootScope.$user = data.user_name)
     // register listener to watch route changes
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {

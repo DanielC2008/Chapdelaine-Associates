@@ -31,11 +31,6 @@ app.factory('JobFactory', function($location, $http, $mdToast) {
 
     factory.getMinJob = () => $http.get('/api/getMinJob')
 
-    //User Factory
-    factory.getUserName = () => $http.get('/api/getUserName')
-
-    factory.removeUser = () => $http.get('/api/removeUser')
-
     // Toast Factory
     factory.toastSuccess = message => {
       let msg = message === undefined ? 'Success' : message

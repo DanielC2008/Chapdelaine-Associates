@@ -1,8 +1,8 @@
 'use strict'
 
-app.controller('Logout', function($scope, $location, $rootScope, JobFactory) {
+app.controller('Logout', function($scope, $location, $rootScope, UserFactory) {
     $scope.logout = () => {
-      JobFactory.removeUser()
+      UserFactory.removeUser()
         .then( data => {
           $rootScope.$user = null
           $location.path('/login')
