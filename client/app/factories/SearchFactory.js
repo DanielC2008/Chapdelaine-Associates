@@ -20,7 +20,6 @@ app.factory('SearchFactory', function($mdDialog) {
     })  
   }
 
-
   factory.chooseOne = (table, options) => {
     let locals = { optionsArr : createArrForChooseOne(table, options) }
     return new Promise ((resolve, reject) => {
@@ -36,8 +35,7 @@ app.factory('SearchFactory', function($mdDialog) {
     })
   }
 
-
-  const createArrForChooseOne = (table, options) => {
+  const createArrForChooseOne = (table, options) => { //right now only works for clients and reps
     return options.map( opt => {
       return {
         id: (table === 'Clients') ? opt.client_id : opt.representative_id,

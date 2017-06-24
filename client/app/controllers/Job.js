@@ -81,60 +81,64 @@ app.controller('Job', function(
     }
 
     else if (change === 'addClient') {
-      ClientFactory.addClient(ids)
-      .then( ({msg}) => {
+      ClientFactory.addClient(ids).then( ({msg}) => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
-      })  
-      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editClient') { 
-      ClientFactory.editClient(ids, $scope.Clients)
-      .then( ({msg}) => {
+      ClientFactory.editClient(ids, $scope.Clients).then( ({msg}) => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
-      })  
-      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'addRep') {
-      RepFactory.addRep(ids, $scope.Clients)
-      .then( ({msg}) => {
+      RepFactory.addRep(ids, $scope.Clients).then( ({msg}) => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
-      })  
-      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editRep') {
-      RepFactory.editRep(ids, $scope.Representatives)
-      .then( ({msg}) => {
+      RepFactory.editRep(ids, $scope.Representatives).then( ({msg}) => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
-      })  
-      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }
 
     else if (change === 'addProp') {
-      PropertyFactory.addProperty(ids)
-      .then( ({msg}) => {
+      PropertyFactory.addProperty(ids).then( ({msg}) => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
-      })  
-      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     } 
 
     else if (change === 'editProp') {
       ids.property_id = $scope.Property.property_id
-      PropertyFactory.editProperty(ids, $scope.Property)
-      .then( ({msg}) => {
+      PropertyFactory.editProperty(ids, $scope.Property).then( ({msg}) => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
-      })  
-      .catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }
-    resetSelect()
+
+    else if ( change === 'removeClient') {
+      ClientFactory.removeClient(ids, $scope.Clients)
+       .then( ({msg}) => {
+        $route.reload()
+        ToastFactory.toastSuccess(msg)
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }
+
+    else if ( change === 'removeRep') {
+      RepFactory.removerep(ids, $scope.Representatives)
+       .then( ({msg}) => {
+        $route.reload()
+        ToastFactory.toastSuccess(msg)
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }
+    resetSelect() 
   }
 
 

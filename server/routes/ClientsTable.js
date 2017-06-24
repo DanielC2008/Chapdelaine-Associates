@@ -75,12 +75,12 @@ router.post('/api/getFullClientById', ({body: {ids}}, res) => { //on new bc no j
   .catch(err => console.log('err', err))
 })
 
-router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
+router.post('/api/removeClientFromJob', ({body: {ids}}, res) => {
   knex('Client_Specs_Per_Job')
-    .del()
-    .where(objToRemove)
-    .then( data => res.send({msg: 'Removed from Job!'}))
-    .catch( err => console.log(err))
+  .del()
+  .where(ids)
+  .then( data => res.send({msg: 'Removed from Job!'}))
+  .catch( err => console.log(err))
 })
 
 router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
