@@ -4,24 +4,24 @@ app.factory('DBFactory', function($http) {
 
   const factory = {}
 
-  factory.addNewToJob = dbPackage => {
+  factory.addNew = dbPackage => {
     if (dbPackage.table === 'Clients'){
-      return $http.post('/api/addNewClientToJob', dbPackage)
+      return $http.post('/api/addNewClient', dbPackage)
     } 
     else if (dbPackage.table === 'Representatives'){
-      return $http.post('/api/addNewRepToJob', dbPackage)
+      return $http.post('/api/addNewRep', dbPackage)
     } 
     else if (dbPackage.table === 'Properties'){
       return $http.post('/api/addNewPropertyToJob', dbPackage)
     }
   }
   
-  factory.addExistingToJob = dbPackage => {
+  factory.addExisting = dbPackage => {
     if (dbPackage.table === 'Clients'){
-      return $http.post('/api/addExistingClientToJob', dbPackage)
+      return $http.post('/api/addExistingClient', dbPackage)
     }
     else if (dbPackage.table === 'Representatives'){
-      return $http.post('/api/addExistingRepToJob', dbPackage)
+      return $http.post('/api/addExistingRep', dbPackage)
     }
   }
 
@@ -31,9 +31,6 @@ app.factory('DBFactory', function($http) {
     }
     else if (dataObj.table === 'Representatives') {        
       return $http.post('/api/removeRepFromJob', dataObj)
-    }
-    else if (dataObj.table === 'Properties') {        
-      return $http.post('/api/removePropertyFromJob', dataObj)
     }
   }
 

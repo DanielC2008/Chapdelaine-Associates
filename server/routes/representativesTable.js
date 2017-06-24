@@ -50,7 +50,7 @@ router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
     .catch( err => console.log(err))
 })
 
-router.post('/api/addNewRepToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addNewRep', ({body: {dbObj, ids}}, res) => {
   const job_id = {job_id: ids.job_id}
   const client_id = {client_id: ids.client_id}
   const errors = validateRep.validate(dbObj)
@@ -82,7 +82,7 @@ router.post('/api/addNewRepToJob', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.post('/api/addExistingRepToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addExistingRep', ({body: {dbObj, ids}}, res) => {
   const job_id = {job_id: ids.job_id}
   const client_id = {client_id: ids.client_id}
   const representative_id = {representative_id: ids.representative_id}

@@ -83,7 +83,7 @@ router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
     .catch( err => console.log(err))
 })
 
-router.post('/api/addNewClientToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
   const job_id = ids.job_id
   const errors = validateClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
@@ -120,7 +120,7 @@ router.post('/api/addNewClientToJob', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.post('/api/addExistingClientToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
   const client_id = ids.client_id
   const job_id = ids.job_id
   const errors = validateClient.validate(dbObj)

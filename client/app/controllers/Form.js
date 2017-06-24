@@ -1,16 +1,17 @@
 'use strict'
 
 app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DBFactory, table, ids, editable, edit) {
-
   let FORM = this
+
   FORM.Display = {}
+  FORM.table = table
 
   if (!edit && !editable) {
-    FORM.addNew = true
+    FORM.updateType = 'addNew'
   } else if (!edit && editable) {
-    FORM.addExisting = true
+    FORM.updateType = 'addExisting'
   } else if (edit && editable) {
-    FORM.editExisting = true
+    FORM.updateType = 'updateExisting'
   }
 
   switch(table) {
@@ -31,13 +32,11 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       break;
   }
 
-  FORM.table = table
-
-  FORM.addNewToJob = ()  => {
+  FORM.addNew = ()  => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
       if (dbPackage) {
-      DBFactory.addNewToJob(dbPackage)
+      DBFactory.addNew(dbPackage)
       .then( ({data: msg}) => $mdDialog.hide(msg))
       .catch( ({data: msg}) => {
         //if msg: client entered incorrect data type else database err
@@ -46,18 +45,16 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     }
   }
 
-
-  FORM.addExistingToJob = () => {
+  FORM.addExisting = () => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-    DBFactory.addExistingToJob(dbPackage)
+    DBFactory.addExisting(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
       //if msg: client entered incorrect data type else database err
       msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
     })
   }
-
 
   FORM.updateExisting = () => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
@@ -71,7 +68,6 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   }
 
   FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
-
 
   const prepForDB = dbObj => {
     let dbPackage = {}
@@ -98,11 +94,6 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       }   
     }
   }
-
-
-
-
-
 
 })
 
