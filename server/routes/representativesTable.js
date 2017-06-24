@@ -42,12 +42,12 @@ router.post('/api/getFullRepById', ({body: {ids}}, res) => {
   .catch(err => console.log('err', err))
 })
 
-router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
+router.post('/api/removeRepFromJob', ({body: {ids}}, res) => {
   knex('Client_Specs_Per_Job')
-    .update('representative_id', null) //-----------------update to null so we keep client associated with job
-    .where(objToRemove)
-    .then( data => {res.send({msg: 'Removed from Job!'})})
-    .catch( err => console.log(err))
+  .update('representative_id', null) //-----------------update to null so we keep client associated with job
+  .where(ids)
+  .then( data => {res.send({msg: 'Removed from Job!'})})
+  .catch( err => console.log(err))
 })
 
 router.post('/api/addNewRep', ({body: {dbObj, ids}}, res) => {
@@ -106,7 +106,7 @@ router.post('/api/addExistingRep', ({body: {dbObj, ids}}, res) => {
             .update(representative_id)   //this update means that there can only be one rep per client per job  
             .where(client_id)
             .andWhere(job_id)
-            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+            .then( data => res.send({msg: 'Successfully added to Job!'}))
             .catch( err => console.log(err))
           }).catch( err => console.log(err))     
         })
@@ -186,6 +186,5 @@ const getConnectTableIds = obj => {
     })
   })
 }
-
 
 module.exports = router

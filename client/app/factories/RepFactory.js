@@ -10,8 +10,9 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
 
     const getRepsForSearch = () => $http.get('/api/getRepsForSearch')
 
-    factory.addRep = (ids, clients) => {
+    factory.addRep = (ids, clients) => { 
       return new Promise ((resolve, reject) => {
+        //force to pick a client for rep to represent
         SearchFactory.chooseOne('Clients', clients).then( client_id => {
           ids.client_id = client_id
           getRepsForSearch().then( ({data}) => {
@@ -37,7 +38,6 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
       })
     }
 
-
     factory.editRep = (ids , reps) => {
       return new Promise ((resolve, reject) => {
         SearchFactory.chooseOne('Representatives', reps).then( rep_id => {
@@ -50,6 +50,17 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
         }).catch( err => reject({msg:'Nothing Saved'}))
       })
     }
+
+  factory.removeRep = (ids, reps) => {
+    return new Promise ((resolve, reject) => {
+      SearchFactory.chooseOne('Representatives', reps).then( rep_id => {
+        ids.representative_id = rep_id
+        $http.post('/api/removeRepFromJob', {ids}).then( ({data: {msg}}) => {
+          resolve(msg)
+        }).catch( err => console.log('err', err))
+      }).catch( err => reject({msg:'Nothing Saved'}))
+    })  
+  }  
 
   return factory
 })

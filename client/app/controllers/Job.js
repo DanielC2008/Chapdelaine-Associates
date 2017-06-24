@@ -132,8 +132,8 @@ app.controller('Job', function(
     }
 
     else if ( change === 'removeRep') {
-      RepFactory.removerep(ids, $scope.Representatives)
-       .then( ({msg}) => {
+      RepFactory.removeRep(ids, $scope.Representatives)
+       .then( msg => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
