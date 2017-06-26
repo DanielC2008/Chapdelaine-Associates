@@ -7,13 +7,15 @@
       <li><a ng-click="setNewTab('JobEstimate') ">Estimate</a></li>
       <li><a ng-click="setNewTab('JobInvoice') ">Invoice</a></li>
       <div class="liDuplicate " ng-init="material()">
-        <select class="navSelect" name="select" ng-model='data.select' ng-change="update(data.select)"> 
+        <select class="navSelect" name="select" ng-model='select' ng-change="update(select)"> 
           <option value="" disabled>Update Job</option>
           <option value="updateStatus">Update Status</option>
           <option value="addClient">Add Client</option>
           <option ng-if="Clients.length != 0" value="editClient">Edit Client</option>
+          <option ng-if="Clients.length != 0" value="removeClient">Delete Client</option>
           <option ng-if="Representatives.length != Clients.length" value="addRep">Add Rep</option>
           <option ng-if="Representatives.length != 0" value="editRep">Edit Rep</option>
+          <option ng-if="Representatives.length != 0" value="removeRep">Delete Rep</option>
           <option value="{{Property ? 'editProp' : 'addProp'}}">{{Property ? 'Edit Property' : 'Add Property'}}</option>
         </select>   
       </div>  
@@ -40,22 +42,22 @@
     </div>
 
     <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">
-      <div ng-include="'./partials/jobMain.html'">
+      <div ng-include="'./partials/job/jobMain.html'">
 
      </div>
     </div>
     <div ng-if="showTab === 'JobAttachment'" ng-controller="JobAttachment as JA">
-      <div ng-include="'./partials/jobAttachment.html'">
+      <div ng-include="'./partials/job/jobAttachment.html'">
 
      </div>
     </div>
     <div ng-if="showTab === 'JobInvoice'" ng-controller="JobInvoice as JI">
-      <div ng-include="'./partials/jobInvoice.html'">
+      <div ng-include="'./partials/job/jobInvoice.html'">
 
      </div>
     </div>
     <div ng-if="showTab === 'JobEstimate'" ng-controller="JobEstimate as JE">
-      <div ng-include="'./partials/jobEstimate.html'">
+      <div ng-include="'./partials/job/jobEstimate.html'">
 
      </div>
     </div>

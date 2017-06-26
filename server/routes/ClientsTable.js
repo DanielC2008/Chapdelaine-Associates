@@ -5,7 +5,7 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
-const validateClient = require('../validation/validClient')
+const {vClient, vClientOnJob} = require('../validation/validClient')
 const validationHelper = require('../validation/validationHelper') 
 
 router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc includes jobid
@@ -45,7 +45,8 @@ router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc
   .catch(err => console.log('err', err))
 }) 
 
-router.post('/api/getFullClientById', ({body: {client_id}}, res) => { //on new bc no job associated yet
+router.post('/api/getFullClientById', ({body: {ids}}, res) => { //on new bc no job associated yet
+  const client_id = ids.client_id
   knex('Clients')
   .select(
     'Clients.client_id',
@@ -74,19 +75,22 @@ router.post('/api/getFullClientById', ({body: {client_id}}, res) => { //on new b
   .catch(err => console.log('err', err))
 })
 
-router.post('/api/removeClientFromJob', ({body: {objToRemove}}, res) => {
+router.post('/api/removeClientFromJob', ({body: {ids}}, res) => {
   knex('Client_Specs_Per_Job')
-    .del()
-    .where(objToRemove)
-    .then( data => res.send({msg: 'Removed from Job!'}))
-    .catch( err => console.log(err))
+  .del()
+  .where(ids)
+  .then( data => res.send({msg: 'Removed from Job!'}))
+  .catch( err => console.log(err))
 })
 
-router.post('/api/addNewClientToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
   const job_id = ids.job_id
-  const errors = validateClient.validate(dbObj)
-  if (errors[0]) {  //------------------------------------checks each data type
+  const errors = vClient.validate(dbObj) //checks data types 
+  const jobErrors = job_id ? vClientOnJob.validate(dbObj) : [] //checks data types if attached to job
+  console.log(jobErrors)
+  if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
     res.status(400).send(msg)
   } else {
     validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {//true/false
@@ -102,16 +106,20 @@ router.post('/api/addNewClientToJob', ({body: {dbObj, ids}}, res) => {
           .returning('client_id')
           .insert(polishedObj)
           .then( data => {
-            let client_id = data[0]
-            knex('Client_Specs_Per_Job')//------set ids on connecting table
-            .insert({
-              job_id,
-              client_id, 
-              client_type_id,
-              main
-            }) 
-            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-            .catch( err => console.log(err))
+            if( job_id ) {
+              let client_id = data[0]
+              knex('Client_Specs_Per_Job')//------set ids if job id exists else only creates client
+              .insert({
+                job_id,
+                client_id, 
+                client_type_id,
+                main
+              }) 
+              .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+              .catch( err => console.log(err))
+            } else {
+              res.send({msg: 'Successfully created Client!'})
+            }
           }).catch( err => console.log(err))
         })
       } 
@@ -119,12 +127,15 @@ router.post('/api/addNewClientToJob', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.post('/api/addExistingClientToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
   const client_id = ids.client_id
   const job_id = ids.job_id
-  const errors = validateClient.validate(dbObj)
-  if (errors[0]) {  //------------------------------------checks each data type
+  const errors = vClient.validate(dbObj) //checks data types 
+  const jobErrors = job_id ? vClientOnJob.validate(dbObj) : []//checks data types if attached to job
+
+  if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
     res.status(400).send(msg)
   } else {
     validationHelper.checkNameExistsOnEdit({client_id: ids.client_id}, dbObj, 'Clients')
@@ -141,15 +152,19 @@ router.post('/api/addExistingClientToJob', ({body: {dbObj, ids}}, res) => {
           .update(polishedObj)
           .where({client_id: client_id})
           .then( () => {
-            knex('Client_Specs_Per_Job')//------set ids on connecting table
-            .insert({
-              job_id,
-              client_id, 
-              client_type_id,
-              main
-            }) 
-            .then( data => res.send({msg: 'Successfully added to Job!'}))
-            .catch( err => console.log(err))
+            if( job_id ) {
+              knex('Client_Specs_Per_Job')//------set ids if job id exists else only updates client
+              .insert({
+                job_id,
+                client_id, 
+                client_type_id,
+                main
+              }) 
+              .then( data => res.send({msg: 'Successfully added to Job!'}))
+              .catch( err => console.log(err))
+            } else {
+              res.send({msg: 'Successfully updated Client!'})
+            }
           }).catch( err => console.log(err))        
         })
       }
@@ -157,10 +172,10 @@ router.post('/api/addExistingClientToJob', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => { // start here
+router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
   const client_id = {client_id: ids.client_id}
   const job_id = {job_id: ids.job_id}
-  const errors = validateClient.validate(dbObj)
+  const errors = vClient.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send(msg)
@@ -195,7 +210,7 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => { // start here
   }
 })
 
-router.get('/api/getClientsBySearch', ({body}, res) => {
+router.get('/api/getClientsForSearch', ({body}, res) => {
   knex('Clients')
   .select(
     knex.raw(`first_name + ' ' + last_name AS 'value'`),

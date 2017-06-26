@@ -217,6 +217,11 @@ div.navSelect span.caret {
   height: 10em;
 }
 
+md-dialog._md {
+  min-height: 15%;
+  min-width: 50%;
+}
+
 md-dialog.md-dialog-fullscreen {
   min-height: 95%;
   min-width: 95%;
@@ -232,4 +237,13 @@ md-dialog.md-dialog-fullscreen {
 .toastSuccess .md-toast-content {
   background-color: #CCFFCC !important;
   color: black !important;
+}
+
+/*********box div***********/
+.boxDiv {
+  background-color: white;
+  border: 5px solid #bcaaa4;
+}
+.adminInfo {
+  height: 35rem;
 }

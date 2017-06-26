@@ -7,14 +7,6 @@ const router = Router()
 const locateOrCreate = require('../locateOrCreate')
 const validateProperty = require('../validation/validProperty')
 
-router.post('/api/removePropertyFromJob', ({body: {objToRemove}}, res) => {
-  knex('Jobs_Properties')
-    .del()
-    .where(objToRemove)
-    .then( data => res.send({msg: 'Removed from Job!'}))
-    .catch( err => console.log(err))
-})
-
 router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   const job_id = ids.job_id
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
@@ -61,8 +53,6 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-
-
 router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
   const job_id = ids.job_id
   const property_id = ids.property_id
@@ -96,12 +86,11 @@ router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
             }).then().catch(err => console.log(err))
           }).then().catch(err => console.log(err))
         } 
-        res.send({msg: 'Successfully created and added to Job!'})
+        res.send({msg: 'Successfully updated Job!'})
       }).catch( err => console.log(err))
     }).catch( err => console.log(err))
   }
 })
-
 
 const getConnectTableIds = obj => {
   let dbPackage = {}
@@ -137,9 +126,6 @@ const getConnectTableIds = obj => {
       resolve(dbPackage)
     })
   })
-
-
-
 }
 
 module.exports = router

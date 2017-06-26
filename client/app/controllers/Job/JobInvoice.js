@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobInvoice', function($scope, JobFactory) {
+app.controller('JobInvoice', function($scope, DBFactory) {
   let JIScope = this
 
   $scope.tableForDB = 'Invoices'
@@ -19,7 +19,7 @@ app.controller('JobInvoice', function($scope, JobFactory) {
       idObj: {invoice_id: $scope.Invoices.invoice_id},
       columnsToUpdate: {invoice_number: invoice_number}
     }
-    JobFactory.updateTable(updateObj)
+    DBFactory.updateTable(updateObj)
     .then(() => $scope.Invoices.invoice_number = invoice_number)
     .catch( ({data}) => console.log('data', data))
   }

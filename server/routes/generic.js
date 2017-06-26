@@ -6,6 +6,35 @@ const knex = require('knex')(config)
 const router = Router()
 const DBHelper = require('../DBHelper')
 
+//Min/Max
+router.post('/api/getMaxNumber', ({body: {table}}, res) => {
+  const {tableName, tableNumber} = DBHelper.getTableInfo(table)
+  knex(`${tableName}`)
+    .select(knex.raw(`MAX(CAST(${tableNumber} AS INT)) AS max`))
+    .then( data => res.send(data[0]))
+    .catch( err => console.log(err))
+})
+
+router.post('/api/getMinNumber', ({body: {table}}, res) => {
+  //get lowest number, returns highest abs value < 0
+  const {tableName, tableNumber} = DBHelper.getTableInfo(table)
+  knex(`${tableName}`)
+    .select(knex.raw(`MIN(CAST(${tableNumber} AS INT)) AS min`))
+    .then( data => res.send(data[0]))
+    .catch( err => console.log(err))
+})
+
+//Table
+router.post('/api/updateTable', ({body: {table, idObj, columnsToUpdate}}, res) => {
+  knex(`${table}`)
+    .update(columnsToUpdate)
+    .where(idObj)
+    .then( data => res.send())
+    .catch( err => console.log('err', err))
+})
+
+
+//Connect Table
 router.post('/api/insertIntoConnectingTable', ({body: {table, objToAdd}}, res) => {
   let {connectTable, connectTableId} = DBHelper.getTableInfo(table)
   knex(`${connectTable}`)
@@ -32,5 +61,4 @@ router.post('/api/deleteFromConnectingTable', ({body: {table, id}}, res) => {
     .then( data => res.send())
     .catch( err => console.log('err', err))
 })
-
 module.exports = router

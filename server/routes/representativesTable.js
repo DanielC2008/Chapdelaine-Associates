@@ -8,7 +8,8 @@ const locateOrCreate = require('../locateOrCreate')
 const validateRep = require('../validation/validRepresentative')
 const validationHelper = require('../validation/validationHelper')
 
-router.post('/api/getFullRepById', ({body: {representative_id}}, res) => {
+router.post('/api/getFullRepById', ({body: {ids}}, res) => {
+  const representative_id = ids.representative_id
   knex('Representatives')
   .select(
     'Representatives.representative_id',
@@ -41,15 +42,15 @@ router.post('/api/getFullRepById', ({body: {representative_id}}, res) => {
   .catch(err => console.log('err', err))
 })
 
-router.post('/api/removeRepFromJob', ({body: {objToRemove}}, res) => {
+router.post('/api/removeRepFromJob', ({body: {ids}}, res) => {
   knex('Client_Specs_Per_Job')
-    .update('representative_id', null) //-----------------update to null so we keep client associated with job
-    .where(objToRemove)
-    .then( data => {res.send({msg: 'Removed from Job!'})})
-    .catch( err => console.log(err))
+  .update('representative_id', null) //-----------------update to null so we keep client associated with job
+  .where(ids)
+  .then( data => {res.send({msg: 'Removed from Job!'})})
+  .catch( err => console.log(err))
 })
 
-router.post('/api/addNewRepToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addNewRep', ({body: {dbObj, ids}}, res) => {
   const job_id = {job_id: ids.job_id}
   const client_id = {client_id: ids.client_id}
   const errors = validateRep.validate(dbObj)
@@ -81,7 +82,7 @@ router.post('/api/addNewRepToJob', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.post('/api/addExistingRepToJob', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addExistingRep', ({body: {dbObj, ids}}, res) => {
   const job_id = {job_id: ids.job_id}
   const client_id = {client_id: ids.client_id}
   const representative_id = {representative_id: ids.representative_id}
@@ -97,7 +98,7 @@ router.post('/api/addExistingRepToJob', ({body: {dbObj, ids}}, res) => {
       } else {
         getConnectTableIds(dbObj).then( data => {
           let polishedObj = data.obj
-          knex('Representatives') //---------------------find client
+          knex('Representatives') //---------------------find rep
           .update(polishedObj)
           .where(representative_id)
           .then( data => {
@@ -105,7 +106,7 @@ router.post('/api/addExistingRepToJob', ({body: {dbObj, ids}}, res) => {
             .update(representative_id)   //this update means that there can only be one rep per client per job  
             .where(client_id)
             .andWhere(job_id)
-            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+            .then( data => res.send({msg: 'Successfully added to Job!'}))
             .catch( err => console.log(err))
           }).catch( err => console.log(err))     
         })
@@ -139,7 +140,7 @@ router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.get('/api/getRepresentativesBySearch', ({body}, res) => {
+router.get('/api/getRepsForSearch', ({body}, res) => {
   knex('Representatives')
     .select(
       knex.raw(`first_name + ' ' + last_name AS 'value'`),
@@ -185,6 +186,5 @@ const getConnectTableIds = obj => {
     })
   })
 }
-
 
 module.exports = router

@@ -1,15 +1,18 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormFactory, editable, edit) {
+app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DBFactory, table, ids, editable, edit) {
   let FORM = this
-  FORM.Display = {}
 
+  FORM.Display = {}
+  FORM.table = table
+  FORM.jobIdExists = ids.job_id ? true : false
+  
   if (!edit && !editable) {
-    FORM.addNew = true
+    FORM.updateType = 'addNew'
   } else if (!edit && editable) {
-    FORM.addExisting = true
+    FORM.updateType = 'addExisting'
   } else if (edit && editable) {
-    FORM.editExisting = true
+    FORM.updateType = 'updateExisting'
   }
 
   switch(table) {
@@ -20,7 +23,7 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
       FORM.main = editable ? editable.main : null
       break;
     case 'Representatives':
-      FORM.title = edit ? 'Update Representatives' : 'Add New Representatives'
+      FORM.title = edit ? 'Update Representative' : 'Add New Representative'
       FORM.Display.Representatives = FormFactory.getRepForm(editable)
       FORM.client_id = ids.client_id
       break;
@@ -30,87 +33,68 @@ app.controller('Form', function($scope, $mdDialog, table, ids, JobFactory, FormF
       break;
   }
 
-  FORM.table = table
-
-  FORM.addNewToJob = ()  => {
-    let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+  FORM.addNew = ()  => {
+    let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
       if (dbPackage) {
-      JobFactory.addNewToJob(dbPackage)
+      DBFactory.addNew(dbPackage)
       .then( ({data: msg}) => $mdDialog.hide(msg))
       .catch( ({data: msg}) => {
-        if (msg) { //------------------------client entered incorrect data type
-          JobFactory.toastReject(msg)
-        } else { //--------------------------database err
-          JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
-        }
+        //if msg: client entered incorrect data type else database err
+        msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
       })
     }
   }
 
-
-  FORM.addExistingToJob = () => {
-    let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+  FORM.addExisting = () => {
+    let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-    JobFactory.addExistingToJob(dbPackage)
+    DBFactory.addExisting(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
-      if (msg) { //------------------------client entered incorrect data type
-        JobFactory.toastReject(msg)
-      } else { //--------------------------database err
-        JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
-      }
+      //if msg: client entered incorrect data type else database err
+      msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
     })
   }
 
-
   FORM.updateExisting = () => {
-    let dbObj = JobFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+    let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-    JobFactory.updateExisting(dbPackage)
+    DBFactory.updateExisting(dbPackage)
     .then( ({data: msg}) => $mdDialog.hide(msg))
     .catch( ({data: msg}) => {
-      if (msg) { //------------------------client entered incorrect data type
-        JobFactory.toastReject(msg)
-      } else { //--------------------------database err
-        JobFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
-      }
+      //if msg: client entered incorrect data type else database err
+      msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
     })
   }
 
   FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
 
-
-  const prepForDB = dbObj => {
+  const prepForDB = dbObj => { // can move this out to individual factories and return the prepped obj
     let dbPackage = {}
     if (table === 'Clients') {
       dbObj.client_type = FORM.clientType
       dbObj.main = FORM.main
       dbPackage.dbObj = dbObj
-      dbPackage.ids = {job_id: ids.job_id, client_id: ids.client_id}
+      dbPackage.ids = ids
       dbPackage.table = table
       return dbPackage
     } else if (table === 'Representatives') {
       dbPackage.table = table
       dbPackage.dbObj = dbObj
-      dbPackage.ids = {representative_id: ids.rep_id, job_id: ids.job_id, client_id: ids.client_id}
+      dbPackage.ids = ids
       return dbPackage
     } else if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
-        JobFactory.toastReject("Please enter an Address or a Road.")
+        ToastFactory.toastReject("Please enter an Address or a Road.")
       } else {
         dbPackage.dbObj = dbObj
         dbPackage.table = table
-        dbPackage.ids = {job_id: ids.job_id, property_id: ids.property_id}
+        dbPackage.ids = ids
         return dbPackage
       }   
     }
   }
-
-
-
-
-
 
 })
 

@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('FormFactory', function(JobFactory, $q) {
+app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
   let factory = {}
   let taskObj 
   let _initialized = $q.defer() //wait for data to return
@@ -11,7 +11,7 @@ app.factory('FormFactory', function(JobFactory, $q) {
     }
   }  
 
-  JobFactory.getTasks()
+  TaskFactory.getTasks()
     .then( ({data}) => {
       let Tasks = data.reduce( (obj, task) => {
         obj[task.task] = ''
@@ -94,6 +94,38 @@ app.factory('FormFactory', function(JobFactory, $q) {
   factory.getTaskForm = () => {
     return taskObj
   }
+
+
+  factory.updateForm = (table, editable, ids, edit) => {
+    return new Promise ((resolve, reject) => { 
+      let locals = {
+        ids: ids,
+        table: table,
+        editable: editable,
+        edit: edit
+      }
+      $mdDialog.show({
+        locals,
+        fullscreen: true,
+        controller: 'Form as FORM',
+        templateUrl: '/partials/form.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose: false,
+        escapeToClose: false
+      })
+      .then( msg => resolve(msg))
+      .catch( err => reject(err))
+    })
+  }  
+
+  factory.matchDatabaseKeys = obj => {
+    for (let key in obj){
+      obj[key.toLowerCase().replace(' ', '_')] = obj[key]
+      delete obj[key]
+    }
+    return obj
+  }
+
 
   factory.initialized = _initialized.promise
 

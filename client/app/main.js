@@ -16,26 +16,26 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
         controller: 'Home',
         templateUrl: 'partials/home.html'
       })
-      .when('/getData', {
-        controller: 'GetData',
-        templateUrl: 'partials/getData.html'
-      })
       .when('/jobs', {
         controller: 'ChooseJob',
         templateUrl: 'partials/chooseJob.html'
       })
       .when('/jobs/:job_id', {
         controller: 'Job',
-        templateUrl: 'partials/job.html'
+        templateUrl: 'partials/job/job.html'
+      })
+      .when('/admin', {
+        controller: 'Admin',
+        templateUrl: 'partials/admin/admin.html'
       })
       .otherwise('/login')
   )
   .config(function($mdAriaProvider) {
     $mdAriaProvider.disableWarnings() // Globally disables all ARIA warnings.
   })
-  .run( function($rootScope, $location, JobFactory) {
+  .run( function($rootScope, $location, UserFactory) {
     $rootScope.timeZoneOffset = `+${new Date().getTimezoneOffset()}`
-    JobFactory.getUserName()
+    UserFactory.getUserName()
       .then(({data}) => $rootScope.$user = data.user_name)
     // register listener to watch route changes
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {

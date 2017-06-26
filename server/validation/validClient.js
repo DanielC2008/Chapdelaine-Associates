@@ -3,7 +3,7 @@
 const schema = require('validate')
 const validationHelper = require('./validationHelper')
 
-  const client = schema({
+  const vClient = schema({
     first_name: {
       type: 'string',
       required: true,
@@ -62,7 +62,10 @@ const validationHelper = require('./validationHelper')
     address: {
       type: 'string',
       message: 'Address must be a string.'
-    },
+    }
+  }, { strip: false})
+
+  const vClientOnJob = schema({
     client_type: {
       type: 'string',
       required: true,
@@ -72,7 +75,6 @@ const validationHelper = require('./validationHelper')
       type: 'boolean',
       message: 'Is this the main Client?'
     }
-  })
+  }, { strip: false})
 
-
-module.exports = client
+module.exports = {vClient, vClientOnJob}
