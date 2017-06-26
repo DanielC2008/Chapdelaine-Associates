@@ -5,7 +5,8 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
 
   FORM.Display = {}
   FORM.table = table
-
+  FORM.jobIdExists = ids.job_id ? true : false
+  
   if (!edit && !editable) {
     FORM.updateType = 'addNew'
   } else if (!edit && editable) {
