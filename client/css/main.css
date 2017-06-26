@@ -233,3 +233,12 @@ md-dialog.md-dialog-fullscreen {
   background-color: #CCFFCC !important;
   color: black !important;
 }
+
+/*********box div***********/
+.boxDiv {
+  background-color: white;
+  border: 5px solid #bcaaa4;
+}
+.adminInfo {
+  height: 35rem;
+}
