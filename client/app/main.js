@@ -22,7 +22,7 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
       })
       .when('/jobs/:job_id', {
         controller: 'Job',
-        templateUrl: 'partials/job.html'
+        templateUrl: 'partials/job/job.html'
       })
       .when('/admin', {
         controller: 'Admin',
