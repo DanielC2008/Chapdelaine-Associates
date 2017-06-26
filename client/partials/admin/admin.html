@@ -5,19 +5,46 @@
   <div class="row">
 
     <div class="col s2 offset-s1 boxDiv adminInfo">
-      <button class="col s12 button btn" type="">Clients</button>
-      <button class="col s12 button btn" type="">Representatives</button>
-      <button class="col s12 button btn" type="">Companies</button>
-      <button class="col s12 button btn" type="">Employees</button>
-      <button class="col s12 button btn" type="">Tasks</button>
-      <button class="col s12 button btn" type="">Job Types</button>
-      <button class="col s12 button btn" type="">Cancellations</button>
-      <button class="col s12 button btn" type="">Time Cards</button>
+      <button class="col s12 button btn" ng-click="showTab = 'MC'">My Company</button>
+      <button class="col s12 button btn" ng-click="showTab = 'AC'">Clients</button>
+      <button class="col s12 button btn" ng-click="showTab = 'AR'">Representatives</button>
+      <button class="col s12 button btn" ng-click="showTab = 'ACO'">Companies</button>
+      <button class="col s12 button btn" ng-click="showTab = 'AE'">Employees</button>
+      <button class="col s12 button btn" ng-click="showTab = 'AT'">Tasks</button>
+      <button class="col s12 button btn" ng-click="showTab = 'JT'">Job Types</button>
+      <button class="col s12 button btn" ng-click="showTab = 'ATC'">Time Cards</button>
+      <button class="col s12 button btn" ng-click="showTab = 'ACA'">Cancellations</button>
     </div>
-    <div class="col s7 offset-s1 boxDiv ">
-      <div class="adminInfo">
-        Company Info
+    <div class="col s7 offset-s1 boxDiv adminInfo">
+      <div ng-if="showTab === 'MC'" class="">
+        <h5>My Company Info</h5>
       </div>
+
+      <div ng-if="showTab === 'AC'" ng-controller="Admin_Clients as AC">
+        <div ng-include="'./partials/admin/admin_clients.html'"></div>
+      </div>  
+      <div ng-if="showTab === 'AR'" ng-controller="Admin_Representatives as AR">
+        <div ng-include="'./partials/admin/admin_representatives.html'"></div>
+      </div>    
+      <div ng-if="showTab === 'ACO'" ng-controller="Admin_Companies as ACO">
+        <div ng-include="'./partials/admin/admin_companies.html'"></div>
+      </div>  
+      <div ng-if="showTab === 'AE'" ng-controller="Admin_Employees as AE">
+        <div ng-include="'./partials/admin/admin_employees.html'"></div>
+      </div>  
+      <div ng-if="showTab === 'AT'" ng-controller="Admin_Tasks as AT">
+        <div ng-include="'./partials/admin/admin_tasks.html'"></div>
+      </div>    
+      <div ng-if="showTab === 'JT'" ng-controller="Admin_Job_Types as JT">
+        <div ng-include="'./partials/admin/admin_job_types.html'"></div>
+      </div>  
+      <div ng-if="showTab === 'ATC'" ng-controller="Admin_Time_Cards as ATC">
+        <div ng-include="'./partials/admin/admin_time_cards.html'"></div>
+      </div>  
+      <div ng-if="showTab === 'ACA'" ng-controller="Admin_Cancellations as ACA">
+        <div ng-include="'./partials/admin/admin_cancellations.html'"></div>
+      </div>  
+
     </div>
 
   </div>
