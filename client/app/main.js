@@ -16,10 +16,6 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
         controller: 'Home',
         templateUrl: 'partials/home.html'
       })
-      .when('/getData', {
-        controller: 'GetData',
-        templateUrl: 'partials/getData.html'
-      })
       .when('/jobs', {
         controller: 'ChooseJob',
         templateUrl: 'partials/chooseJob.html'
@@ -27,6 +23,10 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
       .when('/jobs/:job_id', {
         controller: 'Job',
         templateUrl: 'partials/job.html'
+      })
+      .when('/admin', {
+        controller: 'Admin',
+        templateUrl: 'partials/admin/admin.html'
       })
       .otherwise('/login')
   )

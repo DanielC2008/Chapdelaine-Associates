@@ -69,7 +69,7 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
 
   FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
 
-  const prepForDB = dbObj => {
+  const prepForDB = dbObj => { // can move this out to individual factories and return the prepped obj
     let dbPackage = {}
     if (table === 'Clients') {
       dbObj.client_type = FORM.clientType
