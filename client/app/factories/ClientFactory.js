@@ -33,8 +33,7 @@ app.factory('ClientFactory', function($http, SearchFactory, FormFactory) {
     return new Promise ((resolve, reject) => {
       FormFactory.updateForm('Clients', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
     })
-  } 
-
+  }
 
   factory.removeClientFromJob = ids =>  $http.post('/api/removeClientFromJob', {ids})  
 
