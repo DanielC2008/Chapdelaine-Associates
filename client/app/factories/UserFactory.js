@@ -8,5 +8,7 @@ app.factory('UserFactory', function($http) {
 
   factory.removeUser = () => $http.get('/api/removeUser')
 
+  factory.getAllEmployees = () => $http.get('/api/getAllEmployees')
+
   return factory
 })  
