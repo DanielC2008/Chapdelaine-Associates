@@ -5,7 +5,7 @@ const { Router } = require('express')
 const router = Router()
 
 // public routes
-router.use(require('./loginRegister'))
+router.use(require('./users'))
 
 // add gaurd here and 
 router.use((req, res, next) => {

@@ -87,7 +87,7 @@ router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
   const job_id = ids.job_id
   const errors = vClient.validate(dbObj) //checks data types 
   const jobErrors = job_id ? vClientOnJob.validate(dbObj) : [] //checks data types if attached to job
-  console.log(jobErrors)
+
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
@@ -131,14 +131,14 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
   const client_id = ids.client_id
   const job_id = ids.job_id
   const errors = vClient.validate(dbObj) //checks data types 
-  const jobErrors = job_id ? vClientOnJob.validate(dbObj) : []//checks data types if attached to job
+  const jobErrors = vClientOnJob.validate(dbObj) //checks data types 
 
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit({client_id: ids.client_id}, dbObj, 'Clients')
+    validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
     .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
@@ -152,19 +152,15 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
           .update(polishedObj)
           .where({client_id: client_id})
           .then( () => {
-            if( job_id ) {
-              knex('Client_Specs_Per_Job')//------set ids if job id exists else only updates client
-              .insert({
-                job_id,
-                client_id, 
-                client_type_id,
-                main
-              }) 
-              .then( data => res.send({msg: 'Successfully added to Job!'}))
-              .catch( err => console.log(err))
-            } else {
-              res.send({msg: 'Successfully updated Client!'})
-            }
+            knex('Client_Specs_Per_Job')//------set ids
+            .insert({
+              job_id,
+              client_id, 
+              client_type_id,
+              main
+            }) 
+            .then( data => res.send({msg: 'Successfully added to Job!'}))
+            .catch( err => console.log(err))
           }).catch( err => console.log(err))        
         })
       }
@@ -173,14 +169,17 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
 })
 
 router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
-  const client_id = {client_id: ids.client_id}
-  const job_id = {job_id: ids.job_id}
-  const errors = vClient.validate(dbObj)
-  if (errors[0]) {  //------------------------------------checks each data type
+  const client_id = ids.client_id
+  const job_id = ids.job_id
+  const errors = vClient.validate(dbObj) //checks data types 
+  const jobErrors = job_id ? vClientOnJob.validate(dbObj) : []//checks data types if attached to job
+
+  if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit(client_id, dbObj, 'Clients')
+    validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
     .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
@@ -192,17 +191,21 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
           let polishedObj = data.obj
           knex('Clients') //------------------------find client
           .update(polishedObj)
-          .where(client_id)
+          .where({client_id: client_id})
           .then( () => {
-            knex('Client_Specs_Per_Job')//------set ids on connecting table
-            .update({
-              client_type_id, 
-              main
-            })
-            .where(client_id)
-            .andWhere(job_id)
-            .then( data => res.send({msg: 'Successfully updated Job!'}))
-            .catch( err => console.log(err))
+            if (job_id) { 
+              knex('Client_Specs_Per_Job')//------set ids on connecting table
+              .update({
+                client_type_id, 
+                main
+              })
+              .where({client_id: client_id})
+              .andWhere({client_id: client_id})
+              .then( data => res.send({msg: 'Successfully updated Client!'}))
+              .catch( err => console.log(err))
+            } else {
+              res.send({msg: 'Successfully updated Client!'})
+            }
           }).catch( err => console.log(err))        
         })
       }

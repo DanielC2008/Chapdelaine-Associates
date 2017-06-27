@@ -15,6 +15,7 @@ const checkNameExists = (obj, table) => {
     knex(`${table}`)
     .where(name)
     .then(data => {
+      console.log('data', data)
       let exists = data[0] ? 'It appears this name already exists.' : false
       resolve(exists)
     })

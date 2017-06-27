@@ -51,8 +51,8 @@ router.post('/api/removeRepFromJob', ({body: {ids}}, res) => {
 })
 
 router.post('/api/addNewRep', ({body: {dbObj, ids}}, res) => {
-  const job_id = {job_id: ids.job_id}
-  const client_id = {client_id: ids.client_id}
+  const job_id = ids.job_id
+  const client_id = ids.client_id
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -68,13 +68,17 @@ router.post('/api/addNewRep', ({body: {dbObj, ids}}, res) => {
           .returning('representative_id')
           .insert(polishedObj)
           .then( data => {
-            let representative_id = data[0]
-            knex('Client_Specs_Per_Job')  //-----set ids on connecting table
-            .update({ representative_id })   //this update means that there can only be one rep per client per job  
-            .where(client_id)
-            .andWhere(job_id)
-            .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-            .catch( err => console.log(err))
+            if (job_id) {
+              let representative_id = data[0]
+              knex('Client_Specs_Per_Job')  //-----set ids on connecting table
+              .update({ representative_id })   //this update means that there can only be one rep per client per job  
+              .where({client_id: client_id})
+              .andWhere({job_id: job_id})
+              .then( data => res.send({msg: 'Successfully created and added to Job!'}))
+              .catch( err => console.log(err))
+            } else {
+              res.send({msg: 'Successfully created Representative!'})
+            }
           }).catch( err => console.log(err))
         })
       } 

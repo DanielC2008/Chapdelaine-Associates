@@ -1,35 +1,28 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DBFactory, table, ids, editable, edit) {
+app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DBFactory, table, ids, existingObj, formType) {
   let FORM = this
 
   FORM.Display = {}
   FORM.table = table
   FORM.jobIdExists = ids.job_id ? true : false
-  
-  if (!edit && !editable) {
-    FORM.updateType = 'addNew'
-  } else if (!edit && editable) {
-    FORM.updateType = 'addExisting'
-  } else if (edit && editable) {
-    FORM.updateType = 'updateExisting'
-  }
+  FORM.formType = formType
 
   switch(table) {
     case 'Clients':
-      FORM.title = edit ? 'Update Client' : 'Add New Client'
-      FORM.Display.Clients = FormFactory.getClientForm(editable)
-      FORM.clientType = editable ? editable.client_type : null
-      FORM.main = editable ? editable.main : null
+      FORM.title = `${formType} Client`
+      FORM.Display.Clients = FormFactory.getClientForm(existingObj)
+      FORM.clientType = existingObj ? existingObj.client_type : null
+      FORM.main = existingObj ? existingObj.main : null
       break;
     case 'Representatives':
-      FORM.title = edit ? 'Update Representative' : 'Add New Representative'
-      FORM.Display.Representatives = FormFactory.getRepForm(editable)
+      FORM.title = `${formType} Representative`
+      FORM.Display.Representatives = FormFactory.getRepForm(existingObj)
       FORM.client_id = ids.client_id
       break;
     case 'Properties':
-      FORM.title = edit ? 'Update Property' : 'Add New Property'
-      FORM.Display.Properties = FormFactory.getPropertyForm(editable)
+      FORM.title = `${formType} Property`
+      FORM.Display.Properties = FormFactory.getPropertyForm(existingObj)
       break;
   }
 

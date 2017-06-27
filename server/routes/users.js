@@ -47,4 +47,6 @@ router.get('/api/removeUser', ({session}, res) => {
   res.send()
 })
 
+router.get('/api/getAllEmployees', (req, res) => knex('Employees').then( data=> res.send(data)))
+
 module.exports = router
