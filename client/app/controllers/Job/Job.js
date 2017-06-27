@@ -114,7 +114,7 @@ app.controller('Job', function(
     else if ( change === 'removeClient') {
       SearchFactory.chooseOne('Clients', $scope.Clients).then( client_id => {
         ids.client_id = client_id
-        ClientFactory.removeClientFromJob(ids).then( (msg) => {
+        ClientFactory.removeClientFromJob(ids).then( ({data: {msg}}) => {
           $route.reload()
           ToastFactory.toastSuccess(msg)
         }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))

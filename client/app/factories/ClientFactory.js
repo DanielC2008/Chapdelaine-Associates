@@ -36,13 +36,7 @@ app.factory('ClientFactory', function($http, SearchFactory, FormFactory) {
   } 
 
 
-  factory.removeClientFromJob = ids => { //removes client from connect table, does not delete from DB
-    return new Promise ((resolve, reject) => {
-      $http.post('/api/removeClientFromJob', {ids}).then( ({data: {msg}}) => {
-        resolve(msg)
-      }).catch( err => console.log('err', err))
-    })
-  }  
+  factory.removeClientFromJob = ids =>  $http.post('/api/removeClientFromJob', {ids})  
 
   factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
 
