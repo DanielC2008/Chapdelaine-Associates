@@ -4,23 +4,9 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
   const factory = {}
 
-    factory.removeFromJob = dataObj => $http.post('/api/removeClientFromJob', dataObj)
+  factory.addProperty = ids => FormFactory.updateForm('Properties', null, ids, 'Add New')
 
-    factory.addProperty = ids => {
-      return new Promise ((resolve, reject) => {
-        FormFactory.updateForm('Properties', null, ids, 'Add New').then( msg => {
-          resolve(msg)
-        }).catch( err => reject(err))
-      })
-    }
-
-    factory.editProperty = (ids , property) => {
-      return new Promise ((resolve, reject) => {
-        FormFactory.updateForm('Properties', property, ids, 'Update').then( msg => {
-          resolve(msg)
-        }).catch( err => reject({msg:'Nothing Saved'}))
-      })
-    }
+  factory.editProperty = (ids , property) => FormFactory.updateForm('Properties', property, ids, 'Update')
 
   return factory
 })
