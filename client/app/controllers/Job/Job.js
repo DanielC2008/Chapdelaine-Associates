@@ -1,7 +1,7 @@
 "use strict"
 
 app.controller('Job', function(
-  $scope, $location, JobFactory, ToastFactory, $mdDialog, $route, ClientFactory, RepFactory, PropertyFactory) {
+  $scope, $location, JobFactory, ToastFactory, SearchFactory, $mdDialog, $route, ClientFactory, RepFactory, PropertyFactory) {
 
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
@@ -81,18 +81,45 @@ app.controller('Job', function(
     }
 
     else if (change === 'addClient') {
-      ClientFactory.addClient(ids).then( ({msg}) => {
-        $route.reload()
-        ToastFactory.toastSuccess(msg)
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      ClientFactory.searchForClients().then( client_id => {
+        ids.client_id = client_id
+        if (client_id) {
+          ClientFactory.getFullClientById({ids}).then( ({data}) => {
+            ClientFactory.addExistingClientToJob(ids, data).then( ({msg}) => {
+              $route.reload()
+              ToastFactory.toastSuccess(msg)
+            }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        } else {
+          ClientFactory.addNewClient(ids).then( ({msg}) => {
+            $route.reload()
+            ToastFactory.toastSuccess(msg)
+          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }
+      })
     } 
 
     else if (change === 'editClient') { 
-      ClientFactory.editClient(ids, $scope.Clients).then( ({msg}) => {
-        $route.reload()
-        ToastFactory.toastSuccess(msg)
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      SearchFactory.chooseOne('Clients', $scope.Clients).then( client_id => {
+        ids.client_id = client_id
+        ClientFactory.getFullClientOnJob({ids}).then( ({data}) => {
+          ClientFactory.updateExistingClient(ids, data).then( ({msg}) => {
+            $route.reload()
+            ToastFactory.toastSuccess(msg)
+          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      })
     } 
+
+    else if ( change === 'removeClient') {
+      SearchFactory.chooseOne('Clients', $scope.Clients).then( client_id => {
+        ids.client_id = client_id
+        ClientFactory.removeClientFromJob(ids).then( (msg) => {
+          $route.reload()
+          ToastFactory.toastSuccess(msg)
+        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }) 
+    }
 
     else if (change === 'addRep') {
       RepFactory.addRep(ids, $scope.Clients).then( ({msg}) => {
@@ -123,17 +150,8 @@ app.controller('Job', function(
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }
 
-    else if ( change === 'removeClient') {
-      ClientFactory.removeClient(ids, $scope.Clients)
-       .then( ({msg}) => {
-        $route.reload()
-        ToastFactory.toastSuccess(msg)
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-    }
-
     else if ( change === 'removeRep') {
-      RepFactory.removeRep(ids, $scope.Representatives)
-       .then( msg => {
+      RepFactory.removeRep(ids, $scope.Representatives).then( msg => {
         $route.reload()
         ToastFactory.toastSuccess(msg)
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))

@@ -22,13 +22,13 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
               if (rep_id) { 
                 // edit existing rep
                 getFullRepById({ids}).then(({data}) => { 
-                  FormFactory.updateForm('Representatives', data, ids, false).then( msg => {
+                  FormFactory.updateForm('Representatives', data, ids, 'Add Existing').then( msg => {
                     resolve(msg)
                   }).catch( err => reject(err))
                 }).catch( err => reject(err))
               } else {
                 //add new rep
-                FormFactory.updateForm('Representatives', null, ids, false).then( msg => {
+                FormFactory.updateForm('Representatives', null, ids, 'Add New').then( msg => {
                   resolve(msg)
                 }).catch( err => reject(err))
               }
@@ -43,7 +43,7 @@ app.factory('RepFactory', function($http, SearchFactory, FormFactory) {
         SearchFactory.chooseOne('Representatives', reps).then( rep_id => {
           ids.representative_id = rep_id
           getFullRepById({ids}).then( ({data}) => {
-            FormFactory.updateForm('Representatives', data, ids, true).then( msg => {
+            FormFactory.updateForm('Representatives', data, ids, 'Update').then( msg => {
               resolve(msg)
             }).catch( err => reject({msg:'Nothing Saved'}))
           }).catch( err => console.log('err', err))

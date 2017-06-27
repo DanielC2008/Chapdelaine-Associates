@@ -12,10 +12,10 @@
           <option value="updateStatus">Update Status</option>
           <option value="addClient">Add Client</option>
           <option ng-if="Clients.length != 0" value="editClient">Edit Client</option>
-          <option ng-if="Clients.length != 0" value="removeClient">Delete Client</option>
+          <option ng-if="Clients.length != 0" value="removeClient">Remove Client</option>
           <option ng-if="Representatives.length != Clients.length" value="addRep">Add Rep</option>
           <option ng-if="Representatives.length != 0" value="editRep">Edit Rep</option>
-          <option ng-if="Representatives.length != 0" value="removeRep">Delete Rep</option>
+          <option ng-if="Representatives.length != 0" value="removeRep">Remove Rep</option>
           <option value="{{Property ? 'editProp' : 'addProp'}}">{{Property ? 'Edit Property' : 'Add Property'}}</option>
         </select>   
       </div>  

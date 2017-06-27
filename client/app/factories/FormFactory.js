@@ -96,13 +96,13 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
   }
 
 
-  factory.updateForm = (table, editable, ids, edit) => {
+  factory.updateForm = (table, existingObj, ids, formType) => {
     return new Promise ((resolve, reject) => { 
       let locals = {
         ids: ids,
         table: table,
-        editable: editable,
-        edit: edit
+        existingObj: existingObj,
+        formType: formType
       }
       $mdDialog.show({
         locals,

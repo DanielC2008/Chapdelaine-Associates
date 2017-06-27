@@ -8,7 +8,7 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
     factory.addProperty = ids => {
       return new Promise ((resolve, reject) => {
-        FormFactory.updateForm('Properties', null, ids, false).then( msg => {
+        FormFactory.updateForm('Properties', null, ids, 'Add New').then( msg => {
           resolve(msg)
         }).catch( err => reject(err))
       })
@@ -16,7 +16,7 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
     factory.editProperty = (ids , property) => {
       return new Promise ((resolve, reject) => {
-        FormFactory.updateForm('Properties', property, ids, true).then( msg => {
+        FormFactory.updateForm('Properties', property, ids, 'Update').then( msg => {
           resolve(msg)
         }).catch( err => reject({msg:'Nothing Saved'}))
       })
