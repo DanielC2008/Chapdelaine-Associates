@@ -18,7 +18,7 @@ app.controller('Admin_Clients', function($scope, $route, ClientFactory, ToastFac
           ToastFactory.toastSuccess(msg)
         }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
       }
-    })
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   } 
 
 })

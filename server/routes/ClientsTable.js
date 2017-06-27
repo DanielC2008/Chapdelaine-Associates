@@ -138,7 +138,7 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit({client_id: ids.client_id}, dbObj, 'Clients')
+    validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
     .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
@@ -179,7 +179,7 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
     res.status(400).send(msg)
   } else {
-    validationHelper.checkNameExistsOnEdit({client_id: ids.client_id}, dbObj, 'Clients')
+    validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
     .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
         res.status(400).send(nameExists)
@@ -191,7 +191,7 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
           let polishedObj = data.obj
           knex('Clients') //------------------------find client
           .update(polishedObj)
-          .where({client_id: ids.client_id})
+          .where({client_id: client_id})
           .then( () => {
             if (job_id) { 
               knex('Client_Specs_Per_Job')//------set ids on connecting table
@@ -199,8 +199,8 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
                 client_type_id, 
                 main
               })
-              .where({client_id: ids.client_id})
-              .andWhere({client_id: ids.client_id})
+              .where({client_id: client_id})
+              .andWhere({client_id: client_id})
               .then( data => res.send({msg: 'Successfully updated Client!'}))
               .catch( err => console.log(err))
             } else {
