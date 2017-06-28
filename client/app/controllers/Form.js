@@ -32,7 +32,6 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
 
   FORM.addNew = ()  => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
-    console.log('dbObj', dbObj)
     let dbPackage = prepForDB(dbObj)
       if (dbPackage) {
       DBFactory.addNew(dbPackage)
