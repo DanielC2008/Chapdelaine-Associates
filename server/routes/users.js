@@ -51,13 +51,13 @@ router.get('/api/removeUser', ({session}, res) => {
 
 router.get('/api/getAllEmployees', (req, res) => knex('Employees').then( data=> res.send(data)))
 
-// router.post('/api/removeRepFromJob', ({body: {ids}}, res) => {
-//   knex('Client_Specs_Per_Job')
-//   .update('representative_id', null) //-----------------update to null so we keep client associated with job
-//   .where(ids)
-//   .then( data => {res.send({msg: 'Removed from Job!'})})
-//   .catch( err => console.log(err))
-// })
+router.post('/api/deleteEmployee', ({body: {id}}, res) => {
+  knex('Employees')
+  .del() 
+  .where({employee_id: id})
+  .then( data => {res.send({msg: 'Employee Removed!'})})
+  .catch( err => console.log(err))
+})
 
 router.post('/api/addNewEmployee', ({body: {dbObj, ids}}, res) => {
   const errors = validEmployee.validate(dbObj, {typecast: true})

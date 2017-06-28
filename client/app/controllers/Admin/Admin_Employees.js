@@ -1,7 +1,7 @@
 'use strict'
 
 app.controller('Admin_Employees', function($scope, UserFactory, ToastFactory, $route) {
-  let AE = this
+  const AE = this
 
   UserFactory.getAllEmployees().then( ({data}) => AE.Employees = data)
 
@@ -21,6 +21,15 @@ app.controller('Admin_Employees', function($scope, UserFactory, ToastFactory, $r
       ToastFactory.toastSuccess(msg)
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
-  AE.delete = () => console.log('delete')
+
+  AE.delete = id => {
+    UserFactory.deleteEmployee(id).then( ({msg}) => {
+      UserFactory.setTab('AE')
+      $route.reload()
+      ToastFactory.toastSuccess(msg)
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+  }
+    
   AE.changeStatus = () => console.log('status')
+
 })

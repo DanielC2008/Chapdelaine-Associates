@@ -24,7 +24,9 @@ app.factory('UserFactory', function($http, FormFactory) {
     return new Promise ((resolve, reject) => {
       FormFactory.updateForm('Employees', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
     })
-  }   
+  }
+
+  factory.deleteEmployee = id => $http.post('/api/deleteEmployee', {id})
 
   return factory
 })  

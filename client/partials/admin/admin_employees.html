@@ -10,7 +10,7 @@
         {{employee.first_name}} {{employee.middle_name}} {{employee.last_name}}: 
       </span>
       <button class="col s2"  ng-click="AE.viewOrEdit(employee)">View/Edit</button>
-      <button class="col s2"  ng-click="AE.delete()">Delete</button>
+      <button class="col s2"  ng-click="AE.delete(employee.employee_id)">Delete</button>
       <button class="col s2"  ng-click="AE.changeStatus()">Status</button>
     </div>
   </div>
