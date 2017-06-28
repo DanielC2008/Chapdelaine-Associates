@@ -2,7 +2,7 @@
 
 
 const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMaterial', 'ngMessages', 'angularFileUpload'])
-  .config( $routeProvider =>
+  .config( ($routeProvider) =>
     $routeProvider
       .when('/login', {
         controller: 'Login-Register',
@@ -26,7 +26,10 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
       })
       .when('/admin', {
         controller: 'Admin',
-        templateUrl: 'partials/admin/admin.html'
+        templateUrl: 'partials/admin/admin.html',
+        // resolve: {
+        //   UserFactory.getTab()
+        // }
       })
       .otherwise('/login')
   )

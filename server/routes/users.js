@@ -4,6 +4,10 @@ const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
+const locateOrCreate = require('../locateOrCreate')
+const validEmployee = require('../validation/validEmployee')
+const validationHelper = require('../validation/validationHelper')
+
 
 
 router.post('/api/register', ({body}, res) => {
@@ -92,38 +96,26 @@ router.get('/api/getAllEmployees', (req, res) => knex('Employees').then( data=> 
 // })
 
 router.post('/api/addNewEmployee', ({body: {dbObj, ids}}, res) => {
-  console.log('here', dbObj)
-  // const errors = validateRep.validate(dbObj)
-  // if (errors[0]) {  //------------------------------------checks each data type
-  //   let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-  //   res.status(400).send(msg)
-  // } else {
-  //   validationHelper.checkNameExists(dbObj, 'Representatives').then( nameExists => {//true/false
-  //     if (nameExists) { //-----------------------------checks if name already exists in DB
-  //       res.status(400).send(nameExists)
-  //     } else {
-  //       getConnectTableIds(dbObj).then( data => {
-  //         let polishedObj = data.obj
-  //         knex('Representatives')     //----------make rep
-  //         .returning('representative_id')
-  //         .insert(polishedObj)
-  //         .then( data => {
-  //           if (job_id) {
-  //             let representative_id = data[0]
-  //             knex('Client_Specs_Per_Job')  //-----set ids on connecting table
-  //             .update({ representative_id })   //this update means that there can only be one rep per client per job  
-  //             .where({client_id: client_id})
-  //             .andWhere({job_id: job_id})
-  //             .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-  //             .catch( err => console.log(err))
-  //           } else {
-  //             res.send({msg: 'Successfully created Representative!'})
-  //           }
-  //         }).catch( err => console.log(err))
-  //       })
-  //     } 
-  //   })   
-  // }
+  const errors = validEmployee.validate(dbObj, {typecast: true})
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    validationHelper.checkNameExists(dbObj, 'Employees').then( nameExists => {//true/false
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send(nameExists)
+      } else {
+        getConnectTableIds(dbObj).then( data => {
+          let polishedObj = data.obj
+          knex('Employees')
+          .insert(polishedObj)
+          .then( data => {
+            res.send({msg: 'Successfully created Employee!'})
+          }).catch( err => console.log(err))
+        })  
+      } 
+    })   
+  }
 })
 
 // router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
@@ -151,4 +143,36 @@ router.post('/api/addNewEmployee', ({body: {dbObj, ids}}, res) => {
 //   }
 // })
 
+
+const getConnectTableIds = obj => {
+  let dbPackage = {}
+  return new Promise( (resolve, reject) => {
+    Promise.all([  //-----------------get existing state, city, address, county, zip_code
+      locateOrCreate.state(obj.state).then( data => {
+        delete obj.state
+        obj.state_id = data
+      }),
+      locateOrCreate.city(obj.city).then( data => { 
+        delete obj.city
+        obj.city_id = data
+      }),
+      locateOrCreate.address(obj.address).then( data => { 
+        delete obj.address
+        obj.address_id = data
+      }),
+      locateOrCreate.county(obj.county).then( data => { 
+        delete obj.county
+        obj.county_id = data
+      }),
+      locateOrCreate.zip_code(obj.zip_code).then( data => { 
+        delete obj.zip_code
+        obj.zip_id = data
+      })
+    ])
+    .then( () => {
+      dbPackage.obj = obj
+      resolve(dbPackage)
+    })
+  })
+}
 module.exports = router

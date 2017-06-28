@@ -1,12 +1,14 @@
 'use strict'
 
-app.controller('Admin_Employees', function($scope, UserFactory, ToastFactory) {
+app.controller('Admin_Employees', function($scope, UserFactory, ToastFactory, $route) {
   let AE = this
 
   UserFactory.getAllEmployees().then( ({data}) => AE.Employees = data)
 
   AE.addNew = () => {
     UserFactory.addNew().then( ({msg}) => {
+      UserFactory.setTab('AE')
+      $route.reload()
       ToastFactory.toastSuccess(msg)
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }

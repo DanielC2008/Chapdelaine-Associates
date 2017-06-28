@@ -35,8 +35,8 @@ const validationHelper = require('./validationHelper')
       message: 'Date of Birth must be a valid date.'
     },
     marital_status: {
-      type: 'String',
-      message: 'Marital status must be a string.'
+      type: 'boolean',
+      message: 'Marital status must be true or false.'
     },
     u_s_citizen: {
       type: 'boolean',
