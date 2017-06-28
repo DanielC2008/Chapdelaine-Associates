@@ -1,8 +1,8 @@
 'use strict'
 
-app.controller('Admin', function($scope) {
+app.controller('Admin', function($scope, UserFactory) {
 
-  $scope.showTab = 'MC'
-
+  let tab = UserFactory.getTab()
+  $scope.showTab = tab === '' ? 'MC' : tab 
 
 })

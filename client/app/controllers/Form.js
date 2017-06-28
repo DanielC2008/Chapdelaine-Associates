@@ -24,6 +24,10 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       FORM.title = `${formType} Property`
       FORM.Display.Properties = FormFactory.getPropertyForm(existingObj)
       break;
+    case 'Employees':
+      FORM.title = `${formType} Employee`
+      FORM.Display.Employees = FormFactory.getEmployeeForm(existingObj)
+      break;
   }
 
   FORM.addNew = ()  => {
@@ -64,28 +68,28 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
 
   const prepForDB = dbObj => { // can move this out to individual factories and return the prepped obj
-    let dbPackage = {}
+    let dbPackage = {
+      dbObj: dbObj,
+      ids: ids,
+      table: table
+    }
+
     if (table === 'Clients') {
-      dbObj.client_type = FORM.clientType
-      dbObj.main = FORM.main
-      dbPackage.dbObj = dbObj
-      dbPackage.ids = ids
-      dbPackage.table = table
+      dbPackage.dbObj.client_type = FORM.clientType
+      dbPackage.dbObj.main = FORM.main
       return dbPackage
-    } else if (table === 'Representatives') {
-      dbPackage.table = table
-      dbPackage.dbObj = dbObj
-      dbPackage.ids = ids
-      return dbPackage
-    } else if (table === 'Properties') {
+    }
+
+    else if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
         ToastFactory.toastReject("Please enter an Address or a Road.")
       } else {
-        dbPackage.dbObj = dbObj
-        dbPackage.table = table
-        dbPackage.ids = ids
         return dbPackage
       }   
+    } 
+
+    else {
+      return dbPackage   
     }
   }
 
