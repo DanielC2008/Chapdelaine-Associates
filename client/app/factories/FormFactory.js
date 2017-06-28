@@ -11,7 +11,7 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
     }
   }  
 
-  TaskFactory.getTasks()
+  TaskFactory.getAllTasks()
     .then( ({data}) => {
       let Tasks = data.reduce( (obj, task) => {
         obj[task.task] = ''
