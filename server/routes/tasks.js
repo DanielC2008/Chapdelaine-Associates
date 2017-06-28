@@ -6,8 +6,6 @@ const knex = require('knex')(config)
 const router = Router()
 
 
-router.get('/api/getTasks', (req, res) => {
-  knex('Tasks').then( data => res.send(data))
-})
+router.get('/api/getAllTasks', (req, res) => knex('Tasks').then( data => res.send(data)))
 
 module.exports = router

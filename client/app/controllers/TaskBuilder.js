@@ -8,7 +8,7 @@ app.controller('TaskBuilder', function($scope, ToastFactory, TaskFactory, DBFact
   TBScope.edit = null
   TBScope.task = null
 
-  TaskFactory.getTasks()
+  TaskFactory.getAllTasks()
     .then( ({data}) => {
       allTasks = data
       TBScope.tasks = data.map(obj => obj.task)

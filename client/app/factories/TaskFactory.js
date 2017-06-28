@@ -4,7 +4,7 @@ app.factory('TaskFactory', function($http) {
 
   const factory = {}
 
-  factory.getTasks = () => $http.get('/api/getTasks')
+  factory.getAllTasks = () => $http.get('/api/getAllTasks')
 
   return factory
 })  
