@@ -5,7 +5,7 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
-const {vClient, vClientOnJob} = require('../validation/validClient')
+const {client, clientOnJob} = require('../validation/validClient')
 const validationHelper = require('../validation/validationHelper') 
 
 router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc includes jobid
@@ -85,8 +85,8 @@ router.post('/api/removeClientFromJob', ({body: {ids}}, res) => {
 
 router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
   const job_id = ids.job_id
-  const errors = vClient.validate(dbObj) //checks data types 
-  const jobErrors = job_id ? vClientOnJob.validate(dbObj) : [] //checks data types if attached to job
+  const errors = client.validate(dbObj) //checks data types 
+  const jobErrors = job_id ? clientOnJob.validate(dbObj) : [] //checks data types if attached to job
 
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -130,8 +130,8 @@ router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
 router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
   const client_id = ids.client_id
   const job_id = ids.job_id
-  const errors = vClient.validate(dbObj) //checks data types 
-  const jobErrors = vClientOnJob.validate(dbObj) //checks data types 
+  const errors = client.validate(dbObj) //checks data types 
+  const jobErrors = clientOnJob.validate(dbObj) //checks data types 
 
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -171,8 +171,8 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
 router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
   const client_id = ids.client_id
   const job_id = ids.job_id
-  const errors = vClient.validate(dbObj) //checks data types 
-  const jobErrors = job_id ? vClientOnJob.validate(dbObj) : []//checks data types if attached to job
+  const errors = client.validate(dbObj) //checks data types 
+  const jobErrors = job_id ? clientOnJob.validate(dbObj) : []//checks data types if attached to job
 
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')

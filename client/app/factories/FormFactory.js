@@ -83,6 +83,30 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
     }
   }  
 
+
+  factory.getEmployeeForm = employee => {
+    return {
+      'First Name':     employee ? employee.first_name : '', 
+      'Middle Name':    employee ? employee.middle_name : '', 
+      'Last Name':      employee ? employee.last_name : '', 
+      'S S Number':     employee ? employee.s_s_number : '', 
+      'Date of Birth':  employee ? employee.date_of_birth : '', 
+      'Marital Status': employee ? employee.marital_status : '', 
+      'U S Citizen':    employee ? employee.u_s_citizen : '', 
+      'Home Phone':     employee ? employee.home_number : '', 
+      'Mobile Phone':   employee ? employee.mobile_number : '',
+      'Start Date':     employee ? employee.start_date : '', 
+      'End Date':       employee ? employee.end_date : '', 
+      'Position':       employee ? employee.position : '', 
+      'Pay Rate':       employee ? employee.pay_rate : '', 
+      'Address':        employee ? employee.address : '', 
+      'City':           employee ? employee.city : '', 
+      'State':          employee ? employee.state : '', 
+      'Zip Code':       employee ? employee.zip_code : '', 
+      'County':         employee ? employee.county : ''
+    }
+  }  
+
   factory.getJobForm = () => {
     return {
       'Job Number': '',

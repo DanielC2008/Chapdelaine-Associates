@@ -3,7 +3,7 @@
 const schema = require('validate')
 const validationHelper = require('./validationHelper')
 
-  const client = schema({
+  const employee = schema({
     first_name: {
       type: 'string',
       required: true,
@@ -18,14 +18,9 @@ const validationHelper = require('./validationHelper')
       required: true,
       message: 'Last Name is required.'
     },
-    email: {
+    s_s_number: {
       type: 'string',
-      match: validationHelper.checkEmail,
-      message: 'Valid email is required.'
-    },
-    business_phone: {
-      type: 'string',
-      message: 'Business phone must be a string.'
+      message: 'Social Security must be a number.'
     },
     mobile_phone: {
       type: 'string',
@@ -35,13 +30,33 @@ const validationHelper = require('./validationHelper')
       type: 'string',
       message: 'Home phone must be a string.'
     },
-    fax_number: {
-      type: 'string',
-      message: 'Fax number must be a string.'
+    date_of_birth: {
+      type: 'date',
+      message: 'Date of Birth must be a valid date.'
     },
-    notes: {
+    marital_status: {
+      type: 'String',
+      message: 'Marital status must be a string.'
+    },
+    u_s_citizen: {
+      type: 'boolean',
+      message: 'Citizenship must be true or false.'
+    },
+    start_date: {
+      type: 'date',
+      message: 'Start Date must be a date.'
+    },
+    end_date: {
+      type: 'date',
+      message: 'End Date must be a date.'
+    },
+    position: {
       type: 'string',
-      message: 'Notes must be a string.'
+      message: 'Position must be a string.'
+    },
+    pay_rate: {
+      type: 'number',
+      message: 'Pay Rate must be a number.'
     },
     state: {
       type: 'string',
@@ -63,18 +78,6 @@ const validationHelper = require('./validationHelper')
       type: 'string',
       message: 'Address must be a string.'
     }
-  }, { strip: false})
+  })
 
-  const clientOnJob = schema({
-    client_type: {
-      type: 'string',
-      required: true,
-      message: 'Client Type is required.'
-    },
-    main: {
-      type: 'boolean',
-      message: 'Is this the main Client?'
-    }
-  }, { strip: false})
-
-module.exports = {client, clientOnJob}
+module.exports = employee

@@ -13,6 +13,9 @@ app.factory('DBFactory', function($http) {
     } 
     else if (dbPackage.table === 'Properties'){
       return $http.post('/api/addNewPropertyToJob', dbPackage)
+    } 
+    else if (dbPackage.table === 'Employees'){
+      return $http.post('/api/addNewEmployee', dbPackage)
     }
   }
   
