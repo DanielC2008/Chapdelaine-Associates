@@ -8,8 +8,6 @@ const locateOrCreate = require('../locateOrCreate')
 const validEmployee = require('../validation/validEmployee')
 const validationHelper = require('../validation/validationHelper')
 
-
-
 router.post('/api/register', ({body}, res) => {
   knex('Users')
     .returning('user_name')
@@ -53,40 +51,6 @@ router.get('/api/removeUser', ({session}, res) => {
 
 router.get('/api/getAllEmployees', (req, res) => knex('Employees').then( data=> res.send(data)))
 
-// router.post('/api/getFullRepById', ({body: {ids}}, res) => {
-//   const representative_id = ids.representative_id
-//   knex('Representatives')
-//   .select(
-//     'Representatives.representative_id',
-//     'Representatives.first_name',
-//     'Representatives.middle_name',
-//     'Representatives.last_name',
-//     'Representatives.email',
-//     'Representatives.business_phone',
-//     'Representatives.mobile_phone',
-//     'Representatives.home_phone',
-//     'Representatives.fax_number',
-//     'Representatives.notes',
-//     'Companies.company_name',
-//     'Company_Address.address as company_address',
-//     'Addresses.address',
-//     'Cities.city',
-//     'States.state',
-//     'Zip_Codes.zip_code',
-//     'Counties.county'
-//   )
-//   .leftJoin('Companies', 'Representatives.company_id', 'Companies.company_id')
-//   .leftJoin('Addresses as Company_address', 'Companies.address_id', 'Company_address.address_id')
-//   .leftJoin('Addresses', 'Representatives.address_id', 'Addresses.address_id')      
-//   .leftJoin('Cities', 'Representatives.city_id', 'Cities.city_id') 
-//   .leftJoin('States', 'Representatives.state_id', 'States.state_id')      
-//   .leftJoin('Zip_Codes', 'Representatives.zip_id', 'Zip_Codes.zip_id')      
-//   .leftJoin('Counties', 'Representatives.county_id', 'Counties.county_id')    
-//   .where('Representatives.representative_id', representative_id)
-//   .then(data => res.send(data[0]))
-//   .catch(err => console.log('err', err))
-// })
-
 // router.post('/api/removeRepFromJob', ({body: {ids}}, res) => {
 //   knex('Client_Specs_Per_Job')
 //   .update('representative_id', null) //-----------------update to null so we keep client associated with job
@@ -118,31 +82,30 @@ router.post('/api/addNewEmployee', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-// router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
-//   const representative_id = {representative_id: ids.representative_id}
-//   const errors = validateRep.validate(dbObj)
-//   if (errors[0]) {  //------------------------------------checks each data type
-//     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-//     res.status(400).send(msg)
-//   } else {
-//     validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives')
-//     .then( nameExists => {
-//       if (nameExists) { //-----------------------------checks if name already exists in DB
-//         res.status(400).send(nameExists)
-//       } else {
-//         getConnectTableIds(dbObj).then( data => {
-//           let polishedObj = data.obj
-//           knex('Representatives') //---------------------find client
-//           .update(polishedObj)
-//           .where(representative_id)
-//           .then( () => res.send({msg: 'Successfully updated Job!'}))
-//           .catch( err => console.log(err))        
-//         })
-//       }
-//     })
-//   }
-// })
-
+router.post('/api/updateEmployee', ({body: {dbObj, ids}}, res) => {
+  const employee_id = {employee_id: ids.employee_id}
+  const errors = validEmployee.validate(dbObj, {typecast: true})
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    validationHelper.checkNameExistsOnEdit(employee_id, dbObj, 'Employees').then( nameExists => {//true/false
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send(nameExists)
+      } else {
+        getConnectTableIds(dbObj).then( data => {
+          let polishedObj = data.obj
+          knex('Employees')
+          .update(polishedObj)
+          .where(employee_id)
+          .then( data => {
+            res.send({msg: 'Successfully updated Employee!'})
+          }).catch( err => console.log(err))
+        })  
+      } 
+    })   
+  }
+})
 
 const getConnectTableIds = obj => {
   let dbPackage = {}

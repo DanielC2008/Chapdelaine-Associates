@@ -20,5 +20,11 @@ app.factory('UserFactory', function($http, FormFactory) {
     })
   }
 
+  factory.updateExisting = (data, ids) => {
+    return new Promise ((resolve, reject) => {
+      FormFactory.updateForm('Employees', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+    })
+  }   
+
   return factory
 })  
