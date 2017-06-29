@@ -1,7 +1,6 @@
 'use strict'
 
 const schema = require('validate')
-const validationHelper = require('./validationHelper')
 
   const property = schema({
     property_map: {
