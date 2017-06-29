@@ -3,6 +3,10 @@
 app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, $route) {
   const AT = this
 
+  AT.edit = false
+  AT.switch  = () => {
+    AT.edit === false ? AT.edit = true : AT.edit = false  
+  }
   TaskFactory.getAllTasks().then( ({data}) => AT.Tasks = data)
 
 
