@@ -15,12 +15,6 @@ app.factory('TaskFactory', function($q, $http, FormFactory) {
     })
   }
 
-  // factory.updateExisting = (data, ids) => {
-  //   return new Promise ((resolve, reject) => {
-  //     FormFactory.updateForm('Employees', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-  //   })
-  // }
-
   // factory.deleteEmployee = id => $http.post('/api/deleteEmployee', {id})
 
   factory.getAllTasks()
