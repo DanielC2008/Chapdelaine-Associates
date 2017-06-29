@@ -59,7 +59,7 @@ router.post('/api/deleteEmployee', ({body: {id}}, res) => {
   .catch( err => console.log(err))
 })
 
-router.post('/api/addNewEmployee', ({body: {dbObj, ids}}, res) => {
+router.post('/api/addNewEmployee', ({body: {dbObj}}, res) => {
   const errors = validEmployee.validate(dbObj, {typecast: true})
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')

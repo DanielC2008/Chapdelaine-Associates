@@ -1,17 +1,17 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $http, JobFactory, FormFactory, FindJobService) {
+app.controller('FindJob', function($scope, $http, JobFactory, FormFactory,TaskFactory, FindJobService) {
   let FJScope = this
   let HCScope = $scope.$parent
   let numberOfParams = 1
   let values = {}
 
-  FormFactory.initialized.then(function() {
+  TaskFactory.initialized.then(function() {
     values.Clients = FormFactory.getClientForm()
     values.Representatives = FormFactory.getRepForm()
     values.Properties = FormFactory.getPropertyForm()
     values.Job = FormFactory.getJobForm()
-    values.Tasks = FormFactory.getTaskForm()
+    values.Tasks = TaskFactory.getTaskNames()
     FJScope.Tables = Object.keys(values)
   })
   FJScope.selectedTable

@@ -1,32 +1,13 @@
 'use strict'
 
-app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
+app.factory('FormFactory', function($mdDialog) {
   let factory = {}
-  let taskObj 
-  let _initialized = $q.defer() //wait for data to return
-
-  let createTasks = Tasks => {
-    return {
-      Tasks
-    }
-  }  
-
-  TaskFactory.getAllTasks()
-    .then( ({data}) => {
-      let Tasks = data.reduce( (obj, task) => {
-        obj[task.task] = ''
-        return obj
-      }, {}) 
-      taskObj = createTasks(Tasks)   
-      _initialized.resolve(true) //data has returned and obj is finished pass true to resolve
-    })
-    .catch( (data) => console.log(data))
 
   factory.getClientForm = client => {
     return {
-      'First Name':     client ? client.first_name : '', 
+      'First Name':     client ? client.first_name : '', //required
       'Middle Name':    client ? client.middle_name : '', 
-      'Last Name':      client ? client.last_name : '', 
+      'Last Name':      client ? client.last_name : '', //required
       'Email':          client ? client.email : '', 
       'Business Phone': client ? client.business_phone : '', 
       'Mobile Phone':   client ? client.mobile_phone : '', 
@@ -43,9 +24,9 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
 
   factory.getRepForm = rep => {
     return {
-      'First Name':     rep ? rep.first_name : '', 
+      'First Name':     rep ? rep.first_name : '', //required
       'Middle Name':    rep ? rep.middle_name : '', 
-      'Last Name':      rep ? rep.last_name : '', 
+      'Last Name':      rep ? rep.last_name : '', //required
       'Email':          rep ? rep.email : '', 
       'Business Phone': rep ? rep.business_phone : '', 
       'Mobile Phone':   rep ? rep.mobile_phone : '', 
@@ -64,8 +45,8 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
 
   factory.getPropertyForm = prop => {
     return {
-      'Primary Address':prop ? prop.address : '',
-      'Primary Road':   prop ? prop.road : '',
+      'Primary Address':prop ? prop.address : '', //required
+      'Primary Road':   prop ? prop.road : '', //required if no address
       'City':           prop ? prop.city : '', 
       'State':          prop ? prop.state : '', 
       'Zip Code':       prop ? prop.zip_code : '', 
@@ -86,19 +67,19 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
 
   factory.getEmployeeForm = employee => {
     return {
-      'First Name':     employee ? employee.first_name : '', 
+      'First Name':     employee ? employee.first_name : '', //required
       'Middle Name':    employee ? employee.middle_name : '', 
-      'Last Name':      employee ? employee.last_name : '', 
+      'Last Name':      employee ? employee.last_name : '', //required
       'S S Number':     employee ? employee.s_s_number : '', 
-      'Date of Birth':  employee ? employee.date_of_birth : null, 
-      'Marital Status': employee ? employee.marital_status : null, 
-      'U S Citizen':    employee ? employee.u_s_citizen : null, 
+      'Date of Birth':  employee ? employee.date_of_birth : null, //date
+      'Marital Status': employee ? employee.marital_status : null, //boolean
+      'U S Citizen':    employee ? employee.u_s_citizen : null, //boolean
       'Home Phone':     employee ? employee.home_number : '', 
       'Mobile Phone':   employee ? employee.mobile_number : '',
-      'Start Date':     employee ? employee.start_date : null, 
-      'End Date':       employee ? employee.end_date : null, 
+      'Start Date':     employee ? employee.start_date : null, //date
+      'End Date':       employee ? employee.end_date : null, //date
       'Position':       employee ? employee.position : '', 
-      'Pay Rate':       employee ? employee.pay_rate : null, 
+      'Pay Rate':       employee ? employee.pay_rate : null, //number
       'Address':        employee ? employee.address : '', 
       'City':           employee ? employee.city : '', 
       'State':          employee ? employee.state : '', 
@@ -116,7 +97,11 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
   }    
 
   factory.getTaskForm = () => {
-    return taskObj
+    return {
+      'Task': '',
+      'Rate': null, //number
+      'Hourly': null //boolean
+    }
   }
 
 
@@ -149,8 +134,6 @@ app.factory('FormFactory', function(TaskFactory, $q, $mdDialog) {
     }
     return obj
   }
-
-  factory.initialized = _initialized.promise
 
   return factory
 })
