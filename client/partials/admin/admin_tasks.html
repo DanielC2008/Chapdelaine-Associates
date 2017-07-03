@@ -33,7 +33,7 @@
         </div>
         <div class="col s1" ng-if="!task.hourly"></div>
         <button class="col s2 offset-s1" ng-click="AT.edit(task, $index)">Edit</button>
-        <button class="col s2" ng-click="AT.deleteTask()" ng-disabled="AT.editIndex !== false">Delete</button>
+        <button class="col s2" ng-click="AT.deleteTask(task.task_id)" ng-disabled="AT.editIndex !== false">Delete</button>
       </div>
     </div>
   </div>

@@ -36,5 +36,13 @@ router.post('/api/updateTask', ({body: {ids, task}}, res) => {
   }
 })
 
+router.post('/api/deleteTask', ({body: {id}}, res) => {
+  knex('Tasks')
+  .del()
+  .where({task_id: id})
+  .then( () => res.send({msg: 'Successfully deleted Task!'}))
+  .catch( err => console.log('err', err))
+})
+
 
 module.exports = router
