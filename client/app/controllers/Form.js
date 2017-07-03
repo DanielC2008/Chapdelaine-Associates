@@ -32,6 +32,10 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       FORM.title = `${formType} Task`
       FORM.Display.Tasks = FormFactory.getTaskForm() //can only update objs from admin page
       break;
+    case 'Job_Types':
+      FORM.title = `${formType} Job Type`
+      FORM.Display.Job_Types = FormFactory.getJobTypeForm() 
+      break;
   }
 
   FORM.addNew = ()  => {

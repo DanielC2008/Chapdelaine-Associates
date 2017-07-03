@@ -104,6 +104,10 @@ app.factory('FormFactory', function($mdDialog) {
     }
   }
 
+  factory.getJobTypeForm = () => {
+    return {'Job Type': ''}
+  }
+
 
   factory.updateForm = (table, existingObj, ids, formType) => {
     return new Promise ((resolve, reject) => { 

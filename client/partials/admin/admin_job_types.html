@@ -1,5 +1,8 @@
-<h5>Job Types</h5>
-
+<div class="row">
+  <h5>Job Types</h5>
+  <button class="col s2 offset-s8" ng-click="JT.addNew()"> Add New </button>
+  <button class="col s2" ng-click="JT.editPriority()" ng-disabled="priorityChanged"> Save </button>
+</div>
 <div ng-repeat="type in JT.Types">
   <div>{{type.job_type}}</div>
 </div>

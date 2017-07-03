@@ -4,6 +4,7 @@ const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
+const {validJobType} = require('../validation/validJob')
 
 router.post('/api/createNewJob', ({body}, res) => {
   let newJob = body
@@ -32,17 +33,6 @@ router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {
 
 router.get('/api/getCauses', (req, res) => {
   knex('Cause_For_Cancellation').then( data => res.send(data))
-})
-
-router.post('/api/editColumn', ({body: {table, id, obj}}, res) => {
-  knex(`${table}`)
-    .update(obj)
-    .where(id)
-    .then( data => res.send({msg: 'Your data was saved successfully!'}))
-    .catch( err => {
-      console.log(err)
-      res.send({msg: 'Something went wrong! Please try again.'})
-    })
 })
 
 router.post('/api/setNewTab', ({body:{jobNumber, showTab}, session}, res) => {
@@ -84,11 +74,38 @@ router.post('/api/updateLastAccessed', ({body:{jobNumber}}, res) => {
   .catch(err => res.send(err))
 })
 
+/////////////JOB TYPES////////////////////////////////
 router.get('/api/getAllJobTypes', (req, res) => {
   knex('Job_Types')
   .then( data => res.send(data))
   .catch(err => console.log('err', err))
 })
+
+router.post('/api/addJobType', ({body: {dbObj}}, res) => {
+  //add Priority
+  getLastPriority().then( last => {
+    dbObj.priority = last[0].priority + 1
+    const errors = validJobType.validate(dbObj, {typecast: true})
+    if (errors[0]) {  //------------------------------------checks each type
+      let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+      res.status(400).send(msg)
+    } else {
+      knex('Job_Types')
+      .insert(dbObj)
+      .then( () => res.send({msg: 'Successfully added job type!'}))
+      .catch( err => console.log('err', err))
+    }
+  })
+})
+
+const getLastPriority = () => {
+  return new Promise ((resolve, reject) => {
+    knex('Job_Types')
+    .max('priority as priority')
+    .then( data => resolve(data))
+    .catch( err => reject(err))
+  })  
+}
 
 
 module.exports = router
