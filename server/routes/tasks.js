@@ -22,5 +22,19 @@ router.post('/api/addNewTask', ({body: {dbObj}}, res) => {
   }
 })
 
+router.post('/api/updateTask', ({body: {ids, task}}, res) => {
+  const errors = validTask.validate(task, {typecast: true})
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {  
+    knex('Tasks')
+    .update(task)
+    .where({task_id: ids.task_id})
+    .then( () => res.send({msg: 'Successfully updated Task!'}))
+    .catch( err => console.log('err', err))
+  }
+})
+
 
 module.exports = router

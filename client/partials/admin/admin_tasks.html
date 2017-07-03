@@ -18,11 +18,11 @@
           <input ng-model='task.rate'>
         </div>
         <div class="col s1">
-          <input type="checkbox" id="{{$index}}" ng-checked='task.hourly'/>
+          <input type="checkbox" id="{{$index}}" ng-checked='task.hourly'  ng-model='task.hourly'/>
           <label for="{{$index}}"></label>
         </div>
         <button class="col s2 offset-s1" ng-click="AT.undoChanges()">Undo</button>
-        <button class="col s2" ng-click="AT.saveChanges()">Save</button>
+        <button class="col s2" ng-click="AT.saveChanges(task)">Save</button>
       </div>
       <div ng-if="AT.editIndex !== $index">
         <div class="col s3" ng-model='task.task'>{{task.task}}</div>

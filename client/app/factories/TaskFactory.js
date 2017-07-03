@@ -15,6 +15,8 @@ app.factory('TaskFactory', function($q, $http, FormFactory) {
     })
   }
 
+  factory.updateExisting = (ids, task) => $http.post('/api/updateTask', {ids, task})
+
   // factory.deleteEmployee = id => $http.post('/api/deleteEmployee', {id})
 
   factory.getAllTasks()
