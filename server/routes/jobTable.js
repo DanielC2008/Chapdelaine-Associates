@@ -77,6 +77,7 @@ router.post('/api/updateLastAccessed', ({body:{jobNumber}}, res) => {
 /////////////JOB TYPES////////////////////////////////
 router.get('/api/getAllJobTypes', (req, res) => {
   knex('Job_Types')
+  .orderBy('priority', 'asc')
   .then( data => res.send(data))
   .catch(err => console.log('err', err))
 })

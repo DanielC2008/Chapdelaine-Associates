@@ -30,7 +30,7 @@ app.factory('JobFactory', function($location, $http, FormFactory) {
 
     factory.getAllJobTypes = () => $http.get('/api/getAllJobTypes')
 
-    factory.addNewJobType = ids => { //if job_id adds to Job otherwise just to DB
+    factory.addNewJobType = () => {
       return new Promise ((resolve, reject) => {
         FormFactory.updateForm('Job_Types', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
       })

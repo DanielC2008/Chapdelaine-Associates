@@ -1,8 +1,17 @@
 <div class="row">
   <h5>Job Types</h5>
   <button class="col s2 offset-s8" ng-click="JT.addNew()"> Add New </button>
-  <button class="col s2" ng-click="JT.editPriority()" ng-disabled="priorityChanged"> Save </button>
+  <button class="col s2" ng-click="JT.savePriority()" ng-disabled="!JT.priorityChanged"> Save </button>
 </div>
-<div ng-repeat="type in JT.Types">
-  <div>{{type.job_type}}</div>
+
+<div class="simpleDemo row ">
+  <ul dnd-list="JT.job_types" >
+    <li ng-repeat="type in JT.job_types"
+        dnd-draggable="type"
+        dnd-moved="JT.moved($index)"
+        dnd-effect-allowed="move"
+        dnd-selected="JT.selected = type"
+        ng-class="{'selected': JT.selected === type}">{{type.job_type}}
+    </li>
+  </ul>
 </div>

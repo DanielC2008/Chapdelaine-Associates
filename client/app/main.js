@@ -1,7 +1,7 @@
 'use strict'
 
 
-const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMaterial', 'ngMessages', 'angularFileUpload'])
+const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMaterial', 'ngMessages', 'angularFileUpload', 'dndLists'])
   .config( $routeProvider =>
     $routeProvider
       .when('/login', {
