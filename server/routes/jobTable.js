@@ -77,9 +77,18 @@ router.post('/api/setTab', ({body:{jobNumber}, session}, res) => {
 })
 
 router.post('/api/updateLastAccessed', ({body:{jobNumber}}, res) => {
-  knex('Jobs').where('job_number', jobNumber).update('last_accessed', new Date())
-    .then(res.send())
-    .catch(err => res.send(err))
+  knex('Jobs')
+  .where('job_number', jobNumber)
+  .update('last_accessed', new Date())
+  .then(res.send())
+  .catch(err => res.send(err))
 })
+
+router.get('/api/getAllJobTypes', (req, res) => {
+  knex('Job_Types')
+  .then( data => res.send(data))
+  .catch(err => console.log('err', err))
+})
+
 
 module.exports = router

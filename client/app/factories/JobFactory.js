@@ -28,5 +28,7 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
 
+    factory.getAllJobTypes = () => $http.get('/api/getAllJobTypes')
+
   return factory
 })
