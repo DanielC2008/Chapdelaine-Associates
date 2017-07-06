@@ -21,7 +21,10 @@ app.factory('DBFactory', function($http) {
       return $http.post('/api/addNewTask', dbPackage)
     } 
     else if (dbPackage.table === 'Job_Types'){
-      return $http.post('/api/addJobType', dbPackage)
+      return $http.post('/api/addNewJobType', dbPackage)
+    }
+    else if (dbPackage.table === 'Companies'){
+      return $http.post('/api/addNewCompany', dbPackage)
     }
   }
   

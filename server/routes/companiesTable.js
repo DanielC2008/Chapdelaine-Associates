@@ -50,6 +50,22 @@ router.post('/api/updateCompany', ({body: {dbObj, ids}}, res) => {
   // }
 })
 
+router.post('/api/addNewCompany', ({body: {dbObj}}, res) => {
+  // const errors = validTask.validate(task, {typecast: true})
+  // if (errors[0]) {  //------------------------------------checks each data type
+  //   let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+  //   res.status(400).send(msg)
+  // } else {  
+    getConnectTableIds(dbObj).then( data => {
+      let polishedObj = data.obj
+      knex('Companies')
+      .insert(polishedObj)
+      .then( () => res.send({msg: 'Successfully added new Company!'}))
+      .catch( err => console.log('err', err))
+    })
+  // }
+})
+
 const getConnectTableIds = obj => {
   let dbPackage = {}
   return new Promise( (resolve, reject) => {

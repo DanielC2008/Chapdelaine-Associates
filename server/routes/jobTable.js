@@ -83,7 +83,7 @@ router.get('/api/getEnabledJobTypes', (req, res) => {
   .catch(err => console.log('err', err))
 })
 
-router.post('/api/addJobType', ({body: {dbObj}}, res) => {
+router.post('/api/addNewJobType', ({body: {dbObj}}, res) => {
   //add Priority
   getLastPriority().then( last => {
     dbObj.priority = last[0].priority + 1
