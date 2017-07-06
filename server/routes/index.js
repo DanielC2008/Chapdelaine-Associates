@@ -26,6 +26,7 @@ router.use(require('./propertiesTable'))
 router.use(require('./findJob'))
 router.use(require('./tasksTable'))
 router.use(require('./attachmentsTable'))
+router.use(require('./companiesTable'))
 router.use(require('./generic'))
 
 
