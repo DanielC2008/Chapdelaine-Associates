@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFactory', function($location, $http) {
+app.factory('JobFactory', function($location, $http, FormFactory) {
 
   const factory = {}
 
@@ -27,6 +27,14 @@ app.factory('JobFactory', function($location, $http) {
     factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
 
     factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
+
+    factory.getAllJobTypes = () => $http.get('/api/getAllJobTypes')
+
+    factory.addNewJobType = () => {
+      return new Promise ((resolve, reject) => {
+        FormFactory.updateForm('Job_Types', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+      })
+    }
 
   return factory
 })
