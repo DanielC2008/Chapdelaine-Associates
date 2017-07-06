@@ -47,8 +47,8 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     let dbPackage = prepForDB(dbObj)
       if (dbPackage) {
       DBFactory.addNew(dbPackage)
-      .then( ({data: msg}) => $mdDialog.hide(msg))
-      .catch( ({data: msg}) => {
+      .then( ({data: {msg}}) => $mdDialog.hide(msg))
+      .catch( ({data: {msg}}) => {
         //if msg: client entered incorrect data type else database err
         msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
       })
@@ -59,8 +59,8 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
     DBFactory.addExisting(dbPackage)
-    .then( ({data: msg}) => $mdDialog.hide(msg))
-    .catch( ({data: msg}) => {
+    .then( ({data: {msg}}) => $mdDialog.hide(msg))
+    .catch( ({data: {msg}}) => {
       //if msg: client entered incorrect data type else database err
       msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
     })
@@ -70,8 +70,8 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
     DBFactory.updateExisting(dbPackage)
-    .then( ({data: msg}) => $mdDialog.hide(msg))
-    .catch( ({data: msg}) => {
+    .then( ({data: {msg}}) => $mdDialog.hide(msg))
+    .catch( ({data: {msg}}) => {
       //if msg: client entered incorrect data type else database err
       msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
     })

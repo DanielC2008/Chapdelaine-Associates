@@ -17,7 +17,10 @@ app.controller('Admin_Companies', function($scope, CompanyFactory, ToastFactory)
       } else {
         CompanyFactory.addNewCompany(ids).then( ({msg}) => {
           ToastFactory.toastSuccess(msg)
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => {
+          console.log('err', err)
+          // err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err)
+        })
       }
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   } 

@@ -7,6 +7,7 @@ const router = Router()
 const locateOrCreate = require('../locateOrCreate')
 const validCompany = require('../validation/validCompany')
 const validationHelper = require('../validation/validationHelper') 
+const sqlErrors = require('../errorHandling/sqlErrors')
 
 
 router.get('/api/getCompaniesForSearch', (req, res) => {
@@ -61,7 +62,10 @@ router.post('/api/addNewCompany', ({body: {dbObj}}, res) => {
       knex('Companies')
       .insert(polishedObj)
       .then( () => res.send({msg: 'Successfully added new Company!'}))
-      .catch( err => console.log('err', err))
+      .catch( err => {
+        let error = sqlErrors(err.number)
+        res.status(400).send({msg: error})
+      })
     })
   }
 })
