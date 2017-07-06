@@ -7,7 +7,7 @@ app.factory('TaskFactory', function($q, $http, FormFactory) {
 
   factory.getTaskNames = () => taskObj
 
-  factory.getAllTasks = () => $http.get('/api/getAllTasks')
+  factory.getEnabledTasks = () => $http.get('/api/getEnabledTasks')
 
   factory.addNew = () => {
     return new Promise ((resolve, reject) => {
@@ -17,9 +17,9 @@ app.factory('TaskFactory', function($q, $http, FormFactory) {
 
   factory.updateExisting = (ids, task) => $http.post('/api/updateTask', {ids, task})
 
-  factory.deleteTask = id => $http.post('/api/deleteTask', {id})
+  factory.disableTask = id => $http.post('/api/disableTask', {id})
 
-  factory.getAllTasks()
+  factory.getEnabledTasks()
   .then( ({data}) => {
     let Tasks = data.reduce( (obj, task) => {
       obj[task.task] = ''

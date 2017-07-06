@@ -64,7 +64,6 @@ app.factory('FormFactory', function($mdDialog) {
     }
   }  
 
-
   factory.getEmployeeForm = employee => {
     return {
       'First Name':     employee ? employee.first_name : '', //required
@@ -88,6 +87,13 @@ app.factory('FormFactory', function($mdDialog) {
     }
   }  
 
+  factory.getCompanyForm = company => {
+    return {
+      'Company Name':     company ? company.company_name : '', //required
+      'Company Address':    company ? company.company_address : ''
+    }
+  }  
+
   factory.getJobForm = () => {
     return {
       'Job Number': '',
@@ -107,7 +113,6 @@ app.factory('FormFactory', function($mdDialog) {
   factory.getJobTypeForm = () => {
     return {'Job Type': ''}
   }
-
 
   factory.updateForm = (table, existingObj, ids, formType) => {
     return new Promise ((resolve, reject) => { 

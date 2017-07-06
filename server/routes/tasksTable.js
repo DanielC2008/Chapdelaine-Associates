@@ -7,7 +7,11 @@ const router = Router()
 const validTask = require('../validation/validTask')
 
   
-router.get('/api/getAllTasks', (req, res) => knex('Tasks').then( data => res.send(data)))
+router.get('/api/getEnabledTasks', (req, res) => {
+  knex('Tasks')
+  .where({disabled: false})
+  .then( data => res.send(data))
+})
 
 router.post('/api/addNewTask', ({body: {dbObj}}, res) => {
   const errors = validTask.validate(dbObj, {typecast: true})
@@ -36,11 +40,11 @@ router.post('/api/updateTask', ({body: {ids, task}}, res) => {
   }
 })
 
-router.post('/api/deleteTask', ({body: {id}}, res) => {
+router.post('/api/disableTask', ({body: {id}}, res) => {
   knex('Tasks')
-  .del()
+  .update({disabled: true})
   .where({task_id: id})
-  .then( () => res.send({msg: 'Successfully deleted Task!'}))
+  .then( () => res.send({msg: 'Successfully disabled Task!'}))
   .catch( err => console.log('err', err))
 })
 

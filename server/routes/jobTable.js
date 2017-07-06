@@ -75,14 +75,15 @@ router.post('/api/updateLastAccessed', ({body:{jobNumber}}, res) => {
 })
 
 /////////////JOB TYPES////////////////////////////////
-router.get('/api/getAllJobTypes', (req, res) => {
+router.get('/api/getEnabledJobTypes', (req, res) => {
   knex('Job_Types')
+  .where({disabled: false})
   .orderBy('priority', 'asc')
   .then( data => res.send(data))
   .catch(err => console.log('err', err))
 })
 
-router.post('/api/addJobType', ({body: {dbObj}}, res) => {
+router.post('/api/addNewJobType', ({body: {dbObj}}, res) => {
   //add Priority
   getLastPriority().then( last => {
     dbObj.priority = last[0].priority + 1
@@ -97,6 +98,24 @@ router.post('/api/addJobType', ({body: {dbObj}}, res) => {
       .catch( err => console.log('err', err))
     }
   })
+})
+
+router.post('/api/reprioritizeJobTypes', ({body: {dbPackage}}, res) => {
+  dbPackage.forEach( dbObj => {
+    knex('Job_Types')
+    .update({priority: dbObj.priority}) 
+    .where({job_type_id: dbObj.job_type_id})
+    .then( () => res.send({msg: 'Successfully updated priority!'}))
+    .catch( err => console.log('err', err))
+  })
+})
+
+router.post('/api/disableJobType', ({body: {id}}, res) => {
+  knex('Job_Types')
+  .update({disabled: true})
+  .where({job_type_id: id})
+  .then( () => res.send({msg: 'Successfully disabled Job Type!'}))
+  .catch( err => console.log('err', err))  
 })
 
 const getLastPriority = () => {

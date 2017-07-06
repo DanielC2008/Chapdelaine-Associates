@@ -5,7 +5,7 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastF
   AT.editIndex = false
   let original = undefined
   
-  TaskFactory.getAllTasks().then( ({data}) => AT.Tasks = data )
+  TaskFactory.getEnabledTasks().then( ({data}) => AT.Tasks = data )
   
   const removeChanges = () => AT.Tasks[`${AT.editIndex}`] = original
   
@@ -41,8 +41,8 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastF
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
-  AT.deleteTask = id => {
-    TaskFactory.deleteTask(id).then( ({data: {msg}}) => {
+  AT.disableTask = id => {
+    TaskFactory.disableTask(id).then( ({data: {msg}}) => {
       AdminFactory.setTab('AT')
       $route.reload()
       ToastFactory.toastSuccess(msg)
