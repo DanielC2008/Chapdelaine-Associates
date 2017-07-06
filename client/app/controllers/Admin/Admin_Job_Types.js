@@ -5,15 +5,10 @@ app.controller('Admin_Job_Types', function($scope, JobFactory, ToastFactory, Adm
 
   JT.priorityChanged = false
 
-  JobFactory.getAllJobTypes().then( ({data}) => {
+  JobFactory.getEnabledJobTypes().then( ({data}) => {
     JT.selected = null
     JT.job_types = data
   }) 
-
-  // // Model to JSON for demo purpose
-  $scope.$watch('models', function(model) {
-      $scope.modelAsJson = angular.toJson(model, true);
-  }, true);
 
   JT.addNew = () => {
     JobFactory.addNewJobType().then( ({msg}) => {
@@ -30,10 +25,28 @@ app.controller('Admin_Job_Types', function($scope, JobFactory, ToastFactory, Adm
 
   JT.savePriority = () => {
     reprioritize()
+    let dbPackage = priorityPackage()
+    JobFactory.reprioritizeJobTypes(dbPackage).then( ({data: {msg}}) => {
+      AdminFactory.setTab('JT')
+      $route.reload()
+      ToastFactory.toastSuccess(msg)
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   const reprioritize = () => {
     JT.job_types.forEach( (type, index) => type.priority = index)
-    console.log('herr', JT.job_types)
   }
+
+  const priorityPackage = () => {
+    let dbPackage = JT.job_types.reduce( (arr, type) => {
+      let obj = {
+        job_type_id: type.job_type_id,
+        priority: type.priority
+      }
+      arr.push(obj)
+      return arr
+    }, [])
+    return dbPackage
+  }
+
 })
