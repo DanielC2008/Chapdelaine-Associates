@@ -59,6 +59,9 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Tasks'){
       return $http.post('/api/updateTask', dbPackage)
     }
+    else if (dbPackage.table === 'Companies'){
+      return $http.post('/api/updateCompany', dbPackage)
+    }
   }  
 
   factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)

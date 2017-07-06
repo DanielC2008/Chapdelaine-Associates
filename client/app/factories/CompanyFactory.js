@@ -18,9 +18,13 @@ app.factory('CompanyFactory', function($http, SearchFactory, FormFactory) {
     })
   }
 
-  factory.getFullCompanyById = () => {}
+  factory.getFullCompanyById = company_id => $http.post('/api/getFullCompanyById', company_id)
 
-  factory.updateExistingClient = () => {}
+  factory.updateExistingCompany = (ids, data) => {
+    return new Promise ((resolve, reject) => {
+      FormFactory.updateForm('Companies', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+    })
+  }
 
   factory.addNewClient = () => {}
 

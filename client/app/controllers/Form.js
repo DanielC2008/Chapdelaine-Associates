@@ -36,6 +36,10 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       FORM.title = `${formType} Job Type`
       FORM.Display.Job_Types = FormFactory.getJobTypeForm() 
       break;
+    case 'Companies':
+      FORM.title = `${formType} Company`
+      FORM.Display.Companies = FormFactory.getCompanyForm(existingObj) 
+      break;
   }
 
   FORM.addNew = ()  => {
