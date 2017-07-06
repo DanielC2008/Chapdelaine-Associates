@@ -110,6 +110,14 @@ router.post('/api/reprioritizeJobTypes', ({body: {dbPackage}}, res) => {
   })
 })
 
+router.post('/api/disableJobType', ({body: {id}}, res) => {
+  knex('Job_Types')
+  .update({disabled: true})
+  .where({job_type_id: id})
+  .then( () => res.send({msg: 'Successfully disabled Job Type!'}))
+  .catch( err => console.log('err', err))  
+})
+
 const getLastPriority = () => {
   return new Promise ((resolve, reject) => {
     knex('Job_Types')

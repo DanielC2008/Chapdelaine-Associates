@@ -36,6 +36,8 @@ app.factory('JobFactory', function($location, $http, FormFactory) {
       })
     }
 
+    factory.disableJobType = id => $http.post('/api/disableJobType', {id})
+
     factory.reprioritizeJobTypes = dbPackage => $http.post('/api/reprioritizeJobTypes', {dbPackage})
 
   return factory

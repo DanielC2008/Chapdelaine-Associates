@@ -4,14 +4,19 @@
   <button class="col s2" ng-click="JT.savePriority()" ng-disabled="!JT.priorityChanged"> Save </button>
 </div>
 
-<div class="simpleDemo row ">
-  <ul dnd-list="JT.job_types" >
-    <li ng-repeat="type in JT.job_types"
-        dnd-draggable="type"
-        dnd-moved="JT.moved($index)"
-        dnd-effect-allowed="move"
-        dnd-selected="JT.selected = type"
-        ng-class="{'selected': JT.selected === type}">{{type.job_type}}
-    </li>
-  </ul>
+<div class="row">
+  <div class="simpleDemo col s6 ">
+    <ul dnd-list="JT.job_types" >
+      <li ng-repeat="type in JT.job_types"
+          dnd-draggable="type"
+          dnd-moved="JT.moved($index)"
+          dnd-effect-allowed="move"
+          dnd-selected="JT.selected = type"
+          ng-class="{'selected': JT.selected === type}">{{type.job_type}}
+      </li>
+    </ul>
+  </div>
+  <div class="col s6" ng-repeat="type in JT.job_types">
+    <button class="button btn" ng-click="JT.disable(type)">Disable</button>
+  </div>
 </div>

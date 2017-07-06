@@ -33,6 +33,14 @@ app.controller('Admin_Job_Types', function($scope, JobFactory, ToastFactory, Adm
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
+  JT.disable = type => {
+    JobFactory.disableJobType(type.job_type_id).then( ({data: {msg}}) => {
+      AdminFactory.setTab('JT')
+      $route.reload()
+      ToastFactory.toastSuccess(msg)
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+  }
+
   const reprioritize = () => {
     JT.job_types.forEach( (type, index) => type.priority = index)
   }
