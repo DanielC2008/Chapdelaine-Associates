@@ -5,8 +5,8 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
-// const { validClient, validClientOnJob } = require('../validation/validClient')
-// const validationHelper = require('../validation/validationHelper') 
+const validCompany = require('../validation/validCompany')
+const validationHelper = require('../validation/validationHelper') 
 
 
 router.get('/api/getCompaniesForSearch', (req, res) => {
@@ -34,11 +34,11 @@ router.post('/api/getFullCompanyById', ({body: {ids}}, res) => {
 })
 
 router.post('/api/updateCompany', ({body: {dbObj, ids}}, res) => {
-  // const errors = validTask.validate(task, {typecast: true})
-  // if (errors[0]) {  //------------------------------------checks each data type
-  //   let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-  //   res.status(400).send(msg)
-  // } else {  
+  const errors = validCompany.validate(dbObj)
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {  
     getConnectTableIds(dbObj).then( data => {
       let polishedObj = data.obj
       knex('Companies')
@@ -47,15 +47,15 @@ router.post('/api/updateCompany', ({body: {dbObj, ids}}, res) => {
       .then( () => res.send({msg: 'Successfully updated Company!'}))
       .catch( err => console.log('err', err))
     })
-  // }
+  }
 })
 
 router.post('/api/addNewCompany', ({body: {dbObj}}, res) => {
-  // const errors = validTask.validate(task, {typecast: true})
-  // if (errors[0]) {  //------------------------------------checks each data type
-  //   let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-  //   res.status(400).send(msg)
-  // } else {  
+  const errors = validCompany.validate(dbObj)
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {  
     getConnectTableIds(dbObj).then( data => {
       let polishedObj = data.obj
       knex('Companies')
@@ -63,7 +63,7 @@ router.post('/api/addNewCompany', ({body: {dbObj}}, res) => {
       .then( () => res.send({msg: 'Successfully added new Company!'}))
       .catch( err => console.log('err', err))
     })
-  // }
+  }
 })
 
 const getConnectTableIds = obj => {
