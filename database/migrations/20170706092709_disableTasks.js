@@ -4,8 +4,7 @@ const knex = require('knex')
 
 module.exports.up = (knex, Promise) => {
   return knex.schema
-  .table('Job_Types', table => {
-    table.integer('priority')
+  .table('Tasks', table => {
     table.boolean('disabled').defaultTo(false)
   })
 }
@@ -13,8 +12,7 @@ module.exports.up = (knex, Promise) => {
 
 module.exports.down = (knex, Promise) => {
   return knex.schema
-  .table('Job_Types', table => {
+  .table('Tasks', table => {
     table.dropColumn('disabled')
-    table.dropColumn('priority')
   })
 }
