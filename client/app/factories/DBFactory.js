@@ -26,6 +26,9 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Companies'){
       return $http.post('/api/addNewCompany', dbPackage)
     }
+    else if (dbPackage.table === 'Cause_For_Cancellation'){
+      return $http.post('/api/addNewCause', dbPackage)
+    }
   }
   
   factory.addExisting = dbPackage => {

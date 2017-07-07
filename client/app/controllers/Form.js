@@ -40,6 +40,10 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       FORM.title = `${formType} Company`
       FORM.Display.Companies = FormFactory.getCompanyForm(existingObj) 
       break;
+    case 'Cause_For_Cancellation':
+      FORM.title = `${formType} Cause For Cancellation`
+      FORM.Display.Cause_For_Cancellation = FormFactory.getCauseForm() 
+      break;
   }
 
   FORM.addNew = ()  => {

@@ -18,8 +18,6 @@ app.factory('JobFactory', function($location, $http, FormFactory) {
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
     
-    factory.getCauses = () => $http.get('api/getCauses')
-
     factory.getTab = () => $http.get('/api/getTab')
 
     factory.setTab = jobNumber => $http.post('/api/setTab', jobNumber)
@@ -28,6 +26,8 @@ app.factory('JobFactory', function($location, $http, FormFactory) {
 
     factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
 
+
+    //Job Types -- might move
     factory.getEnabledJobTypes = () => $http.get('/api/getEnabledJobTypes')
 
     factory.addNewJobType = () => {
@@ -39,6 +39,16 @@ app.factory('JobFactory', function($location, $http, FormFactory) {
     factory.disableJobType = id => $http.post('/api/disableJobType', {id})
 
     factory.reprioritizeJobTypes = dbPackage => $http.post('/api/reprioritizeJobTypes', {dbPackage})
+    
+
+    //Cause For Cancellation -- might move
+    factory.getCauses = () => $http.get('api/getCauses')
+
+    factory.addNewCause = () => {
+      return new Promise ((resolve, reject) => {
+        FormFactory.updateForm('Cause_For_Cancellation', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+      })
+    }
 
   return factory
 })
