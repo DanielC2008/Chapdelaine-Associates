@@ -7,6 +7,26 @@ const router = Router()
 const locateOrCreate = require('../locateOrCreate')
 const validateProperty = require('../validation/validProperty')
 
+router.post('/api/getAllAddressesOnProp', ({body:{ property_id }}, res) => {
+  knex('Properties')
+  .select('Addresses.address')
+  .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
+  .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
+  .whereIn('Properties.property_id', property_id)
+  .then(data => jobMain.Addresses = data.map( query => query.address))
+  .catch(err => console.log('err', err))
+})
+
+router.post('/api/getAllRoadsOnProp', ({body:{ property_id }}, res) => {
+  knex('Properties')
+  .select('Roads.road')
+  .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
+  .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
+  .whereIn('Properties.property_id', property_id)
+  .then(data => jobMain.Roads = data.map( query => query.road))
+  .catch(err => console.log('err', err))
+})
+
 router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
   if (errors[0]) {  //------------------------------------checks each type

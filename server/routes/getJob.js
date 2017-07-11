@@ -201,22 +201,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         jobMain.Property = data[0]
       }).catch(err => console.log('err', err)),  
 
-      // knex('Properties')
-      //   .select('Addresses.address')
-      //   .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
-      //   .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
-      //   .whereIn('Properties.property_id', propertyId)
-      //   .then(data => jobMain.Addresses = data.map( query => query.address))
-      //   .catch(err => console.log('err', err)),
-   
-      // knex('Properties')
-      //   .select('Roads.road')
-      //   .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
-      //   .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
-      //   .whereIn('Properties.property_id', propertyId)
-      //   .then(data => jobMain.Roads = data.map( query => query.road))
-      //   .catch(err => console.log('err', err)),
-
       knex('Representatives')
         .select(
           'Clients.client_id',
