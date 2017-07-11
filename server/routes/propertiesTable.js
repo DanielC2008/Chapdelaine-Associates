@@ -28,6 +28,8 @@ router.post('/api/getRoadsOnProp', ({body:{ property_id }}, res) => {
 })
 
 router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
+  let job_id = ids.job_id
+  let property_id
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
   if (errors[0]) {  //------------------------------------checks each type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
@@ -35,18 +37,22 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   } else {
     getConnectTableIds(dbObj).then( data => {
       let polishedObj = data.obj
-      polishedObj.job_id = ids.job_id
       let address_id = data.obj.primary_address_id  ? data.obj.primary_address_id : null
       let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
       knex('Properties') //------------------------make property
       .returning('property_id')
       .insert(polishedObj)
       .then( data => {
-        let property_id = data[0]
+        property_id = data[0]
         return Promise.all([
           addAddress(address_id).then().catch( err => console.log('err', err)),
           addRoad(road_id).then().catch( err => console.log('err', err)),
-        ]).then( () => res.send({msg: 'Successfully created and added to Job!'})).catch(err => console.log(err))
+        ]).then( () => {
+          knex('Jobs')
+          .update({property_id: property_id})
+          .where({job_id: job_id})
+          .then( () => res.send({msg: 'Successfully created and added to Job!'})).catch(err => console.log(err))
+        }).catch(err => console.log(err))
       }).catch( err => console.log(err))
     }).catch( err => console.log(err))
   }

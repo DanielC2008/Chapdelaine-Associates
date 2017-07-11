@@ -84,6 +84,41 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         jobMain.Main = data[0]
       }).catch(err => console.log('err', err)),
 
+    knex('Properties')
+      .select(
+        'Properties.property_id',
+        'Properties.property_map', 
+        'Properties.parcel_number',
+        'Properties.plat_book',
+        'Properties.plat_page',
+        'Properties.deed_book',
+        'Properties.deed_page',
+        'Properties.sub_division',
+        'Properties.lot_number',
+        'Properties.notes',
+        'Properties.acres',
+        'Counties.county',
+        'Cities.city',
+        'States.state',
+        'Zip_Codes.zip_code',
+        'Addresses.address',
+        'Roads.road'
+      )
+      .join('Jobs', 'Jobs.property_id', 'Properties.property_id')
+      .leftJoin('Counties', 'Properties.county_id', 'Counties.county_id')      
+      .leftJoin('Cities', 'Properties.city_id', 'Cities.city_id') 
+      .leftJoin('States', 'Properties.state_id', 'States.state_id')      
+      .leftJoin('Zip_Codes', 'Properties.zip_id', 'Zip_Codes.zip_id')    
+      .leftJoin('Addresses', 'Properties.primary_address_id', 'Addresses.address_id')    
+      .leftJoin('Roads', 'Properties.primary_road_id', 'Roads.road_id')    
+      .where('job_number', job_number)
+      .then( data => {
+        if (data[0]) {
+          propertyId = data[0].property_id
+        }
+        jobMain.Property = data[0]
+      }).catch(err => console.log('err', err)),  
+
     knex('Estimates')
         .select(
           'Tasks.task',
@@ -166,40 +201,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .whereIn('Clients.client_id', allClientIds)
         .then(data => jobMain.Representatives = data)
         .catch(err => console.log('err', err)),
-
-    knex('Properties')
-      .select(
-        'Properties.property_id',
-        'Properties.property_map', 
-        'Properties.parcel_number',
-        'Properties.plat_book',
-        'Properties.plat_page',
-        'Properties.deed_book',
-        'Properties.deed_page',
-        'Properties.sub_division',
-        'Properties.lot_number',
-        'Properties.notes',
-        'Properties.acres',
-        'Counties.county',
-        'Cities.city',
-        'States.state',
-        'Zip_Codes.zip_code',
-        'Addresses.address',
-        'Roads.road'
-      )
-      .leftJoin('Counties', 'Properties.county_id', 'Counties.county_id')      
-      .leftJoin('Cities', 'Properties.city_id', 'Cities.city_id') 
-      .leftJoin('States', 'Properties.state_id', 'States.state_id')      
-      .leftJoin('Zip_Codes', 'Properties.zip_id', 'Zip_Codes.zip_id')    
-      .leftJoin('Addresses', 'Properties.primary_address_id', 'Addresses.address_id')    
-      .leftJoin('Roads', 'Properties.primary_road_id', 'Roads.road_id')    
-      .where('Properties.job_id', jobId)
-      .then( data => {
-        if (data[0]) {
-          propertyId = data[0].property_id
-        }
-        jobMain.Property = data[0]
-      }).catch(err => console.log('err', err)),  
 
       knex('Representatives')
         .select(
