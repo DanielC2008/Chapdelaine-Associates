@@ -65,6 +65,7 @@ router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
       let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
       knex('Properties')
       .update(polishedObj)
+      .where({property_id: property_id})
       .then( data => {
         return Promise.all([
           updateAddress(address_id, property_id),
