@@ -91,11 +91,11 @@ router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         let main = dbObj.main
         delete dbObj.main
@@ -136,12 +136,12 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
     .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         let main = dbObj.main
         delete dbObj.main
@@ -177,12 +177,12 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
     .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         let main = dbObj.main
         delete dbObj.main
@@ -216,7 +216,7 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
 router.get('/api/getClientsForSearch', ({body}, res) => {
   knex('Clients')
   .select(
-    knex.raw(`first_name + ' ' + last_name AS 'value'`),
+    knex.raw(`first_name + ' ' + middle_name + ' ' + last_name AS 'value'`),
     'client_id AS id'
   )
   .then( data => res.send(data))

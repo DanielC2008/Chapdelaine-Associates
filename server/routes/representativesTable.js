@@ -56,11 +56,11 @@ router.post('/api/addNewRep', ({body: {dbObj, ids}}, res) => {
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExists(dbObj, 'Representatives').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         getConnectTableIds(dbObj).then( data => {
           let polishedObj = data.obj
@@ -93,12 +93,12 @@ router.post('/api/addExistingRep', ({body: {dbObj, ids}}, res) => {
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives')
     .then( nameExists => {
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         getConnectTableIds(dbObj).then( data => {
           let polishedObj = data.obj
@@ -124,12 +124,12 @@ router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
   const errors = validateRep.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExistsOnEdit(representative_id, dbObj, 'Representatives')
     .then( nameExists => {
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         getConnectTableIds(dbObj).then( data => {
           let polishedObj = data.obj
@@ -147,7 +147,7 @@ router.post('/api/updateRep', ({body: {dbObj, ids}}, res) => {
 router.get('/api/getRepsForSearch', ({body}, res) => {
   knex('Representatives')
     .select(
-      knex.raw(`first_name + ' ' + last_name AS 'value'`),
+      knex.raw(`first_name + ' ' + middle_name + ' ' + last_name AS 'value'`),
       'representative_id AS id'
     )
     .then( data => res.send(data))

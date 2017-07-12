@@ -33,7 +33,7 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
   if (errors[0]) {  //------------------------------------checks each type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     getConnectTableIds(dbObj).then( data => {
       let polishedObj = data.obj
@@ -63,7 +63,7 @@ router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
   if (errors[0]) {  //------------------------------------checks each type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     getConnectTableIds(dbObj).then( data => {
       let polishedObj = data.obj

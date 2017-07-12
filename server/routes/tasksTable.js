@@ -17,7 +17,7 @@ router.post('/api/addNewTask', ({body: {dbObj}}, res) => {
   const errors = validTask.validate(dbObj, {typecast: true})
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {  
     knex('Tasks')
     .insert(dbObj)
@@ -30,7 +30,7 @@ router.post('/api/updateTask', ({body: {ids, task}}, res) => {
   const errors = validTask.validate(task, {typecast: true})
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {  
     knex('Tasks')
     .update(task)

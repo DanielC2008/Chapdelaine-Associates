@@ -38,7 +38,7 @@ router.post('/api/updateCompany', ({body: {dbObj, ids}}, res) => {
   const errors = validCompany.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {  
     getConnectTableIds(dbObj).then( data => {
       let polishedObj = data.obj
