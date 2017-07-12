@@ -2,6 +2,10 @@
 
 const schema = require('validate')
 
+  //create Job validation
+
+  //valid cancel
+  
   const validJobType = schema({
     job_type: {
       type: 'string',

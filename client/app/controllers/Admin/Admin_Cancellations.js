@@ -1,14 +1,14 @@
 'use strict'
 
-app.controller('Admin_Cancellations', function($scope, JobFactory, AdminFactory, ToastFactory, $route) {
+app.controller('Admin_Cancellations', function($scope, CancellationFactory, AdminFactory, ToastFactory, $route) {
 const ACA = this
 
-JobFactory.getCauses().then( ({data}) => {
+CancellationFactory.getCauses().then( ({data}) => {
   ACA.causes = data
 }) 
 
 ACA.addNew = () => {
-    JobFactory.addNewCause().then( ({msg}) => {
+    CancellationFactory.addNewCause().then( ({msg}) => {
       ////////////////////////////////////////////////////////////////can move this out to Admin.js
       AdminFactory.setTab('ACA')//////////////////////////////
       $route.reload()////////////////////////////////////

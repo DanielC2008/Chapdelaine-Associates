@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFactory', function($location, $http, FormFactory) {
+app.factory('JobFactory', function($location, $http) {
 
   const factory = {}
 
@@ -25,30 +25,6 @@ app.factory('JobFactory', function($location, $http, FormFactory) {
     factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
 
     factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
-
-
-    //Job Types -- might move
-    factory.getEnabledJobTypes = () => $http.get('/api/getEnabledJobTypes')
-
-    factory.addNewJobType = () => {
-      return new Promise ((resolve, reject) => {
-        FormFactory.updateForm('Job_Types', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-      })
-    }
-
-    factory.disableJobType = id => $http.post('/api/disableJobType', {id})
-
-    factory.reprioritizeJobTypes = dbPackage => $http.post('/api/reprioritizeJobTypes', {dbPackage})
-    
-
-    //Cause For Cancellation -- might move
-    factory.getCauses = () => $http.get('api/getCauses')
-
-    factory.addNewCause = () => {
-      return new Promise ((resolve, reject) => {
-        FormFactory.updateForm('Cause_For_Cancellation', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-      })
-    }
 
   return factory
 })

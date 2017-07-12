@@ -92,7 +92,6 @@ app.controller('Job', function(
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
           ClientFactory.addNewClient(ids).then( data => {
-            console.log('data', data)
             $route.reload()
             ToastFactory.toastSuccess(msg)
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
