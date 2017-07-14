@@ -49,8 +49,8 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         jobMain.Clients = data
       }).catch(err => console.log('err', err)),
 
-
-    knex('Clients')
+    //Get main client
+    knex('Jobs') 
       .select(
         'Clients.client_id',
         'Clients.first_name',
@@ -67,16 +67,15 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Counties.county',
         'Client_Types.client_type'
       )
-      .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
+      .join('Clients', 'Clients.client_id', 'Jobs.main_client_id')
+      .join('Client_Specs_Per_Job', 'Jobs.main_client_id', 'Client_Specs_Per_Job.client_id')
       .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
-      .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
       .leftJoin('Addresses', 'Clients.address_id', 'Addresses.address_id')      
       .leftJoin('Cities', 'Clients.city_id', 'Cities.city_id') 
       .leftJoin('States', 'Clients.state_id', 'States.state_id')      
       .leftJoin('Zip_Codes', 'Clients.zip_id', 'Zip_Codes.zip_id')      
       .leftJoin('Counties', 'Clients.county_id', 'Counties.county_id')      
       .where('Jobs.job_number', job_number)
-      .where('Client_Specs_Per_Job.main', true )
       .then(data => {
         if (data[0]) {
           mainClientId = data[0].client_id
@@ -178,7 +177,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   .then( () => {
     return Promise.all([
 
-      knex('Jobs')
+      knex('Jobs') ///////////////////////////////move up ^
         .select('Job_Types.job_type')
         .join('Jobs_Job_Types', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
         .join('Job_Types', 'Jobs_Job_Types.job_type_id', 'Job_Types.job_type_id')
