@@ -63,11 +63,11 @@ router.post('/api/addNewEmployee', ({body: {dbObj}}, res) => {
   const errors = validEmployee.validate(dbObj, {typecast: true})
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExists(dbObj, 'Employees').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         getConnectTableIds(dbObj).then( data => {
           let polishedObj = data.obj
@@ -87,11 +87,11 @@ router.post('/api/updateEmployee', ({body: {dbObj, ids}}, res) => {
   const errors = validEmployee.validate(dbObj, {typecast: true})
   if (errors[0]) {  //------------------------------------checks each data type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExistsOnEdit(employee_id, dbObj, 'Employees').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         getConnectTableIds(dbObj).then( data => {
           let polishedObj = data.obj

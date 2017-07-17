@@ -83,12 +83,14 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
     statusPath(status)
   }
 
-  $scope.numberSet = job_number => { //for RecommendedNumber
-    if (job_number > 0) {
+  $scope.numberSet = number => { //for RecommendedNumber
+    let job_number = Number(number)
+    console.log('job_number', job_number, typeof job_number)
+    if (job_number != NaN && job_number > 0) {
       $scope.Job.job_number = job_number
       submitJobStatus()
     } else {
-      ToastFactory.toastReject('Job number must be greater than 0!')
+      ToastFactory.toastReject('Job number must be a number greater than 0!')
     }
   }
 

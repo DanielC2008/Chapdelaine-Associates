@@ -89,8 +89,8 @@ app.factory('FormFactory', function($mdDialog) {
 
   factory.getCompanyForm = company => {
     return {
-      'Company Name':     company ? company.company_name : '', //required
-      'Company Address':    company ? company.company_address : ''
+      'Company Name':   company ? company.company_name : '', //required
+      'Company Address':company ? company.company_address : ''
     }
   }  
 
@@ -112,6 +112,10 @@ app.factory('FormFactory', function($mdDialog) {
 
   factory.getJobTypeForm = () => {
     return {'Job Type': ''}
+  }
+
+  factory.getCauseForm = () => {
+    return {'Cause': ''}
   }
 
   factory.updateForm = (table, existingObj, ids, formType) => {

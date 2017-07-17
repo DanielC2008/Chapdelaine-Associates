@@ -29,7 +29,7 @@ router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc
     'Zip_Codes.zip_code',
     'Counties.county',
     'Client_Types.client_type',
-    'Client_Specs_Per_Job.main'
+    'Jobs.main_client_id'
   )
   .join('Client_Specs_Per_Job', 'Clients.client_id', 'Client_Specs_Per_Job.client_id')
   .join('Client_Types', 'Client_Specs_Per_Job.client_type_id', 'Client_Types.client_type_id')
@@ -41,7 +41,12 @@ router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc
   .leftJoin('Counties', 'Clients.county_id', 'Counties.county_id')      
   .where({'Clients.client_id': client_id})
   .andWhere({'Jobs.job_id': job_id})
-  .then(data => res.send(data[0]))
+  .then( data => {
+    let client = data[0]
+    client.main = client.client_id === client.main_client_id ? true : false
+    delete client.main_client_id
+    res.send(client)
+  })
   .catch(err => console.log('err', err))
 }) 
 
@@ -91,11 +96,11 @@ router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         let main = dbObj.main
         delete dbObj.main
@@ -112,18 +117,25 @@ router.post('/api/addNewClient', ({body: {dbObj, ids}}, res) => {
               .insert({
                 job_id,
                 client_id, 
-                client_type_id,
-                main
+                client_type_id
               }) 
-              .then( data => res.send({msg: 'Successfully created and added to Job!'}))
-              .catch( err => console.log(err))
+              .then( () => {
+                if (main) {
+                  knex('Jobs')
+                  .update({main_client_id: client_id})
+                  .where({job_id: job_id})
+                  .then( () => res.send({msg: 'Successfully created and added to Job!'}))
+                } else {
+                  res.send({msg: 'Successfully created and added to Job!'})
+                }
+              }).catch( err => console.log(err))
             } else {
               res.send({msg: 'Successfully created Client!'})
             }
           }).catch( err => console.log(err))
-        })
+        }).catch( err => console.log(err))
       } 
-    })   
+    }).catch( err => console.log(err)) 
   }
 })
 
@@ -136,12 +148,11 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
-    validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
-    .then( nameExists => {//true/false
+    validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients').then( nameExists => {
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         let main = dbObj.main
         delete dbObj.main
@@ -156,15 +167,25 @@ router.post('/api/addExistingClient', ({body: {dbObj, ids}}, res) => {
             .insert({
               job_id,
               client_id, 
-              client_type_id,
-              main
+              client_type_id
             }) 
-            .then( data => res.send({msg: 'Successfully added to Job!'}))
+            .then( () => {
+              if (main) {
+                knex('Jobs')
+                .update({main_client_id: client_id})
+                .where({job_id: job_id})
+                .then( () => {
+                  res.send({msg: 'Successfully added to Job!'})
+                })
+              } else {
+                res.send({msg: 'Successfully added to Job!'})
+              }
+            })
             .catch( err => console.log(err))
           }).catch( err => console.log(err))        
-        })
+        }).catch( err => console.log(err)) 
       }
-    })
+    }).catch( err => console.log(err)) 
   }
 })
 
@@ -177,12 +198,12 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
   if (errors[0] || jobErrors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     msg = jobErrors.reduce( (string, err) => string.concat(`${err.message}\n`), msg)
-    res.status(400).send(msg)
+    res.status(400).send({msg: `${msg}`})
   } else {
     validationHelper.checkNameExistsOnEdit({client_id: client_id}, dbObj, 'Clients')
     .then( nameExists => {//true/false
       if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send(nameExists)
+        res.status(400).send({msg: `${nameExists}`})
       } else {
         let main = dbObj.main
         delete dbObj.main
@@ -195,14 +216,19 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
           .then( () => {
             if (job_id) { 
               knex('Client_Specs_Per_Job')//------set ids on connecting table
-              .update({
-                client_type_id, 
-                main
-              })
-              .where({client_id: client_id})
+              .update({client_type_id})
+              .where({job_id: job_id})
               .andWhere({client_id: client_id})
-              .then( data => res.send({msg: 'Successfully updated Client!'}))
-              .catch( err => console.log(err))
+              .then( () => {
+                if (main) {
+                  knex('Jobs')
+                  .update({main_client_id: client_id})
+                  .where({job_id: job_id})
+                  .then( () => res.send({msg: 'Successfully updated Client!'}))
+                } else {
+                  res.send({msg: 'Successfully updated Client!'})
+                }
+              }).catch( err => console.log(err))
             } else {
               res.send({msg: 'Successfully updated Client!'})
             }
@@ -216,7 +242,7 @@ router.post('/api/updateClient', ({body: {dbObj, ids}}, res) => {
 router.get('/api/getClientsForSearch', ({body}, res) => {
   knex('Clients')
   .select(
-    knex.raw(`first_name + ' ' + last_name AS 'value'`),
+    knex.raw(`first_name + ' ' + middle_name + ' ' + last_name AS 'value'`),
     'client_id AS id'
   )
   .then( data => res.send(data))

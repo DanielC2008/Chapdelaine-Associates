@@ -1,17 +1,17 @@
 'use strict'
 
-app.controller('Admin_Job_Types', function($scope, JobFactory, ToastFactory, AdminFactory, $route) {
+app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory, AdminFactory, $route) {
   let JT = this
 
   JT.priorityChanged = false
 
-  JobFactory.getEnabledJobTypes().then( ({data}) => {
+  JobTypeFactory.getEnabledJobTypes().then( ({data}) => {
     JT.selected = null
     JT.job_types = data
   }) 
 
   JT.addNew = () => {
-    JobFactory.addNewJobType().then( ({msg}) => {
+    JobTypeFactory.addNewJobType().then( ({msg}) => {
       AdminFactory.setTab('JT')
       $route.reload()
       ToastFactory.toastSuccess(msg)
@@ -26,7 +26,7 @@ app.controller('Admin_Job_Types', function($scope, JobFactory, ToastFactory, Adm
   JT.savePriority = () => {
     reprioritize()
     let dbPackage = priorityPackage()
-    JobFactory.reprioritizeJobTypes(dbPackage).then( ({data: {msg}}) => {
+    JobTypeFactory.reprioritizeJobTypes(dbPackage).then( ({data: {msg}}) => {
       AdminFactory.setTab('JT')
       $route.reload()
       ToastFactory.toastSuccess(msg)
@@ -34,7 +34,7 @@ app.controller('Admin_Job_Types', function($scope, JobFactory, ToastFactory, Adm
   }
 
   JT.disable = type => {
-    JobFactory.disableJobType(type.job_type_id).then( ({data: {msg}}) => {
+    JobTypeFactory.disableJobType(type.job_type_id).then( ({data: {msg}}) => {
       AdminFactory.setTab('JT')
       $route.reload()
       ToastFactory.toastSuccess(msg)

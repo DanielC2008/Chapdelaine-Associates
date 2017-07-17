@@ -1,3 +1,10 @@
-<h5>
-  Cancellations
-</h5>
+<div class="row">
+  <h5>Cause For Cancellations</h5>
+  <button class="col s2 offset-s8" ng-click="ACA.addNew()"> Add New </button>
+</div>
+
+<div ng-repeat="cause in ACA.causes">
+  <div class="row">
+    {{cause.cause}}
+  </div>
+</div>
