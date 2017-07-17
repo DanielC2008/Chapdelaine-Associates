@@ -4,12 +4,19 @@ const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
+const { validJob } = require('../validation/validJob')
 
 router.post('/api/createNewJob', ({body}, res) => {
-  knex('Jobs')
-  .insert(body)
-  .then( () => res.send({msg:'Success'}))
-  .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
+  const errors = validJob.validate(body)
+  if (errors[0]) {  //------------------------------------checks each type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    knex('Jobs')
+    .insert(body)
+    .then( () => res.send({msg:'Success'}))
+    .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
+  }
 })
 
 router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {

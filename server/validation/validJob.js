@@ -2,9 +2,29 @@
 
 const schema = require('validate')
 
-  //create Job validation
+  const validJob = schema({
+    job_number: {
+      type: 'number',
+      required: true,
+      message: 'Job Number is required and must be a number.'
+    },
+    job_status: {
+      type: 'string',
+      message: 'Job status must be a string.'
+    },
+    target_date: {
+      type: 'date',
+      message: 'Target date must be a date.'
+    }
+  })
 
-  //valid cancel
+  const validCause = schema({
+    cause: {
+      type: 'string',
+      required: true,
+      message: 'Cause is required.'
+    }
+  })
   
   const validJobType = schema({
     job_type: {
@@ -19,4 +39,4 @@ const schema = require('validate')
     }
   })
 
-module.exports = {validJobType}
+module.exports = {validJobType, validCause, validJob}
