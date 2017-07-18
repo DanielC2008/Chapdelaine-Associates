@@ -7,26 +7,6 @@ const router = Router()
 const locateOrCreate = require('../locateOrCreate')
 const validateProperty = require('../validation/validProperty')
 
-router.post('/api/getAddressesOnProp', ({body:{ property_id }}, res) => {
-  knex('Properties')
-  .select('Addresses.address')
-  .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
-  .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
-  .whereIn('Properties.property_id', property_id)
-  .then( data => res.send(data))
-  .catch(err => console.log('err', err))
-})
-
-router.post('/api/getRoadsOnProp', ({body:{ property_id }}, res) => {
-  knex('Properties')
-  .select('Roads.road')
-  .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
-  .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
-  .whereIn('Properties.property_id', property_id)
-  .then(data => res.send(data))
-  .catch(err => console.log('err', err))
-})
-
 router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   let job_id = ids.job_id
   let property_id
@@ -45,8 +25,8 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
       .then( data => {
         property_id = data[0]
         return Promise.all([
-          addAddress(address_id).then().catch( err => console.log('err', err)),
-          addRoad(road_id).then().catch( err => console.log('err', err)),
+          addAddress(address_id, property_id).then().catch( err => console.log('err', err)),
+          addRoad(road_id, property_id).then().catch( err => console.log('err', err)),
         ]).then( () => {
           knex('Jobs')
           .update({property_id: property_id})
@@ -74,50 +54,63 @@ router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
       .where({property_id: property_id})
       .then( data => {
         return Promise.all([
-          updateAddress(address_id, property_id),
-          updateRoad(road_id, property_id)
+          addAddress(address_id, property_id),
+          addRoad(road_id, property_id)
         ]).then( () => res.send({msg: 'Successfully updated Job!'})).catch(err => console.log(err))
       }).catch( err => console.log(err))
     }).catch( err => console.log(err))
   }
 })
 
-const addAddress = address_id => {
-  return new Promise( (resolve, reject) => {
-    if (address_id) {
-      knex('Properties_Addresses') 
-      .insert({
-        address_id,
-        property_id
-      })
-      .then(resolve()).catch(err => console.log(err))
-    } else {resolve()}
-  })
-}
+router.post('/api/getAddressesOnProp', ({body:{ property_id }}, res) => {
+  knex('Properties')
+  .select('Addresses.address')
+  .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
+  .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
+  .whereIn('Properties.property_id', property_id)
+  .then( data => res.send(data))
+  .catch(err => console.log('err', err))
+})
 
-const addRoad = road_id => {
-  return new Promise( (resolve, reject) => {
-    if (road_id) {
-      knex('Properties_Roads')
-      .insert({
-        road_id,
-        property_id
-      })
-      .then().catch(err => console.log(err))
-    } else {resolve()}
-  })
-}
+router.post('/api/getRoadsOnProp', ({body:{ property_id }}, res) => {
+  knex('Properties')
+  .select('Roads.road')
+  .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
+  .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
+  .whereIn('Properties.property_id', property_id)
+  .then(data => res.send(data))
+  .catch(err => console.log('err', err))
+})
 
-const updateAddress = (address_id, property_id) => {
+router.post('/api/addSecondaryAddressOrRoad', ({body: {dbObj, ids}}, res) => {
+  console.log('ids', ids)
+  let property_id = ids.property_id
+  getAddresssRoadIds(dbObj).then( data => {
+    let road_id = data.obj.road_id
+    let address_id = data.obj.address_id
+    console.log('address_id', address_id)
+    console.log('road_id', road_id)
+    return Promise.all([
+      addAddress(address_id, property_id),
+      addRoad(road_id, property_id)
+    ]).then( () => res.send({msg: 'Successfully updated Property!'})).catch(err => console.log(err))
+  })
+})
+
+//this function adds the property and address id to Properties_Address if this combo doesn't already exist
+const addAddress = (address_id, property_id) => {
   return new Promise( (resolve, reject) => {
+    //if address_id user submited address
     if (address_id) {
       knex('Properties_Addresses')
       .where({address_id: address_id})
       .andWhere({property_id: property_id})
       .then( exists => {
+        //if these exist on Properties address. dont create again
         if (exists[0]) { 
           resolve() 
         } else {
+        //else create it
           knex('Properties_Addresses') 
           .insert({
             address_id,
@@ -130,7 +123,8 @@ const updateAddress = (address_id, property_id) => {
   })
 }
 
-const updateRoad = (road_id, property_id) => {
+//this function adds the property and road id to Properties_Roads if this combo doesn't already exist
+const addRoad = (road_id, property_id) => {
   return new Promise( (resolve, reject) => {
     if (road_id) {
       knex('Properties_Roads')
@@ -179,6 +173,26 @@ const getConnectTableIds = obj => {
       locateOrCreate.road(obj.primary_road).then( data => { 
         delete obj.primary_road
         obj.primary_road_id = data
+      })
+    ])
+    .then( () => {
+      dbPackage.obj = obj
+      resolve(dbPackage)
+    })
+  })
+}
+
+const getAddresssRoadIds = obj => {
+  let dbPackage = {}
+  return new Promise( (resolve, reject) => {
+    Promise.all([ //------------------address and road
+      locateOrCreate.address(obj.address).then( data => { 
+        delete obj.address
+        obj.address_id = data
+      }),
+      locateOrCreate.road(obj.road).then( data => { 
+        delete obj.road
+        obj.road_id = data
       })
     ])
     .then( () => {
