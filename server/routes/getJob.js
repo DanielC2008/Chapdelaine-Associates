@@ -18,14 +18,15 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       .select(
         'Jobs.job_id',
         'Jobs.job_number',
-        'Jobs.job_status',
-        'JObs.on_hold',
+        'Job_Statuses.job_status',
+        'Jobs.on_hold',
         'Jobs.start_date',
         'Jobs.complete_date',
         'Jobs.last_accessed',
         'Jobs.target_date'
       )
-      .where('job_number', job_number)
+      .leftJoin('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+      .where('Jobs.job_number', job_number)
       .then(data => {
         jobId = data[0].job_id
         jobMain.Job = data[0]

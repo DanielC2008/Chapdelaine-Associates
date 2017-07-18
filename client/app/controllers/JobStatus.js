@@ -4,7 +4,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
   let JSscope = this
   $scope.Job = {}
   JSscope.currStatus = $scope.jobInfo ? $scope.jobInfo.jobStatus : 'New' //---if job already exists else 'New'
-  JSscope.onHold = $scope.jobInfo.onHold
+  JSscope.onHold = $scope.jobInfo ? $scope.jobInfo.onHold : false
 
   const submitJobStatus = () => {
     if (JSscope.currStatus === 'New') {

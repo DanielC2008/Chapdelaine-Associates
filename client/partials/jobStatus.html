@@ -10,13 +10,13 @@
             ng-hide='JS.currStatus == "Pending" ||
                      JS.currStatus == "Complete"'>Pending
     </button>
+    <button type="submit"  ng-click="JS.jobActive()" 
+            ng-hide='JS.currStatus == "Active"'>Active
+    </button>
     <button type="submit" ng-click="JS.jobChangeHold()" 
             ng-hide='JS.currStatus == "New" ||
                      JS.currStatus == "Canceled" ||
                      JS.currStatus == "Complete"'>{{JS.onHold ? 'Remove Hold' : 'Hold'}}
-    </button>
-    <button type="submit"  ng-click="JS.jobActive()" 
-            ng-hide='JS.currStatus == "Active"'>Active
     </button>
     <button type="submit" ng-click="JS.jobComplete()" 
             ng-hide='JS.currStatus == "Complete" ||
