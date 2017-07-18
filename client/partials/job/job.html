@@ -17,6 +17,7 @@
           <option ng-if="Representatives.length != 0" value="editRep">Edit Rep</option>
           <option ng-if="Representatives.length != 0" value="removeRep">Remove Rep</option>
           <option value="{{Property ? 'editProp' : 'addProp'}}">{{Property ? 'Edit Property' : 'Add Property'}}</option>
+          <option ng-if="Property" value="addAddressRoad">Add Address/Road</option>
         </select>   
       </div>  
       <li class="jobExit" ><a href="/#!/home">X</a></li>

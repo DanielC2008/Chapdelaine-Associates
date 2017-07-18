@@ -180,6 +180,15 @@ app.controller('Job', function(
         ToastFactory.toastSuccess(msg)
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }
+
+    else if (change === 'addAddressRoad') {
+      ids.property_id = $scope.Property.property_id
+      PropertyFactory.addAddressRoad(ids).then( ({msg}) => {
+        $route.reload()
+        ToastFactory.toastSuccess(msg)
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }
+
     resetSelect() 
   }
 
