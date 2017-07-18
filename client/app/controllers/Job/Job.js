@@ -60,7 +60,8 @@ app.controller('Job', function(
       jobInfo: { 
         tableForDB: 'Jobs',
         jobStatus: $scope.Job.job_status,
-        jobNumber: $scope.Job.job_number
+        jobNumber: $scope.Job.job_number,
+        onHold: $scope.Job.on_hold
       }
     }  
     $mdDialog.show({

@@ -19,6 +19,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Jobs.job_id',
         'Jobs.job_number',
         'Jobs.job_status',
+        'JObs.on_hold',
         'Jobs.start_date',
         'Jobs.complete_date',
         'Jobs.last_accessed',

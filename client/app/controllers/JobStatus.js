@@ -4,7 +4,8 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
   let JSscope = this
   $scope.Job = {}
   JSscope.currStatus = $scope.jobInfo ? $scope.jobInfo.jobStatus : 'New' //---if job already exists else 'New'
-  
+  JSscope.onHold = $scope.jobInfo.onHold
+
   const submitJobStatus = () => {
     if (JSscope.currStatus === 'New') {
       JobFactory.createNewJob($scope.Job)
@@ -46,10 +47,16 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
     $scope.Job.job_status = 'Canceled'
     $scope.jobCanceled = true
   }
+  
+  JSscope.jobChangeHold = () => {
+    JSscope.onHold === true ? $scope.Job.on_hold = false : $scope.Job.on_hold = true 
+    submitJobStatus()
+  }
 
   JSscope.jobPending = () => {
     $scope.Job.job_status = 'Pending'
     if( JSscope.currStatus === 'Active') {
+      $scope.Job.on_hold = false
       removeStartDate()
     }
     addMinJobNumber()
@@ -61,6 +68,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       removeCompleteDate()
       submitJobStatus()
     } else{
+      $scope.Job.on_hold = false
       addStartDate()
       $scope.newJobNumberRequired = true
     }
@@ -85,7 +93,6 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
 
   $scope.numberSet = number => { //for RecommendedNumber
     let job_number = Number(number)
-    console.log('job_number', job_number, typeof job_number)
     if (job_number != NaN && job_number > 0) {
       $scope.Job.job_number = job_number
       submitJobStatus()

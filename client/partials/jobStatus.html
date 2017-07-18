@@ -4,18 +4,23 @@
     <button type="submit" ng-click="JS.jobCanceled()" 
             ng-hide='JS.currStatus == "New" ||
                      JS.currStatus == "Canceled" ||
-                     JS.currStatus == "Complete"'">Canceled
+                     JS.currStatus == "Complete"'>Canceled
     </button>
     <button type="submit" ng-click="JS.jobPending()" 
             ng-hide='JS.currStatus == "Pending" ||
-                     JS.currStatus == "Complete"'">Pending
+                     JS.currStatus == "Complete"'>Pending
+    </button>
+    <button type="submit" ng-click="JS.jobChangeHold()" 
+            ng-hide='JS.currStatus == "New" ||
+                     JS.currStatus == "Canceled" ||
+                     JS.currStatus == "Complete"'>{{JS.onHold ? 'Remove Hold' : 'Hold'}}
     </button>
     <button type="submit"  ng-click="JS.jobActive()" 
-            ng-hide='JS.currStatus == "Active"'">Active
+            ng-hide='JS.currStatus == "Active"'>Active
     </button>
     <button type="submit" ng-click="JS.jobComplete()" 
             ng-hide='JS.currStatus == "Complete" ||
-                     JS.currStatus == "Canceled"'">Complete
+                     JS.currStatus == "Canceled"'>Complete
     </button>
   </div>  
 
