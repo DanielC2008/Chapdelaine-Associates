@@ -3,8 +3,8 @@
 app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory, $mdDialog, $route) {
   let JSscope = this
   JSscope.newJobInfo = {}
-  JSscope.currStatus = $scope.jobInfo ? $scope.jobInfo.jobStatus : 'New' //---if job already exists else 'New'
-  JSscope.onHold = $scope.jobInfo ? $scope.jobInfo.onHold : false
+  JSscope.currStatus = 'New' //---if job already exists else 'New'
+  JSscope.onHold = $scope.currJob.jobInfo.on_hold
 
    const submitJobStatus = () => $scope.statusSet(JSscope.newJobInfo)
   // const submitJobStatus = () => {
@@ -55,12 +55,17 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       JSscope.newJobInfo.job_status = 'Canceled'
       JSscope.newJobInfo.cause_id = cause_id
       submitJobStatus()
-      
     })
   }
   
   JSscope.jobChangeHold = () => {
-    JSscope.onHold === true ? JSscope.newJobInfo.on_hold = false : JSscope.newJobInfo.on_hold = true 
+    if (JSscope.onHold === true) {
+      JSscope.onHold = false
+      JSscope.newJobInfo.on_hold = false
+    } else {
+      JSscope.onHold = true
+      JSscope.newJobInfo.on_hold = true
+    } 
     submitJobStatus()
   }
 
@@ -79,9 +84,18 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       removeCompleteDate()
       submitJobStatus()
     } else{
-      JSscope.newJobInfo.on_hold = false
-      addStartDate()
-      $scope.userSetJobNumber()
+      $mdDialog.show({
+        controller: 'RecommendNumber as RN',
+        templateUrl: './partials/recommendNumber.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose: true,
+        multiple: true
+      }).then( job_number => {
+        addStartDate()
+        JSscope.newJobInfo.on_hold = false
+        JSscope.newJobInfo.job_number = job_number
+        submitJobStatus()
+      })
     }
   }
 
@@ -91,23 +105,20 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       addCompleteDate()
       submitJobStatus() 
     } else {
-      addStartDate()
-      addCompleteDate() 
-      $scope.userSetJobNumber()
+      $mdDialog.show({
+        controller: 'RecommendNumber as RN',
+        templateUrl: './partials/recommendNumber.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose: true,
+        multiple: true
+      }).then( job_number => {
+        addStartDate()
+        addCompleteDate() 
+        JSscope.newJobInfo.job_number = job_number
+        submitJobStatus()
+      })
     }
   } 
-
-  // $scope.causeSet = cause_id => { //for JobCanceled
-  //   $scope.Job.cause_id = cause_id
-  //   // submitJobStatus() 
-  // }  
-
-  // JSscope.addJobStatus = status => {
-  //   JSscope.newJobInfo.job_status = status
-  //   statusPath(status)
-  // }
-
-
 
 })
 

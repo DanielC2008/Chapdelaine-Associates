@@ -14,20 +14,19 @@
 
   <div class="col s12">
     Job Number: 
-    <div ng-if="newJobNumberRequired">
-      <div ng-controller="RecommendNumber as RN">
-        <div ng-include="'./partials/recommendNumber.html'"></div>
-      </div>
-    </div>
+    {{newJob.jobInfo.job_number ? newJob.jobInfo.job_number : currJob.jobInfo.job_number}}
   </div>
   <div class="col s12">
-    Start Date:
+    Start Date: 
+    {{newJob.jobInfo.start_date ? newJob.jobInfo.start_date : currJob.jobInfo.start_date}}
   </div>
   <div class="col s12">
-    Complete Date:
+    Complete Date: 
+    {{newJob.jobInfo.complete_date ? newJob.jobInfo.complete_date : currJob.jobInfo.complete_date}}
   </div>
   <div class="col s12">
-    Target Date:
+    Target Date: 
+    {{newJob.jobInfo.target_date ? newJob.jobInfo.target_date : currJob.jobInfo.target_date}}
   </div>
 </div>
 

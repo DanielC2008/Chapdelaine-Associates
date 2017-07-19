@@ -16,7 +16,7 @@
     <button type="submit" ng-click="JS.jobChangeHold()" 
             ng-disabled='JS.currStatus === "New" ||
                      JS.currStatus === "Canceled" ||
-                     JS.currStatus === "Complete"'>{{JS.onHold ? 'Remove Hold' : 'Hold'}}
+                     JS.currStatus === "Complete"'>{{JS.newJobInfo.on_hold ? 'Remove Hold' : 'Hold'}}
     </button>
     <button type="submit" ng-click="JS.jobComplete()" 
             ng-disabled='JS.currStatus === "Complete" ||
