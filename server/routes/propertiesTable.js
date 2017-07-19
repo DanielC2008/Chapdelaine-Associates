@@ -83,13 +83,10 @@ router.post('/api/getRoadsOnProp', ({body:{ property_id }}, res) => {
 })
 
 router.post('/api/addSecondaryAddressOrRoad', ({body: {dbObj, ids}}, res) => {
-  console.log('ids', ids)
   let property_id = ids.property_id
   getAddresssRoadIds(dbObj).then( data => {
     let road_id = data.obj.road_id
     let address_id = data.obj.address_id
-    console.log('address_id', address_id)
-    console.log('road_id', road_id)
     return Promise.all([
       addAddress(address_id, property_id),
       addRoad(road_id, property_id)
