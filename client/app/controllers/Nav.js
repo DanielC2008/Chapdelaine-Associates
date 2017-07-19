@@ -16,7 +16,8 @@ app.controller('Nav', function($scope, JobFactory, $mdDialog) {
       controller: 'JobForm as JF',
       templateUrl: '/partials/jobForm.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      multiple: true
     })
   }
 })

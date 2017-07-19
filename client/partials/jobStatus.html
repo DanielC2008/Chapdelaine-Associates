@@ -2,31 +2,24 @@
   <div>
     <span>Job Status:</span>
     <button type="submit" ng-click="JS.jobCanceled()" 
-            ng-disabled='JS.currStatus == "New" ||
-                     JS.currStatus == "Canceled" ||
-                     JS.currStatus == "Complete"'>Canceled
+            ng-disabled='JS.currStatus === "New" ||
+                     JS.currStatus === "Canceled" ||
+                     JS.currStatus === "Complete"'>Canceled
     </button>
     <button type="submit" ng-click="JS.jobPending()" 
-            ng-disabled='JS.currStatus == "Pending" ||
-                     JS.currStatus == "Complete"'>Pending
+            ng-disabled='JS.currStatus === "Pending" ||
+                     JS.currStatus === "Complete"'>Pending
     </button>
     <button type="submit"  ng-click="JS.jobActive()" 
-            ng-disabled='JS.currStatus == "Active"'>Active
+            ng-disabled='JS.currStatus === "Active"'>Active
     </button>
     <button type="submit" ng-click="JS.jobChangeHold()" 
-            ng-disabled='JS.currStatus == "New" ||
-                     JS.currStatus == "Canceled" ||
-                     JS.currStatus == "Complete"'>{{JS.onHold ? 'Remove Hold' : 'Hold'}}
+            ng-disabled='JS.currStatus === "New" ||
+                     JS.currStatus === "Canceled" ||
+                     JS.currStatus === "Complete"'>{{JS.onHold ? 'Remove Hold' : 'Hold'}}
     </button>
     <button type="submit" ng-click="JS.jobComplete()" 
-            ng-disabled='JS.currStatus == "Complete" ||
-                     JS.currStatus == "Canceled"'>Complete
+            ng-disabled='JS.currStatus === "Complete" ||
+                     JS.currStatus === "Canceled"'>Complete
     </button>
   </div>
-
-  <div ng-if="jobCanceled">
-    <div ng-controller="JobCanceled as JC">
-      <div ng-include="'./partials/jobCanceled.html'"></div>
-    </div>
-  </div>  
-</div>
