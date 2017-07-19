@@ -35,6 +35,11 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
 
   const removeCompleteDate = () => JSscope.newJobInfo.complete_date = null
 
+  const updateStatus = status => {
+    JSscope.newJobInfo.job_status = status
+    JSscope.currStatus = status
+  }
+
   const addMinJobNumber = () => {
     DBFactory.getMinNumber({table: 'Jobs'})
       .then( ({data: {min}}) => { 
@@ -52,7 +57,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       clickOutsideToClose: true,
       multiple: true
     }).then( cause_id => {
-      JSscope.newJobInfo.job_status = 'Canceled'
+      updateStatus('Canceled') 
       JSscope.newJobInfo.cause_id = cause_id
       submitJobStatus()
     })
@@ -70,17 +75,17 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
   }
 
   JSscope.jobPending = () => {
-    JSscope.newJobInfo.job_status = 'Pending'
     if( JSscope.currStatus === 'Active') {
       JSscope.newJobInfo.on_hold = false
+      updateStatus('Pending')
       removeStartDate()
     }
     addMinJobNumber()
   }
 
   JSscope.jobActive = () => {
-    JSscope.newJobInfo.job_status = 'Active'
     if ( JSscope.currStatus === 'Complete'){
+      updateStatus('Active')
       removeCompleteDate()
       submitJobStatus()
     } else{
@@ -91,6 +96,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
         clickOutsideToClose: true,
         multiple: true
       }).then( job_number => {
+        updateStatus('Active')
         addStartDate()
         JSscope.newJobInfo.on_hold = false
         JSscope.newJobInfo.job_number = job_number
@@ -100,8 +106,8 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
   }
 
   JSscope.jobComplete = () => {
-    JSscope.newJobInfo.job_status = 'Complete'
     if ( JSscope.currStatus === 'Active') { 
+      updateStatus('Complete') 
       addCompleteDate()
       submitJobStatus() 
     } else {
@@ -112,6 +118,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
         clickOutsideToClose: true,
         multiple: true
       }).then( job_number => {
+        updateStatus('Complete') 
         addStartDate()
         addCompleteDate() 
         JSscope.newJobInfo.job_number = job_number

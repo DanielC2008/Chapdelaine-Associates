@@ -2,6 +2,13 @@
 
 <div class="row">
   <h5 class="col s12">Job info</h5>
+  <div class="col s12" ng-show='hold'>
+    Job Status: Hold
+  </div> 
+  <div class="col s12" ng-show='!hold'>
+    Job Status: 
+    {{newJob.jobInfo.job_status ? newJob.jobInfo.job_status : currJob.jobInfo.job_status}}
+  </div>  
   <div class="col s12" ng-controller="JobStatus as JS">
       <div ng-include="'./partials/jobStatus.html'"></div>
   </div>

@@ -4,6 +4,7 @@ app.controller('JobForm', function($scope, ToastFactory, job) {
 
   if (job) {
     //updating current job
+    $scope.hold = job.jobInfo.on_hold
     $scope.currJob = job
   } else {
     //new job
@@ -35,7 +36,9 @@ app.controller('JobForm', function($scope, ToastFactory, job) {
   $scope.userSetJobNumber = () => $scope.newJobNumberRequired = true
 
   $scope.statusSet = status => {
+    status.on_hold ? $scope.hold = true : $scope.hold = false
     $scope.newJob.jobInfo = status
+    console.log('status', status)
   }
 
 
