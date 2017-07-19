@@ -9,9 +9,12 @@ app.controller('Nav', function($scope, JobFactory, $mdDialog) {
   }
 
   NAV.newJob = () =>{
+    let locals = {}
     $mdDialog.show({
-      controller: 'NewJob as NJ',
-      templateUrl: '/partials/newJob.html',
+      locals,
+      fullscreen: true,
+      controller: 'JobForm as JF',
+      templateUrl: '/partials/jobForm.html',
       parent: angular.element(document.body),
       clickOutsideToClose: true
     })

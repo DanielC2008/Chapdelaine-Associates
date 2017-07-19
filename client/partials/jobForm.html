@@ -1,0 +1,54 @@
+<div class="dialog">
+
+<div class="row">
+  <h5 class="col s12">Job info</h5>
+  <div class="col s12" ng-controller="JobStatus as JS">
+      <div ng-include="'./partials/jobStatus.html'"></div>
+  </div>
+  <div class="col s12">
+    Job Number: 
+    <div ng-if="newJobNumberRequired">
+      <div ng-controller="RecommendNumber as RN">
+        <div ng-include="'./partials/recommendNumber.html'"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col s12">
+    Start Date:
+  </div>
+  <div class="col s12">
+    Complete Date:
+  </div>
+  <div class="col s12">
+    Target Date:
+  </div>
+</div>
+
+
+<div>
+  Property
+</div>
+<div>
+  Add Address
+</div>
+<div>
+  Add Road
+</div>
+<div>
+  Client
+</div>
+<div>
+  Client Type
+</div>
+<div>
+  Client Rep
+</div>
+<div>
+  Owner
+</div>
+<div>
+  Owner Rep
+</div>
+
+
+</div>

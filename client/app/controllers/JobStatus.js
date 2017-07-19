@@ -70,7 +70,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
     } else{
       $scope.Job.on_hold = false
       addStartDate()
-      $scope.newJobNumberRequired = true
+      $scope.userSetJobNumber()
     }
   }
 
@@ -82,7 +82,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
     } else {
       addStartDate()
       addCompleteDate() 
-      $scope.newJobNumberRequired = true
+      $scope.userSetJobNumber()
     }
   } 
 
