@@ -56,9 +56,10 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       parent: angular.element(document.body),
       clickOutsideToClose: true,
       multiple: true
-    }).then( cause_id => {
+    }).then( cause => {
+      $scope.showCause(cause.cause)
       updateStatus('Canceled') 
-      JSscope.newJobInfo.cause_id = cause_id
+      JSscope.newJobInfo.cause_id = cause.cause_id
       submitJobStatus()
     })
   }
@@ -77,9 +78,9 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
   JSscope.jobPending = () => {
     if( JSscope.currStatus === 'Active') {
       JSscope.newJobInfo.on_hold = false
-      updateStatus('Pending')
       removeStartDate()
     }
+    updateStatus('Pending')
     addMinJobNumber()
   }
 

@@ -41,6 +41,8 @@ app.controller('JobForm', function($scope, ToastFactory, job) {
     console.log('status', status)
   }
 
+  $scope.showCause = cause => $scope.displayCause = cause 
+
 
 
 })

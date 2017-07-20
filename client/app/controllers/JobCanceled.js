@@ -11,6 +11,6 @@ app.controller('JobCanceled', function($scope, CancellationFactory, $mdDialog) {
 
   CancellationFactory.getCauses().then( ({data}) => JCscope.causes = data)
 
-  JCscope.selected = cause_id => $mdDialog.hide(cause_id)
+  JCscope.selected = cause => $mdDialog.hide(cause)
 
 })
