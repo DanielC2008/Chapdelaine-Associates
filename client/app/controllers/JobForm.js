@@ -43,10 +43,13 @@ app.controller('JobForm', function($scope, ToastFactory, job) {
 
   $scope.showCause = cause => $scope.displayCause = cause 
 
-  $scope.setTargetDate = target => {
-    let targetDate = Date.now(target)
+  $scope.setTargetDate = (target) => {
+    let MM = target.getMonth() + 1
+    let DD = target.getDate()
+    let YYYY = target.getFullYear()
+    let targetDate = `${YYYY}-${MM}-${DD}`
     $scope.newJob.jobInfo.target_date = targetDate
-    $scope.changeTarget = ''
+    $scope.target = null
   }
 
 
