@@ -89,7 +89,10 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       updateStatus('Active')
       removeCompleteDate()
       submitJobStatus()
-    } else{
+    } else if ( JSscope.currStatus === 'Canceled' && JSscope.newJobInfo.job_number > 0 ) {
+      updateStatus('Active')
+      submitJobStatus()      
+    } else {
       $mdDialog.show({
         controller: 'RecommendNumber as RN',
         templateUrl: './partials/recommendNumber.html',
