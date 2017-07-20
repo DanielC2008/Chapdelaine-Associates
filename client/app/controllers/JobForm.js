@@ -32,17 +32,22 @@ app.controller('JobForm', function($scope, ToastFactory, job) {
       owner : {},
       ownerRep : {}
     }
-
+  //STATUS CONTROLLER
   $scope.userSetJobNumber = () => $scope.newJobNumberRequired = true
 
   $scope.statusSet = status => {
     status.on_hold ? $scope.hold = true : $scope.hold = false
-    $scope.newJob.jobInfo = status
+    Object.assign($scope.newJob.jobInfo, status)
     console.log('status', status)
   }
 
   $scope.showCause = cause => $scope.displayCause = cause 
 
+  $scope.setTargetDate = target => {
+    let targetDate = Date.now(target)
+    $scope.newJob.jobInfo.target_date = targetDate
+    $scope.changeTarget = ''
+  }
 
 
 })

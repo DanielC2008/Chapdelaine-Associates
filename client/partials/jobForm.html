@@ -31,8 +31,10 @@
     {{newJob.jobInfo.complete_date ? newJob.jobInfo.complete_date : currJob.jobInfo.complete_date}}
   </div>
   <div class="col s12">
-    Target Date: 
-    {{newJob.jobInfo.target_date ? newJob.jobInfo.target_date : currJob.jobInfo.target_date}}
+    Target Date: {{newJob.jobInfo.target_date ? newJob.jobInfo.target_date : currJob.jobInfo.target_date}}
+  </div>
+  <div class="col s12">
+    <input type="" name="" ng-model="changeTarget" enter="setTargetDate(changeTarget)">
   </div>
 </div>
 
