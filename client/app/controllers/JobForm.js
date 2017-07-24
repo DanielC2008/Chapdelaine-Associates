@@ -1,38 +1,22 @@
 'use strict'
 
 app.controller('JobForm', function($scope, ToastFactory, job) {
-
-  if (job) {
-    //updating current job
-    $scope.hold = job.jobInfo.on_hold
-    $scope.currJob = job
-  } else {
-    //new job
-    $scope.currJob = {
-      jobInfo: {},
-      prop: {},
-      addresses : {},
-      roads : {},
-      client : {},
-      clientType : {},
-      clientRep : {},
-      owner : {},
-      ownerRep : {}
-    }
+  const defaultJob = {
+    jobInfo: {
+      job_status: 'New'
+    },
+    prop: {},
+    addresses : {},
+    roads : {},
+    client : {},
+    clientType : {},
+    clientRep : {},
+    owner : {},
+    ownerRep : {}
   }
-  //store updates seperately from current
-  $scope.newJob = {
-      jobInfo: {},
-      prop: {},
-      addresses : {},
-      roads : {},
-      client : {},
-      clientType : {},
-      clientRep : {},
-      owner : {},
-      ownerRep : {}
-    }
-  //STATUS CONTROLLER
+  $scope.job = job ? job : defaultJob
+  const originalObj = Object.assign({}, $scope.job)
+
   $scope.userSetJobNumber = () => $scope.newJobNumberRequired = true
 
   $scope.statusSet = status => {

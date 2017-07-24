@@ -2,12 +2,8 @@
 
 <div class="row">
   <h5 class="col s12">Job info</h5>
-  <div class="col s12" ng-show='hold'>
-    Job Status: Hold
-  </div> 
-  <div class="col s12" ng-show='!hold'>
-    Job Status: 
-    {{newJob.jobInfo.job_status ? newJob.jobInfo.job_status : currJob.jobInfo.job_status}}
+  <div class="col s12">
+    Job Status: {{job.jobInfo.on_hold ? 'Hold' : job.jobInfo.job_status}}
   </div>  
   <div class="col s12" ng-controller="JobStatus as JS">
       <div ng-include="'./partials/jobStatus.html'"></div>
@@ -20,18 +16,18 @@
 
   <div class="col s12">
     Job Number: 
-    {{newJob.jobInfo.job_number ? newJob.jobInfo.job_number : currJob.jobInfo.job_number}}
+    {{job.jobInfo.job_number}}
   </div>
   <div class="col s12">
     Start Date: 
-    {{newJob.jobInfo.start_date ? newJob.jobInfo.start_date : currJob.jobInfo.start_date}}
+    {{job.jobInfo.start_date}}
   </div>
   <div class="col s12">
     Complete Date: 
-    {{newJob.jobInfo.complete_date ? newJob.jobInfo.complete_date : currJob.jobInfo.complete_date}}
+    {{job.jobInfo.complete_date}}
   </div>
   <div class="col s12">
-    Target Date: {{newJob.jobInfo.target_date ? newJob.jobInfo.target_date : currJob.jobInfo.target_date}}
+    Target Date: {{job.jobInfo.target_date}}
   </div>
   <div class="col s12">
     <input type="date" name="" ng-model="target" enter="setTargetDate(target)">
