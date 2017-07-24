@@ -15,9 +15,9 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory) {
     ownerRep: {}
   }
   $scope.job = job ? job : defaultJob
-  const originalObj = Object.assign({}, $scope.job)
+  const originalJob = Object.assign({}, $scope.job)
   //set variables for required info, JobInfo, property, client, and client type
-  $scope.propertySet = false
+  $scope.propertySet = Object.keys($scope.job.property).length === 0 ? false : true
 
   $scope.showCause = cause => $scope.displayCause = cause 
 
@@ -31,11 +31,17 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory) {
   }
 
   $scope.addProp = () =>{ 
-    PropertyFactory.addProperty().then( ({dbObj, msg}) => {
+    PropertyFactory.addProp().then( ({dbObj, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.property = dbObj
       $scope.propertySet = true
-      console.log('$scope.job', $scope.job)
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+  }
+
+  $scope.editProp = () =>{
+    PropertyFactory.editProp($scope.job.property).then( ({dbObj, msg}) => {
+      ToastFactory.toastSuccess(msg)
+      $scope.job.property = dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 

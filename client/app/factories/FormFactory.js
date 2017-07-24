@@ -45,8 +45,8 @@ app.factory('FormFactory', function($mdDialog) {
 
   factory.getPropertyForm = prop => {
     return {
-      'Primary Address':prop ? prop.address : '', //required
-      'Primary Road':   prop ? prop.road : '', //required if no address
+      'Primary Address':prop ? prop.primary_address : '', //required
+      'Primary Road':   prop ? prop.primary_road : '', //required if no address
       'City':           prop ? prop.city : '', 
       'State':          prop ? prop.state : '', 
       'Zip Code':       prop ? prop.zip_code : '', 
