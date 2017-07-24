@@ -1,6 +1,8 @@
 'use strict'
 
-app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory) {
+app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, ClientFactory) {
+  
+  /////////////////////////WILL NEED ID STORAGE/////////////////////////
   const defaultJob = {
     jobInfo: {
       job_status: 'New'
@@ -18,6 +20,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory) {
   const originalJob = Object.assign({}, $scope.job)
   //set variables for required info, JobInfo, property, client, and client type
   $scope.propertySet = Object.keys($scope.job.property).length === 0 ? false : true
+  $scope.clientSet = Object.keys($scope.job.client).length === 0 ? false : true
 
   $scope.showCause = cause => $scope.displayCause = cause 
 
@@ -42,6 +45,33 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory) {
     PropertyFactory.editProp($scope.job.property).then( ({dbObj, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.property = dbObj
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+  }
+
+  $scope.addClient = () =>{ 
+      ClientFactory.searchForClients().then( client_id => {
+        if (client_id) {
+          // ClientFactory.getFullClientById({ids}).then( ({data}) => {
+          //   ClientFactory.addClient().then( ({dbObj, msg}) => {
+          //     ToastFactory.toastSuccess(msg)
+          //     $scope.job.client = dbObj
+          //     $scope.clientSet = true
+          //   }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          // }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        } else {
+          ClientFactory.addClient().then( ({dbObj, msg}) => {
+            ToastFactory.toastSuccess(msg)
+            $scope.job.client = dbObj
+            $scope.clientSet = true
+          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+  }
+
+  $scope.editClient = () =>{
+    ClientFactory.editClient($scope.job.client).then( ({dbObj, msg}) => {
+      ToastFactory.toastSuccess(msg)
+      $scope.job.client = dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 

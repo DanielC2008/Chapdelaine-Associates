@@ -97,20 +97,13 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
 
   FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
 
-  const prepForDB = dbObj => { // can move this out to individual factories and return the prepped obj
+  const prepForDB = dbObj => {
     let dbPackage = {
       dbObj: dbObj,
-      ids: ids,
       table: table
     }
 
-    if (table === 'Clients') {
-      dbPackage.dbObj.client_type = FORM.clientType
-      dbPackage.dbObj.main = FORM.main
-      return dbPackage
-    }
-
-    else if (table === 'Properties') {
+    if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
         ToastFactory.toastReject("Please enter an Address or a Road.")
       } else {

@@ -8,6 +8,21 @@ const locateOrCreate = require('../locateOrCreate')
 const { validClient, validClientOnJob } = require('../validation/validClient')
 const validationHelper = require('../validation/validationHelper') 
 
+router.post('/api/validateClient', ({body: {dbObj}}, res) => {
+  const errors = validClient.validate(dbObj) //checks data types 
+  if (errors[0]) {
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send({msg: `${msg}`})
+  } else {
+    res.send({msg: 'Valid Client!'})
+  }
+  // else if {
+    // validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {//true/false
+    //   if (nameExists) { //-----------------------------checks if name already exists in DB
+    //     res.status(400).send({msg: `${nameExists}`})
+    //   } else {}
+})
+
 router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc includes jobid
   const client_id = ids.client_id
   const job_id = ids.job_id

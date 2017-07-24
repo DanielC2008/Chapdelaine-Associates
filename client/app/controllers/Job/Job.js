@@ -81,37 +81,6 @@ app.controller('Job', function(
       updateStatus()
     }
 
-    else if (change === 'addClient') {
-      ClientFactory.searchForClients().then( client_id => {
-        ids.client_id = client_id
-        if (client_id) {
-          ClientFactory.getFullClientById({ids}).then( ({data}) => {
-            ClientFactory.addExistingClientToJob(ids, data).then( ({msg}) => {
-              $route.reload()
-              ToastFactory.toastSuccess(msg)
-            }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-        } else {
-          ClientFactory.addNewClient(ids).then( data => {
-            $route.reload()
-            ToastFactory.toastSuccess(msg)
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-        }
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-    } 
-
-    else if (change === 'editClient') { 
-      SearchFactory.chooseOne('Clients', $scope.Clients).then( client_id => {
-        ids.client_id = client_id
-        ClientFactory.getFullClientOnJob({ids}).then( ({data}) => {
-          ClientFactory.updateExistingClient(ids, data).then( ({msg}) => {
-            $route.reload()
-            ToastFactory.toastSuccess(msg)
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-    } 
-
     else if ( change === 'removeClient') {
       SearchFactory.chooseOne('Clients', $scope.Clients).then( client_id => {
         ids.client_id = client_id
@@ -166,15 +135,6 @@ app.controller('Job', function(
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))  
     }
 
- 
-
-    else if (change === 'editProp') {
-      ids.property_id = $scope.Property.property_id
-      PropertyFactory.editProperty(ids, $scope.Property).then( ({msg}) => {
-        $route.reload()
-        ToastFactory.toastSuccess(msg)
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-    }
 
     else if (change === 'addAddressRoad') {
       ids.property_id = $scope.Property.property_id

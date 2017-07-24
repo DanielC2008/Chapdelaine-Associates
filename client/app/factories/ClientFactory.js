@@ -17,25 +17,30 @@ app.factory('ClientFactory', function($http, SearchFactory, FormFactory) {
     })
   }
 
-  factory.addNewClient = ids => { //if job_id adds to Job otherwise just to DB
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Clients', null, ids, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
 
-  factory.addExistingClientToJob = (ids, data) => { //only used to add existing to Job
-    return new Promise ((resolve, reject) => { 
-      FormFactory.updateForm('Clients', data, ids, 'Add Existing').then( msg => resolve(msg)).catch(err => reject({msg:'Nothing Saved'}))
-    })
-  }  
+  factory.addClient = () => FormFactory.updateForm('Clients', null, {}, 'Add New')
 
-  factory.updateExistingClient = (ids, data) => { //if job_id updates to Job(main/client_id)otherwise just updates Client
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Clients', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
+  factory.editClient = client => FormFactory.updateForm('Clients', client, {}, 'Update')
 
-  factory.removeClientFromJob = ids =>  $http.post('/api/removeClientFromJob', {ids})  
+  // factory.addNewClient = ids => { //if job_id adds to Job otherwise just to DB
+  //   return new Promise ((resolve, reject) => {
+  //     FormFactory.updateForm('Clients', null, ids, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+  //   })
+  // }
+
+  // factory.addExistingClientToJob = (ids, data) => { //only used to add existing to Job
+  //   return new Promise ((resolve, reject) => { 
+  //     FormFactory.updateForm('Clients', data, ids, 'Add Existing').then( msg => resolve(msg)).catch(err => reject({msg:'Nothing Saved'}))
+  //   })
+  // }  
+
+  // factory.updateExistingClient = (ids, data) => { //if job_id updates to Job(main/client_id)otherwise just updates Client
+  //   return new Promise ((resolve, reject) => {
+  //     FormFactory.updateForm('Clients', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+  //   })
+  // }
+
+  // factory.removeClientFromJob = ids =>  $http.post('/api/removeClientFromJob', {ids})  
 
   factory.getFullClientById = client_id => $http.post('/api/getFullClientById', client_id)
 

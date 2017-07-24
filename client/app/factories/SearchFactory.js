@@ -13,7 +13,8 @@ app.factory('SearchFactory', function($mdDialog) {
         templateUrl: '/partials/searchFilter.html',
         parent: angular.element(document.body),
         clickOutsideToClose: false,
-        escapeToClose: false
+        escapeToClose: false,
+        multiple: true
       })
       .then( id => resolve(id))
       .catch( err => reject(err)) 

@@ -56,9 +56,15 @@
   <div>
     Add Road
   </div>
-  <div>
-    Client
+<div class="row">
+  <div class="col s3">
+    Client : 
+    {{clientSet ? job.client.last_name : ''}}
   </div>
+  <button class="col s2" ng-click="clientSet ? editClient() : addClient()">
+    {{clientSet ? 'Edit Client' : 'Add Client'}}
+  </button>
+</div>
   <div>
     Client Type
   </div>

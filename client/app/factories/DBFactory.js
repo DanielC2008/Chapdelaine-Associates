@@ -6,7 +6,7 @@ app.factory('DBFactory', function($http) {
 
   factory.validate = dbPackage => {
     if (dbPackage.table === 'Clients'){
-      return $http.post('/api/addNewClient', dbPackage)
+      return $http.post('/api/validateClient', dbPackage)
     } 
     else if (dbPackage.table === 'Representatives'){
       return $http.post('/api/addNewRep', dbPackage)
