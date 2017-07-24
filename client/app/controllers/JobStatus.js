@@ -33,10 +33,10 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
 
   const updateStatus = status => {
     if (status != 'Canceled') {
-      console.log('here')
       $scope.job.jobInfo.cause_id = null
       $scope.showCause(null)
     }
+    $scope.job.jobInfo.on_hold = false
     $scope.job.jobInfo.job_status = status
   }  
   const addMinJobNumber = () => {
@@ -55,20 +55,16 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       clickOutsideToClose: true,
       multiple: true
     }).then( cause => {
-      console.log('cause', cause.cause)
       updateStatus('Canceled') 
       $scope.showCause(cause.cause) 
       $scope.job.jobInfo.cause_id = cause.cause_id
     })
   }
   
-  JSscope.jobChangeHold = () => {
-    $scope.job.jobInfo.on_hold = $scope.job.jobInfo.on_hold === true ? false : true
-  }
+  JSscope.jobChangeHold = () => $scope.job.jobInfo.on_hold = $scope.job.jobInfo.on_hold === true ? false : true
 
   JSscope.jobPending = () => {
     if( $scope.job.jobInfo.job_status === 'Active') {
-      $scope.job.jobInfo.on_hold = false
       removeStartDate()
     }
     updateStatus('Pending')
@@ -79,6 +75,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
     if ( $scope.job.jobInfo.job_status === 'Complete'){
       updateStatus('Active')
       removeCompleteDate()
+    //dont redo job # if going from Active to canceled to Active
     } else if ( $scope.job.jobInfo.job_status === 'Canceled' && $scope.job.jobInfo.job_number > 0 ) {
       updateStatus('Active')      
     } else {
@@ -91,7 +88,6 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       }).then( job_number => {
         updateStatus('Active')
         addStartDate()
-        $scope.job.jobInfo.on_hold = false
         $scope.job.jobInfo.job_number = job_number
       })
     }

@@ -16,21 +16,27 @@
 
   <div class="col s12">
     Job Number: 
-    {{job.jobInfo.job_number}}
+    {{job.jobInfo.job_number > 0 ? job.jobInfo.job_number : 'None' }}
   </div>
   <div class="col s12">
     Start Date: 
     {{job.jobInfo.start_date}}
   </div>
   <div class="col s12">
+    <input ng-disabled='!job.jobInfo.start_date' type="date" name="" ng-model="startDate" enter="setDate(startDate, 'start')">
+  </div>
+  <div class="col s12">
     Complete Date: 
     {{job.jobInfo.complete_date}}
+  </div>
+  <div class="col s12">
+    <input ng-disabled='!job.jobInfo.complete_date' type="date" name="" ng-model="completeDate" enter="setDate(completeDate, 'complete')">
   </div>
   <div class="col s12">
     Target Date: {{job.jobInfo.target_date}}
   </div>
   <div class="col s12">
-    <input type="date" name="" ng-model="target" enter="setTargetDate(target)">
+    <input type="date" name="" ng-model="targetDate" enter="setDate(targetDate, 'target')">
   </div>
 </div>
 
