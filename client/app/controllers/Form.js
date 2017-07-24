@@ -12,8 +12,6 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     case 'Clients':
       FORM.title = `${formType} Client`
       FORM.Display.Clients = FormFactory.getClientForm(existingObj)
-      FORM.clientType = existingObj ? existingObj.client_type : null
-      FORM.main = existingObj ? existingObj.main : null
       break;
     case 'Representatives':
       FORM.title = `${formType} Representative`
@@ -100,7 +98,8 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   const prepForDB = dbObj => {
     let dbPackage = {
       dbObj: dbObj,
-      table: table
+      table: table,
+      formType: formType
     }
 
     if (table === 'Properties') {
