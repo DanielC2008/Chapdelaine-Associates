@@ -1,21 +1,23 @@
 'use strict'
 
-app.controller('JobForm', function($scope, ToastFactory, job) {
+app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory) {
   const defaultJob = {
     jobInfo: {
       job_status: 'New'
     },
-    prop: {},
+    property: {},
     addresses : {},
-    roads : {},
-    client : {},
-    clientType : {},
-    clientRep : {},
-    owner : {},
-    ownerRep : {}
+    roads: {},
+    client: {},
+    clientType: {},
+    clientRep: {},
+    owner: {},
+    ownerRep: {}
   }
   $scope.job = job ? job : defaultJob
   const originalObj = Object.assign({}, $scope.job)
+  //set variables for required info, JobInfo, property, client, and client type
+  $scope.propertySet = false
 
   $scope.showCause = cause => $scope.displayCause = cause 
 
@@ -26,6 +28,15 @@ app.controller('JobForm', function($scope, ToastFactory, job) {
     let formatedDate = `${YYYY}-${MM}-${DD}`
     $scope.job.jobInfo[`${type}_date`] = formatedDate
     $scope[`${type}Date`] = null
+  }
+
+  $scope.addProp = () =>{ 
+    PropertyFactory.addProperty().then( ({dbObj, msg}) => {
+      ToastFactory.toastSuccess(msg)
+      $scope.job.property = dbObj
+      $scope.propertySet = true
+      console.log('$scope.job', $scope.job)
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
 

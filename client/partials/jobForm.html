@@ -40,31 +40,36 @@
   </div>
 </div>
 
-
-<div>
-  Property
-</div>
-<div>
-  Add Address
-</div>
-<div>
-  Add Road
-</div>
-<div>
-  Client
-</div>
-<div>
-  Client Type
-</div>
-<div>
-  Client Rep
-</div>
-<div>
-  Owner
-</div>
-<div>
-  Owner Rep
+<div class="row">
+  <div class="col s3">
+    Property : 
+    {{propertySet && job.property.primary_address ? job.property.primary_address : job.property.primary_road}}
+  </div>
+  <button class="col s2" ng-click="propertySet ? editProp() : addProp()">
+    {{propertySet ? 'Edit Property' : 'Add Property'}}
+  </button>
 </div>
 
+  <div>
+    Add Address
+  </div>
+  <div>
+    Add Road
+  </div>
+  <div>
+    Client
+  </div>
+  <div>
+    Client Type
+  </div>
+  <div>
+    Client Rep
+  </div>
+  <div>
+    Owner
+  </div>
+  <div>
+    Owner Rep
+  </div>
 
 </div>

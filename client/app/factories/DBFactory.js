@@ -4,6 +4,36 @@ app.factory('DBFactory', function($http) {
 
   const factory = {}
 
+  factory.validate = dbPackage => {
+    if (dbPackage.table === 'Clients'){
+      return $http.post('/api/addNewClient', dbPackage)
+    } 
+    else if (dbPackage.table === 'Representatives'){
+      return $http.post('/api/addNewRep', dbPackage)
+    } 
+    else if (dbPackage.table === 'Properties'){
+      return $http.post('/api/validateProp', dbPackage)
+    } 
+    else if (dbPackage.table === 'Employees'){
+      return $http.post('/api/addNewEmployee', dbPackage)
+    } 
+    else if (dbPackage.table === 'Tasks'){
+      return $http.post('/api/addNewTask', dbPackage)
+    } 
+    else if (dbPackage.table === 'Job_Types'){
+      return $http.post('/api/addNewJobType', dbPackage)
+    }
+    else if (dbPackage.table === 'Companies'){
+      return $http.post('/api/addNewCompany', dbPackage)
+    }
+    else if (dbPackage.table === 'Cancellations'){
+      return $http.post('/api/addNewCause', dbPackage)
+    }
+    else if (dbPackage.table === 'AddressRoad'){
+      return $http.post('/api/addSecondaryAddressOrRoad', dbPackage)
+    }
+  }
+
   factory.addNew = dbPackage => {
     if (dbPackage.table === 'Clients'){
       return $http.post('/api/addNewClient', dbPackage)

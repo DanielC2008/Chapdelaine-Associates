@@ -7,6 +7,16 @@ const router = Router()
 const locateOrCreate = require('../locateOrCreate')
 const validateProperty = require('../validation/validProperty')
 
+router.post('/api/validateProp', ({body: {dbObj}}, res) => {
+  const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
+  if (errors[0]) {  //------------------------------------checks each type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send({msg: `${msg}`})
+  } else {
+    res.send({msg: 'Valid Property!'})
+  }
+})
+
 router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   let job_id = ids.job_id
   let property_id

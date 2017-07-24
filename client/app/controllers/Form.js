@@ -50,40 +50,50 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       break;
   }
 
-  FORM.addNew = ()  => {
+  FORM.validate = () => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-      if (dbPackage) {
-      DBFactory.addNew(dbPackage)
-      .then( ({data: {msg}}) => $mdDialog.hide(msg))
-      .catch( ({data: {msg}}) => {
-        //if msg: client entered incorrect data type else database err
-        msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
-      })
+    if (dbPackage) {
+      DBFactory.validate(dbPackage)
+      .then( ({data: {msg}}) => $mdDialog.hide({dbObj, msg}))
+      .catch( ({data: {msg}}) => ToastFactory.toastReject(msg))
     }
   }
 
-  FORM.addExisting = () => {
-    let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
-    let dbPackage = prepForDB(dbObj)
-    DBFactory.addExisting(dbPackage)
-    .then( ({data: {msg}}) => $mdDialog.hide(msg))
-    .catch( ({data: {msg}}) => {
-      //if msg: client entered incorrect data type else database err
-      msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
-    })
-  }
+  // FORM.addNew = ()  => {
+  //   let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+  //   let dbPackage = prepForDB(dbObj)
+  //     if (dbPackage) {
+  //     DBFactory.addNew(dbPackage)
+  //     .then( ({data: {msg}}) => $mdDialog.hide(msg))
+  //     .catch( ({data: {msg}}) => {
+  //       //if msg: client entered incorrect data type else database err
+  //       msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+  //     })
+  //   }
+  // }
 
-  FORM.updateExisting = () => {
-    let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
-    let dbPackage = prepForDB(dbObj)
-    DBFactory.updateExisting(dbPackage)
-    .then( ({data: {msg}}) => $mdDialog.hide(msg))
-    .catch( ({data: {msg}}) => {
-      //if msg: client entered incorrect data type else database err
-      msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
-    })
-  }
+  // FORM.addExisting = () => {
+  //   let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+  //   let dbPackage = prepForDB(dbObj)
+  //   DBFactory.addExisting(dbPackage)
+  //   .then( ({data: {msg}}) => $mdDialog.hide(msg))
+  //   .catch( ({data: {msg}}) => {
+  //     //if msg: client entered incorrect data type else database err
+  //     msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+  //   })
+  // }
+
+  // FORM.updateExisting = () => {
+  //   let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+  //   let dbPackage = prepForDB(dbObj)
+  //   DBFactory.updateExisting(dbPackage)
+  //   .then( ({data: {msg}}) => $mdDialog.hide(msg))
+  //   .catch( ({data: {msg}}) => {
+  //     //if msg: client entered incorrect data type else database err
+  //     msg ? ToastFactory.toastReject(msg) : ToastFactory.toastReject({msg: `Error: ${FORM.title} not saved!`})
+  //   })
+  // }
 
   FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
 

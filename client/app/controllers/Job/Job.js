@@ -166,12 +166,7 @@ app.controller('Job', function(
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))  
     }
 
-    else if (change === 'addProp') {
-      PropertyFactory.addProperty(ids).then( ({msg}) => {
-        $route.reload()
-        ToastFactory.toastSuccess(msg)
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-    } 
+ 
 
     else if (change === 'editProp') {
       ids.property_id = $scope.Property.property_id

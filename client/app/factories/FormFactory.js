@@ -140,9 +140,10 @@ app.factory('FormFactory', function($mdDialog) {
         templateUrl: '/partials/form.html',
         parent: angular.element(document.body),
         clickOutsideToClose: false,
-        escapeToClose: false
+        escapeToClose: false,
+        multiple: true
       })
-      .then( msg => resolve(msg))
+      .then( validatedObj => resolve(validatedObj))
       .catch( err => reject(err))
     })
   }  
