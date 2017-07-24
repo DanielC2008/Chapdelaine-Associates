@@ -1,0 +1,70 @@
+<div class="dialog">
+
+<div class="row">
+  <h5 class="col s12">Job info</h5>
+  <div class="col s12">
+    Job Status: {{job.jobInfo.on_hold ? 'Hold' : job.jobInfo.job_status}}
+  </div>  
+  <div class="col s12" ng-controller="JobStatus as JS">
+      <div ng-include="'./partials/jobStatus.html'"></div>
+  </div>
+
+  <div class="col s12" ng-if="displayCause">
+    Cause for Cancelling: {{displayCause}}
+  </div>
+
+
+  <div class="col s12">
+    Job Number: 
+    {{job.jobInfo.job_number > 0 ? job.jobInfo.job_number : 'None' }}
+  </div>
+  <div class="col s12">
+    Start Date: 
+    {{job.jobInfo.start_date}}
+  </div>
+  <div class="col s12">
+    <input ng-disabled='!job.jobInfo.start_date' type="date" name="" ng-model="startDate" enter="setDate(startDate, 'start')">
+  </div>
+  <div class="col s12">
+    Complete Date: 
+    {{job.jobInfo.complete_date}}
+  </div>
+  <div class="col s12">
+    <input ng-disabled='!job.jobInfo.complete_date' type="date" name="" ng-model="completeDate" enter="setDate(completeDate, 'complete')">
+  </div>
+  <div class="col s12">
+    Target Date: {{job.jobInfo.target_date}}
+  </div>
+  <div class="col s12">
+    <input type="date" name="" ng-model="targetDate" enter="setDate(targetDate, 'target')">
+  </div>
+</div>
+
+
+<div>
+  Property
+</div>
+<div>
+  Add Address
+</div>
+<div>
+  Add Road
+</div>
+<div>
+  Client
+</div>
+<div>
+  Client Type
+</div>
+<div>
+  Client Rep
+</div>
+<div>
+  Owner
+</div>
+<div>
+  Owner Rep
+</div>
+
+
+</div>

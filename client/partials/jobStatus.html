@@ -1,33 +1,25 @@
-<div class='dialog'>
+<div class='dialog row'>
   <div>
-    <div>What is the status of this job?</div>
+    <span>Update Status:</span>
     <button type="submit" ng-click="JS.jobCanceled()" 
-            ng-hide='JS.currStatus == "New" ||
-                     JS.currStatus == "Canceled" ||
-                     JS.currStatus == "Complete"'">Canceled
+            ng-disabled='job.jobInfo.job_status === "New" ||
+                     job.jobInfo.job_status === "Canceled" ||
+                     job.jobInfo.job_status === "Complete"'>Canceled
     </button>
     <button type="submit" ng-click="JS.jobPending()" 
-            ng-hide='JS.currStatus == "Pending" ||
-                     JS.currStatus == "Complete"'">Pending
+            ng-disabled='job.jobInfo.job_status === "Pending" ||
+                     job.jobInfo.job_status === "Complete"'>Pending
     </button>
     <button type="submit"  ng-click="JS.jobActive()" 
-            ng-hide='JS.currStatus == "Active"'">Active
+            ng-disabled='job.jobInfo.job_status === "Active"'>Active
+    </button>
+    <button type="submit" ng-click="JS.jobChangeHold()" 
+            ng-disabled='job.jobInfo.job_status === "New" ||
+                     job.jobInfo.job_status === "Canceled" ||
+                     job.jobInfo.job_status === "Complete"'>{{job.jobInfo.on_hold ? 'Remove Hold' : 'Hold'}}
     </button>
     <button type="submit" ng-click="JS.jobComplete()" 
-            ng-hide='JS.currStatus == "Complete" ||
-                     JS.currStatus == "Canceled"'">Complete
+            ng-disabled='job.jobInfo.job_status === "Complete" ||
+                     job.jobInfo.job_status === "Canceled"'>Complete
     </button>
-  </div>  
-
-  <div ng-if="newJobNumberRequired">
-    <div ng-controller="RecommendNumber as RN">
-      <div ng-include="'./partials/recommendNumber.html'"></div>
-    </div>
   </div>
-
-  <div ng-if="jobCanceled">
-    <div ng-controller="JobCanceled as JC">
-      <div ng-include="'./partials/jobCanceled.html'"></div>
-    </div>
-  </div>  
-</div>

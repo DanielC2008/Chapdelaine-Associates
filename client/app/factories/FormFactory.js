@@ -110,6 +110,13 @@ app.factory('FormFactory', function($mdDialog) {
     }
   }
 
+  factory.getAddressRoadForm = () => {
+    return {
+      'Address': '',
+      'Road': ''
+    }
+  }
+
   factory.getJobTypeForm = () => {
     return {'Job Type': ''}
   }

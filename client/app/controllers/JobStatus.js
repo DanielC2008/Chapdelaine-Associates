@@ -2,102 +2,116 @@
 
 app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory, $mdDialog, $route) {
   let JSscope = this
-  $scope.Job = {}
-  JSscope.currStatus = $scope.jobInfo ? $scope.jobInfo.jobStatus : 'New' //---if job already exists else 'New'
-  
-  const submitJobStatus = () => {
-    if (JSscope.currStatus === 'New') {
-      JobFactory.createNewJob($scope.Job)
-        .then( ({data}) => {
-          ToastFactory.toastSuccess(data.msg)
-          $mdDialog.hide()
-          JobFactory.goToJobPage($scope.Job.job_number)
-        })
-        .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
-    } else {
-      JobFactory.updateJobStatus({jobObj: $scope.Job, currJobNum: $scope.jobInfo.jobNumber})
-        .then( ({data}) => {  
-          ToastFactory.toastSuccess(data.msg)
-          $mdDialog.hide()
-          $scope.jobInfo.jobNumber == data.job_number ? $route.reload() : JobFactory.goToJobPage(data.job_number)
-        })
-        .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
+   // const submitJobStatus = () => $scope.statusSet(JSscope.jobInfo)
+  // const submitJobStatus = () => {
+  //   if (JSscope.currStatus === 'New') {
+  //     JobFactory.createNewJob($scope.Job)
+  //       .then( ({data}) => {
+  //         ToastFactory.toastSuccess(data.msg)
+  //         $mdDialog.hide()
+  //         JobFactory.goToJobPage($scope.Job.job_number)
+  //       })
+  //       .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
+  //   } else {
+  //     JobFactory.updateJobStatus({jobObj: $scope.Job, currJobNum: $scope.jobInfo.jobNumber})
+  //       .then( ({data}) => {  
+  //         ToastFactory.toastSuccess(data.msg)
+  //         $mdDialog.hide()
+  //         $scope.jobInfo.jobNumber == data.job_number ? $route.reload() : JobFactory.goToJobPage(data.job_number)
+  //       })
+  //       .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
+  //   }
+  // }
+
+  const addStartDate = () => $scope.job.jobInfo.start_date = new Date()
+
+  const addCompleteDate = () => $scope.job.jobInfo.complete_date = new Date()
+
+  const removeStartDate = () => $scope.job.jobInfo.start_date = null
+
+  const removeCompleteDate = () => $scope.job.jobInfo.complete_date = null
+
+  const updateStatus = status => {
+    if (status != 'Canceled') {
+      $scope.job.jobInfo.cause_id = null
+      $scope.showCause(null)
     }
-  }
-
-  const addStartDate = () => $scope.Job.start_date = new Date()
-
-  const addCompleteDate = () => $scope.Job.complete_date = new Date()
-
-  const removeStartDate = () => $scope.Job.start_date = null
-
-  const removeCompleteDate = () => $scope.Job.complete_date = null
-
+    $scope.job.jobInfo.on_hold = false
+    $scope.job.jobInfo.job_status = status
+  }  
   const addMinJobNumber = () => {
     DBFactory.getMinNumber({table: 'Jobs'})
       .then( ({data: {min}}) => { 
-        (min < 0) ? $scope.Job.job_number = min - 1 : $scope.Job.job_number = -1
-        submitJobStatus() 
+        (min < 0) ? $scope.job.jobInfo.job_number = min - 1 : $scope.job.jobInfo.job_number = -1 
       })
       .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
   }
   
   JSscope.jobCanceled = () => {
-    $scope.Job.job_status = 'Canceled'
-    $scope.jobCanceled = true
+    $mdDialog.show({
+      controller: 'JobCanceled as JC',
+      templateUrl: './partials/jobCanceled.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: true,
+      multiple: true
+    }).then( cause => {
+      updateStatus('Canceled') 
+      $scope.showCause(cause.cause) 
+      $scope.job.jobInfo.cause_id = cause.cause_id
+    })
   }
+  
+  JSscope.jobChangeHold = () => $scope.job.jobInfo.on_hold = $scope.job.jobInfo.on_hold === true ? false : true
 
   JSscope.jobPending = () => {
-    $scope.Job.job_status = 'Pending'
-    if( JSscope.currStatus === 'Active') {
+    if( $scope.job.jobInfo.job_status === 'Active') {
       removeStartDate()
     }
+    updateStatus('Pending')
     addMinJobNumber()
   }
 
   JSscope.jobActive = () => {
-    $scope.Job.job_status = 'Active'
-    if ( JSscope.currStatus === 'Complete'){
+    if ( $scope.job.jobInfo.job_status === 'Complete'){
+      updateStatus('Active')
       removeCompleteDate()
-      submitJobStatus()
-    } else{
-      addStartDate()
-      $scope.newJobNumberRequired = true
+    //dont redo job # if going from Active to canceled to Active
+    } else if ( $scope.job.jobInfo.job_status === 'Canceled' && $scope.job.jobInfo.job_number > 0 ) {
+      updateStatus('Active')      
+    } else {
+      $mdDialog.show({
+        controller: 'RecommendNumber as RN',
+        templateUrl: './partials/recommendNumber.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose: true,
+        multiple: true
+      }).then( job_number => {
+        updateStatus('Active')
+        addStartDate()
+        $scope.job.jobInfo.job_number = job_number
+      })
     }
   }
 
   JSscope.jobComplete = () => {
-    $scope.Job.job_status = 'Complete'
-    if ( JSscope.currStatus === 'Active') { 
-      addCompleteDate()
-      submitJobStatus() 
-    } else {
-      addStartDate()
+    if ( $scope.job.jobInfo.job_status === 'Active') { 
+      updateStatus('Complete') 
       addCompleteDate() 
-      $scope.newJobNumberRequired = true
+    } else {
+      $mdDialog.show({
+        controller: 'RecommendNumber as RN',
+        templateUrl: './partials/recommendNumber.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose: true,
+        multiple: true
+      }).then( job_number => {
+        updateStatus('Complete') 
+        addStartDate()
+        addCompleteDate() 
+        $scope.job.jobInfo.job_number = job_number
+      })
     }
   } 
-
-  JSscope.addJobStatus = status => {
-    $scope.Job.job_status = status
-    statusPath(status)
-  }
-
-  $scope.numberSet = number => { //for RecommendedNumber
-    let job_number = Number(number)
-    console.log('job_number', job_number, typeof job_number)
-    if (job_number != NaN && job_number > 0) {
-      $scope.Job.job_number = job_number
-      submitJobStatus()
-    } else {
-      ToastFactory.toastReject('Job number must be a number greater than 0!')
-    }
-  }
-
-  $scope.causeSet = cause_id => { //for JobCanceled
-    $scope.Job.cause_id = cause_id
-    submitJobStatus() 
-  }  
 
 })
 

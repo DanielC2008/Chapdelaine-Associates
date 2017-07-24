@@ -17,6 +17,7 @@
           <option ng-if="Representatives.length != 0" value="editRep">Edit Rep</option>
           <option ng-if="Representatives.length != 0" value="removeRep">Remove Rep</option>
           <option value="{{Property ? 'editProp' : 'addProp'}}">{{Property ? 'Edit Property' : 'Add Property'}}</option>
+          <option ng-if="Property" value="addAddressRoad">Add Address/Road</option>
         </select>   
       </div>  
       <li class="jobExit" ><a href="/#!/home">X</a></li>
@@ -34,7 +35,7 @@
     <h5>Job Number: {{Job.job_number < 0 ? 'None': Job.job_number}}</h5> 
     <div class='row'>
       <div class="col s2">Job Type: {{Job.job_types}}</div>
-      <div class="col s2">Job Status: {{Job.job_status}}</div>
+      <div class="col s2">Job Status: {{Job.on_hold ? 'Hold' : Job.job_status}}</div>
       <div class="col s2">Date Started: {{Job.start_date | date : 'mediumDate' : timeZoneOffset}}</div>
       <div class="col s2">Date Completed: {{Job.complete_date | date : 'mediumDate' : timeZoneOffset}}</div>
       <div class="col s2">Last Accessed: {{Job.last_accessed | date : 'medium'}}</div>

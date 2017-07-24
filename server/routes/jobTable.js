@@ -6,6 +6,19 @@ const knex = require('knex')(config)
 const router = Router()
 const { validJob } = require('../validation/validJob')
 
+const locateStatusId = status => {
+  return new Promise( (resolve, reject) => {
+    if (status === undefined) {
+      resolve()
+    } else { 
+      knex('Job_Statuses')
+      .select('job_status_id')
+      .where({job_status: status})
+      .then( data => resolve(data[0])).catch( err => console.log('err', err))
+    }
+  })
+}
+
 router.post('/api/createNewJob', ({body}, res) => {
   const errors = validJob.validate(body)
   if (errors[0]) {  //------------------------------------checks each type
@@ -20,12 +33,21 @@ router.post('/api/createNewJob', ({body}, res) => {
 })
 
 router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {
-  knex('Jobs')
+  //finds status id
+  locateStatusId(jobObj.job_status) 
+  .then( data => {
+    //if actually changing status id manipulate jobObj 
+    let job_status_id = data ? data.job_status_id : null
+    if (job_status_id) {
+      jobObj.job_status_id = job_status_id
+      delete jobObj.job_status 
+    }
+    knex('Jobs')
     .returning('job_number')
     .update(jobObj)
     .where({job_number: currJobNum})
-    .then( data => res.send({msg: 'Success', job_number: data[0]}))
-    .catch( err => res.send({msg: err}))
+    .then( data => res.send({msg: 'Success', job_number: data[0]})).catch( err => res.send({msg: err}))
+  }).catch( err => console.log('err', err))
 })
 
 router.post('/api/setNewTab', ({body:{jobNumber, showTab}, session}, res) => {

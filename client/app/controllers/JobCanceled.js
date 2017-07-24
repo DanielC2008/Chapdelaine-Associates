@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobCanceled', function($scope, CancellationFactory) { 
+app.controller('JobCanceled', function($scope, CancellationFactory, $mdDialog) { 
   let JCscope = this
 
    $scope.material = () => {
@@ -11,6 +11,6 @@ app.controller('JobCanceled', function($scope, CancellationFactory) {
 
   CancellationFactory.getCauses().then( ({data}) => JCscope.causes = data)
 
-  JCscope.selected = cause_id => $scope.causeSet(cause_id)
+  JCscope.selected = cause => $mdDialog.hide(cause)
 
 })

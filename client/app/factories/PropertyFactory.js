@@ -12,5 +12,7 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
   
   factory.getRoadsOnProp = property_id => $http.post('/api/getRoadsOnProp', {property_id})
 
+  factory.addAddressRoad = ids => FormFactory.updateForm('AddressRoad', {}, ids, 'Add New')
+
   return factory
 })
