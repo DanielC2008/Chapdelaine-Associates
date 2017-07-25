@@ -39,9 +39,12 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
 
 
   $scope.addAddress = () => {
-    PropertyFactory.searchForAddresses().then( addresses_id => {
-      if (addresses_id) {
-        //push address id 
+    PropertyFactory.searchForAddresses().then( selected => {
+      let address = selected ? {address: selected.value} : null
+      if (address) {
+        //could save ids here
+        $scope.job.addresses.push(address)
+        $scope.$apply()
       } else {
         PropertyFactory.addAddress().then( ({dbPackage, msg}) => {
           ToastFactory.toastSuccess(msg)
@@ -51,10 +54,13 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     })
   }
 
-  $scope.addRoad = () => {
-    PropertyFactory.searchForRoads().then( road_id => {
-      if (road_id) {
-        //push address id 
+ $scope.addRoad = () => {
+    PropertyFactory.searchForRoads().then( selected => {
+      let road = selected ? {road: selected.value} : null
+      if (road) {
+        //could save ids here
+        $scope.job.roads.push(road)
+        $scope.$apply()
       } else {
         PropertyFactory.addRoad().then( ({dbPackage, msg}) => {
           ToastFactory.toastSuccess(msg)
@@ -63,7 +69,6 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
       }
     })
   }
-
   $scope.addProp = () => { 
     PropertyFactory.addProp().then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
@@ -81,7 +86,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
 /////////////////////////////////////////CLIENT/////////////////////////////////////////
   $scope.addClient = () => { 
       //force user to search for client first
-      CustomerFactory.searchForCustomers().then( customer_id => {
+      CustomerFactory.searchForCustomers().then( selected => {
+        let customer_id = selected ? selected.id : null
         if (customer_id) {
           //if exist bring back full client in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
@@ -115,7 +121,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
 /////////////////////////////////////////CLIENT CONTACT/////////////////////////////////////////
   $scope.addClientContact = () => { 
       //force user to search for contact first
-      CustomerFactory.searchForCustomers().then( customer_id => {
+      CustomerFactory.searchForCustomers().then( selected => {
+        let customer_id = selected ? selected.id : null
         if (customer_id) {
           //if exist bring back full contact in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
@@ -149,7 +156,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
 /////////////////////////////////////////OWNER/////////////////////////////////////////
   $scope.addOwner = () => { 
       //force user to search for owner first
-      CustomerFactory.searchForCustomers().then( customer_id => {
+      CustomerFactory.searchForCustomers().then( selected => {
+        let customer_id = selected ? selected.id : null
         if (customer_id) {
           //if exist bring back full owner in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
@@ -182,7 +190,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
 /////////////////////////////////////////OWNER CONTACT/////////////////////////////////////////
   $scope.addOwnerContact = () => { 
       //force user to search for contact first
-      CustomerFactory.searchForCustomers().then( customer_id => {
+      CustomerFactory.searchForCustomers().then( selected => {
+        let customer_id = selected ? selected.id : null
         if (customer_id) {
           //if exist bring back full contact in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {

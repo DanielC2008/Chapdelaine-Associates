@@ -20,8 +20,8 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
     return new Promise ((resolve, reject) => {
       getAddressesForSearch().then( ({data}) => {
         let addresses = data
-        SearchFactory.addBySearch(addresses).then( address_id => {
-          address_id ? resolve(address_id) : resolve(null)
+        SearchFactory.addBySearch(addresses).then( selected => {
+          selected ? resolve(selected) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
     })

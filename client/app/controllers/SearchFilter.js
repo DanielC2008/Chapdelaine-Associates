@@ -5,7 +5,7 @@ app.controller('SearchFilter', function($scope, $mdDialog, items) {
 
   SFscope.filter = searchText => items.filter( item => item.value && item.value.toLowerCase().search(searchText.toLowerCase()) != -1 )
   
-  SFscope.existing = selectedId => $mdDialog.hide(selectedId)
+  SFscope.existing = selected => $mdDialog.hide(selected)
 
   SFscope.new = () => $mdDialog.hide()
   
