@@ -18,9 +18,9 @@ app.factory('ClientFactory', function($http, SearchFactory, FormFactory) {
   }
 
 
-  factory.addClient = () => FormFactory.updateForm('Clients', null, {}, 'Add New')
+  factory.addClient = () => FormFactory.updateForm('Clients', null, {client_id: null}, 'Add New')
 
-  factory.editClient = client => FormFactory.updateForm('Clients', client, {}, 'Update')
+  factory.editClient = (client, client_id) => FormFactory.updateForm('Clients', client, {client_id: client_id}, 'Update')
 
   // factory.addNewClient = ids => { //if job_id adds to Job otherwise just to DB
   //   return new Promise ((resolve, reject) => {

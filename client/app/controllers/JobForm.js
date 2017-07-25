@@ -2,7 +2,6 @@
 
 app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, ClientFactory) {
   
-  /////////////////////////WILL NEED ID STORAGE/////////////////////////
   const defaultJob = {
     jobInfo: {
       job_status: 'New'
@@ -14,7 +13,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     clientType: {},
     clientRep: {},
     owner: {},
-    ownerRep: {}
+    ownerRep: {},
+    ids: {}
   }
   $scope.job = job ? job : defaultJob
   const originalJob = Object.assign({}, $scope.job)
@@ -52,15 +52,19 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   }
 
   $scope.addClient = () => { 
+      //force user to search for client first
       ClientFactory.searchForClients().then( client_id => {
         if (client_id) {
-          // ClientFactory.getFullClientById({ids}).then( ({data}) => {
-          //   ClientFactory.addClient().then( ({dbObj, msg}) => {
-          //     ToastFactory.toastSuccess(msg)
-          //     $scope.job.client = dbObj
-          //     $scope.clientSet = true
-          //   }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-          // }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          //if exist bring back full client in case they want to make changes
+          ClientFactory.getFullClientById({client_id}).then( ({data}) => {
+            //edit, validate, and on return set obj, clientSet, and id
+            ClientFactory.editClient(data, data.client_id).then( ({dbPackage, msg}) => {
+              ToastFactory.toastSuccess(msg)
+              $scope.job.client = dbPackage.dbObj
+              $scope.clientSet = true
+              $scope.job.ids.client_id = dbPackage.client_id.client_id
+            }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
           ClientFactory.addClient().then( ({dbObj, msg}) => {
             ToastFactory.toastSuccess(msg)
@@ -72,9 +76,11 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   }
 
   $scope.editClient = () => {
-    ClientFactory.editClient($scope.job.client).then( ({dbObj, msg}) => {
+    //send id for name check if id exists else we are editing a validated client not in DB
+    let client_id = $scope.job.ids.client_id ? $scope.job.ids.client_id : null 
+    ClientFactory.editClient($scope.job.client, client_id).then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
-      $scope.job.client = dbObj
+      $scope.job.client = dbPackage.dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 

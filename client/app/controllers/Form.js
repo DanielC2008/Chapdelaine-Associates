@@ -53,7 +53,7 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     let dbPackage = prepForDB(dbObj)
     if (dbPackage) {
       DBFactory.validate(dbPackage)
-      .then( ({data: {msg}}) => $mdDialog.hide({dbObj, msg}))
+      .then( ({data: {msg}}) => $mdDialog.hide({dbPackage, msg}))
       .catch( ({data: {msg}}) => ToastFactory.toastReject(msg))
     }
   }
@@ -98,8 +98,11 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   const prepForDB = dbObj => {
     let dbPackage = {
       dbObj: dbObj,
-      table: table,
-      formType: formType
+      table: table
+    }
+
+    if (table === 'Clients'){
+      dbPackage.client_id = ids
     }
 
     if (table === 'Properties') {

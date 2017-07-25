@@ -8,13 +8,13 @@ const locateOrCreate = require('../locateOrCreate')
 const { validClient, validClientOnJob } = require('../validation/validClient')
 const validationHelper = require('../validation/validationHelper') 
 
-router.post('/api/validateClient', ({body: {dbObj}}, res) => {
+router.post('/api/validateClient', ({body: {dbObj, client_id}}, res) => {
   const errors = validClient.validate(dbObj)
   if (errors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
   } else {
-    validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {
+    validationHelper.checkNameExists(dbObj, 'Clients', client_id).then( nameExists => {
       nameExists ? res.status(400).send({msg: `${nameExists}`}) : res.send({msg: 'Valid Client!'})
     })
   }
@@ -62,8 +62,7 @@ router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc
   .catch(err => console.log('err', err))
 }) 
 
-router.post('/api/getFullClientById', ({body: {ids}}, res) => { //on new bc no job associated yet
-  const client_id = ids.client_id
+router.post('/api/getFullClientById', ({body: {client_id}}, res) => {
   knex('Clients')
   .select(
     'Clients.client_id',
