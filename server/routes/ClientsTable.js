@@ -9,18 +9,15 @@ const { validClient, validClientOnJob } = require('../validation/validClient')
 const validationHelper = require('../validation/validationHelper') 
 
 router.post('/api/validateClient', ({body: {dbObj}}, res) => {
-  const errors = validClient.validate(dbObj) //checks data types 
+  const errors = validClient.validate(dbObj)
   if (errors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
   } else {
-    res.send({msg: 'Valid Client!'})
+    validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {
+      nameExists ? res.status(400).send({msg: `${nameExists}`}) : res.send({msg: 'Valid Client!'})
+    })
   }
-  // else if {
-    // validationHelper.checkNameExists(dbObj, 'Clients').then( nameExists => {//true/false
-    //   if (nameExists) { //-----------------------------checks if name already exists in DB
-    //     res.status(400).send({msg: `${nameExists}`})
-    //   } else {}
 })
 
 router.post('/api/getFullClientOnJob', ({body: {ids}}, res) => { // on update bc includes jobid
