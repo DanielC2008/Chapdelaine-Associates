@@ -37,17 +37,17 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   $scope.clientTypeChange = () => $scope.clientTypeSet = true
 
   $scope.addProp = () => { 
-    PropertyFactory.addProp().then( ({dbObj, msg}) => {
+    PropertyFactory.addProp().then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
-      $scope.job.property = dbObj
+      $scope.job.property = dbPackage.dbObj
       $scope.propertySet = true
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   $scope.editProp = () => {
-    PropertyFactory.editProp($scope.job.property).then( ({dbObj, msg}) => {
+    PropertyFactory.editProp($scope.job.property).then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
-      $scope.job.property = dbObj
+      $scope.job.property = dbPackage.dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
