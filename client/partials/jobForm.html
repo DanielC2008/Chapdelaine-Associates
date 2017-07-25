@@ -65,8 +65,13 @@
     {{clientSet ? 'Edit Client' : 'Add Client'}}
   </button>
 </div>
-  <div>
-    Client Type
+  <div >
+    <form action="#"> Client Type:
+      <input ng-model="job.clientType.client_type" ng-change="clientTypeChange()" type="radio" id="owner" value="Owner" />
+      <label for="owner">Owner</label>
+      <input ng-model="job.clientType.client_type" ng-change="clientTypeChange()" type="radio" id="buyer" value="Buyer" />
+      <label for="buyer">Buyer</label>
+    </form>
   </div>
   <div>
     Client Rep

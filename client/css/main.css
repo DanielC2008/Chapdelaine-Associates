@@ -165,7 +165,6 @@ div.navSelect span.caret {
   margin: 15px 10px 0 10px;
 }
 
-/*********buttons**********/
 .button:hover {
   background-color: #bcaaa4;
   box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
@@ -189,6 +188,13 @@ div.navSelect span.caret {
 .wrapper {
   margin-top: 25px;
   border: 15px solid #bcaaa4;
+}
+
+
+/*********radio**********/
+input[type="radio"] {
+  opacity: 1;
+  position: relative;
 }
 
 

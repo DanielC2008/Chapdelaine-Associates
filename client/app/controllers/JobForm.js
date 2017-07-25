@@ -21,6 +21,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   //set variables for required info, JobInfo, property, client, and client type
   $scope.propertySet = Object.keys($scope.job.property).length === 0 ? false : true
   $scope.clientSet = Object.keys($scope.job.client).length === 0 ? false : true
+  $scope.clientTypeSet = Object.keys($scope.job.clientType).length === 0 ? false : true
 
   $scope.showCause = cause => $scope.displayCause = cause 
 
@@ -33,7 +34,9 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     $scope[`${type}Date`] = null
   }
 
-  $scope.addProp = () =>{ 
+  $scope.clientTypeChange = () => $scope.clientTypeSet = true
+
+  $scope.addProp = () => { 
     PropertyFactory.addProp().then( ({dbObj, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.property = dbObj
@@ -41,14 +44,14 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
-  $scope.editProp = () =>{
+  $scope.editProp = () => {
     PropertyFactory.editProp($scope.job.property).then( ({dbObj, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.property = dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
-  $scope.addClient = () =>{ 
+  $scope.addClient = () => { 
       ClientFactory.searchForClients().then( client_id => {
         if (client_id) {
           // ClientFactory.getFullClientById({ids}).then( ({data}) => {
@@ -68,7 +71,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
-  $scope.editClient = () =>{
+  $scope.editClient = () => {
     ClientFactory.editClient($scope.job.client).then( ({dbObj, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.client = dbObj
