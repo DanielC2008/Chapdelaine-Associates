@@ -26,8 +26,11 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Cancellations'){
       return $http.post('/api/addNewCause', dbPackage)
     }
-    else if (dbPackage.table === 'AddressRoad'){
-      return $http.post('/api/addSecondaryAddressOrRoad', dbPackage)
+    else if (dbPackage.table === 'Addresses'){
+      return $http.post('/api/validateAddress', dbPackage)
+    }
+    else if (dbPackage.table === 'Roads'){
+      return $http.post('/api/validateRoad', dbPackage)
     }
   }
 

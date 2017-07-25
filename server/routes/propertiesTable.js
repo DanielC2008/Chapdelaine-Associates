@@ -5,7 +5,7 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
-const validateProperty = require('../validation/validProperty')
+const {validateProperty, validateAddress, validateRoad} = require('../validation/validProperty')
 
 router.post('/api/validateProp', ({body: {dbObj}}, res) => {
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
@@ -16,6 +16,47 @@ router.post('/api/validateProp', ({body: {dbObj}}, res) => {
     res.send({msg: 'Valid Property!'})
   }
 })
+
+router.post('/api/validateAddress', ({body: {dbObj}}, res) => {
+  const errors = validateAddress.validate(dbObj) 
+  if (errors[0]) { 
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send({msg: `${msg}`})
+  } else {
+    res.send({msg: 'Valid Address!'})
+  }
+})
+
+router.post('/api/validateRoad', ({body: {dbObj}}, res) => {
+  const errors = validateRoad.validate(dbObj)
+  if (errors[0]) { 
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send({msg: `${msg}`})
+  } else {
+    res.send({msg: 'Valid Road!'})
+  }
+})
+
+router.get('/api/getAddressesForSearch', ({body}, res) => {
+  knex('Addresses')
+    .select(
+      'address AS value',
+      'address_id AS id'
+    )
+    .then( data => res.send(data))
+    .catch( err => console.log(err))
+})
+
+router.get('/api/getRoadsForSearch', ({body}, res) => {
+  knex('Roads')
+    .select(
+      'road AS value',
+      'road_id AS id'
+    )
+    .then( data => res.send(data))
+    .catch( err => console.log(err))
+})
+
 
 router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
   let job_id = ids.job_id

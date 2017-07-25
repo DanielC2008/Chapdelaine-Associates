@@ -49,13 +49,27 @@
       {{propertySet ? 'Edit Property' : 'Add Property'}}
     </button>
   </div>
-  <!-- ////////////////////////////ADDRESS//////////////////////////// -->
-  <div>
-    Add Address
+  <!-- ////////////////////////////ADDRESSES//////////////////////////// -->
+  <div class="row">
+    <div class="col s3">Secondary Addresses:
+      <span ng-repeat="address in job.addresses">
+      <span>{{address.address}} <span ng-hide="$index + 1 === job.addresses.length">,</span> </span>
+      </span>
+    </div>
+    <button class="col s2" ng-click="addAddress()">
+      {{'Add Address'}}
+    </button>
   </div>
-    <!-- ////////////////////////////ROAD//////////////////////////// -->
-  <div>
-    Add Road
+    <!-- ////////////////////////////ROADS//////////////////////////// -->
+  <div class="row">
+    <div class="col s3">Secondary Roads:
+      <span ng-repeat="road in job.roads">
+      <span>{{road.road}} <span ng-hide="$index + 1 === job.roads.length">,</span> </span>
+      </span>
+    </div>
+    <button class="col s2" ng-click="addRoad()">
+      {{'Add Road'}}
+    </button>
   </div>
   <!-- ////////////////////////////CLIENT//////////////////////////// -->
   <div class="row">
@@ -87,7 +101,6 @@
     </button>
   </div>
   <!-- ////////////////////////////OWNER//////////////////////////// -->
-  <!-- if client is not owner -->
   <div class="row"> 
     <div class="col s3">
       Owner: 

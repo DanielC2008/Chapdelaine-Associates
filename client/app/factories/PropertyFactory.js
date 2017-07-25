@@ -12,7 +12,38 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
   
   factory.getRoadsOnProp = property_id => $http.post('/api/getRoadsOnProp', {property_id})
 
-  factory.addAddressRoad = ids => FormFactory.updateForm('AddressRoad', {}, ids, 'Add New')
+  factory.addAddress = () => FormFactory.updateForm('Addresses', null,  {}, 'Add New')
+
+  const getAddressesForSearch = () => $http.get('/api/getAddressesForSearch')
+
+  factory.searchForAddresses = () => {
+    return new Promise ((resolve, reject) => {
+      getAddressesForSearch().then( ({data}) => {
+        let addresses = data
+        SearchFactory.addBySearch(addresses).then( address_id => {
+          address_id ? resolve(address_id) : resolve(null)
+        })
+      }).catch( err => reject({msg:'Nothing Saved'}))
+    })
+  }
+
+  factory.addRoad = () => FormFactory.updateForm('Roads', null,  {}, 'Add New')
+
+  const getRoadsForSearch = () => $http.get('/api/getRoadsForSearch')
+
+  factory.searchForRoads = () => {
+    return new Promise ((resolve, reject) => {
+      getRoadsForSearch().then( ({data}) => {
+        let roads = data
+        SearchFactory.addBySearch(roads).then( road_id => {
+          road_id ? resolve(road_id) : resolve(null)
+        })
+      }).catch( err => reject({msg:'Nothing Saved'}))
+    })
+  }
+
+
+
 
   return factory
 })

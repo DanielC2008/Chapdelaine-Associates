@@ -37,9 +37,13 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       FORM.title = `${formType} Cause For Cancellation`
       FORM.Display.Cancellations = FormFactory.getCauseForm() 
       break;
-    case 'AddressRoad':
-      FORM.title = `${formType} Address/Road`
-      FORM.Display.AddressRoad = FormFactory.getAddressRoadForm() 
+    case 'Addresses':
+      FORM.title = `${formType} Address`
+      FORM.Display.Addresses = FormFactory.getAddressForm() 
+      break;
+    case 'Roads':
+      FORM.title = `${formType} Road`
+      FORM.Display.Roads = FormFactory.getRoadForm() 
       break;
   }
 

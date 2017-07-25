@@ -7,8 +7,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
       job_status: 'New'
     },
     property: {},
-    addresses : {},
-    roads: {},
+    addresses : [],
+    roads: [],
     client: {},
     clientType: {},
     clientContact: {},
@@ -36,6 +36,33 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   }
 
   $scope.clientTypeChange = () => $scope.clientTypeSet = true
+
+
+  $scope.addAddress = () => {
+    PropertyFactory.searchForAddresses().then( addresses_id => {
+      if (addresses_id) {
+        //push address id 
+      } else {
+        PropertyFactory.addAddress().then( ({dbPackage, msg}) => {
+          ToastFactory.toastSuccess(msg)
+          $scope.job.addresses.push(dbPackage.dbObj)
+        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }
+    })
+  }
+
+  $scope.addRoad = () => {
+    PropertyFactory.searchForRoads().then( road_id => {
+      if (road_id) {
+        //push address id 
+      } else {
+        PropertyFactory.addRoad().then( ({dbPackage, msg}) => {
+          ToastFactory.toastSuccess(msg)
+          $scope.job.roads.push(dbPackage.dbObj)
+        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }
+    })
+  }
 
   $scope.addProp = () => { 
     PropertyFactory.addProp().then( ({dbPackage, msg}) => {

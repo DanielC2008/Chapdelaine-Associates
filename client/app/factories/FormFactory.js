@@ -91,9 +91,14 @@ app.factory('FormFactory', function($mdDialog) {
     }
   }
 
-  factory.getAddressRoadForm = () => {
+  factory.getAddressForm = () => {
     return {
-      'Address': '',
+      'Address': ''
+    }
+  }
+
+  factory.getRoadForm = () => {
+    return {
       'Road': ''
     }
   }
