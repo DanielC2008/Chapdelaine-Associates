@@ -76,14 +76,14 @@
       <label for="buyer">Buyer</label>
     </form>
   </div>
-  <!-- ////////////////////////////CLIENT REPRESENTATIVE//////////////////////////// -->
+  <!-- ////////////////////////////CLIENT CONTACT//////////////////////////// -->
   <div class="row">
     <div class="col s3">
-      Client Representative : 
-      {{clientRepSet ? job.clientRep.last_name : ''}}
+      Client Contact : 
+      {{clientContactSet ? job.clientContact.last_name : ''}}
     </div>
-    <button class="col s2" ng-click="clientRepSet ? editClientRep() : addClientRep()">
-      {{clientRepSet ? 'Edit Client Representative' : 'Add Client Representative'}}
+    <button class="col s2" ng-click="clientContactSet ? editClientContact() : addClientContact()">
+      {{clientContactSet ? 'Edit Client Contact' : 'Add Client Contact'}}
     </button>
   </div>
   <!-- ////////////////////////////OWNER//////////////////////////// -->
@@ -97,14 +97,14 @@
       {{ownerSet ? 'Edit Owner' : 'Add Owner'}}
     </button>
   </div>
-  <!-- ////////////////////////////OWNER REPERESENTATIVE//////////////////////////// -->
+  <!-- ////////////////////////////OWNER CONTACT//////////////////////////// -->
   <div class="row">
     <div class="col s3">
-      Owner Representative : 
-      {{ownerRepSet ? job.ownerRep.last_name : ''}}
+      Owner Contact : 
+      {{ownerContactSet ? job.ownerContact.last_name : ''}}
     </div>
-    <button class="col s2" ng-click="ownerRepSet ? editOwnerRep() : addOwnerRep()">
-      {{ownerRepSet ? 'Edit Owner Representative' : 'Add Owner Representative'}}
+    <button class="col s2" ng-click="ownerContactSet ? editOwnerContact() : addOwnerContact()">
+      {{ownerContactSet ? 'Edit Owner Contact' : 'Add Owner Contact'}}
     </button>
   </div>
 
