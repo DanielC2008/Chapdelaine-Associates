@@ -93,7 +93,8 @@
       Owner: 
       {{ownerSet ? job.owner.last_name : ''}}
     </div>
-    <button class="col s2" ng-click="ownerSet ? editOwner() : addOwner()">
+    <button class="col s2" ng-click="ownerSet ? editOwner() : addOwner()" 
+      ng-disabled="job.clientType.client_type !== 'Buyer'">
       {{ownerSet ? 'Edit Owner' : 'Add Owner'}}
     </button>
   </div>
@@ -103,7 +104,8 @@
       Owner Contact : 
       {{ownerContactSet ? job.ownerContact.last_name : ''}}
     </div>
-    <button class="col s2" ng-click="ownerContactSet ? editOwnerContact() : addOwnerContact()">
+    <button class="col s2" ng-click="ownerContactSet ? editOwnerContact() : addOwnerContact()"
+      ng-disabled="job.clientType.client_type !== 'Buyer'">
       {{ownerContactSet ? 'Edit Owner Contact' : 'Add Owner Contact'}}
     </button>
   </div>
