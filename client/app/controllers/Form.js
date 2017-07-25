@@ -9,14 +9,9 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   FORM.formType = formType
 
   switch(table) {
-    case 'Clients':
-      FORM.title = `${formType} Client`
-      FORM.Display.Clients = FormFactory.getClientForm(existingObj)
-      break;
-    case 'Representatives':
-      FORM.title = `${formType} Representative`
-      FORM.Display.Representatives = FormFactory.getRepForm(existingObj)
-      FORM.client_id = ids.client_id
+    case 'Customers':
+      FORM.title = `${formType} Customer`
+      FORM.Display.Customers = FormFactory.getCustomerForm(existingObj)
       break;
     case 'Properties':
       FORM.title = `${formType} Property`
@@ -51,6 +46,7 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   FORM.validate = () => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
+    console.log('dbPackage', dbPackage)
     if (dbPackage) {
       DBFactory.validate(dbPackage)
       .then( ({data: {msg}}) => $mdDialog.hide({dbPackage, msg}))
@@ -58,6 +54,30 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     }
   }
 
+  FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
+
+  const prepForDB = dbObj => {
+    let dbPackage = {
+      dbObj: dbObj,
+      table: table
+    }
+
+    if (table === 'Customers'){
+      dbPackage.customer_id = ids
+    }
+
+    if (table === 'Properties') {
+      if (!dbObj.primary_address && !dbObj.primary_road) {
+        ToastFactory.toastReject("Please enter an Address or a Road.")
+      } else {
+        return dbPackage
+      }   
+    } 
+
+    else {
+      return dbPackage   
+    }
+  }
   // FORM.addNew = ()  => {
   //   let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
   //   let dbPackage = prepForDB(dbObj)
@@ -93,30 +113,6 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   //   })
   // }
 
-  FORM.reject = () => $mdDialog.cancel({msg: 'Nothing Saved!'})
-
-  const prepForDB = dbObj => {
-    let dbPackage = {
-      dbObj: dbObj,
-      table: table
-    }
-
-    if (table === 'Clients'){
-      dbPackage.client_id = ids
-    }
-
-    if (table === 'Properties') {
-      if (!dbObj.primary_address && !dbObj.primary_road) {
-        ToastFactory.toastReject("Please enter an Address or a Road.")
-      } else {
-        return dbPackage
-      }   
-    } 
-
-    else {
-      return dbPackage   
-    }
-  }
 
 })
 

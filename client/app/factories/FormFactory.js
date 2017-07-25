@@ -3,43 +3,24 @@
 app.factory('FormFactory', function($mdDialog) {
   let factory = {}
 
-  factory.getClientForm = client => {
+  factory.getCustomerForm = customer => {
     return {
-      'First Name':     client ? client.first_name : '', //required
-      'Middle Name':    client ? client.middle_name : '', 
-      'Last Name':      client ? client.last_name : '', //required
-      'Email':          client ? client.email : '', 
-      'Business Phone': client ? client.business_phone : '', 
-      'Mobile Phone':   client ? client.mobile_phone : '', 
-      'Home Phone':     client ? client.home_phone : '', 
-      'Fax Number':     client ? client.fax_number : '',
-      'Address':        client ? client.address : '', 
-      'City':           client ? client.city : '', 
-      'State':          client ? client.state : '', 
-      'Zip Code':       client ? client.zip_code : '', 
-      'County':         client ? client.county : '',
-      'Notes':          client ? client.notes : ''
-    }
-  }  
-
-  factory.getRepForm = rep => {
-    return {
-      'First Name':     rep ? rep.first_name : '', //required
-      'Middle Name':    rep ? rep.middle_name : '', 
-      'Last Name':      rep ? rep.last_name : '', //required
-      'Email':          rep ? rep.email : '', 
-      'Business Phone': rep ? rep.business_phone : '', 
-      'Mobile Phone':   rep ? rep.mobile_phone : '', 
-      'Home Phone':     rep ? rep.home_phone : '', 
-      'Fax Number':     rep ? rep.fax_number : '',
-      'Address':        rep ? rep.address : '', 
-      'City':           rep ? rep.city : '', 
-      'State':          rep ? rep.state : '', 
-      'Zip Code':       rep ? rep.zip_code : '', 
-      'County':         rep ? rep.county : '',
-      'Company Name':   rep ? rep.company_name : '',
-      'Company Address':rep ? rep.company_address: '',
-      'Notes':          rep ? rep.notes : ''
+      'First Name':     customer ? customer.first_name : '', //required
+      'Middle Name':    customer ? customer.middle_name : '', 
+      'Last Name':      customer ? customer.last_name : '', //required
+      'Email':          customer ? customer.email : '', 
+      'Business Phone': customer ? customer.business_phone : '', 
+      'Mobile Phone':   customer ? customer.mobile_phone : '', 
+      'Home Phone':     customer ? customer.home_phone : '', 
+      'Fax Number':     customer ? customer.fax_number : '',
+      'Address':        customer ? customer.address : '', 
+      'City':           customer ? customer.city : '', 
+      'State':          customer ? customer.state : '', 
+      'Zip Code':       customer ? customer.zip_code : '', 
+      'County':         customer ? customer.county : '',
+      'Company Name':   customer ? customer.company_name : '',
+      'Company Address':customer ? customer.company_address: '',
+      'Notes':          customer ? customer.notes : ''
     }
   }    
 
