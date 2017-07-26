@@ -1,10 +1,12 @@
 'use strict'
 
-app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory) {
+app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory, $mdDialog, JobFormFactory) {
 
   const defaultJob = {
     jobInfo: {
-      job_status: 'New'
+      job_status: 'New',
+      job_number: null,
+      job_type: null
     },
     property: {},
     addresses : [],
@@ -16,12 +18,15 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     ownerContact: {},
     ids: {}
   }
-  $scope.job = job ? job : defaultJob
-  const originalJob = Object.assign({}, $scope.job)
-  //set variables for required info, JobInfo, property, client, and client type
+  let originalJob = _.cloneDeep(job ? job : defaultJob)
+  $scope.job = _.cloneDeep(job ? job : defaultJob)
+  //set variables for required info and determining add or edit button
   $scope.propertySet = Object.keys($scope.job.property).length === 0 ? false : true
   $scope.clientSet = Object.keys($scope.job.client).length === 0 ? false : true
   $scope.clientTypeSet = Object.keys($scope.job.clientType).length === 0 ? false : true
+  $scope.clientContactSet = Object.keys($scope.job.clientContact).length === 0 ? false : true
+  $scope.ownerSet = Object.keys($scope.job.owner).length === 0 ? false : true
+  $scope.ownerContactSet = Object.keys($scope.job.ownerContact).length === 0 ? false : true
 
   JobTypeFactory.getEnabledJobTypes().then( ({data}) => $scope.types = data.map( type => type.job_type ))
 
@@ -31,18 +36,58 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     })  
   }
 
-  $scope.showCause = cause => $scope.displayCause = cause 
-
-  $scope.setDate = (date, type) => {
-    let MM = date.getMonth() + 1
-    let DD = date.getDate()
-    let YYYY = date.getFullYear()
-    let formatedDate = `${YYYY}-${MM}-${DD}`
-    $scope.job.jobInfo[`${type}_date`] = formatedDate
-    $scope[`${type}Date`] = null
+  const submit = () => {
+    if (originalJob.jobInfo.job_status === 'New') {
+      console.log('create')
+      // JobFormFactory.createJob(originalJob, $scope.job)
+    } else {
+      console.log('update')
+      // JobFormFactory.updateJob(originalJob, $scope.job)
+    }
   }
 
+  $scope.checkReqs = () => {
+    let reqMsg = requirements()
+    typeof reqMsg === 'string' ? ToastFactory.toastReject(reqMsg) : submit()
+  }
+
+  const requirements = () => {
+    if ($scope.job.jobInfo.job_status === 'New') {
+      return 'Please set job status.'
+    } else if ($scope.job.jobInfo.job_type === null) {
+      return 'Please set job type.'
+    } else if (!$scope.propertySet) {
+      return 'Please create a new Property.'
+    } else if (!$scope.clientSet) {
+      return 'Please assign a Client.'
+    } else if (!$scope.clientTypeSet) {
+      return 'Please choose a Client Type.'
+    } else {
+      return
+    }
+  } 
+
+  $scope.cancel = () => $mdDialog.hide()
+
+  $scope.showCause = cause => $scope.displayCause = cause 
+
   $scope.clientTypeChange = () => $scope.clientTypeSet = true
+
+/////////////////////////////////////////PROPERTY/////////////////////////////////////////  
+  $scope.addProp = () => { 
+    PropertyFactory.addProp().then( ({dbPackage, msg}) => {
+      ToastFactory.toastSuccess(msg)
+      $scope.job.property = dbPackage.dbObj
+      $scope.propertySet = true
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+  }
+
+  $scope.editProp = () => {
+    PropertyFactory.editProp($scope.job.property).then( ({dbPackage, msg}) => {
+      ToastFactory.toastSuccess(msg)
+      $scope.job.property = dbPackage.dbObj
+    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+  }
 
   $scope.addAddress = () => {
     PropertyFactory.searchForAddresses().then( selected => {
@@ -75,20 +120,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
       }
     })
   }
-  $scope.addProp = () => { 
-    PropertyFactory.addProp().then( ({dbPackage, msg}) => {
-      ToastFactory.toastSuccess(msg)
-      $scope.job.property = dbPackage.dbObj
-      $scope.propertySet = true
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-  }
-
-  $scope.editProp = () => {
-    PropertyFactory.editProp($scope.job.property).then( ({dbPackage, msg}) => {
-      ToastFactory.toastSuccess(msg)
-      $scope.job.property = dbPackage.dbObj
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-  }
+  
 /////////////////////////////////////////CLIENT/////////////////////////////////////////
   $scope.addClient = () => { 
       //force user to search for client first

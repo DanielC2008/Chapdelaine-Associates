@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFactory', function($http) {
+app.factory('JobFormFactory', function($http) {
 
   const factory = {}
 

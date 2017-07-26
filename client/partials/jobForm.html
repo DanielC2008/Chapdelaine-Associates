@@ -41,7 +41,7 @@
         <label for="targetDate">Target Date:</label>
         <input type="date" name="targetDate" ng-model="job.jobInfo.target_date">
       </div>
-      
+
     </div>
   </div>
 
@@ -135,8 +135,8 @@
 
   <div class="row">
     <div class="col s4 offset-s4">
-      <button class="col s6">Submit</button>
-      <button class="col s6">Cancel</button>
+      <button class="col s6" ng-click="cancel()">Cancel</button>
+      <button class="col s6" ng-click="checkReqs()">Submit</button>
     </div>
   </div>
 
