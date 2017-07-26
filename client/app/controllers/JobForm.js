@@ -1,7 +1,7 @@
 'use strict'
 
-app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, CustomerFactory) {
-  
+app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory) {
+
   const defaultJob = {
     jobInfo: {
       job_status: 'New'
@@ -22,7 +22,14 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   $scope.propertySet = Object.keys($scope.job.property).length === 0 ? false : true
   $scope.clientSet = Object.keys($scope.job.client).length === 0 ? false : true
   $scope.clientTypeSet = Object.keys($scope.job.clientType).length === 0 ? false : true
-  $scope.clientContactSet = Object.keys($scope.job.clientContact).length === 0 ? false : true
+
+  JobTypeFactory.getEnabledJobTypes().then( ({data}) => $scope.types = data.map( type => type.job_type ))
+
+  $scope.material = () => {
+    $(document).ready(function() {  
+      $('select').material_select()
+    })  
+  }
 
   $scope.showCause = cause => $scope.displayCause = cause 
 
@@ -36,7 +43,6 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   }
 
   $scope.clientTypeChange = () => $scope.clientTypeSet = true
-
 
   $scope.addAddress = () => {
     PropertyFactory.searchForAddresses().then( selected => {

@@ -31,7 +31,6 @@ router.post('/api/validateCustomer', ({body: {dbObj, customer_id}}, res) => {
 })
 
 router.post('/api/getFullCustomerById', ({body: {customer_id}}, res) => {
-  console.log('customer_id', customer_id)
   knex('Customers')
   .select(
     'Customers.customer_id',
