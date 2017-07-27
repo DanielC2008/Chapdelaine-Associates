@@ -67,26 +67,29 @@ app.factory('JobFormFactory', function(DBFactory) {
       const customersToAdd = []
       const customersToUpdate = []
       if (client) {
-        update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push(client)
+        update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push({customer: client, idType: 'client_id'})
       }
       if (clientContact) {
-        update.ids.client_contact_id ? customersToUpdate.push({customer: clientContact, id: update.ids.client_contact_id}) : customersToAdd.push(clientContact)
+        update.ids.client_contact_id ? customersToUpdate.push({customer: clientContact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: clientContact, idType: 'client_contact_id'})
       }
       if (owner) {
-        update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push(owner)
+        update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner'})
       }
       if (ownerContact) {
-        update.ids.owner_contact_id ? customersToUpdate.push({customer: ownerContact, id: update.ids.owner_contact_id}) : customersToAdd.push(ownerContact)
+        update.ids.owner_contact_id ? customersToUpdate.push({customer: ownerContact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: ownerContact, idType: 'owner_contact_id'})
       }
-      
-      addNewCustomers(customersToAdd).then( data => console.log('data', data))
-      updateExistingCustomers(customersToUpdate).then( data => console.log('data', data))
-
+      //add new Prop, Client, (and if) C_Contact, Owner, O_Contact
+      Promise.all([
+        //addProp
+        //if id exists send to update
+        updateExistingCustomers(customersToUpdate).then( data => Promise.resolve(data)).catch( err => reject(err))
+        //if not send to add new
+        addNewCustomers(customersToAdd).then( data => Promise.resolve(data)).catch( err => reject(err)),
+      ]).then( data => {
+        //return ids
+        
+      })
     // db function
-        //add new Prop, Client, (and if) CContact, Owner, OContact
-          //if id exists send to update
-          //if not send to add new
-          //return ids
         //create Job and put all Ids + client *********dont do this with dummy data!************
         //send address and road arrays with Prop id
     // })
@@ -98,8 +101,8 @@ app.factory('JobFormFactory', function(DBFactory) {
   const addNewCustomers = customersToAdd => {
     return new Promise( (resolve, reject) => {
       Promise.all(customersToAdd.map( customer => {
-        let dbPackage = {table: 'Customers', dbObj: customer}
-        return DBFactory.addNew(dbPackage).then( ({status}) => Promise.resolve(status)).catch( err => reject(err))
+        let dbPackage = {table: 'Customers', dbObj: customer, idType: customer.idType}
+        return DBFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
@@ -108,8 +111,7 @@ app.factory('JobFormFactory', function(DBFactory) {
     return new Promise( (resolve, reject) => {
       Promise.all(customersToUpdate.map( customer => {
         let dbPackage = {table: 'Customers', dbObj: customer.customer, id: customer.id }
-        console.log('dbPackage', dbPackage)
-        return DBFactory.updateExisting(dbPackage).then( ({status}) => Promise.resolve(status)).catch( err => reject(err))
+        return DBFactory.updateExisting(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }

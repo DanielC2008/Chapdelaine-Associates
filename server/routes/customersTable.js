@@ -71,9 +71,11 @@ router.post('/api/getFullCustomerById', ({body: {customer_id}}, res) => {
 //   .catch( err => console.log(err))
 // })
 
-router.post('/api/addNewCustomer', ({body : {dbObj}}, res) => {
-  console.log('dbObj', dbObj)
-  res.send({msg: 'yup'})
+router.post('/api/addNewCustomer', ({body : {dbObj, idType}}, res) => {
+  let obj = {}
+  let id = 76
+  obj[`${idType}`] = id 
+  res.send(obj)
   // getConnectTableIds(body[0]).then( data => {
   //   let polishedObj = data.obj
   //   knex('Customers')
@@ -87,9 +89,6 @@ router.post('/api/addNewCustomer', ({body : {dbObj}}, res) => {
 })
 
 router.post('/api/updateCustomer', ({body: {dbObj, id}}, res) => {
-  console.log('dbObj', dbObj)
-  console.log('id', id)
-  res.send({msg: 'mhhhhhmm'})
   // getConnectTableIds(dbObj).then( data => {
   //   let polishedObj = data.obj
   //   knex('Customers')
