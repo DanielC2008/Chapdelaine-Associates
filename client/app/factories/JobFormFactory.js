@@ -47,7 +47,7 @@ app.factory('JobFormFactory', function(DBFactory) {
       first_name: 'willy'
     },
     ids: {
-      owner_contact_id: 123
+      // owner_contact_id: 123
     }
   }
 
@@ -62,7 +62,7 @@ app.factory('JobFormFactory', function(DBFactory) {
       const clientContact = changed(original, update, 'clientContact') 
       const owner = changed(original, update, 'owner') 
       const ownerContact = changed(original, update, 'ownerContact')
-      const ids = changed(original, update, 'ids') 
+      const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
       //one array to add new and one to update existing customers
       const customersToAdd = []
       const customersToUpdate = []
@@ -81,13 +81,18 @@ app.factory('JobFormFactory', function(DBFactory) {
       //add new Prop, Client, (and if) C_Contact, Owner, O_Contact
       Promise.all([
         //addProp
+        // DBFactory.addNew({table: 'Properties', dbObj: property})
         //if id exists send to update
-        updateExistingCustomers(customersToUpdate).then( data => Promise.resolve(data)).catch( err => reject(err))
+        updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => reject(err)),
         //if not send to add new
-        addNewCustomers(customersToAdd).then( data => Promise.resolve(data)).catch( err => reject(err)),
+        addNewCustomers(customersToAdd).then( data => {
+          //add new ids to id obj
+          data.forEach( id => ids[`${Object.keys(id)[0]}`] = id[Object.keys(id)[0]])
+        }).catch( err => Promise.reject(err))
       ]).then( data => {
         //return ids
-        
+        console.log('ids', ids)
+        console.log('data', data)
       })
     // db function
         //create Job and put all Ids + client *********dont do this with dummy data!************
