@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFormFactory', function($http) {
+app.factory('JobFormFactory', function(DBFactory) {
 
   const factory = {}
 
@@ -67,21 +67,21 @@ app.factory('JobFormFactory', function($http) {
       const customersToAdd = []
       const customersToUpdate = []
       if (client) {
-        update.ids.client_id ? customersToUpdate.push(client) : customersToAdd.push(client)
+        update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push(client)
       }
       if (clientContact) {
-        update.ids.client_contact_id ? customersToUpdate.push(clientContact) : customersToAdd.push(clientContact)
+        update.ids.client_contact_id ? customersToUpdate.push({customer: clientContact, id: update.ids.client_contact_id}) : customersToAdd.push(clientContact)
       }
       if (owner) {
-        update.ids.owner_id ? customersToUpdate.push(owner) : customersToAdd.push(owner)
+        update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push(owner)
       }
       if (ownerContact) {
-        update.ids.owner_contact_id ? customersToUpdate.push(ownerContact) : customersToAdd.push(ownerContact)
+        update.ids.owner_contact_id ? customersToUpdate.push({customer: ownerContact, id: update.ids.owner_contact_id}) : customersToAdd.push(ownerContact)
       }
+      
+      addNewCustomers(customersToAdd).then( data => console.log('data', data))
+      updateExistingCustomers(customersToUpdate).then( data => console.log('data', data))
 
-      // // return new Promise.all([
-
-      // ]).then 
     // db function
         //add new Prop, Client, (and if) CContact, Owner, OContact
           //if id exists send to update
@@ -94,6 +94,25 @@ app.factory('JobFormFactory', function($http) {
   }
 
   const changed = (o, u, key) => _.isEqual(o[`${key}`], u[`${key}`]) ? null : u[`${key}`] 
+
+  const addNewCustomers = customersToAdd => {
+    return new Promise( (resolve, reject) => {
+      Promise.all(customersToAdd.map( customer => {
+        let dbPackage = {table: 'Customers', dbObj: customer}
+        return DBFactory.addNew(dbPackage).then( ({status}) => Promise.resolve(status)).catch( err => reject(err))
+      })).then( data => resolve(data)).catch( err => console.log('err', err))
+    })
+  }
+
+  const updateExistingCustomers = customersToUpdate => {
+    return new Promise( (resolve, reject) => {
+      Promise.all(customersToUpdate.map( customer => {
+        let dbPackage = {table: 'Customers', dbObj: customer.customer, id: customer.id }
+        console.log('dbPackage', dbPackage)
+        return DBFactory.updateExisting(dbPackage).then( ({status}) => Promise.resolve(status)).catch( err => reject(err))
+      })).then( data => resolve(data)).catch( err => console.log('err', err))
+    })
+  }
 
   factory.createJob(defaultJob, newJob)
 

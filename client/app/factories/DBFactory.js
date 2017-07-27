@@ -35,12 +35,9 @@ app.factory('DBFactory', function($http) {
   }
 
   factory.addNew = dbPackage => {
-    if (dbPackage.table === 'Clients'){
-      return $http.post('/api/addNewClient', dbPackage)
-    } 
-    else if (dbPackage.table === 'Representatives'){
-      return $http.post('/api/addNewRep', dbPackage)
-    } 
+    if (dbPackage.table === 'Customers'){
+      return $http.post('/api/addNewCustomer', dbPackage)
+    }
     else if (dbPackage.table === 'Properties'){
       return $http.post('/api/addNewPropertyToJob', dbPackage)
     } 
@@ -63,32 +60,17 @@ app.factory('DBFactory', function($http) {
       return $http.post('/api/addSecondaryAddressOrRoad', dbPackage)
     }
   }
-  
-  factory.addExisting = dbPackage => {
-    if (dbPackage.table === 'Clients'){
-      return $http.post('/api/addExistingClient', dbPackage)
-    }
-    else if (dbPackage.table === 'Representatives'){
-      return $http.post('/api/addExistingRep', dbPackage)
-    }
-  }
 
   factory.removeFromJob = dataObj => {
     if (dataObj.table === 'Clients') {        
       return $http.post('/api/removeClientFromJob', dataObj)
     }
-    else if (dataObj.table === 'Representatives') {        
-      return $http.post('/api/removeRepFromJob', dataObj)
-    }
   }
 
   factory.updateExisting = dbPackage => {
-    if (dbPackage.table === 'Clients') {
-      return $http.post('/api/updateClient', dbPackage)
+    if (dbPackage.table === 'Customers') {
+      return $http.post('/api/updateCustomer', dbPackage)
     } 
-    else if (dbPackage.table === 'Representatives') {
-      return $http.post('/api/updateRep', dbPackage)
-    }
     else if (dbPackage.table === 'Properties') {        
       return $http.post('/api/updateProperty', dbPackage)
     }
