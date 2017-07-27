@@ -20,6 +20,7 @@ const locateStatusId = status => {
 }
 
 router.post('/api/createNewJob', ({body: {dbObj}}, res) => {
+  console.log('dbObj', dbObj)
   res.send({job_number: 5009})
   // const errors = validJob.validate(dbObj)
   // if (errors[0]) {  //------------------------------------checks each type

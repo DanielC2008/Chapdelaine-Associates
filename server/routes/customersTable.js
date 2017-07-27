@@ -89,6 +89,7 @@ router.post('/api/addNewCustomer', ({body : {dbObj, idType}}, res) => {
 })
 
 router.post('/api/updateCustomer', ({body: {dbObj, id}}, res) => {
+  res.send()
   // getConnectTableIds(dbObj).then( data => {
   //   let polishedObj = data.obj
   //   knex('Customers')
