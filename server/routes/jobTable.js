@@ -19,17 +19,19 @@ const locateStatusId = status => {
   })
 }
 
-router.post('/api/createNewJob', ({body}, res) => {
-  const errors = validJob.validate(body)
-  if (errors[0]) {  //------------------------------------checks each type
-    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
-  } else {
-    knex('Jobs')
-    .insert(body)
-    .then( () => res.send({msg:'Success'}))
-    .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
-  }
+router.post('/api/createNewJob', ({body: {dbObj}}, res) => {
+  res.send({job_number: 5009})
+  // const errors = validJob.validate(dbObj)
+  // if (errors[0]) {  //------------------------------------checks each type
+  //   let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+  //   res.status(400).send(msg)
+  // } else {
+  //   knex('Jobs')
+        //returning job_number
+  //   .insert(dbObj)
+  //   .then( () => res.send({msg:'Success'}))
+  //   .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
+  // }
 })
 
 router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {

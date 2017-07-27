@@ -12,8 +12,6 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.getPendingJobs = () => $http.get('/api/pendingJobs') //will remove
 
-    factory.createNewJob = newJobObj => $http.post('/api/createNewJob', newJobObj)
-
     factory.updateJobStatus = jobObj => $http.post('/api/updateJobStatus', jobObj)
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
