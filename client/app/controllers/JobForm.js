@@ -38,10 +38,11 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
 
   const submit = () => {
     if (originalJob.jobInfo.job_status === 'New') {
-      console.log('create')
-      // JobFormFactory.createJob(originalJob, $scope.job)
+      JobFormFactory.createJob(defaultJob, $scope.job)
+      // .then( job_number => {
+      //   //go to job page
+      // }).catch( err => console.log('err', err))
     } else {
-      console.log('update')
       // JobFormFactory.updateJob(originalJob, $scope.job)
     }
   }
@@ -120,7 +121,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
       }
     })
   }
-  
+
 /////////////////////////////////////////CLIENT/////////////////////////////////////////
   $scope.addClient = () => { 
       //force user to search for client first
