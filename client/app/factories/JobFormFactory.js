@@ -46,14 +46,42 @@ app.factory('JobFormFactory', function($http) {
     ownerContact: {
       first_name: 'willy'
     },
-    ids: {}
+    ids: {
+      owner_contact_id: 123
+    }
   }
 
   factory.createJob = (original, update) => {
     //function to check if items on a job were changed -- this can be used by the update function as well
-    getChanges(original, update).then( data => {
-      //returns a new obj that needs to be sent to the db
-      const dbPackage = data      
+      const jobInfo = changed(original, update, 'jobInfo')
+      const property = changed(original, update, 'property') 
+      const addresses = changed(original, update, 'addresses') 
+      const roads = changed(original, update, 'roads') 
+      const client = changed(original, update, 'client') 
+      const clientType = changed(original, update, 'clientType') 
+      const clientContact = changed(original, update, 'clientContact') 
+      const owner = changed(original, update, 'owner') 
+      const ownerContact = changed(original, update, 'ownerContact')
+      const ids = changed(original, update, 'ids') 
+      //one array to add new and one to update existing customers
+      const customersToAdd = []
+      const customersToUpdate = []
+      if (client) {
+        update.ids.client_id ? customersToUpdate.push(client) : customersToAdd.push(client)
+      }
+      if (clientContact) {
+        update.ids.client_contact_id ? customersToUpdate.push(clientContact) : customersToAdd.push(clientContact)
+      }
+      if (owner) {
+        update.ids.owner_id ? customersToUpdate.push(owner) : customersToAdd.push(owner)
+      }
+      if (ownerContact) {
+        update.ids.owner_contact_id ? customersToUpdate.push(ownerContact) : customersToAdd.push(ownerContact)
+      }
+
+      // // return new Promise.all([
+
+      // ]).then 
     // db function
         //add new Prop, Client, (and if) CContact, Owner, OContact
           //if id exists send to update
@@ -61,23 +89,11 @@ app.factory('JobFormFactory', function($http) {
           //return ids
         //create Job and put all Ids + client *********dont do this with dummy data!************
         //send address and road arrays with Prop id
-    })
+    // })
 
   }
 
-  const getChanges = (original, update) => {
-    return new Promise( (resolve, reject) => {
-      const dbPackage = {}
-      for (let item in update) {
-        const isEqual = _.isEqual(original[item], update[item])
-        if (!isEqual) {
-          dbPackage[`${item}`] = update[item]
-        } 
-      }
-      resolve(dbPackage)
-    })
-  }
-
+  const changed = (o, u, key) => _.isEqual(o[`${key}`], u[`${key}`]) ? null : u[`${key}`] 
 
   factory.createJob(defaultJob, newJob)
 
