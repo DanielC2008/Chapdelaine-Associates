@@ -86,18 +86,14 @@ router.post('/api/addNewCustomer', ({body : {dbObj, idType}}, res) => {
 })
 
 router.post('/api/updateCustomer', ({body: {dbObj, id}}, res) => {
-  //find id if dont have it
-  console.log('updateCustomer', dbObj)
-  console.log('id', id)
-  res.send()
-  // getConnectTableIds(dbObj).then( data => {
-  //   let polishedObj = data.obj
-  //   knex('Customers')
-  //   .update(polishedObj)
-  //   .where(id)
-  //   .then( () => res.send())
-  //   .catch( err => console.log(err))        
-  // })
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Customers')
+    .update(polishedObj)
+    .where({customer_id: id})
+    .then( () => res.send())
+    .catch( err => console.log(err))        
+  })
 })
 
 const getConnectTableIds = obj => {

@@ -59,7 +59,6 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
     const client = changed(original, update, 'client') 
     const clientType = changed(original, update, 'clientType') 
     const clientContact = changed(original, update, 'clientContact') 
-    console.log('clientContact', clientContact)
     const owner = changed(original, update, 'owner') 
     const ownerContact = changed(original, update, 'ownerContact')
     const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}

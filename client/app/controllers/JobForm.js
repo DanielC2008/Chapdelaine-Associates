@@ -170,7 +170,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
               ToastFactory.toastSuccess(msg)
               $scope.job.clientContact = dbPackage.dbObj
               $scope.clientContactSet = true
-              $scope.job.ids.clientContact_id = dbPackage.customer_id.customer_id
+              $scope.job.ids.client_contact_id = dbPackage.customer_id.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
@@ -239,7 +239,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
               ToastFactory.toastSuccess(msg)
               $scope.job.ownerContact = dbPackage.dbObj
               $scope.ownerContactSet = true
-              $scope.job.ids.ownerContact_id = dbPackage.customer_id.customer_id
+              $scope.job.ids.owner_contact_id = dbPackage.customer_id.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
