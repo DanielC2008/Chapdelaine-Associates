@@ -72,30 +72,30 @@ router.post('/api/getFullCustomerById', ({body: {customer_id}}, res) => {
 // })
 
 router.post('/api/addNewCustomer', ({body : {dbObj, idType}}, res) => {
-  let obj = {}
-  let id = 76
-  obj[`${idType}`] = id 
-  res.send(obj)
-  // getConnectTableIds(body[0]).then( data => {
-  //   let polishedObj = data.obj
-  //   knex('Customers')
-  //   .returning('representative_id')
-  //   .insert(polishedObj)
-  //   .then( data => {
-  //     console.log(data)
-  //     res.send()
-  //   }
-  // }).catch( err => console.log(err))
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Customers')
+    .returning('customer_id')
+    .insert(polishedObj)
+    .then( data => {
+      let obj = {}
+      obj[`${idType}`] = data[0] 
+      res.send(obj)
+    }).catch( err => console.log(err))
+  }).catch( err => console.log(err))
 })
 
 router.post('/api/updateCustomer', ({body: {dbObj, id}}, res) => {
+  //find id if dont have it
+  console.log('updateCustomer', dbObj)
+  console.log('id', id)
   res.send()
   // getConnectTableIds(dbObj).then( data => {
   //   let polishedObj = data.obj
   //   knex('Customers')
   //   .update(polishedObj)
-  //   .where(representative_id)
-  //   .then( () => res.send({msg: 'Successfully updated Job!'}))
+  //   .where(id)
+  //   .then( () => res.send())
   //   .catch( err => console.log(err))        
   // })
 })

@@ -4,6 +4,53 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
 
   const factory = {}
 
+   const defaultJob = {
+    jobInfo: {
+      job_status: 'New',
+      job_number: null,
+      job_type: null
+    },
+    property: {
+      primary_address: 'yooo'
+    },
+    addresses : [],
+    roads: [],
+    client: {},
+    clientType: {},
+    clientContact: {},
+    owner: {},
+    ownerContact: {},
+    ids: {}
+  }
+
+  const newJob = {
+    jobInfo: {
+      job_status: 'Pending',
+      job_number: -118,
+      job_type: 'Pin'
+    },
+    property: {
+      primary_address: 'ooop'
+    },
+    addresses : [],
+    roads: ['1223 smelly rd', '144 cashmoney st.'],
+    client: {
+      first_name: 'Dan',
+      last_name: 'odddd',
+    },
+    clientType: {
+      client_type: 'Owner'
+    },
+    clientContact: {},
+    owner: {},
+    ownerContact: {
+      first_name: 'willy'
+    },
+    ids: {
+      owner_contact_id: 123
+    }
+  }
+
   factory.createJob = (original, update) => {
     let jobNumber = null
     //function to check if items on a job were changed -- this can be used by the update function as well
@@ -12,6 +59,7 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
     const client = changed(original, update, 'client') 
     const clientType = changed(original, update, 'clientType') 
     const clientContact = changed(original, update, 'clientContact') 
+    console.log('clientContact', clientContact)
     const owner = changed(original, update, 'owner') 
     const ownerContact = changed(original, update, 'ownerContact')
     const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
@@ -35,7 +83,7 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
       update.ids.client_contact_id ? customersToUpdate.push({customer: clientContact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: clientContact, idType: 'client_contact_id'})
     }
     if (owner) {
-      update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner'})
+      update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner_id'})
     }
     if (ownerContact) {
       update.ids.owner_contact_id ? customersToUpdate.push({customer: ownerContact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: ownerContact, idType: 'owner_contact_id'})
@@ -46,8 +94,8 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
       DBFactory.addNew({table: 'Properties', dbObj: property}).then( ({data}) => {
         ids.property_id = data.property_id
       }).catch( err => Promise.reject(err)),
-      //if id exists send to update
-      updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)),
+      //if client exists send to update //FIXXXXXXXXXXXXXXXXX
+      updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)), //id come back if not already on job
       //if not send to add new
       addNewCustomers(customersToAdd).then( data => {
         //add new ids to id obj
@@ -55,6 +103,7 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
       }).catch( err => Promise.reject(err))
     ]).then( () => {
       let jobObj = Object.assign({}, jobInfo, clientType, ids)
+        console.log('jobObj', jobObj)
       Promise.all([
         //create Job and put all Ids + client
         DBFactory.addNew({table: 'Jobs', dbObj: jobObj}).then( ({data:{job_number}}) => jobNumber = job_number).catch( err => Promise.reject(err)),
@@ -62,7 +111,8 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
         addAddressesToProp(newAddresses, ids.property_id).then( data => {}).catch( err => Promise.reject(err)),
         addRoadsToProp(newRoads, ids.property_id).then( data => {}).catch( err => Promise.reject(err))
       ]).then( () => {
-        JobFactory.goToJobPage(jobNumber)
+        console.log('ya did it', jobNumber)
+        // JobFactory.goToJobPage(jobNumber)
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
 
@@ -73,7 +123,7 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
   const addNewCustomers = customersToAdd => {
     return new Promise( (resolve, reject) => {
       Promise.all(customersToAdd.map( customer => {
-        let dbPackage = {table: 'Customers', dbObj: customer, idType: customer.idType}
+        let dbPackage = {table: 'Customers', dbObj: customer.customer, idType: customer.idType}
         return DBFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
@@ -105,6 +155,8 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
+
+  // factory.createJob(defaultJob, newJob)
 
   return factory
 })

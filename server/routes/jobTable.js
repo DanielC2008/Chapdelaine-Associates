@@ -8,49 +8,63 @@ const { validJob } = require('../validation/validJob')
 
 const locateStatusId = status => {
   return new Promise( (resolve, reject) => {
-    if (status === undefined) {
-      resolve()
-    } else { 
-      knex('Job_Statuses')
-      .select('job_status_id')
-      .where({job_status: status})
-      .then( data => resolve(data[0])).catch( err => console.log('err', err))
-    }
+    knex('Job_Statuses')
+    .select('job_status_id')
+    .where({job_status: status})
+    .then( data => resolve(data[0])).catch( err => console.log('err', err))
+  })
+}
+
+const locateClientTypeId = type => {
+  return new Promise( (resolve, reject) => {
+    knex('Client_Types')
+    .select('client_type_id')
+    .where({client_type: type})
+    .then( data => resolve(data[0])).catch( err => console.log('err', err))
   })
 }
 
 router.post('/api/createNewJob', ({body: {dbObj}}, res) => {
-  console.log('dbObj', dbObj)
-  res.send({job_number: 5009})
-  // const errors = validJob.validate(dbObj)
-  // if (errors[0]) {  //------------------------------------checks each type
-  //   let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-  //   res.status(400).send(msg)
-  // } else {
-  //   knex('Jobs')
-        //returning job_number
-  //   .insert(dbObj)
-  //   .then( () => res.send({msg:'Success'}))
-  //   .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
-  // }
+  let job_types = dbObj.job_type
+  delete dbObj.job_type
+  Promise.all([
+    locateStatusId(dbObj.job_status).then(data => {
+      delete dbObj.job_status
+      dbObj.job_status_id = data.job_status_id
+    }).catch( err => console.log('err', err)),
+    locateClientTypeId(dbObj.client_type).then(data => {
+      delete dbObj.client_type
+      dbObj.client_type_id = data.client_type_id
+    }).catch( err => console.log('err', err))
+  ]).then( () => {
+    knex('Jobs')
+    .returning('job_number') 
+    .insert(dbObj)
+    .then( data => {
+      //add job_type
+      //function to find all jobtype ids adn put them in array
+      //funtion takes array plus job_id, loop over array and put both ids on table
+      res.send({job_number: data[0]})
+    }).catch( err => console.log(err))
+  }).catch( err => console.log('err', err))
 })
 
 router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {
-  //finds status id
-  locateStatusId(jobObj.job_status) 
-  .then( data => {
-    //if actually changing status id manipulate jobObj 
-    let job_status_id = data ? data.job_status_id : null
-    if (job_status_id) {
-      jobObj.job_status_id = job_status_id
-      delete jobObj.job_status 
-    }
-    knex('Jobs')
-    .returning('job_number')
-    .update(jobObj)
-    .where({job_number: currJobNum})
-    .then( data => res.send({msg: 'Success', job_number: data[0]})).catch( err => res.send({msg: err}))
-  }).catch( err => console.log('err', err))
+  // //finds status id
+  // locateStatusId(jobObj.job_status) 
+  // .then( data => {
+  //   //if actually changing status id manipulate jobObj 
+  //   let job_status_id = data ? data.job_status_id : null
+  //   if (job_status_id) {
+  //     jobObj.job_status_id = job_status_id
+  //     delete jobObj.job_status 
+  //   }
+  //   knex('Jobs')
+  //   .returning('job_number')
+  //   .update(jobObj)
+  //   .where({job_number: currJobNum})
+  //   .then( data => res.send({msg: 'Success', job_number: data[0]})).catch( err => res.send({msg: err}))
+  // }).catch( err => console.log('err', err))
 })
 
 router.post('/api/setNewTab', ({body:{jobNumber, showTab}, session}, res) => {

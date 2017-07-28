@@ -59,17 +59,13 @@ router.get('/api/getRoadsForSearch', ({body}, res) => {
 
 
 router.post('/api/addNewPropertyToJob', ({body: {dbObj}}, res) => {
-  // console.log('dbObj', dbObj)
-  res.send({property_id: 227})
-  // getConnectTableIds(dbObj).then( data => {
-  //   let polishedObj = data.obj
-  //   let address_id = data.obj.primary_address_id  ? data.obj.primary_address_id : null
-  //   let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
-  //   knex('Properties')
-  //   .returning('property_id')
-  //   .insert(polishedObj)
-  //   .then( data => res.send(data[0])).catch( err => console.log(err))
-  // }).catch( err => console.log(err))
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Properties')
+    .returning('property_id')
+    .insert(polishedObj)
+    .then( data => res.send({property_id: data[0]})).catch( err => console.log(err))
+  }).catch( err => console.log(err))
 })
 
 router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
@@ -161,6 +157,7 @@ const addAddress = (address_id, property_id) => {
 
 //this function adds the property and road id to Properties_Roads if this combo doesn't already exist
 const addRoad = (road_id, property_id) => {
+  console.log('road_id', road_id)
   return new Promise( (resolve, reject) => {
     if (road_id) {
       knex('Properties_Roads')
