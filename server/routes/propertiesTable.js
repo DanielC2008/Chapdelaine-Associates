@@ -93,12 +93,15 @@ router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
 })
 
 router.post('/api/getAddressesOnProp', ({body:{ property_id }}, res) => {
+  console.log('property_id', property_id)
   knex('Properties')
   .select('Addresses.address')
   .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
   .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
   .whereIn('Properties.property_id', property_id)
-  .then( data => res.send(data))
+  .then( data => {
+    console.log('data', data)
+    res.send(data)})
   .catch(err => console.log('err', err))
 })
 
@@ -113,8 +116,11 @@ router.post('/api/getRoadsOnProp', ({body:{ property_id }}, res) => {
 })
 
 router.post('/api/addSecondaryAddress', ({body: {address, property_id}}, res) => {
+  console.log('address', address)
+  console.log('property_id', property_id)
   locateOrCreate.address(address).then( data => { 
     let address_id = data
+    console.log('address_id', address_id)
     addAddress(address_id, property_id).then( () => res.send({})).catch(err => console.log(err))
   })
 })
@@ -138,6 +144,7 @@ const addAddress = (address_id, property_id) => {
       .where({address_id: address_id})
       .andWhere({property_id: property_id})
       .then( exists => {
+        console.log('exists', exists)
         //if these exist on Properties address. dont create again
         if (exists[0]) { 
           resolve() 

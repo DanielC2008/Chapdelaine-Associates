@@ -124,6 +124,7 @@ module.exports = {
   },
 
   address: address => {
+    console.log('address', address)
     return new Promise( (resolve, reject) => {
       if(!address) { 
         resolve(null) 
@@ -134,6 +135,7 @@ module.exports = {
         .select('address_id')
         .where('address', address)
         .then( data => {
+          console.log('address exists data', data)
           if (data[0]) {
             resolve(data[0].address_id)
             reject(err => console.log('err', err))
@@ -143,6 +145,7 @@ module.exports = {
             .returning('address_id')
             .insert({address: address})
             .then( data => {
+              console.log('address  new data', data)
               resolve(data[0])
               reject(err => console.log('err', err))
             })

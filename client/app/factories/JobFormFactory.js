@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFormFactory', function(DBFactory, JobFactory) {
+app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
 
   const factory = {}
 
@@ -93,8 +93,8 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
       DBFactory.addNew({table: 'Properties', dbObj: property}).then( ({data}) => {
         ids.property_id = data.property_id
       }).catch( err => Promise.reject(err)),
-      //if client exists send to update //FIXXXXXXXXXXXXXXXXX
-      updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)), //id come back if not already on job
+      //if client exists send to update 
+      updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)), 
       //if not send to add new
       addNewCustomers(customersToAdd).then( data => {
         //add new ids to id obj
@@ -110,8 +110,7 @@ app.factory('JobFormFactory', function(DBFactory, JobFactory) {
         addAddressesToProp(newAddresses, ids.property_id).then( data => {}).catch( err => Promise.reject(err)),
         addRoadsToProp(newRoads, ids.property_id).then( data => {}).catch( err => Promise.reject(err))
       ]).then( () => {
-        console.log('ya did it', jobNumber)
-        // JobFactory.goToJobPage(jobNumber)
+        $mdDialog.hide(jobNumber)
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
 

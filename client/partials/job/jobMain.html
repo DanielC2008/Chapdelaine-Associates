@@ -7,49 +7,49 @@
       <div id="Items" class="col s10">
 
         <div class="row">
-          <div id="Main">
+          <div id="client">
             <div class="col s6">
               <div class="row">
-                Client's Name: {{Main.first_name}} {{Main.middle_name}} {{Main.last_name}} 
-                <span ng-if='Main'>({{Main.client_type}})</span>
+                Client's Name: {{client.first_name}} {{client.middle_name}} {{client.last_name}} 
+                <span ng-if='client'>({{client.client_type}})</span>
               </div>
               <div class="row">
-                Mailing Address: {{Main.address}}
+                Mailing Address: {{client.address}}
               </div>
               <div class="row">
-                City: {{Main.city}} State: {{Main.state}} Zip: {{Main.zip_code}} 
+                City: {{client.city}} State: {{client.state}} Zip: {{client.zip_code}} 
               </div>
               <div class="row">
-                 County: {{Main.county}}
+                 County: {{client.county}}
               </div>
               <div class="row">
-                Mobile Phone: {{Main.mobile_phone}}
+                Mobile Phone: {{client.mobile_phone}}
               </div>
               <div class="row">
-                 Home Phone: {{Main.home_phone}}
+                 Home Phone: {{client.home_phone}}
               </div>
               <div class="row">
-                Email: {{Main.email}} 
+                Email: {{client.email}} 
               </div>
             </div>
             <div class="col s6">
               <div class="row">
-                Contact: {{Main.Rep.first_name}} {{Main.Rep.middle_name}} {{Main.Rep.last_name}}
+                Contact: {{clientContact.first_name}} {{clientContact.middle_name}} {{clientContact.last_name}}
               </div>
               <div class="row">
-                Mobile Phone: {{Main.Rep.mobile_phone}}
+                Mobile Phone: {{clientContact.mobile_phone}}
               </div>
               <div class="row">
-                Business Phone: {{Main.Rep.business_phone}}
+                Business Phone: {{clientContact.business_phone}}
               </div>
               <div class="row">
-                Email: {{Main.Rep.email}}
+                Email: {{clientContact.email}}
               </div>
               <div class="row">
-                Company Name: {{Main.Rep.company_name}}
+                Company Name: {{clientContact.company_name}}
               </div>
               <div class="row">
-                Company Address: {{Main.Rep.company_address}}
+                Company Address: {{clientContact.company_address}}
               </div>
             </div>
           </div>
@@ -59,11 +59,16 @@
           <div id="PropTitle">
             <div class="col s12">
               <div class="row">
-                Owner's Name: {{Owner.first_name}} {{Owner.middle_name}} {{Owner.last_name}} 
+                <div>
+                  Owner's Name: {{owner.first_name}} {{owner.middle_name}} {{owner.last_name}} 
+                </div>
+                <div>
+                  Owner Contact Name: {{ownerContact.first_name}} {{ownerContact.middle_name}} {{ownerContact.last_name}} 
+                </div>
               </div>
               <div class="row">
                 <div class="col s4" ng-hide="JM.allAddresses">
-                  Property Address: {{Property.address}}
+                  Property Address: {{property.primary_address}}
                 </div>
                 <div class="col s4" ng-show="JM.allAddresses">
                   <div ng-repeat="address in JM.allAddresses">
@@ -71,13 +76,13 @@
                   </div>
                 </div>
                 <button class="button btn col s2" 
-                  ng-click="JM.allAddresses ? JM.hideAddresses() : JM.showAddresses(Property.property_id)">
+                  ng-click="JM.allAddresses ? JM.hideAddresses() : JM.showAddresses(property.property_id)">
                   {{JM.allAddresses ? 'Show Less' : 'Show All'}} 
                 </button>
               </div> 
               <div class="row">
                 <div class="col s4" ng-hide="JM.allRoads">
-                  Property Road: {{Property.road}}
+                  Property Road: {{property.primary_road}}
                 </div>
                 <div class="col s4" ng-show="JM.allRoads">
                   <div ng-repeat="road in JM.allRoads">
@@ -85,42 +90,42 @@
                   </div>
                 </div>
                 <button class="button btn col s2" 
-                  ng-click="JM.allRoads ? JM.hideRoads() : JM.showRoads(Property.property_id)">
+                  ng-click="JM.allRoads ? JM.hideRoads() : JM.showRoads(property.property_id)">
                   {{JM.allRoads ? 'Show Less' : 'Show All'}} 
                 </button>
               </div> 
             </div>  
           </div>
-          <div id="Property">
+          <div id="property">
             <div class="col s6">
               <div class="row">
-                City: {{Property.city}} 
+                City: {{property.city}} 
               </div>
               <div class="row">
-                State: {{Property.state}} Zip: {{Property.zip_code}}  
+                State: {{property.state}} Zip: {{property.zip_code}}  
               </div>
               <div class="row">
-                County {{Property.county}}
+                County {{property.county}}
               </div>
               <div class="row">
-                Acrage: {{Property.acres}}
+                Acrage: {{property.acres}}
               </div>
               <div class="row">
-                Notes: {{Property.notes}} 
+                Notes: {{property.notes}} 
               </div>
             </div>
             <div class="col s6">
               <div class="row">
-                Subdivision: {{Property.sub_division}} Lot Number: {{Property.lot_number}}
+                Subdivision: {{property.sub_division}} Lot Number: {{property.lot_number}}
               </div>
               <div class="row">
-                Platbook: {{Property.plat_book}} Page: {{Property.plat_page}}
+                Platbook: {{property.plat_book}} Page: {{property.plat_page}}
               </div>
               <div class="row">
-                Property Map: {{Property.property_map}} Parcel: {{Property.parcel_number}}
+                Property Map: {{property.property_map}} Parcel: {{property.parcel_number}}
               </div>
               <div class="row">
-                Deedbook: {{Property.deed_book}} Page: {{Property.deed_page}}
+                Deedbook: {{property.deed_book}} Page: {{property.deed_page}}
               </div>
             </div>
           </div>

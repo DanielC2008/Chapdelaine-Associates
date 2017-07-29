@@ -5,7 +5,9 @@ app.controller('JobMain', function($scope, PropertyFactory) {
 
   JMScope.showAddresses = property_id => {
     PropertyFactory.getAddressesOnProp(property_id)
-    .then( ({data}) => JMScope.allAddresses = data)
+    .then( ({data}) => {
+      console.log('data', data)
+      JMScope.allAddresses = data})
     .catch( err => console.log('err', err))
   }
 
