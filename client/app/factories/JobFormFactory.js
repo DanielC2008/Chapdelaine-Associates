@@ -64,12 +64,12 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
     const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
     const newAddresses = update.addresses.map( address => {
       if (!original.addresses.includes(address)) {
-        return address
+        return address.address
       }
     })
     const newRoads = update.roads.map( road => {
       if (!original.roads.includes(road)) {
-        return road
+        return road.road
       }
     })
     //one array to add new and one to update existing customers
@@ -138,14 +138,15 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
 
   const addAddressesToProp = (newAddresses, property_id) => {
     return new Promise( (resolve, reject) => {
-      Promise.all(newAddresses.map( addresses => {
-        let dbPackage = {table: 'Addresses', address: addresses, property_id: property_id}
+      Promise.all(newAddresses.map( address => {
+        let dbPackage = {table: 'Addresses', address: address, property_id: property_id}
         return DBFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
 
   const addRoadsToProp = (newRoads, property_id) => {
+    console.log('newRoads', newRoads)
     return new Promise( (resolve, reject) => {
       Promise.all(newRoads.map( road => {
         let dbPackage = {table: 'Roads', road: road, property_id: property_id}
