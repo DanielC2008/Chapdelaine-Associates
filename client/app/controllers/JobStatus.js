@@ -2,26 +2,6 @@
 
 app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory, $mdDialog, $route) {
   let JSscope = this
-   // const submitJobStatus = () => $scope.statusSet(JSscope.jobInfo)
-  // const submitJobStatus = () => {
-  //   if (JSscope.currStatus === 'New') {
-  //     JobFactory.createNewJob($scope.Job)
-  //       .then( ({data}) => {
-  //         ToastFactory.toastSuccess(data.msg)
-  //         $mdDialog.hide()
-  //         JobFactory.goToJobPage($scope.Job.job_number)
-  //       })
-  //       .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
-  //   } else {
-  //     JobFactory.updateJobStatus({jobObj: $scope.Job, currJobNum: $scope.jobInfo.jobNumber})
-  //       .then( ({data}) => {  
-  //         ToastFactory.toastSuccess(data.msg)
-  //         $mdDialog.hide()
-  //         $scope.jobInfo.jobNumber == data.job_number ? $route.reload() : JobFactory.goToJobPage(data.job_number)
-  //       })
-  //       .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
-  //   }
-  // }
 
   const addStartDate = () => $scope.job.jobInfo.start_date = new Date()
 

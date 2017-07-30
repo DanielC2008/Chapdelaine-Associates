@@ -38,8 +38,8 @@
       <div class="col s2">Job Status: {{jobInfo.on_hold ? 'Hold' : jobInfo.job_status}}</div>
       <div class="col s2">Date Started: {{jobInfo.start_date | date : 'mediumDate' : timeZoneOffset}}</div>
       <div class="col s2">Date Completed: {{jobInfo.complete_date | date : 'mediumDate' : timeZoneOffset}}</div>
-      <div class="col s2">Last Accessed: {{jobInfo.last_accessed | date : 'medium'}}</div>
-      <div class="col s2">Target Date: {{jobInfo.target_date | date : 'mediumDate'}}</div>
+      <div class="col s2">Last Accessed: {{jobInfo.last_accessed | date : 'medium' : timeZoneOffset}}</div>
+      <div class="col s2">Target Date: {{jobInfo.target_date | date : 'mediumDate' : timeZoneOffset}}</div>
     </div>
 
     <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">
