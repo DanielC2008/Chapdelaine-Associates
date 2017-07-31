@@ -155,7 +155,15 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         //   propertyId = data[0].property_id
         // }
         job.property = data[0]
-      }).catch(err => console.log('err', err))
+      }).catch(err => console.log('err', err)),
+
+      knex('Jobs')
+        .select('Job_Types.job_type')
+        .join('Jobs_Job_Types', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
+        .join('Job_Types', 'Jobs_Job_Types.job_type_id', 'Job_Types.job_type_id')
+        .where('Jobs.job_number', job_number)
+        .then(data => job.job_types = data.map( type => type.job_type))
+        .catch(err => console.log('err', err))
 
     // knex('Estimates')
     //     .select(
@@ -215,14 +223,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   ]) 
   .then( () => {
     // return Promise.all([
-
-    //   knex('Jobs') ///////////////////////////////move up ^
-    //     .select('Job_Types.job_type')
-    //     .join('Jobs_Job_Types', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
-    //     .join('Job_Types', 'Jobs_Job_Types.job_type_id', 'Job_Types.job_type_id')
-    //     .where('Jobs.job_id', jobId)
-    //     .then(data => jobMain.Job.job_types = data.map( type => type.job_type))
-    //     .catch(err => console.log('err', err)),
 
     //   knex('Representatives')
     //     .select(

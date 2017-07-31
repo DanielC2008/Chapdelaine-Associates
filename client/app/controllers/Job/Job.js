@@ -34,6 +34,8 @@ app.controller('Job', function($scope, $location, JobFactory) {
     $scope.clientContact = data.client_contact
     $scope.owner = data.owner
     $scope.ownerContact = data.owner_contact
+    $scope.job_types = data.job_types
+    console.log('$scope.job_types', $scope.job_types)
     // $scope.Estimates = data.Estimates
     // $scope.EstimateDetails = data.EstimateDetails
     // $scope.Invoices = data.Invoices
