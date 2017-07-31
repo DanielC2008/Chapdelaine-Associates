@@ -1,8 +1,8 @@
 'use strict'
 
-app.controller('UpdateStatus', function($scope, jobInfo) { 
+app.controller('UpdateStatus', function($scope, job_info) { 
   let US = this
   $scope.tableForDB ='Jobs' //---------------for getMaxNumber on RN
-  $scope.jobInfo = jobInfo  //---setting current status
+  $scope.job_info = job_info  //---setting current status
 
 })

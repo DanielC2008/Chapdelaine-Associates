@@ -10,46 +10,46 @@
           <div id="client">
             <div class="col s6">
               <div class="row">
-                Client's Name: {{client.first_name}} {{client.middle_name}} {{client.last_name}} 
-                <span ng-if='client'>({{client.client_type}})</span>
+                Client's Name: {{job.client.first_name}} {{job.client.middle_name}} {{job.client.last_name}} 
+                <span ng-if='client'>({{job.client.client_type}})</span>
               </div>
               <div class="row">
-                Mailing Address: {{client.address}}
+                Mailing Address: {{job.client.address}}
               </div>
               <div class="row">
-                City: {{client.city}} State: {{client.state}} Zip: {{client.zip_code}} 
+                City: {{job.client.city}} State: {{job.client.state}} Zip: {{job.client.zip_code}} 
               </div>
               <div class="row">
-                 County: {{client.county}}
+                 County: {{job.client.county}}
               </div>
               <div class="row">
-                Mobile Phone: {{client.mobile_phone}}
+                Mobile Phone: {{job.client.mobile_phone}}
               </div>
               <div class="row">
-                 Home Phone: {{client.home_phone}}
+                 Home Phone: {{job.client.home_phone}}
               </div>
               <div class="row">
-                Email: {{client.email}} 
+                Email: {{job.client.email}} 
               </div>
             </div>
             <div class="col s6">
               <div class="row">
-                Contact: {{clientContact.first_name}} {{clientContact.middle_name}} {{clientContact.last_name}}
+                Contact: {{job.client_contact.first_name}} {{job.client_contact.middle_name}} {{job.client_contact.last_name}}
               </div>
               <div class="row">
-                Mobile Phone: {{clientContact.mobile_phone}}
+                Mobile Phone: {{job.client_contact.mobile_phone}}
               </div>
               <div class="row">
-                Business Phone: {{clientContact.business_phone}}
+                Business Phone: {{job.client_contact.business_phone}}
               </div>
               <div class="row">
-                Email: {{clientContact.email}}
+                Email: {{job.client_contact.email}}
               </div>
               <div class="row">
-                Company Name: {{clientContact.company_name}}
+                Company Name: {{job.client_contact.company_name}}
               </div>
               <div class="row">
-                Company Address: {{clientContact.company_address}}
+                Company Address: {{job.client_contact.company_address}}
               </div>
             </div>
           </div>
@@ -60,37 +60,37 @@
             <div class="col s12">
               <div class="row">
                 <div>
-                  Owner's Name: {{owner.first_name}} {{owner.middle_name}} {{owner.last_name}} 
+                  Owner's Name: {{job.owner.first_name}} {{job.owner.middle_name}} {{job.owner.last_name}} 
                 </div>
                 <div>
-                  Owner Contact Name: {{ownerContact.first_name}} {{ownerContact.middle_name}} {{ownerContact.last_name}} 
+                  Owner Contact Name: {{job.owner_contact.first_name}} {{job.owner_contact.middle_name}} {{job.owner_contact.last_name}} 
                 </div>
               </div>
               <div class="row">
                 <div class="col s4" ng-hide="JM.allAddresses">
-                  Property Address: {{property.primary_address}}
+                  Property Address: {{job.property.primary_address}}
                 </div>
                 <div class="col s4" ng-show="JM.allAddresses">
                   <div ng-repeat="address in JM.allAddresses">
-                    Address: {{address.address}}
+                    Address: {{job.address.address}}
                   </div>
                 </div>
                 <button class="button btn col s2" 
-                  ng-click="JM.allAddresses ? JM.hideAddresses() : JM.showAddresses(property.property_id)">
+                  ng-click="JM.allAddresses ? JM.hideAddresses() : JM.showAddresses(job.property.property_id)">
                   {{JM.allAddresses ? 'Show Less' : 'Show All'}} 
                 </button>
               </div> 
               <div class="row">
                 <div class="col s4" ng-hide="JM.allRoads">
-                  Property Road: {{property.primary_road}}
+                  Property Road: {{job.property.primary_road}}
                 </div>
                 <div class="col s4" ng-show="JM.allRoads">
                   <div ng-repeat="road in JM.allRoads">
-                    Road: {{road.road}}
+                    Road: {{job.road.road}}
                   </div>
                 </div>
                 <button class="button btn col s2" 
-                  ng-click="JM.allRoads ? JM.hideRoads() : JM.showRoads(property.property_id)">
+                  ng-click="JM.allRoads ? JM.hideRoads() : JM.showRoads(job.property.property_id)">
                   {{JM.allRoads ? 'Show Less' : 'Show All'}} 
                 </button>
               </div> 
@@ -99,33 +99,33 @@
           <div id="property">
             <div class="col s6">
               <div class="row">
-                City: {{property.city}} 
+                City: {{job.property.city}} 
               </div>
               <div class="row">
-                State: {{property.state}} Zip: {{property.zip_code}}  
+                State: {{job.property.state}} Zip: {{job.property.zip_code}}  
               </div>
               <div class="row">
-                County {{property.county}}
+                County {{job.property.county}}
               </div>
               <div class="row">
-                Acrage: {{property.acres}}
+                Acrage: {{job.property.acres}}
               </div>
               <div class="row">
-                Notes: {{property.notes}} 
+                Notes: {{job.property.notes}} 
               </div>
             </div>
             <div class="col s6">
               <div class="row">
-                Subdivision: {{property.sub_division}} Lot Number: {{property.lot_number}}
+                Subdivision: {{job.property.sub_division}} Lot Number: {{job.property.lot_number}}
               </div>
               <div class="row">
-                Platbook: {{property.plat_book}} Page: {{property.plat_page}}
+                Platbook: {{job.property.plat_book}} Page: {{job.property.plat_page}}
               </div>
               <div class="row">
-                Property Map: {{property.property_map}} Parcel: {{property.parcel_number}}
+                Property Map: {{job.property.property_map}} Parcel: {{job.property.parcel_number}}
               </div>
               <div class="row">
-                Deedbook: {{property.deed_book}} Page: {{property.deed_page}}
+                Deedbook: {{job.property.deed_book}} Page: {{job.property.deed_page}}
               </div>
             </div>
           </div>

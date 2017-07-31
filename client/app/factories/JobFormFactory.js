@@ -5,7 +5,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
   const factory = {}
 
    const defaultJob = {
-    jobInfo: {
+    job_info: {
       job_status: 'New',
       job_number: null,
       job_type: null
@@ -16,15 +16,15 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     addresses : [],
     roads: [],
     client: {},
-    clientType: {},
-    clientContact: {},
+    client_type: {},
+    client_contact: {},
     owner: {},
-    ownerContact: {},
+    owner_contact: {},
     ids: {}
   }
 
   const newJob = {
-    jobInfo: {
+    job_info: {
       job_status: 'Pending',
       job_number: -118,
       job_type: 'Pin'
@@ -38,12 +38,12 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       first_name: 'Dan',
       last_name: 'odddd',
     },
-    clientType: {
+    client_type: {
       client_type: 'Owner'
     },
-    clientContact: {},
+    client_contact: {},
     owner: {},
-    ownerContact: {
+    owner_contact: {
       first_name: 'willy'
     },
     ids: {
@@ -55,13 +55,13 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     let jobNumber = null
     let jobId = null
     //function to check if items on a job were changed -- this can be used by the update function as well
-    const jobInfo = changed(original, update, 'jobInfo')
+    const job_info = changed(original, update, 'job_info')
     const property = changed(original, update, 'property') 
     const client = changed(original, update, 'client') 
-    const clientType = changed(original, update, 'clientType') 
-    const clientContact = changed(original, update, 'clientContact') 
+    const client_type = changed(original, update, 'client_type') 
+    const client_contact = changed(original, update, 'client_contact') 
     const owner = changed(original, update, 'owner') 
-    const ownerContact = changed(original, update, 'ownerContact')
+    const owner_contact = changed(original, update, 'owner_contact')
     const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
     const newAddresses = update.addresses.map( address => {
       if (!original.addresses.includes(address)) {
@@ -84,14 +84,14 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     if (client) {
       update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push({customer: client, idType: 'client_id'})
     }
-    if (clientContact) {
-      update.ids.client_contact_id ? customersToUpdate.push({customer: clientContact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: clientContact, idType: 'client_contact_id'})
+    if (client_contact) {
+      update.ids.client_contact_id ? customersToUpdate.push({customer: client_contact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: client_contact, idType: 'client_contact_id'})
     }
     if (owner) {
       update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner_id'})
     }
-    if (ownerContact) {
-      update.ids.owner_contact_id ? customersToUpdate.push({customer: ownerContact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: ownerContact, idType: 'owner_contact_id'})
+    if (owner_contact) {
+      update.ids.owner_contact_id ? customersToUpdate.push({customer: owner_contact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: owner_contact, idType: 'owner_contact_id'})
     }
     //add new Prop, Client, (and if) C_Contact, Owner, O_Contact
     Promise.all([
@@ -107,7 +107,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
         data.forEach( id => ids[`${Object.keys(id)[0]}`] = id[Object.keys(id)[0]])
       }).catch( err => Promise.reject(err))
     ]).then( () => {
-      let jobObj = Object.assign({}, jobInfo, clientType, ids)
+      let jobObj = Object.assign({}, job_info, client_type, ids)
       Promise.all([
         //create Job and put all Ids + client
         DBFactory.addNew({table: 'Jobs', dbObj: jobObj}).then( ({data:{job_id, job_number}}) => {
@@ -115,8 +115,8 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
           jobId = job_id
         }).catch( err => Promise.reject(err)),
         //send address and road arrays with Prop id
-        addAddressesToProp(newAddresses, ids.property_id).then( () => {}).catch( err => Promise.reject(err)),
-        addRoadsToProp(newRoads, ids.property_id).then( () => {}).catch( err => Promise.reject(err))
+        addAddressesToProp(newAddresses, ids.property_id).then().catch( err => Promise.reject(err)),
+        addRoadsToProp(newRoads, ids.property_id).then().catch( err => Promise.reject(err))
       ]).then( () => {
         addJobTypesToJob(newJobTypes, jobId).then( () => {
           $mdDialog.hide(jobNumber)

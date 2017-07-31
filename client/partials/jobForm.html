@@ -5,7 +5,7 @@
 
       <h5 class="col s12">Job info</h5>
       <div class="col s12">
-        Job Status: {{job.jobInfo.on_hold ? 'Hold' : job.jobInfo.job_status}}
+        Job Status: {{job.job_info.on_hold ? 'Hold' : job.job_info.job_status}}
       </div>  
       <div class="col s12" ng-controller="JobStatus as JS">
           <div ng-include="'./partials/jobStatus.html'"></div>
@@ -30,20 +30,20 @@
       </div>
 
       <div class="col s12">
-        Job Number: {{job.jobInfo.job_number > 0 ? job.jobInfo.job_number : 'None' }}
+        Job Number: {{job.job_info.job_number > 0 ? job.job_info.job_number : 'None' }}
       </div>
 
       <div class="col s12">
         <label for="startDate">Start Date:</label>
-        <input ng-disabled='!job.jobInfo.start_date' type="date" name="startDate" ng-model="job.jobInfo.start_date">
+        <input ng-disabled='!job.job_info.start_date' type="date" name="startDate" ng-model="job.job_info.start_date">
       </div>
       <div class="col s12">
         <label for="completeDate">Complete Date:</label>
-        <input  ng-disabled='!job.jobInfo.complete_date' type="date" name="completeDate" ng-model="job.jobInfo.complete_date">
+        <input  ng-disabled='!job.job_info.complete_date' type="date" name="completeDate" ng-model="job.job_info.complete_date">
       </div>
       <div class="col s12">
         <label for="targetDate">Target Date:</label>
-        <input type="date" name="targetDate" ng-model="job.jobInfo.target_date">
+        <input type="date" name="targetDate" ng-model="job.job_info.target_date">
       </div>
 
     </div>
@@ -97,9 +97,9 @@
     <div class="row">
       <div class="col s6"> Client Type: </div>
       <form action="#" class="col s3 offset-s3"> 
-        <input ng-model="job.clientType.client_type" ng-change="clientTypeChange()" type="radio" id="owner" value="Owner" />
+        <input ng-model="job.client_type.client_type" ng-change="clientTypeChange()" type="radio" id="owner" value="Owner" />
         <label for="owner">Owner</label>
-        <input ng-model="job.clientType.client_type" ng-change="clientTypeChange()" type="radio" id="buyer" value="Buyer" />
+        <input ng-model="job.client_type.client_type" ng-change="clientTypeChange()" type="radio" id="buyer" value="Buyer" />
         <label for="buyer">Buyer</label>
       </form>
     </div>
@@ -107,7 +107,7 @@
     <div class="row">
       <div class="col s6">
         Client Contact : 
-        {{clientContactSet ? job.clientContact.last_name : ''}}
+        {{clientContactSet ? job.client_contact.last_name : ''}}
       </div>
       <button class="col s3 offset-s3" ng-click="clientContactSet ? editClientContact() : addClientContact()">
         {{clientContactSet ? 'Edit Client Contact' : 'Add Client Contact'}}
@@ -120,7 +120,7 @@
         {{ownerSet ? job.owner.last_name : ''}}
       </div>
       <button class="col s3 offset-s3" ng-click="ownerSet ? editOwner() : addOwner()" 
-        ng-disabled="job.clientType.client_type !== 'Buyer'">
+        ng-disabled="job.client_type.client_type !== 'Buyer'">
         {{ownerSet ? 'Edit Owner' : 'Add Owner'}}
       </button>
     </div>
@@ -128,10 +128,10 @@
     <div class="row">
       <div class="col s6">
         Owner Contact : 
-        {{ownerContactSet ? job.ownerContact.last_name : ''}}
+        {{ownerContactSet ? job.owner_contact.last_name : ''}}
       </div>
       <button class="col s3 offset-s3" ng-click="ownerContactSet ? editOwnerContact() : addOwnerContact()"
-        ng-disabled="job.clientType.client_type !== 'Buyer'">
+        ng-disabled="job.client_type.client_type !== 'Buyer'">
         {{ownerContactSet ? 'Edit Owner Contact' : 'Add Owner Contact'}}
       </button>
     </div>
