@@ -38,14 +38,9 @@ router.post('/api/createNewJob', ({body: {dbObj}}, res) => {
     }).catch( err => console.log('err', err))
   ]).then( () => {
     knex('Jobs')
-    .returning('job_number') 
+    .returning( ['job_id', 'job_number'])
     .insert(dbObj)
-    .then( data => {
-      //add job_type
-      //function to find all jobtype ids adn put them in array
-      //funtion takes array plus job_id, loop over array and put both ids on table
-      res.send({job_number: data[0]})
-    }).catch( err => console.log(err))
+    .then( data => res.send(data[0])).catch( err => console.log(err))
   }).catch( err => console.log('err', err))
 })
 

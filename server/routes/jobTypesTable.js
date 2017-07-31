@@ -6,6 +6,19 @@ const knex = require('knex')(config)
 const router = Router()
 const {validJobType} = require('../validation/validJob')
 
+
+router.post('/api/addJobTypeToJob', ({body: {job_type, job_id}}, res) => { // ensure this doesnt happen twice
+  knex('Job_Types')
+  .select('job_type_id')
+  .where({'job_type': job_type})
+  .then( data => {
+    let job_type_id = data[0].job_type_id
+    knex('Jobs_Job_Types')
+    .insert({job_id: job_id, job_type_id: job_type_id})
+    .then( () => res.send()).catch( err => console.log('err', err))
+  })
+})
+
 router.get('/api/getEnabledJobTypes', (req, res) => {
   knex('Job_Types')
   .where({disabled: false})

@@ -4,6 +4,8 @@ app.factory('JobTypeFactory', function($http, FormFactory) {
 
   const factory = {}
 
+  factory.addJobTypeToJob = dbPackage => $http.post('/api/addJobTypeToJob', dbPackage)
+
   factory.getEnabledJobTypes = () => $http.get('/api/getEnabledJobTypes')
 
   factory.addNewJobType = () => {

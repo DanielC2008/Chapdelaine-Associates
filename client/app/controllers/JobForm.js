@@ -6,8 +6,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     jobInfo: {
       job_status: 'New',
       job_number: null,
-      job_type: null
     },
+    job_types: [],
     property: {},
     addresses : [],
     roads: [],
@@ -55,7 +55,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   const requirements = () => {
     if ($scope.job.jobInfo.job_status === 'New') {
       return 'Please set job status.'
-    } else if ($scope.job.jobInfo.job_type === null) {
+    } else if ($scope.job.jobInfo.job_type < 1) {
       return 'Please set job type.'
     } else if (!$scope.propertySet) {
       return 'Please create a new Property.'
@@ -73,6 +73,12 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   $scope.showCause = cause => $scope.displayCause = cause 
 
   $scope.clientTypeChange = () => $scope.clientTypeSet = true
+
+  $scope.addJobType = type => {
+    if (!$scope.job.job_types.includes(type)) {
+      $scope.job.job_types.push(type)
+    }
+  }
 
 /////////////////////////////////////////PROPERTY/////////////////////////////////////////  
   $scope.addProp = () => { 

@@ -104,8 +104,7 @@ router.post('/api/getAddressesOnProp', ({body:{ property_id }}, res) => {
   .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
   .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
   .whereIn('Properties.property_id', property_id)
-  .then( data => {
-    res.send(data)})
+  .then( data => res.send(data))
   .catch(err => console.log('err', err))
 })
 

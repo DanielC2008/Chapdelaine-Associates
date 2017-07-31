@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
+app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
 
   const factory = {}
 
@@ -53,6 +53,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
 
   factory.createJob = (original, update) => {
     let jobNumber = null
+    let jobId = null
     //function to check if items on a job were changed -- this can be used by the update function as well
     const jobInfo = changed(original, update, 'jobInfo')
     const property = changed(original, update, 'property') 
@@ -70,6 +71,11 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
     const newRoads = update.roads.map( road => {
       if (!original.roads.includes(road)) {
         return road.road
+      }
+    })
+    const newJobTypes = update.job_types.map( type => {
+      if (!original.job_types.includes(type)) {
+        return type
       }
     })
     //one array to add new and one to update existing customers
@@ -102,15 +108,19 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
       }).catch( err => Promise.reject(err))
     ]).then( () => {
       let jobObj = Object.assign({}, jobInfo, clientType, ids)
-        console.log('jobObj', jobObj)
       Promise.all([
         //create Job and put all Ids + client
-        DBFactory.addNew({table: 'Jobs', dbObj: jobObj}).then( ({data:{job_number}}) => jobNumber = job_number).catch( err => Promise.reject(err)),
+        DBFactory.addNew({table: 'Jobs', dbObj: jobObj}).then( ({data:{job_id, job_number}}) => {
+          jobNumber = job_number
+          jobId = job_id
+        }).catch( err => Promise.reject(err)),
         //send address and road arrays with Prop id
-        addAddressesToProp(newAddresses, ids.property_id).then( data => {}).catch( err => Promise.reject(err)),
-        addRoadsToProp(newRoads, ids.property_id).then( data => {}).catch( err => Promise.reject(err))
+        addAddressesToProp(newAddresses, ids.property_id).then( () => {}).catch( err => Promise.reject(err)),
+        addRoadsToProp(newRoads, ids.property_id).then( () => {}).catch( err => Promise.reject(err))
       ]).then( () => {
-        $mdDialog.hide(jobNumber)
+        addJobTypesToJob(newJobTypes, jobId).then( () => {
+          $mdDialog.hide(jobNumber)
+        }).catch( err => console.log('err', err))
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
 
@@ -146,11 +156,19 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog) {
   }
 
   const addRoadsToProp = (newRoads, property_id) => {
-    console.log('newRoads', newRoads)
     return new Promise( (resolve, reject) => {
       Promise.all(newRoads.map( road => {
         let dbPackage = {table: 'Roads', road: road, property_id: property_id}
         return DBFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+      })).then( data => resolve(data)).catch( err => console.log('err', err))
+    })
+  }
+
+  const addJobTypesToJob = (newJobTypes, jobId) => {
+    return new Promise( (resolve, reject) => {
+      Promise.all(newJobTypes.map( job_type => {
+        let dbPackage = {job_type: job_type, job_id: jobId}
+        return JobTypeFactory.addJobTypeToJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }

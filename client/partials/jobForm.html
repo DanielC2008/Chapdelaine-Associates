@@ -11,11 +11,15 @@
           <div ng-include="'./partials/jobStatus.html'"></div>
       </div>
       <div class="row">
-        <div class="col s2">
-          Job Type:
-        </div>
-        <div class="col s4 input-field" ng-if="types" ng-init="material()">
-          <select  ng-model="job.jobInfo.job_type" ng-options="type as type disable when type.notAnOption for type in types"> 
+        <div class="col s6">Job Type:
+          <span ng-repeat="jobType in job.job_types">
+            <span>{{jobType}} <span ng-hide="$index + 1 === job.job_types.length">,</span> </span>
+          </span>
+        </div> 
+      </div>
+      <div class="row">
+        <div class="col s6 input-field" ng-if="types" ng-init="material()">
+          <select  ng-model="jobType" ng-change="addJobType(jobType)" ng-options="type as type disable when type.notAnOption for type in types"> 
             <option value="" label="-- Select option --" disabled selected="selected"> Choose a job type</option>
           </select>
         </div>
@@ -61,7 +65,7 @@
     <div class="row">
       <div class="col s6">Secondary Addresses:
         <span ng-repeat="address in job.addresses">
-        <span>{{address.address}} <span ng-hide="$index + 1 === job.addresses.length">,</span> </span>
+          <span>{{address.address}} <span ng-hide="$index + 1 === job.addresses.length">,</span> </span>
         </span>
       </div>
       <button class="col s3 offset-s3" ng-click="addAddress()">
@@ -72,7 +76,7 @@
     <div class="row">
       <div class="col s6">Secondary Roads:
         <span ng-repeat="road in job.roads">
-        <span>{{road.road}} <span ng-hide="$index + 1 === job.roads.length">,</span> </span>
+          <span>{{road.road}} <span ng-hide="$index + 1 === job.roads.length">,</span> </span>
         </span>
       </div>
       <button class="col s3 offset-s3" ng-click="addRoad()">
