@@ -69,7 +69,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   } 
 
   $scope.showCause = cause => $scope.displayCause = cause 
-  
+
     //customers
       //if client, ensure they cannot send without client
       //just wipe the current customer object, they can choose to add a new one
@@ -130,8 +130,14 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     })
   }
 
-  $scope.removeAddress = () => {
-    let locals = {optionsArr: $scope.job.addresses}
+  $scope.removeAddress = primary => {
+    let optionsArr = $scope.job.addresses.reduce( (arr, address) => {
+      if (address !== primary) {
+        arr.push(address)
+      }
+      return arr
+    },[])
+    let locals = {optionsArr: optionsArr}
     $mdDialog.show({
       locals,
       controller: 'ChooseOne as CO',
@@ -144,7 +150,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     .catch( err => console.log('err', err))
   }
 
- $scope.addRoad = () => {
+  $scope.addRoad = () => {
     PropertyFactory.searchForRoads().then( selected => {
       let road = selected ? selected.value : null
       if (road) {
@@ -159,8 +165,14 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     })
   }
 
-  $scope.removeRoad = () => {
-    let locals = {optionsArr: $scope.job.roads}
+  $scope.removeRoad = primary => {
+    let optionsArr = $scope.job.roads.reduce( (arr, address) => {
+      if (address !== primary) {
+        arr.push(address)
+      }
+      return arr
+    },[])
+    let locals = {optionsArr: optionsArr}
     $mdDialog.show({
       locals,
       controller: 'ChooseOne as CO',

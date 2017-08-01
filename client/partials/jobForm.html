@@ -68,21 +68,25 @@
     <div class="row">
       <div class="col s6">Secondary Addresses:
         <span ng-repeat="address in job.addresses">
-          <span>{{address}} <span ng-hide="$index + 1 === job.addresses.length">,</span> </span>
+          <span ng-if="address !== job.property.primary_address">{{address}} 
+            <span ng-hide="$index + 1 === job.addresses.length">,</span> 
+          </span>
         </span>
       </div>
       <button class="col s3" ng-click="addAddress()">Add Address</button>
-      <button class="col s3" ng-click="removeAddress()">Remove Address</button>
+      <button class="col s3" ng-click="removeAddress(job.property.primary_address)">Remove Address</button>
     </div>
       <!-- ////////////////////////////ROADS//////////////////////////// -->
     <div class="row">
       <div class="col s6">Secondary Roads:
         <span ng-repeat="road in job.roads">
-          <span>{{road}} <span ng-hide="$index + 1 === job.roads.length">,</span> </span>
+          <span ng-if="road !== job.property.primary_road">{{road}} 
+            <span ng-hide="$index + 1 === job.roads.length">,</span> 
+          </span>
         </span>
       </div>
       <button class="col s3" ng-click="addRoad()">Add Road</button>
-      <button class="col s3" ng-click="removeRoad()">Remove Road</button>
+      <button class="col s3" ng-click="removeRoad(job.property.primary_road)">Remove Road</button>
     </div>
     <!-- ////////////////////////////CLIENT//////////////////////////// -->
     <div class="row">
