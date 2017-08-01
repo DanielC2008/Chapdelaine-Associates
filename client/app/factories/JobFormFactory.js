@@ -51,6 +51,69 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     }
   }
 
+  factory.updateJob = (original, update) => {
+    let jobNumber = null
+    let jobId = null
+    const job_info = changed(original, update, 'job_info')
+    const property = changed(original, update, 'property') 
+    const client = changed(original, update, 'client') 
+    const client_type = changed(original, update, 'client_type') 
+    const client_contact = changed(original, update, 'client_contact') 
+    const owner = changed(original, update, 'owner') 
+    const owner_contact = changed(original, update, 'owner_contact')
+    const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
+
+
+    //if job_info changed send
+    //if property changed send
+    //if ids have changed remove (id: null)/update to new ids
+    //if client_type changed to owner 
+      //remove owner and owner rep
+    // to buyer just change in db
+    //if client changed and id changed
+      // update new id only
+    //else if only client changed
+      // send update to curr
+    //if client_contact and id
+      // update new id only
+    //else if only client changed
+      // send
+    //if owner changed and id
+      // update new id only
+    //else if only client changed
+      // send
+    //if owner_contact and id
+      // update new id only
+    //else if only client changed
+      // send
+
+    //to do this make addresses and roads come back at getJob
+    // const newAddresses = update.addresses.map( address => {
+    //   if (!original.addresses.includes(address)) {
+    //     return address.address
+    //   }
+    // })
+    // const newRoads = update.roads.map( road => {
+    //   if (!original.roads.includes(road)) {
+    //     return road.road
+    //   }
+    // })
+
+    //////JobTypes
+    const newJobTypes = update.job_types.reduce( (arr, type) => {
+      if (!original.job_types.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[])
+    const removedJobTypes = original.job_types.reduce( (arr, type) => {
+      if (!update.job_types.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[]) 
+  }  
+
   factory.createJob = (original, update) => {
     let jobNumber = null
     let jobId = null
@@ -119,6 +182,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
         addRoadsToProp(newRoads, ids.property_id).then().catch( err => Promise.reject(err))
       ]).then( () => {
         addJobTypesToJob(newJobTypes, jobId).then( () => {
+          console.log('jobNumber', jobNumber)
           $mdDialog.hide(jobNumber)
         }).catch( err => console.log('err', err))
       }).catch( err => console.log('err', err))

@@ -41,7 +41,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     if (originalJob.job_info.job_status === 'New') {
       JobFormFactory.createJob(defaultJob, $scope.job)
     } else {
-      // JobFormFactory.updateJob(originalJob, $scope.job)
+      JobFormFactory.updateJob(originalJob, $scope.job)
     }
   }
 
@@ -69,6 +69,29 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   $scope.cancel = () => $mdDialog.hide()
 
   $scope.showCause = cause => $scope.displayCause = cause 
+
+  $scope.removeJobType = arr => {
+    let locals = {
+      optionsArr: arr
+    }
+    $mdDialog.show({
+      locals,
+      controller: 'ChooseOne as CO',
+      templateUrl: '/partials/chooseOne.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: true,
+      multiple: true
+    })
+    .then( data => $scope.job.job_types.splice($scope.job.job_types.indexOf(data), 1))
+    .catch( err => console.log('err', err))
+  }
+  //need to create the ability to remove 
+    //jobTypes, address, road
+      //maybe another pop up that allows you to choose one to remove
+    //customers
+      //if client, ensure they cannot send without client
+      //just wipe the current customer object, they can choose to add a new one
+      //let form factory handle the rest
 
   $scope.clientTypeChange = () => $scope.clientTypeSet = true
 
