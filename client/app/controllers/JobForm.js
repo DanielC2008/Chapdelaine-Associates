@@ -37,6 +37,8 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     })  
   }
 
+  $scope.cancel = () => $mdDialog.hide()
+
   const submit = () => {
     if (originalJob.job_info.job_status === 'New') {
       JobFormFactory.createJob(defaultJob, $scope.job)
@@ -66,14 +68,24 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     }
   } 
 
-  $scope.cancel = () => $mdDialog.hide()
-
   $scope.showCause = cause => $scope.displayCause = cause 
+  
+    //customers
+      //if client, ensure they cannot send without client
+      //just wipe the current customer object, they can choose to add a new one
+      //let form factory handle the rest
 
-  $scope.removeJobType = arr => {
-    let locals = {
-      optionsArr: arr
+  $scope.clientTypeChange = () => $scope.clientTypeSet = true
+
+/////////////////////////////////////////JOB TYPES/////////////////////////////////////////  
+  $scope.addJobType = type => {
+    if (!$scope.job.job_types.includes(type)) {
+      $scope.job.job_types.push(type)
     }
+  }
+
+  $scope.removeJobType = () => {
+    let locals = {optionsArr: $scope.job.job_types}
     $mdDialog.show({
       locals,
       controller: 'ChooseOne as CO',
@@ -84,21 +96,6 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     })
     .then( data => $scope.job.job_types.splice($scope.job.job_types.indexOf(data), 1))
     .catch( err => console.log('err', err))
-  }
-  //need to create the ability to remove 
-    //jobTypes, address, road
-      //maybe another pop up that allows you to choose one to remove
-    //customers
-      //if client, ensure they cannot send without client
-      //just wipe the current customer object, they can choose to add a new one
-      //let form factory handle the rest
-
-  $scope.clientTypeChange = () => $scope.clientTypeSet = true
-
-  $scope.addJobType = type => {
-    if (!$scope.job.job_types.includes(type)) {
-      $scope.job.job_types.push(type)
-    }
   }
 
 /////////////////////////////////////////PROPERTY/////////////////////////////////////////  
@@ -117,11 +114,11 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
+/////////////////////////////////////////ADDRESSES/ROADS/////////////////////////////////////////  
   $scope.addAddress = () => {
     PropertyFactory.searchForAddresses().then( selected => {
-      let address = selected ? {address: selected.value} : null
+      let address = selected ? selected.value : null
       if (address) {
-        //could save ids here
         $scope.job.addresses.push(address)
         $scope.$apply()
       } else {
@@ -133,11 +130,24 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     })
   }
 
+  $scope.removeAddress = () => {
+    let locals = {optionsArr: $scope.job.addresses}
+    $mdDialog.show({
+      locals,
+      controller: 'ChooseOne as CO',
+      templateUrl: '/partials/chooseOne.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: true,
+      multiple: true
+    })
+    .then( data => $scope.job.addresses.splice($scope.job.addresses.indexOf(data), 1))
+    .catch( err => console.log('err', err))
+  }
+
  $scope.addRoad = () => {
     PropertyFactory.searchForRoads().then( selected => {
-      let road = selected ? {road: selected.value} : null
+      let road = selected ? selected.value : null
       if (road) {
-        //could save ids here
         $scope.job.roads.push(road)
         $scope.$apply()
       } else {
@@ -148,6 +158,21 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
       }
     })
   }
+
+  $scope.removeRoad = () => {
+    let locals = {optionsArr: $scope.job.roads}
+    $mdDialog.show({
+      locals,
+      controller: 'ChooseOne as CO',
+      templateUrl: '/partials/chooseOne.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: true,
+      multiple: true
+    })
+    .then( data => $scope.job.roads.splice($scope.job.roads.indexOf(data), 1))
+    .catch( err => console.log('err', err))
+  }
+
 
 /////////////////////////////////////////CLIENT/////////////////////////////////////////
   $scope.addClient = () => { 

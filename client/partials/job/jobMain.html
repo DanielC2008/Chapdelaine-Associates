@@ -67,30 +67,30 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col s4" ng-hide="JM.allAddresses">
-                  Property Address: {{job.property.primary_address}}
+                <div class="col s4"  ng-hide="JM.allAddresses">
+                  Primary Address: {{job.property.primary_address}}
                 </div>
-                <div class="col s4" ng-show="JM.allAddresses">
-                  <div ng-repeat="address in JM.allAddresses">
-                    Address: {{job.address.address}}
+                <div class="col s4" ng-show="JM.allAddresses">All Adresses:
+                  <div ng-repeat="address in job.addresses">
+                    {{address}}
                   </div>
                 </div>
                 <button class="button btn col s2" 
-                  ng-click="JM.allAddresses ? JM.hideAddresses() : JM.showAddresses(job.property.property_id)">
+                  ng-click="JM.allAddresses ? JM.allAddresses = false : JM.allAddresses = true">
                   {{JM.allAddresses ? 'Show Less' : 'Show All'}} 
                 </button>
               </div> 
               <div class="row">
-                <div class="col s4" ng-hide="JM.allRoads">
-                  Property Road: {{job.property.primary_road}}
+                <div class="col s4"  ng-hide="JM.allRoads">
+                  Primary Road: {{job.property.primary_road}}
                 </div>
-                <div class="col s4" ng-show="JM.allRoads">
-                  <div ng-repeat="road in JM.allRoads">
-                    Road: {{job.road.road}}
+                <div class="col s4" ng-show="JM.allRoads">All Roads:
+                  <div ng-repeat="road in job.roads">
+                    {{road}}
                   </div>
                 </div>
                 <button class="button btn col s2" 
-                  ng-click="JM.allRoads ? JM.hideRoads() : JM.showRoads(job.property.property_id)">
+                  ng-click="JM.allRoads ? JM.allRoads = false : JM.allRoads = true">
                   {{JM.allRoads ? 'Show Less' : 'Show All'}} 
                 </button>
               </div> 

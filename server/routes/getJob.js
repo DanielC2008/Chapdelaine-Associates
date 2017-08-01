@@ -162,7 +162,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .join('Job_Types', 'Jobs_Job_Types.job_type_id', 'Job_Types.job_type_id')
         .where('Jobs.job_number', job_number)
         .then(data => job.job_types = data.map( type => type.job_type))
-        .catch(err => console.log('err', err))
+        .catch(err => console.log('err', err)),
+
+
 
     // knex('Estimates')
     //     .select(
@@ -221,54 +223,27 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
   ]) 
   .then( () => {
-    // return Promise.all([
+    return Promise.all([
 
-    //   knex('Representatives')
-    //     .select(
-    //       'Clients.client_id',
-    //       'Representatives.representative_id',
-    //       'Representatives.first_name',
-    //       'Representatives.middle_name',
-    //       'Representatives.last_name'
-    //     )
-    //     .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
-    //     .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
-    //     .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
-    //     .where('Jobs.job_number', job_number)
-    //     .whereIn('Clients.client_id', allClientIds)
-    //     .then(data => jobMain.Representatives = data)
-    //     .catch(err => console.log('err', err)),
+      knex('Properties')
+        .select('Addresses.address')
+        .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
+        .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
+        .where('Properties.property_id', job.property.property_id)
+        .then( data => job.addresses = data.map( address => address.address ))
+        .catch(err => console.log('err', err)),
 
-    //   knex('Representatives')
-    //     .select(
-    //       'Clients.client_id',
-    //       'Representatives.representative_id',
-    //       'Representatives.first_name',
-    //       'Representatives.middle_name',
-    //       'Representatives.last_name',
-    //       'Representatives.email',
-    //       'Representatives.business_phone',
-    //       'Representatives.mobile_phone',
-    //       'Companies.company_name',
-    //       'Addresses.address as company_address'
-    //     )
-    //     .join('Client_Specs_Per_Job', 'Representatives.representative_id', 'Client_Specs_Per_Job.representative_id')
-    //     .join('Jobs', 'Client_Specs_Per_Job.job_id', 'Jobs.job_id')
-    //     .join('Clients', 'Client_Specs_Per_Job.client_id', 'Clients.client_id')
-    //     .leftJoin('Companies', 'Representatives.company_id', 'Companies.company_id')
-    //     .leftJoin('Addresses', 'Companies.address_id', 'Addresses.address_id')
-    //     .where('Jobs.job_number', job_number)
-    //     .where('Clients.client_id', mainClientId)
-    //     .then( data => {
-    //       if (jobMain.Main) {
-    //         jobMain.Main.Rep = data[0]
-    //       }  
-    //     })
-    //     .catch(err => console.log('err', err))
-    // ])
-    // .then( () => {
-    res.send(job)
-    // })     
+      knex('Properties')
+        .select('Roads.road')
+        .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
+        .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
+        .where('Properties.property_id', job.property.property_id)
+        .then(data => job.roads = data.map( road => road.road ))
+        .catch(err => console.log('err', err))
+    ])
+    .then( () => {
+      res.send(job)
+    })     
   })     
 })
 

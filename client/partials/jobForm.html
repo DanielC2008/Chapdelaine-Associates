@@ -17,7 +17,7 @@
           </span>
         </div> 
         <div class="col s4">
-          <button ng-click="removeJobType(job.job_types)">Remove Job type</button>
+          <button ng-click="removeJobType()">Remove Job Type</button>
         </div>
       </div>
       <div class="row">
@@ -68,23 +68,21 @@
     <div class="row">
       <div class="col s6">Secondary Addresses:
         <span ng-repeat="address in job.addresses">
-          <span>{{address.address}} <span ng-hide="$index + 1 === job.addresses.length">,</span> </span>
+          <span>{{address}} <span ng-hide="$index + 1 === job.addresses.length">,</span> </span>
         </span>
       </div>
-      <button class="col s3 offset-s3" ng-click="addAddress()">
-        {{'Add Address'}}
-      </button>
+      <button class="col s3" ng-click="addAddress()">Add Address</button>
+      <button class="col s3" ng-click="removeAddress()">Remove Address</button>
     </div>
       <!-- ////////////////////////////ROADS//////////////////////////// -->
     <div class="row">
       <div class="col s6">Secondary Roads:
         <span ng-repeat="road in job.roads">
-          <span>{{road.road}} <span ng-hide="$index + 1 === job.roads.length">,</span> </span>
+          <span>{{road}} <span ng-hide="$index + 1 === job.roads.length">,</span> </span>
         </span>
       </div>
-      <button class="col s3 offset-s3" ng-click="addRoad()">
-        {{'Add Road'}}
-      </button>
+      <button class="col s3" ng-click="addRoad()">Add Road</button>
+      <button class="col s3" ng-click="removeRoad()">Remove Road</button>
     </div>
     <!-- ////////////////////////////CLIENT//////////////////////////// -->
     <div class="row">

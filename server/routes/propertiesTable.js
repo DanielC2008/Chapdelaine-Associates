@@ -98,26 +98,6 @@ router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
   }
 })
 
-router.post('/api/getAddressesOnProp', ({body:{ property_id }}, res) => {
-  knex('Properties')
-  .select('Addresses.address')
-  .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
-  .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
-  .whereIn('Properties.property_id', property_id)
-  .then( data => res.send(data))
-  .catch(err => console.log('err', err))
-})
-
-router.post('/api/getRoadsOnProp', ({body:{ property_id }}, res) => {
-  knex('Properties')
-  .select('Roads.road')
-  .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
-  .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
-  .whereIn('Properties.property_id', property_id)
-  .then(data => res.send(data))
-  .catch(err => console.log('err', err))
-})
-
 router.post('/api/addSecondaryAddress', ({body: {address, property_id}}, res) => {
   locateOrCreate.address(address).then( data => { 
     let address_id = data
@@ -172,6 +152,7 @@ const addRoad = (road_id, property_id) => {
         if (exists[0]) { 
           resolve() 
         } else {
+          console.log('here')
           knex('Properties_Roads') 
           .insert({
             road_id,

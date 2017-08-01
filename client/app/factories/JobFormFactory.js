@@ -62,6 +62,12 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const owner = changed(original, update, 'owner') 
     const owner_contact = changed(original, update, 'owner_contact')
     const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
+    const newAddresses = findAdditions(original.addresses, update.addresses)
+    const removedAddresses = findRemovals(original.addresses, update.addresses) 
+    const newRoads = findAdditions(original.roads, update.roads)
+    const removedRoads = findRemovals(original.roads, update.roads) 
+    const newJobTypes = findAdditions(original.job_types, update.job_types)
+    const removedJobTypes = findRemovals(original.job_types, update.job_types)
 
 
     //if job_info changed send
@@ -87,31 +93,6 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     //else if only client changed
       // send
 
-    //to do this make addresses and roads come back at getJob
-    // const newAddresses = update.addresses.map( address => {
-    //   if (!original.addresses.includes(address)) {
-    //     return address.address
-    //   }
-    // })
-    // const newRoads = update.roads.map( road => {
-    //   if (!original.roads.includes(road)) {
-    //     return road.road
-    //   }
-    // })
-
-    //////JobTypes
-    const newJobTypes = update.job_types.reduce( (arr, type) => {
-      if (!original.job_types.includes(type)) {
-        arr.push(type)
-      }
-      return arr
-    },[])
-    const removedJobTypes = original.job_types.reduce( (arr, type) => {
-      if (!update.job_types.includes(type)) {
-        arr.push(type)
-      }
-      return arr
-    },[]) 
   }  
 
   factory.createJob = (original, update) => {
@@ -126,21 +107,10 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const owner = changed(original, update, 'owner') 
     const owner_contact = changed(original, update, 'owner_contact')
     const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
-    const newAddresses = update.addresses.map( address => {
-      if (!original.addresses.includes(address)) {
-        return address.address
-      }
-    })
-    const newRoads = update.roads.map( road => {
-      if (!original.roads.includes(road)) {
-        return road.road
-      }
-    })
-    const newJobTypes = update.job_types.map( type => {
-      if (!original.job_types.includes(type)) {
-        return type
-      }
-    })
+    const newAddresses = findAdditions(original.addresses, update.addresses)
+    const newRoads = findAdditions(original.roads, update.roads)
+    const newJobTypes = findAdditions(original.job_types, update.job_types)
+  
     //one array to add new and one to update existing customers
     const customersToAdd = []
     const customersToUpdate = []
@@ -236,6 +206,24 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
+
+  const findAdditions = (original, update) => {
+    return update.reduce( (arr, type) => {
+      if (!original.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[])
+  } 
+
+  const findRemovals = (original, update) => {
+    return original.reduce( (arr, type) => {
+      if (!update.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[])
+  }  
 
   // factory.createJob(defaultJob, newJob)
 
