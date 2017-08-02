@@ -21,13 +21,28 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   let originalJob = _.cloneDeep(job ? job : defaultJob)
   $scope.job = _.cloneDeep(job ? job : defaultJob)
   console.log('$scope.job', $scope.job)
-  //set variables for required info and determining add or edit button
-  $scope.propertySet = Object.keys($scope.job.property).length === 0 ? false : true
-  $scope.clientSet = Object.keys($scope.job.client).length === 0 ? false : true
-  $scope.clientTypeSet = Object.keys($scope.job.client_type).length === 0 ? false : true
-  $scope.clientContactSet = Object.keys($scope.job.client_contact).length === 0 ? false : true
-  $scope.ownerSet = Object.keys($scope.job.owner).length === 0 ? false : true
-  $scope.ownerContactSet = Object.keys($scope.job.owner_contact).length === 0 ? false : true
+
+  //set variables for required info and determining add or edit button AND watch those variables
+  const checkIfSet = obj => Object.keys(obj).length === 0 ? false : true
+  const setProperty = () => $scope.propertySet = checkIfSet($scope.job.property)
+  $scope.$watch('job.property', () => setProperty())
+  setProperty()
+  const setClient = () => $scope.clientSet = checkIfSet($scope.job.client)
+  $scope.$watch('job.client', () => setClient())
+  setClient()
+  const setClientType = () => $scope.clientTypeSet = checkIfSet($scope.job.client_type)
+  $scope.$watch('job.client_type', () => setClientType())
+  setClientType()
+  const setClientContact = () => $scope.clientContactSet = checkIfSet($scope.job.client_contact)
+  $scope.$watch('job.client_contact', () => setClientContact())
+  setClientContact()
+  const setOwner = () => $scope.ownerSet = checkIfSet($scope.job.owner)
+  $scope.$watch('job.owner', () => setOwner())
+  setOwner()
+  const setOwnerContact = () => $scope.ownerContactSet = checkIfSet($scope.job.owner_contact)
+  $scope.$watch('job.owner_contact', () => setOwnerContact())
+  setOwnerContact()
+
 
   JobTypeFactory.getEnabledJobTypes().then( ({data}) => $scope.types = data.map( type => type.job_type ))
 
@@ -53,6 +68,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   }
 
   const requirements = () => {
+    console.log('$scope.clientSet', $scope.clientSet)
     if ($scope.job.job_info.job_status === 'New') {
       return 'Please set job status.'
     } else if ($scope.job.job_info.job_type < 1) {
@@ -185,6 +201,12 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
     .catch( err => console.log('err', err))
   }
 
+///////////////////////CUSTOMERS////////////////////////////////////////////////////
+
+$scope.removeCustomer = customerType => {
+  $scope.job[`${customerType}`] = {}
+  console.log('$scope.job', $scope.job)
+}
 
 /////////////////////////////////////////CLIENT/////////////////////////////////////////
   $scope.addClient = () => { 

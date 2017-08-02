@@ -94,9 +94,10 @@
         Client : 
         {{clientSet ? job.client.last_name : ''}}
       </div>
-      <button class="col s3 offset-s3" ng-click="clientSet ? editClient() : addClient()">
+      <button class="col s3" ng-click="clientSet ? editClient() : addClient()">
         {{clientSet ? 'Edit Client' : 'Add Client'}}
       </button>
+      <button class="col s3" ng-click="removeCustomer('client')">Remove</button>
     </div>
     <!-- ////////////////////////////CLIENT TYPE//////////////////////////// -->
     <div class="row">
@@ -114,9 +115,10 @@
         Client Contact : 
         {{clientContactSet ? job.client_contact.last_name : ''}}
       </div>
-      <button class="col s3 offset-s3" ng-click="clientContactSet ? editClientContact() : addClientContact()">
+      <button class="col s3" ng-click="clientContactSet ? editClientContact() : addClientContact()">
         {{clientContactSet ? 'Edit Client Contact' : 'Add Client Contact'}}
       </button>
+      <button class="col s3" ng-click="removeCustomer('client_contact')">Remove</button>
     </div>
     <!-- ////////////////////////////OWNER//////////////////////////// -->
     <div class="row"> 
@@ -124,10 +126,11 @@
         Owner: 
         {{ownerSet ? job.owner.last_name : ''}}
       </div>
-      <button class="col s3 offset-s3" ng-click="ownerSet ? editOwner() : addOwner()" 
+      <button class="col s3" ng-click="ownerSet ? editOwner() : addOwner()" 
         ng-disabled="job.client_type.client_type !== 'Buyer'">
         {{ownerSet ? 'Edit Owner' : 'Add Owner'}}
       </button>
+      <button class="col s3" ng-click="removeCustomer('owner')">Remove</button>
     </div>
     <!-- ////////////////////////////OWNER CONTACT//////////////////////////// -->
     <div class="row">
@@ -135,10 +138,11 @@
         Owner Contact : 
         {{ownerContactSet ? job.owner_contact.last_name : ''}}
       </div>
-      <button class="col s3 offset-s3" ng-click="ownerContactSet ? editOwnerContact() : addOwnerContact()"
+      <button class="col s3" ng-click="ownerContactSet ? editOwnerContact() : addOwnerContact()"
         ng-disabled="job.client_type.client_type !== 'Buyer'">
         {{ownerContactSet ? 'Edit Owner Contact' : 'Add Owner Contact'}}
       </button>
+      <button class="col s3" ng-click="removeCustomer('owner_contact')">Remove</button>
     </div>
   </div>
 

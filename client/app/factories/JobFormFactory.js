@@ -69,6 +69,8 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const newJobTypes = findAdditions(original.job_types, update.job_types)
     const removedJobTypes = findRemovals(original.job_types, update.job_types)
 
+    console.log('client', client)
+
 
     //if job_info changed send
     //if property changed send
