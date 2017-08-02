@@ -65,7 +65,6 @@ router.post('/api/updateJob', ({body: {dbObj, jobNumber}}, res) => {
       }
     }).catch( err => console.log('err', err))
   ]).then( () => {
-  console.log('dbObj', dbObj)
     knex('Jobs')
     .update(dbObj)
     .where({job_number: jobNumber})

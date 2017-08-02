@@ -56,7 +56,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     console.log('update', update)
     const originalJobNumber = original.job_info.job_number
     const newJobNumber = update.job_info.job_number
-    
+
     const job_info = findChanges(original.job_info, update.job_info)
     const property = findChanges(original.property, update.property) 
     const client = findChanges(original.client, update.client) 
@@ -88,8 +88,8 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
   }  
 
   let findChanges = (original, update) => {
-    return Object.keys(original).reduce( (obj, key) => {
-      if (original[key] !== update[key]) {
+    return Object.keys(update).reduce( (obj, key) => {
+      if (update[key] !== original[key]) {
         obj[key] = update[key]
       } 
       return obj
@@ -107,17 +107,18 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
 
 
   factory.createJob = (original, update) => {
+
     let jobNumber = null
     let jobId = null
     //function to check if items on a job were changed -- this can be used by the update function as well
-    const job_info = changed(original, update, 'job_info')
-    const property = changed(original, update, 'property') 
-    const client = changed(original, update, 'client') 
-    const client_type = changed(original, update, 'client_type') 
-    const client_contact = changed(original, update, 'client_contact') 
-    const owner = changed(original, update, 'owner') 
-    const owner_contact = changed(original, update, 'owner_contact')
-    const ids = changed(original, update, 'ids')
+    const job_info = findChanges(original.job_info, update.job_info)
+    const property = findChanges(original.property, update.property) 
+    const client = findChanges(original.client, update.client) 
+    const client_type = findChanges(original.client_type, update.client_type) 
+    const client_contact = findChanges(original.client_contact, update.client_contact) 
+    const owner = findChanges(original.owner, update.owner) 
+    const owner_contact = findChanges(original.owner_contact, update.owner_contact)
+    const ids = findChanges(original.ids, update.ids)
     const newAddresses = findAdditions(original.addresses, update.addresses)
     const newRoads = findAdditions(original.roads, update.roads)
     const newJobTypes = findAdditions(original.job_types, update.job_types)
@@ -125,16 +126,16 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     //one array to add new and one to update existing customers
     const customersToAdd = []
     const customersToUpdate = []
-    if (client) {
+    if (Object.keys(client).length > 0) {
       update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push({customer: client, idType: 'client_id'})
     }
-    if (client_contact) {
+    if (Object.keys(client_contact).length > 0) {
       update.ids.client_contact_id ? customersToUpdate.push({customer: client_contact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: client_contact, idType: 'client_contact_id'})
     }
-    if (owner) {
+    if (Object.keys(owner).length > 0) {
       update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner_id'})
     }
-    if (owner_contact) {
+    if (Object.keys(owner_contact).length > 0) {
       update.ids.owner_contact_id ? customersToUpdate.push({customer: owner_contact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: owner_contact, idType: 'owner_contact_id'})
     }
     //add new Prop, Client, (and if) C_Contact, Owner, O_Contact
@@ -167,8 +168,6 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     }).catch( err => console.log('err', err))
 
   }
-
-  const changed = (o, u, key) => _.isEqual(o[`${key}`], u[`${key}`]) ? null : u[`${key}`] 
 
   const addNewCustomers = customersToAdd => {
     return new Promise( (resolve, reject) => {

@@ -152,7 +152,6 @@ const addRoad = (road_id, property_id) => {
         if (exists[0]) { 
           resolve() 
         } else {
-          console.log('here')
           knex('Properties_Roads') 
           .insert({
             road_id,
