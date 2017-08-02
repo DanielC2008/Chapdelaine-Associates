@@ -31,7 +31,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   $scope.$watch('job.client', () => setClient())
   setClient()
   const setClientType = () => $scope.clientTypeSet = checkIfSet($scope.job.client_type)
-  $scope.$watch('job.client_type', () => setClientType())
+  $scope.$watch('job.client_type.client_type', () => setClientType())
   setClientType()
   const setClientContact = () => $scope.clientContactSet = checkIfSet($scope.job.client_contact)
   $scope.$watch('job.client_contact', () => setClientContact())
@@ -42,7 +42,6 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   const setOwnerContact = () => $scope.ownerContactSet = checkIfSet($scope.job.owner_contact)
   $scope.$watch('job.owner_contact', () => setOwnerContact())
   setOwnerContact()
-
 
   JobTypeFactory.getEnabledJobTypes().then( ({data}) => $scope.types = data.map( type => type.job_type ))
 
@@ -68,7 +67,7 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   }
 
   const requirements = () => {
-    console.log('$scope.clientSet', $scope.clientSet)
+    console.log('$scope.clientTypeSet', $scope.clientTypeSet)
     if ($scope.job.job_info.job_status === 'New') {
       return 'Please set job status.'
     } else if ($scope.job.job_info.job_type < 1) {
@@ -90,8 +89,6 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
       //if client, ensure they cannot send without client
       //just wipe the current customer object, they can choose to add a new one
       //let form factory handle the rest
-
-  $scope.clientTypeChange = () => $scope.clientTypeSet = true
 
 /////////////////////////////////////////JOB TYPES/////////////////////////////////////////  
   $scope.addJobType = type => {
@@ -220,7 +217,6 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.client = dbPackage.dbObj
-              $scope.clientSet = true
               $scope.job.ids.client_id = dbPackage.customer_id.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -228,7 +224,6 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.client = dbPackage.dbObj
-            $scope.clientSet = true
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         }
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -255,7 +250,6 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.client_contact = dbPackage.dbObj
-              $scope.clientContactSet = true
               $scope.job.ids.client_contact_id = dbPackage.customer_id.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -263,7 +257,6 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.client_contact = dbPackage.dbObj
-            $scope.clientContactSet = true
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         }
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -290,7 +283,6 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.owner = dbPackage.dbObj
-              $scope.ownerSet = true
               $scope.job.ids.owner_id = dbPackage.customer_id.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -298,7 +290,6 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.owner = dbPackage.dbObj
-            $scope.ownerSet = true
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         }
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -324,7 +315,6 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.owner_contact = dbPackage.dbObj
-              $scope.ownerContactSet = true
               $scope.job.ids.owner_contact_id = dbPackage.customer_id.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -332,7 +322,6 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.owner_contact = dbPackage.dbObj
-            $scope.ownerContactSet = true
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         }
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
