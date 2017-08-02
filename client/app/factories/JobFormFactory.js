@@ -52,6 +52,8 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
   }
 
   factory.updateJob = (original, update) => {
+    console.log('original', original)
+    console.log('update', update)
     let jobNumber = null
     let jobId = null
     const job_info = changed(original, update, 'job_info')
@@ -61,7 +63,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const client_contact = changed(original, update, 'client_contact') 
     const owner = changed(original, update, 'owner') 
     const owner_contact = changed(original, update, 'owner_contact')
-    const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
+    const ids = changed(original, update, 'ids')
     const newAddresses = findAdditions(original.addresses, update.addresses)
     const removedAddresses = findRemovals(original.addresses, update.addresses) 
     const newRoads = findAdditions(original.roads, update.roads)
@@ -69,33 +71,33 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const newJobTypes = findAdditions(original.job_types, update.job_types)
     const removedJobTypes = findRemovals(original.job_types, update.job_types)
 
-    console.log('client', client)
+    console.log('client_contact', client_contact)
+    console.log('ids', ids)
 
 
     //if job_info changed send
+      //if ids have changed remove (id: null)/update to new Ids
     //if property changed send
-    //if ids have changed remove (id: null)/update to new ids
     //if client_type changed to owner 
       //remove owner and owner rep
     // to buyer just change in db
-    //if client changed and id changed
-      // update new id only
-    //else if only client changed
-      // send update to curr
-    //if client_contact and id
-      // update new id only
-    //else if only client changed
-      // send
-    //if owner changed and id
-      // update new id only
-    //else if only client changed
-      // send
-    //if owner_contact and id
-      // update new id only
-    //else if only client changed
-      // send
+    //if customers changed send to update
+    //if new/removed Address, Roads, JobTypes
 
   }  
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
   factory.createJob = (original, update) => {
     let jobNumber = null
@@ -108,11 +110,11 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const client_contact = changed(original, update, 'client_contact') 
     const owner = changed(original, update, 'owner') 
     const owner_contact = changed(original, update, 'owner_contact')
-    const ids = changed(original, update, 'ids') ? changed(original, update, 'ids') : {}
+    const ids = changed(original, update, 'ids')
     const newAddresses = findAdditions(original.addresses, update.addresses)
     const newRoads = findAdditions(original.roads, update.roads)
     const newJobTypes = findAdditions(original.job_types, update.job_types)
-  
+
     //one array to add new and one to update existing customers
     const customersToAdd = []
     const customersToUpdate = []

@@ -67,7 +67,6 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   }
 
   const requirements = () => {
-    console.log('$scope.clientTypeSet', $scope.clientTypeSet)
     if ($scope.job.job_info.job_status === 'New') {
       return 'Please set job status.'
     } else if ($scope.job.job_info.job_type < 1) {
@@ -84,11 +83,6 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   } 
 
   $scope.showCause = cause => $scope.displayCause = cause 
-
-    //customers
-      //if client, ensure they cannot send without client
-      //just wipe the current customer object, they can choose to add a new one
-      //let form factory handle the rest
 
 /////////////////////////////////////////JOB TYPES/////////////////////////////////////////  
   $scope.addJobType = type => {
@@ -201,9 +195,9 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
 ///////////////////////CUSTOMERS////////////////////////////////////////////////////
 
 $scope.removeCustomer = customerType => {
+  $scope.job.ids[`${customerType}_id`] = null
   $scope.job[`${customerType}`] = {}
-  console.log('$scope.job', $scope.job)
-}
+}  
 
 /////////////////////////////////////////CLIENT/////////////////////////////////////////
   $scope.addClient = () => { 
