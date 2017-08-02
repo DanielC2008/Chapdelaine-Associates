@@ -11,27 +11,27 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Properties'){
       return $http.post('/api/validateProp', dbPackage)
     } 
-    else if (dbPackage.table === 'Employees'){
-      return $http.post('/api/addNewEmployee', dbPackage)
-    } 
-    else if (dbPackage.table === 'Tasks'){
-      return $http.post('/api/addNewTask', dbPackage)
-    } 
-    else if (dbPackage.table === 'Job_Types'){
-      return $http.post('/api/addNewJobType', dbPackage)
-    }
-    else if (dbPackage.table === 'Companies'){
-      return $http.post('/api/addNewCompany', dbPackage)
-    }
-    else if (dbPackage.table === 'Cancellations'){
-      return $http.post('/api/addNewCause', dbPackage)
-    }
     else if (dbPackage.table === 'Addresses'){
       return $http.post('/api/validateAddress', dbPackage)
     }
     else if (dbPackage.table === 'Roads'){
       return $http.post('/api/validateRoad', dbPackage)
     }
+    // else if (dbPackage.table === 'Employees'){
+    //   return $http.post('/api/addNewEmployee', dbPackage)
+    // } 
+    // else if (dbPackage.table === 'Tasks'){
+    //   return $http.post('/api/addNewTask', dbPackage)
+    // } 
+    // else if (dbPackage.table === 'Job_Types'){
+    //   return $http.post('/api/addNewJobType', dbPackage)
+    // }
+    // else if (dbPackage.table === 'Companies'){
+    //   return $http.post('/api/addNewCompany', dbPackage)
+    // }
+    // else if (dbPackage.table === 'Cancellations'){
+    //   return $http.post('/api/addNewCause', dbPackage)
+    // }
   }
 
   factory.addNew = dbPackage => {
@@ -67,18 +67,15 @@ app.factory('DBFactory', function($http) {
     }
   }
 
-  factory.removeFromJob = dataObj => {
-    if (dataObj.table === 'Clients') {        
-      return $http.post('/api/removeClientFromJob', dataObj)
-    }
-  }
-
   factory.updateExisting = dbPackage => {
     if (dbPackage.table === 'Customers') {
       return $http.post('/api/updateCustomer', dbPackage)
     } 
     else if (dbPackage.table === 'Properties') {        
       return $http.post('/api/updateProperty', dbPackage)
+    } 
+    else if (dbPackage.table === 'Jobs') {        
+      return $http.post('/api/updateJob', dbPackage)
     }
     else if (dbPackage.table === 'Employees') {        
       return $http.post('/api/updateEmployee', dbPackage)

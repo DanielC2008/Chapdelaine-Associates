@@ -54,16 +54,17 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
   factory.updateJob = (original, update) => {
     console.log('original', original)
     console.log('update', update)
-    let jobNumber = null
-    let jobId = null
-    const job_info = changed(original, update, 'job_info')
-    const property = changed(original, update, 'property') 
-    const client = changed(original, update, 'client') 
-    const client_type = changed(original, update, 'client_type') 
-    const client_contact = changed(original, update, 'client_contact') 
-    const owner = changed(original, update, 'owner') 
-    const owner_contact = changed(original, update, 'owner_contact')
-    const ids = changed(original, update, 'ids')
+    const originalJobNumber = original.job_info.job_number
+    const newJobNumber = update.job_info.job_number
+    
+    const job_info = findChanges(original.job_info, update.job_info)
+    const property = findChanges(original.property, update.property) 
+    const client = findChanges(original.client, update.client) 
+    const client_type = findChanges(original.client_type, update.client_type) 
+    const client_contact = findChanges(original.client_contact, update.client_contact) 
+    const owner = findChanges(original.owner, update.owner) 
+    const owner_contact = findChanges(original.owner_contact, update.owner_contact)
+    const ids = findChanges(original.ids, update.ids)
     const newAddresses = findAdditions(original.addresses, update.addresses)
     const removedAddresses = findRemovals(original.addresses, update.addresses) 
     const newRoads = findAdditions(original.roads, update.roads)
@@ -71,12 +72,12 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const newJobTypes = findAdditions(original.job_types, update.job_types)
     const removedJobTypes = findRemovals(original.job_types, update.job_types)
 
-    console.log('client_contact', client_contact)
-    console.log('ids', ids)
+    const jobObj = Object.assign({}, job_info, client_type, ids)
+    Promise.all([
+      DBFactory.updateExisting({table: 'Jobs', dbObj: jobObj, jobNumber: originalJobNumber})
+      .then().catch(err => console.log('err', err))
 
-
-    //if job_info changed send
-      //if ids have changed remove (id: null)/update to new Ids
+    ]).then( () => $mdDialog.hide(newJobNumber)).catch( err => console.log('err', err))
     //if property changed send
     //if client_type changed to owner 
       //remove owner and owner rep
@@ -86,6 +87,14 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
 
   }  
 
+  let findChanges = (original, update) => {
+    return Object.keys(original).reduce( (obj, key) => {
+      if (original[key] !== update[key]) {
+        obj[key] = update[key]
+      } 
+      return obj
+    },{})
+  }
 
 
 
@@ -96,8 +105,6 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
 
 
 
-
-  
 
   factory.createJob = (original, update) => {
     let jobNumber = null
@@ -147,7 +154,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       let jobObj = Object.assign({}, job_info, client_type, ids)
       Promise.all([
         //create Job and put all Ids + client
-        DBFactory.addNew({table: 'Jobs', dbObj: jobObj}).then( ({data:{job_id, job_number}}) => {
+        DBFactory.addNew({table: 'Jobs', dbObj: jobObj}).then( ({ data: { job_id, job_number }}) => {
           jobNumber = job_number
           jobId = job_id
         }).catch( err => Promise.reject(err)),
@@ -155,10 +162,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
         addAddressesToProp(newAddresses, ids.property_id).then().catch( err => Promise.reject(err)),
         addRoadsToProp(newRoads, ids.property_id).then().catch( err => Promise.reject(err))
       ]).then( () => {
-        addJobTypesToJob(newJobTypes, jobId).then( () => {
-          console.log('jobNumber', jobNumber)
-          $mdDialog.hide(jobNumber)
-        }).catch( err => console.log('err', err))
+        addJobTypesToJob(newJobTypes, jobId).then( () => $mdDialog.hide(jobNumber)).catch( err => console.log('err', err))
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
 

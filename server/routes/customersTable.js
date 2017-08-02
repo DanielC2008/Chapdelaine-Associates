@@ -63,14 +63,6 @@ router.post('/api/getFullCustomerById', ({body: {customer_id}}, res) => {
   .catch(err => console.log('err', err))
 })
 
-// router.post('/api/removeRepFromJob', ({body: {ids}}, res) => {
-//   knex('Client_Specs_Per_Job')
-//   .update('representative_id', null) //-----------------update to null so we keep client associated with job
-//   .where(ids)
-//   .then( data => {res.send({msg: 'Removed from Job!'})})
-//   .catch( err => console.log(err))
-// })
-
 router.post('/api/addNewCustomer', ({body : {dbObj, idType}}, res) => {
   getConnectTableIds(dbObj).then( data => {
     let polishedObj = data.obj
