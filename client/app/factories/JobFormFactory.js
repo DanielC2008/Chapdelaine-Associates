@@ -72,17 +72,38 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const newJobTypes = findAdditions(original.job_types, update.job_types)
     const removedJobTypes = findRemovals(original.job_types, update.job_types)
 
-    const jobObj = Object.assign({}, job_info, client_type, ids)
-
-    console.log('property', property)
-
+    const customersToAdd = []
+    const customersToUpdate = []
+    if (Object.keys(client).length > 0) {
+      update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push({customer: client, idType: 'client_id'})
+    }
+    if (Object.keys(client_contact).length > 0) {
+      update.ids.client_contact_id ? customersToUpdate.push({customer: client_contact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: client_contact, idType: 'client_contact_id'})
+    }
+    if (Object.keys(owner).length > 0) {
+      update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner_id'})
+    }
+    if (Object.keys(owner_contact).length > 0) {
+      update.ids.owner_contact_id ? customersToUpdate.push({customer: owner_contact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: owner_contact, idType: 'owner_contact_id'})
+    }
     Promise.all([
-      DBFactory.updateExisting({table: 'Jobs', dbObj: jobObj, jobNumber: originalJobNumber})
-      .then().catch(err => console.log('err', err)),
-      DBFactory.updateExisting({table: 'Properties', dbObj: property, id: original.ids.property_id})
-      .then().catch( err => Promise.reject(err))
 
-    ]).then( () => $mdDialog.hide(newJobNumber)).catch( err => console.log('err', err))
+      // DBFactory.updateExisting({table: 'Properties', dbObj: property, id: original.ids.property_id})
+      // .then().catch( err => Promise.reject(err)),
+      updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)), 
+      //if not send to add new
+      addNewCustomers(customersToAdd).then( data => {
+        //add new ids to id obj
+        data.forEach( id => ids[`${Object.keys(id)[0]}`] = id[Object.keys(id)[0]])
+      }).catch( err => Promise.reject(err))
+
+    ]).then( () => {
+      let jobObj = Object.assign({}, job_info, client_type, ids)
+      DBFactory.updateExisting({table: 'Jobs', dbObj: jobObj, jobNumber: originalJobNumber})
+      .then( () => {
+        $mdDialog.hide(newJobNumber)
+      }).catch(err => Promise.reject(err))
+    }).catch( err => console.log('err', err))
     //if client_type changed to owner 
       //remove owner and owner rep
     // to buyer just change in db
