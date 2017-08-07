@@ -50,7 +50,7 @@ router.post('/api/createNewJob', ({body: {dbObj}}, res) => {
   }).catch( err => console.log('err', err))
 })
 
-router.post('/api/updateJob', ({body: {dbObj, jobNumber}}, res) => {
+router.post('/api/updateJob', ({body: {dbObj, job_number}}, res) => {
   Promise.all([
     locateStatusId(dbObj.job_status).then( data => {
       delete dbObj.job_status
@@ -67,7 +67,7 @@ router.post('/api/updateJob', ({body: {dbObj, jobNumber}}, res) => {
   ]).then( () => {
     knex('Jobs')
     .update(dbObj)
-    .where({job_number: jobNumber})
+    .where({job_number: job_number})
     .then( data => res.send()).catch( err => console.log(err))
   }).catch( err => console.log('err', err))
 })
