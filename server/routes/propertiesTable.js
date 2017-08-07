@@ -95,10 +95,40 @@ router.post('/api/addSecondaryAddress', ({body: {address, property_id}}, res) =>
   })
 })
 
+router.post('/api/removeSecondaryAddress', ({body: {address, property_id}}, res) => {
+  knex('Addresses')
+  .select('address_id')
+  .where({address: address})
+  .then( data => {
+    let address_id = data[0].address_id
+    knex('Properties_Addresses')
+    .del()
+    .where({address_id: address_id})
+    .andWhere({property_id: property_id})
+    .then( () => res.send())
+    .catch( err => console.log('err', err))
+  })
+})
+
 router.post('/api/addSecondaryRoad', ({body: {road, property_id}}, res) => {
   locateOrCreate.road(road).then( data => { 
     let road_id = data
     addRoad(road_id, property_id).then( () => res.send()).catch(err => console.log(err))
+  })
+})
+
+router.post('/api/removeSecondaryRoad', ({body: {road, property_id}}, res) => {
+  knex('Roads')
+  .select('road_id')
+  .where({road: road})
+  .then( data => {
+    let road_id = data[0].road_id
+    knex('Properties_Roads')
+    .del()
+    .where({road_id: road_id})
+    .andWhere({property_id: property_id})
+    .then( () => res.send())
+    .catch( err => console.log('err', err))
   })
 })
 

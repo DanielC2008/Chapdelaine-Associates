@@ -55,6 +55,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     console.log('original', original)
     console.log('update', update)
     const originalJobNumber = original.job_info.job_number
+    const jobId = original.job_info.job_id
     const newJobNumber = update.job_info.job_number
 
     const job_info = findChanges(original.job_info, update.job_info)
@@ -98,17 +99,25 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       }).catch( err => Promise.reject(err))
 
     ]).then( () => {
-      let jobObj = Object.assign({}, job_info, client_type, ids)
-      DBFactory.updateExisting({table: 'Jobs', dbObj: jobObj, jobNumber: originalJobNumber})
-      .then( () => {
-        $mdDialog.hide(newJobNumber)
-      }).catch(err => Promise.reject(err))
+      Promise.all([
+        //update job obj if changes are made
+        // DBFactory.updateExisting({table: 'Jobs', dbObj: jobObj, jobNumber: originalJobNumber})
+        // .then().catch( err => Promise.reject(err)),
+        //send address and road arrays with Prop id
+        addAddressesToProp(newAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        removeAddressesFromProp(removedAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        addRoadsToProp(newRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        removeRoadsFromProp(removedRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        addJobTypesToJob(newJobTypes, jobId).then().catch( err => console.log('err', err)),
+        removeJobTypesFromJob(removedJobTypes, jobId).then().catch( err => console.log('err', err))
+      ]).then( () => {
+        $mdDialog.hide()
+      }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
     //if client_type changed to owner 
       //remove owner and owner rep
     // to buyer just change in db
     //if customers changed send to update or create 
-    //if new/removed Address, Roads, JobTypes
 
   }  
 
@@ -235,6 +244,15 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     })
   }
 
+  const removeAddressesFromProp = (addresses, property_id) => {
+    return new Promise( (resolve, reject) => {
+      Promise.all(addresses.map( address => {
+        let dbPackage = {table: 'Addresses', address: address, property_id: property_id}
+        return DBFactory.removeFromJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+      })).then( data => resolve(data)).catch( err => console.log('err', err))
+    })
+  }
+
   const addRoadsToProp = (newRoads, property_id) => {
     return new Promise( (resolve, reject) => {
       Promise.all(newRoads.map( road => {
@@ -244,11 +262,30 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     })
   }
 
+  const removeRoadsFromProp = (roads, property_id) => {
+    return new Promise( (resolve, reject) => {
+      Promise.all(roads.map( road => {
+        let dbPackage = {table: 'Roads', road: road, property_id: property_id}
+        return DBFactory.removeFromJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+      })).then( data => resolve(data)).catch( err => console.log('err', err))
+    })
+  }
+
   const addJobTypesToJob = (newJobTypes, jobId) => {
     return new Promise( (resolve, reject) => {
       Promise.all(newJobTypes.map( job_type => {
         let dbPackage = {job_type: job_type, job_id: jobId}
         return JobTypeFactory.addJobTypeToJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+      })).then( data => resolve(data)).catch( err => console.log('err', err))
+    })
+  }
+
+  const removeJobTypesFromJob = (jobTypes, jobId) => {
+    return new Promise( (resolve, reject) => {
+      Promise.all(jobTypes.map( job_type => {
+        console.log('job_type', job_type)
+        let dbPackage = {table: 'Job_Types', job_type, job_id: jobId}
+        return DBFactory.removeFromJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }

@@ -19,6 +19,20 @@ router.post('/api/addJobTypeToJob', ({body: {job_type, job_id}}, res) => { // en
   })
 })
 
+router.post('/api/removeJobTypeFromJob', ({body: {job_type, job_id}}, res) => { // ensure this doesnt happen twice
+  knex('Job_Types')
+  .select('job_type_id')
+  .where({'job_type': job_type})
+  .then( data => {
+    let job_type_id = data[0].job_type_id
+    knex('Jobs_Job_Types')
+    .del()
+    .where({job_type_id: job_type_id})
+    .andWhere({job_id: job_id})
+    .then( () => res.send()).catch( err => console.log('err', err))
+  })
+})
+
 router.get('/api/getEnabledJobTypes', (req, res) => {
   knex('Job_Types')
   .where({disabled: false})

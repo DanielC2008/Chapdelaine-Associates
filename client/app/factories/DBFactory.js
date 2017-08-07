@@ -86,7 +86,19 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Companies'){
       return $http.post('/api/updateCompany', dbPackage)
     }
-  }  
+  }
+
+  factory.removeFromJob = dbPackage => {
+    if (dbPackage.table === 'Addresses'){
+      return $http.post('/api/removeSecondaryAddress', dbPackage)
+    }
+    else if (dbPackage.table === 'Roads'){
+      return $http.post('/api/removeSecondaryRoad', dbPackage)
+    }
+    else if (dbPackage.table === 'Job_Types'){
+      return $http.post('/api/removeJobTypeFromJob', dbPackage)
+    }
+  }
 
   factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
 
