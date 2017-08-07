@@ -73,16 +73,20 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const removedJobTypes = findRemovals(original.job_types, update.job_types)
 
     const jobObj = Object.assign({}, job_info, client_type, ids)
+
+    console.log('property', property)
+
     Promise.all([
       DBFactory.updateExisting({table: 'Jobs', dbObj: jobObj, jobNumber: originalJobNumber})
-      .then().catch(err => console.log('err', err))
+      .then().catch(err => console.log('err', err)),
+      DBFactory.updateExisting({table: 'Properties', dbObj: property, id: original.ids.property_id})
+      .then().catch( err => Promise.reject(err))
 
     ]).then( () => $mdDialog.hide(newJobNumber)).catch( err => console.log('err', err))
-    //if property changed send
     //if client_type changed to owner 
       //remove owner and owner rep
     // to buyer just change in db
-    //if customers changed send to update
+    //if customers changed send to update or create 
     //if new/removed Address, Roads, JobTypes
 
   }  
@@ -96,9 +100,23 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     },{})
   }
 
+  const findAdditions = (original, update) => {
+    return update.reduce( (arr, type) => {
+      if (!original.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[])
+  } 
 
-
-
+  const findRemovals = (original, update) => {
+    return original.reduce( (arr, type) => {
+      if (!update.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[])
+  }  
 
 
 
@@ -213,24 +231,6 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
-
-  const findAdditions = (original, update) => {
-    return update.reduce( (arr, type) => {
-      if (!original.includes(type)) {
-        arr.push(type)
-      }
-      return arr
-    },[])
-  } 
-
-  const findRemovals = (original, update) => {
-    return original.reduce( (arr, type) => {
-      if (!update.includes(type)) {
-        arr.push(type)
-      }
-      return arr
-    },[])
-  }  
 
   // factory.createJob(defaultJob, newJob)
 

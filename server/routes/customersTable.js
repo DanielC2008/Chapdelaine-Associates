@@ -93,29 +93,41 @@ const getConnectTableIds = obj => {
   return new Promise( (resolve, reject) => {
     Promise.all([
       locateOrCreate.state(obj.state).then( data => {
+        if (obj.state) {
+          obj.state_id = data
+        }
         delete obj.state
-        obj.state_id = data
       }),
       locateOrCreate.city(obj.city).then( data => { 
+        if (obj.city) {
+          obj.city_id = data
+        }  
         delete obj.city
-        obj.city_id = data
-      }),
-      locateOrCreate.address(obj.address).then( data => { 
-        delete obj.address
-        obj.address_id = data
       }),
       locateOrCreate.county(obj.county).then( data => { 
+        if (obj.county) {
+          obj.county_id = data
+        }
         delete obj.county
-        obj.county_id = data
       }),
       locateOrCreate.zip_code(obj.zip_code).then( data => { 
+        if (obj.zip_code) {
+          obj.zip_id = data
+        }  
         delete obj.zip_code
-        obj.zip_id = data
       }),
-      locateOrCreate.company_name(obj.company_name, obj.company_address).then( data => { 
+      locateOrCreate.address(obj.address).then( data => {
+        if (obj.address){
+          obj.address_id = data
+        } 
+        delete obj.address
+      }),
+      locateOrCreate.company_name(obj.company_name, obj.company_address).then( data => {
+        if (obj.company_name || obj.company_address) {
+          obj.company_id = data
+        }
         delete obj.company_name
         delete obj.company_address
-        obj.company_id = data
       })
     ])
     .then( () => {

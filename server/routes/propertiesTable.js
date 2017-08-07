@@ -74,28 +74,18 @@ router.post('/api/addNewPropertyToJob', ({body: {dbObj}}, res) => {
   }).catch( err => console.log(err))
 })
 
-router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
-  const property_id = ids.property_id
-  const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
-  if (errors[0]) {  //------------------------------------checks each type
-    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send({msg: `${msg}`})
-  } else {
-    getConnectTableIds(dbObj).then( data => {
-      let polishedObj = data.obj
-      let address_id = data.obj.primary_address_id  ? data.obj.primary_address_id : null
-      let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
-      knex('Properties')
-      .update(polishedObj)
-      .where({property_id: property_id})
-      .then( data => {
-        return Promise.all([
-          addAddress(address_id, property_id),
-          addRoad(road_id, property_id)
-        ]).then( () => res.send({msg: 'Successfully updated Job!'})).catch(err => console.log(err))
-      }).catch( err => console.log(err))
+router.post('/api/updateProperty', ({body: {dbObj, id}}, res) => {
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Properties')
+    .update(polishedObj)
+    .then( data => {
+      Promise.all([
+        addAddress(polishedObj.primary_address_id, id),
+        addRoad(polishedObj.primary_road_id, id),
+      ]).then(() => res.send()).catch( err => console.log(err))
     }).catch( err => console.log(err))
-  }
+  }).catch( err => console.log(err))
 })
 
 router.post('/api/addSecondaryAddress', ({body: {address, property_id}}, res) => {
@@ -125,7 +115,7 @@ const addAddress = (address_id, property_id) => {
       .andWhere({property_id: property_id})
       .then( exists => {
         //if these exist on Properties address. dont create again
-        if (exists[0]) { 
+        if (exists[0]) {
           resolve() 
         } else {
         //else create it
@@ -169,28 +159,40 @@ const getConnectTableIds = obj => {
   return new Promise( (resolve, reject) => {
     Promise.all([ //------------------get existing state, city, address, county, zip_code, and road
       locateOrCreate.state(obj.state).then( data => {
+        if (obj.state) {
+          obj.state_id = data
+        }
         delete obj.state
-        obj.state_id = data
       }),
       locateOrCreate.city(obj.city).then( data => { 
+        if (obj.city) {
+          obj.city_id = data
+        }  
         delete obj.city
-        obj.city_id = data
       }),
-      locateOrCreate.county(obj.county).then( data => { 
+      locateOrCreate.county(obj.county).then( data => {
+        if (obj.county) {
+          obj.county_id = data
+        }
         delete obj.county
-        obj.county_id = data
       }),
       locateOrCreate.zip_code(obj.zip_code).then( data => { 
+        if (obj.zip_code) {
+          obj.zip_id = data
+        }  
         delete obj.zip_code
-        obj.zip_id = data
       }),
       locateOrCreate.address(obj.primary_address).then( data => { 
+        if (obj.primary_address) {
+          obj.primary_address_id = data
+        }
         delete obj.primary_address
-        obj.primary_address_id = data
       }),
       locateOrCreate.road(obj.primary_road).then( data => { 
+        if (obj.primary_road) {
+          obj.primary_road_id = data
+        }  
         delete obj.primary_road
-        obj.primary_road_id = data
       })
     ])
     .then( () => {
