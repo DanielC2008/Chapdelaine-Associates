@@ -1,6 +1,6 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog) {
+app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route) {
 
   let URL = $location.$$url
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
@@ -32,7 +32,9 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog) {
       clickOutsideToClose: true,
       multiple: true
     })
-    .then( jobNumber => JobFactory.goToJobPage(jobNumber)).catch( err => console.log('err', err))
+    .then( jobNumber => {
+      jobNumber === $scope.jobNumber ? $route.reload() : JobFactory.goToJobPage(jobNumber)
+    }).catch( err => console.log('err', err))
   }
 
   $scope.material = () => {

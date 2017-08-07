@@ -88,9 +88,6 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       update.ids.owner_contact_id ? customersToUpdate.push({customer: owner_contact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: owner_contact, idType: 'owner_contact_id'})
     }
     Promise.all([
-
-      // DBFactory.updateExisting({table: 'Properties', dbObj: property, id: original.ids.property_id})
-      // .then().catch( err => Promise.reject(err)),
       updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)), 
       //if not send to add new
       addNewCustomers(customersToAdd).then( data => {
@@ -102,6 +99,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       let jobObj = Object.assign({}, job_info, client_type, ids)
       Promise.all([
         updateJob(jobObj, originalJobNumber).then().catch( err => Promise.reject(err)),
+        updateProp(property, original.ids.property_id).then().catch( err => Promise.reject(err)),
         addAddressesToProp(newAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
         removeAddressesFromProp(removedAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
         addRoadsToProp(newRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
@@ -109,7 +107,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
         addJobTypesToJob(newJobTypes, jobId).then().catch( err => console.log('err', err)),
         removeJobTypesFromJob(removedJobTypes, jobId).then().catch( err => console.log('err', err))
       ]).then( () => {
-        $mdDialog.hide()
+        $mdDialog.hide(newJobNumber)
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
     //if client_type changed to owner 
@@ -292,6 +290,21 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       //if changes were made
       if (Object.keys(jobObj).length > 0) {
         DBFactory.updateExisting({table: 'Jobs', dbObj: jobObj, job_number}).then( () => {
+          resolve()
+        })
+        .catch( err => reject(err))
+      } else {
+        //do nothing
+        resolve()
+      }  
+    })
+  }
+
+  const updateProp = (property, property_id) => {
+    return new Promise( (resolve, reject) => {
+      //if changes were made
+      if (Object.keys(property).length > 0) {
+        DBFactory.updateExisting({table: 'Properties', dbObj: property, id: property_id}).then( () => {
           resolve()
         })
         .catch( err => reject(err))
