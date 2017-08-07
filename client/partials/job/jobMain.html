@@ -11,7 +11,7 @@
             <div class="col s6">
               <div class="row">
                 Client's Name: {{job.client.first_name}} {{job.client.middle_name}} {{job.client.last_name}} 
-                <span ng-if='client'>({{job.client.client_type}})</span>
+                <span >({{job.client_type.client_type}})</span>
               </div>
               <div class="row">
                 Mailing Address: {{job.client.address}}

@@ -92,7 +92,7 @@ router.post('/api/addSecondaryAddress', ({body: {address, property_id}}, res) =>
   locateOrCreate.address(address).then( data => { 
     let address_id = data
     addAddress(address_id, property_id).then( () => res.send()).catch(err => console.log(err))
-  })
+  }).catch( err => console.log('err', err))
 })
 
 router.post('/api/removeSecondaryAddress', ({body: {address, property_id}}, res) => {
@@ -114,7 +114,7 @@ router.post('/api/addSecondaryRoad', ({body: {road, property_id}}, res) => {
   locateOrCreate.road(road).then( data => { 
     let road_id = data
     addRoad(road_id, property_id).then( () => res.send()).catch(err => console.log(err))
-  })
+  }).catch( err => console.log('err', err))
 })
 
 router.post('/api/removeSecondaryRoad', ({body: {road, property_id}}, res) => {

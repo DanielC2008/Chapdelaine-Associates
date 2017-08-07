@@ -62,6 +62,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const property = findChanges(original.property, update.property) 
     const client = findChanges(original.client, update.client) 
     const client_type = findChanges(original.client_type, update.client_type) 
+    console.log('client_type', client_type)
     const client_contact = findChanges(original.client_contact, update.client_contact) 
     const owner = findChanges(original.owner, update.owner) 
     const owner_contact = findChanges(original.owner_contact, update.owner_contact)
@@ -89,14 +90,17 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     }
     Promise.all([
       updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)), 
-      //if not send to add new
       addNewCustomers(customersToAdd).then( data => {
-        //add new ids to id obj
+        //add new ids to id 
         data.forEach( id => ids[`${Object.keys(id)[0]}`] = id[Object.keys(id)[0]])
       }).catch( err => Promise.reject(err))
 
     ]).then( () => {
       let jobObj = Object.assign({}, job_info, client_type, ids)
+      if (client_type.client_type === "Owner") {
+        jobObj.owner_id = null
+        jobObj.owner_contact_id = null
+      }
       Promise.all([
         updateJob(jobObj, originalJobNumber).then().catch( err => Promise.reject(err)),
         updateProp(property, original.ids.property_id).then().catch( err => Promise.reject(err)),
