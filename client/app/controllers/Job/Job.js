@@ -56,7 +56,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route)
     //redis saves previous tab accesses
     JobFactory.setTab({jobNumber: $scope.jobNumber}).then( ({data}) => $scope.showTab = data.showTab).catch( err => console.log('err', err))
     //last access update
-    JobFactory.updateLastAccessed($scope.jobNumber).then().catch(err => console.log('err', err))
+    JobFactory.updateLastAccessed({job_number: $scope.jobNumber, date: new Date()}).then().catch(err => console.log('err', err))
     $scope.material()
   })
   //can post status with .status and .statusText

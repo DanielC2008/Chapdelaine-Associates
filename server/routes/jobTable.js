@@ -103,15 +103,15 @@ router.post('/api/setTab', ({body:{jobNumber}, session}, res) => {
   }
 })
 
-router.post('/api/updateLastAccessed', ({body:{jobNumber}}, res) => {
+router.post('/api/updateLastAccessed', ({body: { job_number, date }}, res) => {
   knex('Jobs')
-  .where('job_number', jobNumber)
-  .update('last_accessed', new Date())
+  .where({job_number: job_number})
+  .update('last_accessed', date)
   .then( () => res.send())
   .catch( err => console.log(err))
 })
 
-router.post('/api/checkJobNumberExists', ({body:{job_number}}, res) => {
+router.post('/api/checkJobNumberExists', ({body: { job_number }}, res) => {
   knex('Jobs')
   .select('job_number')
   .where({job_number: job_number})

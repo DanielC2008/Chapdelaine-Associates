@@ -20,7 +20,7 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
 
-    factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
+    factory.updateLastAccessed = dbObj => $http.post('/api/updateLastAccessed', dbObj)
 
     factory.checkJobNumberExists = job_number => $http.post('/api/checkJobNumberExists', {job_number})
 
