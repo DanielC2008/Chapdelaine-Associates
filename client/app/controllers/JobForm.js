@@ -32,7 +32,13 @@ app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, Proper
   } 
   if ($scope.job.job_info.target_date) {
     $scope.targetDate = new Date($scope.job.job_info.target_date)
-  } 
+  }
+  $scope.$watch('job.job_info.start_date', () => {
+    $scope.startDate = $scope.job.job_info.start_date ? new Date($scope.job.job_info.start_date) : null
+  })
+  $scope.$watch('job.job_info.complete_date', () => {
+    $scope.completeDate = $scope.job.job_info.complete_date ? new Date($scope.job.job_info.complete_date) : null
+  })
 
   $scope.changeDate = (date, type) => $scope.job.job_info[`${type}`] = date
 
