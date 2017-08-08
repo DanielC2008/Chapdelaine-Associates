@@ -22,5 +22,7 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
 
+    factory.checkJobNumberExists = job_number => $http.post('/api/checkJobNumberExists', {job_number})
+
   return factory
 })

@@ -107,9 +107,16 @@ router.post('/api/updateLastAccessed', ({body:{jobNumber}}, res) => {
   knex('Jobs')
   .where('job_number', jobNumber)
   .update('last_accessed', new Date())
-  .then(res.send())
-  .catch(err => res.send(err))
+  .then( () => res.send())
+  .catch( err => console.log(err))
 })
 
+router.post('/api/checkJobNumberExists', ({body:{job_number}}, res) => {
+  knex('Jobs')
+  .select('job_number')
+  .where({job_number: job_number})
+  .then( data => data[0] ? res.send({exists: true}) : res.send({exists: false}))
+  .catch( err => console.log(err))
+})
 
 module.exports = router
