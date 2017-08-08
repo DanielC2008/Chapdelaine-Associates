@@ -38,15 +38,15 @@
 
       <div class="col s12">
         <label for="startDate">Start Date:</label>
-        <input ng-disabled='!job.job_info.start_date' type="date" name="startDate" ng-model="job.job_info.start_date">
+        <input ng-disabled='!job.job_info.start_date' type="date" name="startDate" ng-change="changeDate(startDate, 'start_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="startDate">
       </div>
       <div class="col s12">
         <label for="completeDate">Complete Date:</label>
-        <input  ng-disabled='!job.job_info.complete_date' type="date" name="completeDate" ng-model="job.job_info.complete_date">
+        <input  ng-disabled='!job.job_info.complete_date' type="date" name="completeDate" ng-change="changeDate(completeDate, 'complete_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="completeDate">
       </div>
       <div class="col s12">
         <label for="targetDate">Target Date:</label>
-        <input type="date" name="targetDate" ng-model="job.job_info.target_date">
+        <input type="date" name="targetDate" ng-change="changeDate(targetDate, 'target_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="targetDate">
       </div>
 
     </div>

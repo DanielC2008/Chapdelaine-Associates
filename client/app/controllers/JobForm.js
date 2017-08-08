@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory, $mdDialog, JobFormFactory) {
+app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory, $mdDialog, JobFormFactory) {
 
   const defaultJob = {
     job_info: {
@@ -21,6 +21,20 @@ app.controller('JobForm', function($scope, ToastFactory, job, PropertyFactory, C
   let originalJob = _.cloneDeep(job ? job : defaultJob)
   $scope.job = _.cloneDeep(job ? job : defaultJob)
   console.log('$scope.job', $scope.job)
+
+  /////////////////////DATE STUFF///////////////////
+  $scope.timeZoneOffset = $rootScope.timeZoneOffset
+  if ($scope.job.job_info.start_date) {
+    $scope.startDate = new Date($scope.job.job_info.start_date)
+  } 
+  if ($scope.job.job_info.complete_date) {
+    $scope.completeDate = new Date($scope.job.job_info.complete_date)
+  } 
+  if ($scope.job.job_info.target_date) {
+    $scope.targetDate = new Date($scope.job.job_info.target_date)
+  } 
+
+  $scope.changeDate = (date, type) => $scope.job.job_info[`${type}`] = date
 
   //set variables for required info and determining add or edit button AND watch those variables
   const checkIfSet = obj => Object.keys(obj).length === 0 ? false : true
