@@ -3,7 +3,7 @@
 const schema = require('validate')
 const validationHelper = require('./validationHelper')
 
-  const validClient = schema({
+  const customer = schema({
     first_name: {
       type: 'string',
       required: true,
@@ -62,19 +62,16 @@ const validationHelper = require('./validationHelper')
     address: {
       type: 'string',
       message: 'Address must be a string.'
-    }
-  }, { strip: false})
-
-  const validClientOnJob = schema({
-    client_type: {
-      type: 'string',
-      required: true,
-      message: 'Client Type is required.'
     },
-    main: {
-      type: 'boolean',
-      message: 'Is this the main Client?'
+    company_name: {
+      type: 'string',
+      message: 'Company name must be a string.'
+    },
+    company_address: {
+      type: 'string',
+      message: 'Company address must be a string.'
     }
-  }, { strip: false})
+  })
 
-module.exports = {validClient, validClientOnJob}
+
+module.exports = customer

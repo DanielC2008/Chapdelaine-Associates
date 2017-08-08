@@ -20,7 +20,6 @@ router.use((req, res, next) => {
 router.use(require('./home'))
 router.use(require('./getJob'))
 router.use(require('./jobTable'))
-router.use(require('./clientsTable'))
 router.use(require('./customersTable'))
 router.use(require('./propertiesTable'))
 router.use(require('./findJob'))

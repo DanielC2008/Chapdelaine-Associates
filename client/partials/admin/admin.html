@@ -6,7 +6,7 @@
 
     <div class="col s2 offset-s1 boxDiv adminInfo">
       <button class="col s12 button btn" ng-click="showTab = 'MC'">My Company</button>
-      <button class="col s12 button btn" ng-click="showTab = 'AC'">Clients</button>
+      <button class="col s12 button btn" ng-click="showTab = 'AC'">Customers</button>
       <button class="col s12 button btn" ng-click="showTab = 'AR'">Representatives</button>
       <button class="col s12 button btn" ng-click="showTab = 'ACO'">Companies</button>
       <button class="col s12 button btn" ng-click="showTab = 'AE'">Employees</button>
@@ -20,8 +20,8 @@
         <h5>My Company Info</h5>
       </div>
 
-      <div ng-if="showTab === 'AC'" ng-controller="Admin_Clients as AC">
-        <div ng-include="'./partials/admin/admin_clients.html'"></div>
+      <div ng-if="showTab === 'AC'" ng-controller="Admin_Customers as AC">
+        <div ng-include="'./partials/admin/admin_customers.html'"></div>
       </div>  
       <div ng-if="showTab === 'AR'" ng-controller="Admin_Representatives as AR">
         <div ng-include="'./partials/admin/admin_representatives.html'"></div>

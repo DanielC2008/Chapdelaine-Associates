@@ -50,8 +50,8 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   FORM.validate = () => {
     let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
     let dbPackage = prepForDB(dbObj)
-    console.log('dbPackage', dbPackage)
     if (dbPackage) {
+    console.log('dbPackage', dbPackage)
       DBFactory.validate(dbPackage)
       .then( ({data: {msg}}) => $mdDialog.hide({dbPackage, msg}))
       .catch( ({data: {msg}}) => ToastFactory.toastReject(msg))
@@ -67,6 +67,7 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     }
 
     if (table === 'Customers'){
+      console.log('ids', ids)
       dbPackage.customer_id = ids
     }
 

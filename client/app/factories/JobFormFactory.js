@@ -4,56 +4,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
 
   const factory = {}
 
-   const defaultJob = {
-    job_info: {
-      job_status: 'New',
-      job_number: null,
-      job_type: null
-    },
-    property: {
-      primary_address: 'yooo'
-    },
-    addresses : [],
-    roads: [],
-    client: {},
-    client_type: {},
-    client_contact: {},
-    owner: {},
-    owner_contact: {},
-    ids: {}
-  }
-
-  const newJob = {
-    job_info: {
-      job_status: 'Pending',
-      job_number: -118,
-      job_type: 'Pin'
-    },
-    property: {
-      primary_address: 'ooop'
-    },
-    addresses : [],
-    roads: ['1223 smelly rd', '144 cashmoney st.'],
-    client: {
-      first_name: 'Dan',
-      last_name: 'odddd',
-    },
-    client_type: {
-      client_type: 'Owner'
-    },
-    client_contact: {},
-    owner: {},
-    owner_contact: {
-      first_name: 'willy'
-    },
-    ids: {
-      owner_contact_id: 123
-    }
-  }
-
   factory.updateJob = (original, update) => {
-    console.log('original', original)
-    console.log('update', update)
     const originalJobNumber = original.job_info.job_number
     const jobId = original.job_info.job_id
     const newJobNumber = update.job_info.job_number
@@ -62,7 +13,6 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     const property = findChanges(original.property, update.property) 
     const client = findChanges(original.client, update.client) 
     const client_type = findChanges(original.client_type, update.client_type) 
-    console.log('client_type', client_type)
     const client_contact = findChanges(original.client_contact, update.client_contact) 
     const owner = findChanges(original.owner, update.owner) 
     const owner_contact = findChanges(original.owner_contact, update.owner_contact)
@@ -114,45 +64,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
         $mdDialog.hide(newJobNumber)
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
-    //if client_type changed to owner 
-      //remove owner and owner rep
-    // to buyer just change in db
-    //if customers changed send to update or create 
-
   }  
-
-  let findChanges = (original, update) => {
-    return Object.keys(update).reduce( (obj, key) => {
-      if (update[key] !== original[key]) {
-        obj[key] = update[key]
-      } 
-      return obj
-    },{})
-  }
-
-  const findAdditions = (original, update) => {
-    return update.reduce( (arr, type) => {
-      if (!original.includes(type)) {
-        arr.push(type)
-      }
-      return arr
-    },[])
-  } 
-
-  const findRemovals = (original, update) => {
-    return original.reduce( (arr, type) => {
-      if (!update.includes(type)) {
-        arr.push(type)
-      }
-      return arr
-    },[])
-  }  
-
-
-
-
-
-
 
   factory.createJob = (original, update) => {
 
@@ -217,6 +129,34 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
 
   }
 
+
+  const findChanges = (original, update) => {
+    return Object.keys(update).reduce( (obj, key) => {
+      if (update[key] !== original[key]) {
+        obj[key] = update[key]
+      } 
+      return obj
+    },{})
+  }
+
+  const findAdditions = (original, update) => {
+    return update.reduce( (arr, type) => {
+      if (!original.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[])
+  } 
+
+  const findRemovals = (original, update) => {
+    return original.reduce( (arr, type) => {
+      if (!update.includes(type)) {
+        arr.push(type)
+      }
+      return arr
+    },[])
+  }  
+
   const addNewCustomers = customersToAdd => {
     return new Promise( (resolve, reject) => {
       Promise.all(customersToAdd.map( customer => {
@@ -229,7 +169,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
   const updateExistingCustomers = customersToUpdate => {
     return new Promise( (resolve, reject) => {
       Promise.all(customersToUpdate.map( customer => {
-        let dbPackage = {table: 'Customers', dbObj: customer.customer, id: customer.id }
+        let dbPackage = {table: 'Customers', dbObj: customer.customer, customer_id: customer.id }
         return DBFactory.updateExisting(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
@@ -318,8 +258,6 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
       }  
     })
   }
-
-  // factory.createJob(defaultJob, newJob)
 
   return factory
 })

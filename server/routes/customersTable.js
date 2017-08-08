@@ -5,7 +5,7 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
-const validateRep = require('../validation/validRepresentative')
+const validateCustomer = require('../validation/validCustomer')
 const validationHelper = require('../validation/validationHelper')
 
 router.get('/api/getCustomersForSearch', ({body}, res) => {
@@ -19,7 +19,7 @@ router.get('/api/getCustomersForSearch', ({body}, res) => {
 })
 
 router.post('/api/validateCustomer', ({body: {dbObj, customer_id}}, res) => {
-  const errors = validateRep.validate(dbObj)
+  const errors = validateCustomer.validate(dbObj)
   if (errors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
@@ -77,12 +77,12 @@ router.post('/api/addNewCustomer', ({body : {dbObj, idType}}, res) => {
   }).catch( err => console.log(err))
 })
 
-router.post('/api/updateCustomer', ({body: {dbObj, id}}, res) => {
+router.post('/api/updateCustomer', ({body: {dbObj, customer_id}}, res) => {
   getConnectTableIds(dbObj).then( data => {
     let polishedObj = data.obj
     knex('Customers')
     .update(polishedObj)
-    .where({customer_id: id})
+    .where({customer_id: customer_id})
     .then( () => res.send())
     .catch( err => console.log(err))        
   })
