@@ -9,6 +9,15 @@ const validCompany = require('../validation/validCompany')
 const validationHelper = require('../validation/validationHelper') 
 const sqlErrors = require('../errorHandling/sqlErrors')
 
+router.post('/api/validateCompany', ({body: {dbObj, customer_id}}, res) => {
+  const errors = validCompany.validate(dbObj)
+  if (errors[0]) {
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send({msg: `${msg}`})
+  } else {
+    res.send({msg: 'Valid Company!'})
+  }
+})
 
 router.get('/api/getCompaniesForSearch', (req, res) => {
   knex('Companies')
@@ -20,8 +29,7 @@ router.get('/api/getCompaniesForSearch', (req, res) => {
   .catch( err => console.log(err))
 }) 
 
-router.post('/api/getFullCompanyById', ({body: {ids}}, res) => {
-  const company_id = ids.company_id
+router.post('/api/getFullCompanyById', ({body: {company_id}}, res) => {
   knex('Companies')
   .select(
     'Companies.company_id',
@@ -29,26 +37,20 @@ router.post('/api/getFullCompanyById', ({body: {ids}}, res) => {
     'Addresses.address AS company_address'
   )
   .leftJoin('Addresses', 'Companies.address_id', 'Addresses.address_id')           
-  .where({'Companies.company_id': company_id})
+  .where('Companies.company_id', company_id)
   .then(data => res.send(data[0]))
   .catch(err => console.log('err', err))
 })
 
 router.post('/api/updateCompany', ({body: {dbObj, ids}}, res) => {
-  const errors = validCompany.validate(dbObj)
-  if (errors[0]) {  //------------------------------------checks each data type
-    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send({msg: `${msg}`})
-  } else {  
-    getConnectTableIds(dbObj).then( data => {
-      let polishedObj = data.obj
-      knex('Companies')
-      .update(polishedObj)
-      .where({company_id: ids.company_id})
-      .then( () => res.send({msg: 'Successfully updated Company!'}))
-      .catch( err => console.log('err', err))
-    })
-  }
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Companies')
+    .update(polishedObj)
+    .where({company_id: ids.company_id})
+    .then( () => res.send({msg: 'Successfully updated Company!'}))
+    .catch( err => console.log('err', err))
+  })
 })
 
 router.post('/api/addNewCompany', ({body: {dbObj}}, res) => {

@@ -63,11 +63,11 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
   const prepForDB = dbObj => {
     let dbPackage = {
       dbObj: dbObj,
-      table: table
+      table: table,
+      ids
     }
 
-    if (table === 'Customers'){
-      console.log('ids', ids)
+    if (table === 'Customers'){ ////////////////////remove this, just send ids/////////////////////////////////
       dbPackage.customer_id = ids
     }
 

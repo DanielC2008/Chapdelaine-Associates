@@ -26,9 +26,9 @@ app.factory('CompanyFactory', function($http, SearchFactory, FormFactory) {
     })
   }
 
-  factory.addNewCompany = (ids, data) => {
+  factory.addNewCompany = () => {
     return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Companies', data, ids, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+      FormFactory.updateForm('Companies', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
     })
   }
 

@@ -26,9 +26,9 @@ app.factory('DBFactory', function($http) {
     // else if (dbPackage.table === 'Job_Types'){
     //   return $http.post('/api/addNewJobType', dbPackage)
     // }
-    // else if (dbPackage.table === 'Companies'){
-    //   return $http.post('/api/addNewCompany', dbPackage)
-    // }
+    else if (dbPackage.table === 'Companies'){
+      return $http.post('/api/validateCompany', dbPackage)
+    }
     // else if (dbPackage.table === 'Cancellations'){
     //   return $http.post('/api/addNewCause', dbPackage)
     // }
