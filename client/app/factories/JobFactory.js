@@ -6,7 +6,7 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
-    factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
+    factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
     

@@ -67,10 +67,6 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
       ids
     }
 
-    if (table === 'Customers'){ ////////////////////remove this, just send ids/////////////////////////////////
-      dbPackage.customer_id = ids
-    }
-
     if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
         ToastFactory.toastReject("Please enter an Address or a Road.")

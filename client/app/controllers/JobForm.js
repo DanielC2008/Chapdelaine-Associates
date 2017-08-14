@@ -231,7 +231,7 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.client = dbPackage.dbObj
-              $scope.job.ids.client_id = dbPackage.customer_id.customer_id
+              $scope.job.ids.client_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
@@ -264,7 +264,7 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.client_contact = dbPackage.dbObj
-              $scope.job.ids.client_contact_id = dbPackage.customer_id.customer_id
+              $scope.job.ids.client_contact_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
@@ -297,7 +297,7 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.owner = dbPackage.dbObj
-              $scope.job.ids.owner_id = dbPackage.customer_id.customer_id
+              $scope.job.ids.owner_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
@@ -329,7 +329,7 @@ $scope.removeCustomer = customerType => {
             CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.owner_contact = dbPackage.dbObj
-              $scope.job.ids.owner_contact_id = dbPackage.customer_id.customer_id
+              $scope.job.ids.owner_contact_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {

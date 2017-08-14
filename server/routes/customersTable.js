@@ -18,7 +18,8 @@ router.get('/api/getCustomersForSearch', ({body}, res) => {
     .catch( err => console.log(err))
 })
 
-router.post('/api/validateCustomer', ({body: {dbObj, customer_id}}, res) => {
+router.post('/api/validateCustomer', ({body: {dbObj, ids}}, res) => {
+  const customer_id = {customer_id: ids.customer_id}
   const errors = validateCustomer.validate(dbObj)
   if (errors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
