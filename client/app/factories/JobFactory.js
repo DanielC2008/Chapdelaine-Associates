@@ -8,10 +8,6 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
 
-    factory.getActiveJobs = () => $http.get('/api/activeJobs') //will remove
-
-    factory.getPendingJobs = () => $http.get('/api/pendingJobs') //will remove
-
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
     
     factory.getTab = () => $http.get('/api/getTab')
