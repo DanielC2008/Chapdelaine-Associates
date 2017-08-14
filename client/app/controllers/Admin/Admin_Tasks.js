@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastFactory, $route, DBFactory) {
+app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, DBFactory) {
   const AT = this
   AT.editIndex = false
   let original = undefined
@@ -26,9 +26,7 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastF
   AT.addNew = () => {
     TaskFactory.addNew().then( ({dbPackage}) => {
       DBFactory.addNew(dbPackage).then( () => {
-        AdminFactory.setTab('AT')
-        $route.reload()
-        ToastFactory.toastSuccess()
+        $scope.setTabAndReload('AT')
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
@@ -37,17 +35,13 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastF
     const ids = {task_id: task.task_id}
     delete task.task_id
     TaskFactory.updateExisting(task, ids).then( () => {
-      AdminFactory.setTab('AT')
-      $route.reload()
-      ToastFactory.toastSuccess()
+      $scope.setTabAndReload('AT')
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   AT.disableTask = id => {
     TaskFactory.disableTask(id).then( ({data: {msg}}) => {
-      AdminFactory.setTab('AT')
-      $route.reload()
-      ToastFactory.toastSuccess(msg)
+      $scope.setTabAndReload('AT')
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }  
 

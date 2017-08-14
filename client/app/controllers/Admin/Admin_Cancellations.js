@@ -1,21 +1,18 @@
 'use strict'
 
-app.controller('Admin_Cancellations', function($scope, CancellationFactory, AdminFactory, ToastFactory, $route, DBFactory) {
+app.controller('Admin_Cancellations', function($scope, CancellationFactory, ToastFactory, DBFactory) {
 const ACA = this
 
-CancellationFactory.getCauses().then( ({data}) => {
-  ACA.causes = data
-}) 
+  CancellationFactory.getCauses().then( ({data}) => {
+    ACA.causes = data
+  }) 
 
-ACA.addNew = () => {
-  CancellationFactory.addNewCause().then( ({dbPackage}) => {
-    DBFactory.addNew(dbPackage).then( ({msg}) => {
-      ////////////////////////////////////////////////////////////////can move this out to Admin.js
-      AdminFactory.setTab('ACA')//////////////////////////////
-      $route.reload()////////////////////////////////////
-      ToastFactory.toastSuccess(msg)/////////////////////////////////
+  ACA.addNew = () => {
+    CancellationFactory.addNewCause().then( ({dbPackage}) => {
+      DBFactory.addNew(dbPackage).then( ({msg}) => {
+        $scope.setTabAndReload('ACA')
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-  }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-}
+  }
 
 })

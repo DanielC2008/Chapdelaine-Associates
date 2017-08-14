@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Customers', function($scope, $route, CustomerFactory, ToastFactory, DBFactory) {
+app.controller('Admin_Customers', function($scope, CustomerFactory, ToastFactory, DBFactory) {
   let AC = this
 
   AC.addOrEdit = () => { 
