@@ -26,7 +26,6 @@ router.post('/api/validateEmployee', ({body: {dbObj, ids}}, res) => {
     })   
   }
 })
-
   
 router.post('/api/register', ({body}, res) => {
   knex('Users')
