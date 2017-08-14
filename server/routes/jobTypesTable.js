@@ -4,8 +4,18 @@ const { Router } = require('express')
 const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
-const {validJobType} = require('../validation/validJob')
+const { validJobType } = require('../validation/validJob')
 
+
+router.post('/api/validateJobType', ({body: {dbObj}}, res) => {
+  const errors = validJobType.validate(dbObj, {typecast: true})
+  if (errors[0]) {  //------------------------------------checks each type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send(msg)
+  } else {
+    res.send({msg: 'Valid Job Type'})
+  }
+})
 
 router.post('/api/addJobTypeToJob', ({body: {job_type, job_id}}, res) => { // ensure this doesnt happen twice
   knex('Job_Types')
@@ -45,16 +55,10 @@ router.post('/api/addNewJobType', ({body: {dbObj}}, res) => {
   //add Priority
   getLastPriority().then( last => {
     dbObj.priority = last[0].priority + 1
-    const errors = validJobType.validate(dbObj, {typecast: true})
-    if (errors[0]) {  //------------------------------------checks each type
-      let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-      res.status(400).send(msg)
-    } else {
-      knex('Job_Types')
-      .insert(dbObj)
-      .then( () => res.send({msg: 'Successfully added job type!'}))
-      .catch( err => console.log('err', err))
-    }
+    knex('Job_Types')
+    .insert(dbObj)
+    .then( () => res.send({msg: 'Successfully added job type!'}))
+    .catch( err => console.log('err', err))
   })
 })
 

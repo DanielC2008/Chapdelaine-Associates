@@ -23,9 +23,10 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Tasks'){
       return $http.post('/api/validateTask', dbPackage)
     } 
-    // else if (dbPackage.table === 'Job_Types'){
-    //   return $http.post('/api/addNewJobType', dbPackage)
-    // }
+    else if (dbPackage.table === 'Job_Types'){
+      console.log('dbPackageyy', dbPackage)
+      return $http.post('/api/validateJobType', dbPackage)
+    }
     else if (dbPackage.table === 'Companies'){
       return $http.post('/api/validateCompany', dbPackage)
     }
