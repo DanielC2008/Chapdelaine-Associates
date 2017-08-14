@@ -30,9 +30,9 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Companies'){
       return $http.post('/api/validateCompany', dbPackage)
     }
-    // else if (dbPackage.table === 'Cancellations'){
-    //   return $http.post('/api/addNewCause', dbPackage)
-    // }
+    else if (dbPackage.table === 'Cancellations'){
+      return $http.post('/api/validateCause', dbPackage)
+    }
   }
 
   factory.addNew = dbPackage => {
