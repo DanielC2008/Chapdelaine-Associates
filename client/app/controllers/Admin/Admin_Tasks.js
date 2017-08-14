@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastFactory, $route) {
+app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastFactory, $route, DBFactory) {
   const AT = this
   AT.editIndex = false
   let original = undefined
@@ -24,20 +24,22 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, AdminFactory, ToastF
   }  
   
   AT.addNew = () => {
-    TaskFactory.addNew().then( ({msg}) => {
-      AdminFactory.setTab('AT')
-      $route.reload()
-      ToastFactory.toastSuccess(msg)
+    TaskFactory.addNew().then( ({dbPackage}) => {
+      DBFactory.addNew(dbPackage).then( () => {
+        AdminFactory.setTab('AT')
+        $route.reload()
+        ToastFactory.toastSuccess()
+      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   AT.saveChanges = task => {
     const ids = {task_id: task.task_id}
     delete task.task_id
-    TaskFactory.updateExisting(ids, task).then( ({data: {msg}}) => {
+    TaskFactory.updateExisting(task, ids).then( () => {
       AdminFactory.setTab('AT')
       $route.reload()
-      ToastFactory.toastSuccess(msg)
+      ToastFactory.toastSuccess()
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 
