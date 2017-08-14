@@ -6,10 +6,11 @@ app.controller('Admin_Employees', function($scope, UserFactory, AdminFactory, To
   UserFactory.getAllEmployees().then( ({data}) => AE.Employees = data)
 
   AE.addNew = () => {
-    UserFactory.addNew().then( ({msg}) => {
-      AdminFactory.setTab('AE')
-      $route.reload()
-      ToastFactory.toastSuccess(msg)
+    UserFactory.addNew().then( dbPackage => {
+      console.log('dbPackage', dbPackage)
+      // AdminFactory.setTab('AE')
+      // $route.reload()
+      // ToastFactory.toastSuccess(msg)
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
   }
 

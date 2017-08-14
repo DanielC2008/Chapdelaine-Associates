@@ -8,6 +8,26 @@ const locateOrCreate = require('../locateOrCreate')
 const validEmployee = require('../validation/validEmployee')
 const validationHelper = require('../validation/validationHelper')
 
+
+
+router.post('/api/validateEmployee', ({body: {dbObj, ids}}, res) => {
+  const employee_id = {employee_id: ids.employee_id}
+  const errors = validEmployee.validate(dbObj, {typecast: true})
+  if (errors[0]) {  //------------------------------------checks each data type
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send({msg: `${msg}`})
+  } else {
+    validationHelper.checkNameExists(dbObj, 'Employees', employee_id).then( nameExists => {//true/false
+      if (nameExists) { //-----------------------------checks if name already exists in DB
+        res.status(400).send({msg: `${nameExists}`})
+      } else {
+        res.send({msg: 'Valid Employee!'}) 
+      } 
+    })   
+  }
+})
+
+  
 router.post('/api/register', ({body}, res) => {
   knex('Users')
     .returning('user_name')
@@ -60,51 +80,27 @@ router.post('/api/deleteEmployee', ({body: {id}}, res) => {
 })
 
 router.post('/api/addNewEmployee', ({body: {dbObj}}, res) => {
-  const errors = validEmployee.validate(dbObj, {typecast: true})
-  if (errors[0]) {  //------------------------------------checks each data type
-    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send({msg: `${msg}`})
-  } else {
-    validationHelper.checkNameExists(dbObj, 'Employees').then( nameExists => {//true/false
-      if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send({msg: `${nameExists}`})
-      } else {
-        getConnectTableIds(dbObj).then( data => {
-          let polishedObj = data.obj
-          knex('Employees')
-          .insert(polishedObj)
-          .then( data => {
-            res.send({msg: 'Successfully created Employee!'})
-          }).catch( err => console.log(err))
-        })  
-      } 
-    })   
-  }
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Employees')
+    .insert(polishedObj)
+    .then( data => {
+      res.send({msg: 'Successfully created Employee!'})
+    }).catch( err => console.log(err))
+  })  
 })
 
 router.post('/api/updateEmployee', ({body: {dbObj, ids}}, res) => {
   const employee_id = {employee_id: ids.employee_id}
-  const errors = validEmployee.validate(dbObj, {typecast: true})
-  if (errors[0]) {  //------------------------------------checks each data type
-    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send({msg: `${msg}`})
-  } else {
-    validationHelper.checkNameExistsOnEdit(employee_id, dbObj, 'Employees').then( nameExists => {//true/false
-      if (nameExists) { //-----------------------------checks if name already exists in DB
-        res.status(400).send({msg: `${nameExists}`})
-      } else {
-        getConnectTableIds(dbObj).then( data => {
-          let polishedObj = data.obj
-          knex('Employees')
-          .update(polishedObj)
-          .where(employee_id)
-          .then( data => {
-            res.send({msg: 'Successfully updated Employee!'})
-          }).catch( err => console.log(err))
-        })  
-      } 
-    })   
-  }
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Employees')
+    .update(polishedObj)
+    .where(employee_id)
+    .then( data => {
+      res.send({msg: 'Successfully updated Employee!'})
+    }).catch( err => console.log(err))
+  })  
 })
 
 const getConnectTableIds = obj => {

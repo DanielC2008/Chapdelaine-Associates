@@ -25,7 +25,7 @@ router.post('/api/validateCustomer', ({body: {dbObj, ids}}, res) => {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
   } else {
-    validationHelper.checkNameExists(dbObj, customer_id).then( nameExists => {
+    validationHelper.checkNameExists(dbObj, 'Customers', customer_id).then( nameExists => {
       nameExists ? res.status(400).send({msg: `${nameExists}`}) : res.send({msg: 'Valid Customer!'})
     })
   }

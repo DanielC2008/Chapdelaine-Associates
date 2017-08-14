@@ -17,9 +17,9 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Roads'){
       return $http.post('/api/validateRoad', dbPackage)
     }
-    // else if (dbPackage.table === 'Employees'){
-    //   return $http.post('/api/addNewEmployee', dbPackage)
-    // } 
+    else if (dbPackage.table === 'Employees'){
+      return $http.post('/api/validateEmployee', dbPackage)
+    } 
     // else if (dbPackage.table === 'Tasks'){
     //   return $http.post('/api/addNewTask', dbPackage)
     // } 

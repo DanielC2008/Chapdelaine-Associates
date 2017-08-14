@@ -11,13 +11,13 @@ app.factory('UserFactory', function($http, FormFactory) {
 
   factory.addNew = () => {
     return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Employees', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+      FormFactory.updateForm('Employees', null, {employee_id: null}, 'Add New').then( dbPackage => resolve(dbPackage)).catch( err => reject({msg:'Nothing Saved'}))
     })
   }
 
   factory.updateExisting = (data, ids) => {
     return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Employees', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
+      FormFactory.updateForm('Employees', data, ids, 'Update').then( dbPackage => resolve(dbPackage)).catch( err => reject({msg:'Nothing Saved'}))
     })
   }
 

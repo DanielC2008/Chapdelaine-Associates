@@ -9,7 +9,7 @@ const validCompany = require('../validation/validCompany')
 const validationHelper = require('../validation/validationHelper') 
 const sqlErrors = require('../errorHandling/sqlErrors')
 
-router.post('/api/validateCompany', ({body: {dbObj, customer_id}}, res) => {
+router.post('/api/validateCompany', ({body: {dbObj}}, res) => {
   const errors = validCompany.validate(dbObj)
   if (errors[0]) {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
