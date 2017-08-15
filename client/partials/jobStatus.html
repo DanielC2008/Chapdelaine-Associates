@@ -2,24 +2,24 @@
   <div>
     <span>Update Status:</span>
     <button type="submit" ng-click="JS.jobCanceled()" 
-            ng-disabled='job.jobInfo.job_status === "New" ||
-                     job.jobInfo.job_status === "Canceled" ||
-                     job.jobInfo.job_status === "Complete"'>Canceled
+            ng-disabled='job.job_info.job_status === "New" ||
+                     job.job_info.job_status === "Canceled" ||
+                     job.job_info.job_status === "Complete"'>Canceled
     </button>
     <button type="submit" ng-click="JS.jobPending()" 
-            ng-disabled='job.jobInfo.job_status === "Pending" ||
-                     job.jobInfo.job_status === "Complete"'>Pending
+            ng-disabled='job.job_info.job_status === "Pending" ||
+                     job.job_info.job_status === "Complete"'>Pending
     </button>
     <button type="submit"  ng-click="JS.jobActive()" 
-            ng-disabled='job.jobInfo.job_status === "Active"'>Active
+            ng-disabled='job.job_info.job_status === "Active"'>Active
     </button>
     <button type="submit" ng-click="JS.jobChangeHold()" 
-            ng-disabled='job.jobInfo.job_status === "New" ||
-                     job.jobInfo.job_status === "Canceled" ||
-                     job.jobInfo.job_status === "Complete"'>{{job.jobInfo.on_hold ? 'Remove Hold' : 'Hold'}}
+            ng-disabled='job.job_info.job_status === "New" ||
+                     job.job_info.job_status === "Canceled" ||
+                     job.job_info.job_status === "Complete"'>{{job.job_info.on_hold ? 'Remove Hold' : 'Hold'}}
     </button>
     <button type="submit" ng-click="JS.jobComplete()" 
-            ng-disabled='job.jobInfo.job_status === "Complete" ||
-                     job.jobInfo.job_status === "Canceled"'>Complete
+            ng-disabled='job.job_info.job_status === "Complete" ||
+                     job.job_info.job_status === "Canceled"'>Complete
     </button>
   </div>

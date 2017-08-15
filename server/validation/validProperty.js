@@ -2,7 +2,7 @@
 
 const schema = require('validate')
 
-  const property = schema({
+  const validateProperty = schema({
     property_map: {
       type: 'string',
       message: 'Property Map must be a string.'
@@ -70,5 +70,21 @@ const schema = require('validate')
     }
   })
 
+  const validateAddress = schema({
+    address: {
+      type: 'string',
+      message: 'Address must be a string.',
+      required: true
+    }
+  })
 
-module.exports = property
+  const validateRoad = schema({
+    road: {
+      type: 'string',
+      message: 'Road must be a string.',
+      required: true
+    }
+  })
+
+
+module.exports = {validateProperty, validateAddress, validateRoad}

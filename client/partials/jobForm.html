@@ -1,70 +1,156 @@
-<div class="dialog">
+<div class="row dialog">
+  <div class="col s6">
+  <!-- ////////////////////////////JOB INFO//////////////////////////// -->
+    <div class="row">
 
-<div class="row">
-  <h5 class="col s12">Job info</h5>
-  <div class="col s12">
-    Job Status: {{job.jobInfo.on_hold ? 'Hold' : job.jobInfo.job_status}}
-  </div>  
-  <div class="col s12" ng-controller="JobStatus as JS">
-      <div ng-include="'./partials/jobStatus.html'"></div>
+      <h5 class="col s12">Job info</h5>
+      <div class="col s12">
+        Job Status: {{job.job_info.on_hold ? 'Hold' : job.job_info.job_status}}
+      </div>  
+      <div class="col s12" ng-controller="JobStatus as JS">
+          <div ng-include="'./partials/jobStatus.html'"></div>
+      </div>
+      <div class="row">
+        <div class="col s8">Job Type:
+          <span ng-repeat="jobType in job.job_types">
+            <span>{{jobType}} <span ng-hide="$index + 1 === job.job_types.length">,</span> </span>
+          </span>
+        </div> 
+        <div class="col s4">
+          <button ng-click="removeJobType()">Remove Job Type</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s6 input-field" ng-if="types" ng-init="material()">
+          <select  ng-model="jobType" ng-change="addJobType(jobType)" ng-options="type as type disable when type.notAnOption for type in types"> 
+            <option value="" label="-- Select option --" disabled selected="selected"> Choose a job type</option>
+          </select>
+        </div>
+      </div>
+   
+      <div class="col s12" ng-if="displayCause">
+        Cause for Cancelling: {{displayCause}}
+      </div>
+
+      <div class="col s12">
+        Job Number: {{job.job_info.job_number > 0 ? job.job_info.job_number : 'None' }}
+      </div>
+
+      <div class="col s12">
+        <label for="startDate">Start Date:</label>
+        <input ng-disabled='!job.job_info.start_date' type="date" name="startDate" ng-change="changeDate(startDate, 'start_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="startDate">
+      </div>
+      <div class="col s12">
+        <label for="completeDate">Complete Date:</label>
+        <input  ng-disabled='!job.job_info.complete_date' type="date" name="completeDate" ng-change="changeDate(completeDate, 'complete_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="completeDate">
+      </div>
+      <div class="col s12">
+        <label for="targetDate">Target Date:</label>
+        <input type="date" name="targetDate" ng-change="changeDate(targetDate, 'target_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="targetDate">
+      </div>
+
+    </div>
   </div>
 
-  <div class="col s12" ng-if="displayCause">
-    Cause for Cancelling: {{displayCause}}
+  <div class="col s6">
+  <h5 class="col s12"> Property and Client Info</h5>
+    <!-- ////////////////////////////PROPERTY//////////////////////////// -->
+    <div class="row">
+      <div class="col s6">
+        Property : 
+        {{propertySet && job.property.primary_address ? job.property.primary_address : job.property.primary_road}}
+      </div>
+      <button class="col s3 offset-s3" ng-click="propertySet ? editProp() : addProp()">
+        {{propertySet ? 'Edit Property' : 'Add Property'}}
+      </button>
+    </div>
+    <!-- ////////////////////////////ADDRESSES//////////////////////////// -->
+    <div class="row">
+      <div class="col s6">Secondary Addresses:
+        <span ng-repeat="address in job.addresses">
+          <span ng-if="address !== job.property.primary_address">{{address}} 
+            <span ng-hide="$index + 1 === job.addresses.length">,</span> 
+          </span>
+        </span>
+      </div>
+      <button class="col s3" ng-click="addAddress()">Add Address</button>
+      <button class="col s3" ng-click="removeAddress(job.property.primary_address)">Remove Address</button>
+    </div>
+      <!-- ////////////////////////////ROADS//////////////////////////// -->
+    <div class="row">
+      <div class="col s6">Secondary Roads:
+        <span ng-repeat="road in job.roads">
+          <span ng-if="road !== job.property.primary_road">{{road}} 
+            <span ng-hide="$index + 1 === job.roads.length">,</span> 
+          </span>
+        </span>
+      </div>
+      <button class="col s3" ng-click="addRoad()">Add Road</button>
+      <button class="col s3" ng-click="removeRoad(job.property.primary_road)">Remove Road</button>
+    </div>
+    <!-- ////////////////////////////CLIENT//////////////////////////// -->
+    <div class="row">
+      <div class="col s6">
+        Client : 
+        {{clientSet ? job.client.last_name : ''}}
+      </div>
+      <button class="col s3" ng-click="clientSet ? editClient() : addClient()">
+        {{clientSet ? 'Edit Client' : 'Add Client'}}
+      </button>
+      <button class="col s3" ng-click="removeCustomer('client')">Remove</button>
+    </div>
+    <!-- ////////////////////////////CLIENT TYPE//////////////////////////// -->
+    <div class="row">
+      <div class="col s6"> Client Type: </div>
+      <form action="#" class="col s3 offset-s3"> 
+        <input ng-model="job.client_type.client_type" ng-change="clientTypeChange()" type="radio" id="owner" value="Owner" />
+        <label for="owner">Owner</label>
+        <input ng-model="job.client_type.client_type" ng-change="clientTypeChange()" type="radio" id="buyer" value="Buyer" />
+        <label for="buyer">Buyer</label>
+      </form>
+    </div>
+    <!-- ////////////////////////////CLIENT CONTACT//////////////////////////// -->
+    <div class="row">
+      <div class="col s6">
+        Client Contact : 
+        {{clientContactSet ? job.client_contact.last_name : ''}}
+      </div>
+      <button class="col s3" ng-click="clientContactSet ? editClientContact() : addClientContact()">
+        {{clientContactSet ? 'Edit Client Contact' : 'Add Client Contact'}}
+      </button>
+      <button class="col s3" ng-click="removeCustomer('client_contact')">Remove</button>
+    </div>
+    <!-- ////////////////////////////OWNER//////////////////////////// -->
+    <div class="row"> 
+      <div class="col s6">
+        Owner: 
+        {{ownerSet ? job.owner.last_name : ''}}
+      </div>
+      <button class="col s3" ng-click="ownerSet ? editOwner() : addOwner()" 
+        ng-disabled="job.client_type.client_type !== 'Buyer'">
+        {{ownerSet ? 'Edit Owner' : 'Add Owner'}}
+      </button>
+      <button class="col s3" ng-click="removeCustomer('owner')">Remove</button>
+    </div>
+    <!-- ////////////////////////////OWNER CONTACT//////////////////////////// -->
+    <div class="row">
+      <div class="col s6">
+        Owner Contact : 
+        {{ownerContactSet ? job.owner_contact.last_name : ''}}
+      </div>
+      <button class="col s3" ng-click="ownerContactSet ? editOwnerContact() : addOwnerContact()"
+        ng-disabled="job.client_type.client_type !== 'Buyer'">
+        {{ownerContactSet ? 'Edit Owner Contact' : 'Add Owner Contact'}}
+      </button>
+      <button class="col s3" ng-click="removeCustomer('owner_contact')">Remove</button>
+    </div>
   </div>
 
-
-  <div class="col s12">
-    Job Number: 
-    {{job.jobInfo.job_number > 0 ? job.jobInfo.job_number : 'None' }}
+  <div class="row">
+    <div class="col s4 offset-s4">
+      <button class="col s6" ng-click="cancel()">Cancel</button>
+      <button class="col s6" ng-click="checkReqs()">Submit</button>
+    </div>
   </div>
-  <div class="col s12">
-    Start Date: 
-    {{job.jobInfo.start_date}}
-  </div>
-  <div class="col s12">
-    <input ng-disabled='!job.jobInfo.start_date' type="date" name="" ng-model="startDate" enter="setDate(startDate, 'start')">
-  </div>
-  <div class="col s12">
-    Complete Date: 
-    {{job.jobInfo.complete_date}}
-  </div>
-  <div class="col s12">
-    <input ng-disabled='!job.jobInfo.complete_date' type="date" name="" ng-model="completeDate" enter="setDate(completeDate, 'complete')">
-  </div>
-  <div class="col s12">
-    Target Date: {{job.jobInfo.target_date}}
-  </div>
-  <div class="col s12">
-    <input type="date" name="" ng-model="targetDate" enter="setDate(targetDate, 'target')">
-  </div>
-</div>
-
-
-<div>
-  Property
-</div>
-<div>
-  Add Address
-</div>
-<div>
-  Add Road
-</div>
-<div>
-  Client
-</div>
-<div>
-  Client Type
-</div>
-<div>
-  Client Rep
-</div>
-<div>
-  Owner
-</div>
-<div>
-  Owner Rep
-</div>
-
 
 </div>

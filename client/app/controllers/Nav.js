@@ -21,5 +21,6 @@ app.controller('Nav', function($scope, JobFactory, $mdDialog) {
       clickOutsideToClose: true,
       multiple: true
     })
+    .then( jobNumber => JobFactory.goToJobPage(jobNumber)).catch( err => console.log('err', err))
   }
 })

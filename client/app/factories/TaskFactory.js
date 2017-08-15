@@ -15,7 +15,7 @@ app.factory('TaskFactory', function($q, $http, FormFactory) {
     })
   }
 
-  factory.updateExisting = (ids, task) => $http.post('/api/updateTask', {ids, task})
+  factory.updateExisting = (dbObj, ids) => $http.post('/api/updateTask', {dbObj, ids})
 
   factory.disableTask = id => $http.post('/api/disableTask', {id})
 

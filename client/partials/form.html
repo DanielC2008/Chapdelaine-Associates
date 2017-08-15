@@ -8,29 +8,8 @@
     <textarea class='col s8 offset-s2 addToJobNotes' ng-if="key == 'Notes'" ng-model='display[key]' placeholder="Special Notes..."></textarea>
   </div>
 </div>
-<div class='row' ng-if="FORM.table === 'Clients' && FORM.jobIdExists "> 
-  <h5 class="col s12">Client Type:</h5>
-  <button class="button btn col s3" ng-class="{selectedButton: FORM.clientType === 'Owner'}" ng-click="FORM.clientType = 'Owner'">Owner</button> 
-  <button class="button btn col s3" ng-class="{selectedButton: FORM.clientType === 'Buyer'}" ng-click="FORM.clientType = 'Buyer'"">Buyer</button>
-  <div class="col s4">
-    <span for="other">Other</span>
-    <input type="text" name="other" ng-model="other" ng-change="FORM.clientType = other"> 
-  </div>
-  <div class="col s12">
-    <h5>Is this your main client?</h5>
-    <button class="button btn col s3" ng-class="{selectedButton: FORM.main}" ng-click='FORM.main = true'>Yes</button>
-    <button class="button btn col s3" ng-class="{selectedButton: !FORM.main}" ng-click='FORM.main = false'>No</button>
-  </div>
-</div>
-<div ng-if="FORM.ClientNames" class="row"> Add Client:
-  <div ng-repeat="name in FORM.ClientNames"> 
-    <button class="button btn"  ng-click="FORM.clientId = name.client_id">{{name.client_name}}</button>
-  </div>
-</div>
 <div class="row">
   <button class="button btn" ng-click="FORM.reject()">Exit Without Saving</button>
-  <button ng-if="FORM.formType === 'Add New' " class="button btn" ng-click="FORM.addNew()" >Add</button>
-  <button ng-if="FORM.formType === 'Add Existing' " class="button btn" ng-click="FORM.addExisting()" >Add</button>
-  <button ng-if="FORM.formType === 'Update' " class="button btn" ng-click="FORM.updateExisting()" >Update</button>
+  <button class="button btn" ng-click="FORM.validate()" >{{FORM.formType}}</button>
 </div>
 

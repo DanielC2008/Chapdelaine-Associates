@@ -6,20 +6,7 @@
       <li><a ng-click="setNewTab('JobAttachment') ">Attachments</a></li>
       <li><a ng-click="setNewTab('JobEstimate') ">Estimate</a></li>
       <li><a ng-click="setNewTab('JobInvoice') ">Invoice</a></li>
-      <div class="liDuplicate " ng-init="material()">
-        <select class="navSelect" name="select" ng-model='select' ng-change="update(select)"> 
-          <option value="" disabled>Update Job</option>
-          <option value="updateStatus">Update Status</option>
-          <option value="addClient">Add Client</option>
-          <option ng-if="Clients.length != 0" value="editClient">Edit Client</option>
-          <option ng-if="Clients.length != 0" value="removeClient">Remove Client</option>
-          <option ng-if="Representatives.length != Clients.length" value="addRep">Add Rep</option>
-          <option ng-if="Representatives.length != 0" value="editRep">Edit Rep</option>
-          <option ng-if="Representatives.length != 0" value="removeRep">Remove Rep</option>
-          <option value="{{Property ? 'editProp' : 'addProp'}}">{{Property ? 'Edit Property' : 'Add Property'}}</option>
-          <option ng-if="Property" value="addAddressRoad">Add Address/Road</option>
-        </select>   
-      </div>  
+      <li><a ng-click="updateJob() ">Update Job</a></li>
       <li class="jobExit" ><a href="/#!/home">X</a></li>
     </ul>
   </nav>
@@ -31,15 +18,21 @@
     </div>
   </div>
 
-  <div class="jobInfo"> 
-    <h5>Job Number: {{Job.job_number < 0 ? 'None': Job.job_number}}</h5> 
+  <div class="job.job_info"> 
     <div class='row'>
-      <div class="col s2">Job Type: {{Job.job_types}}</div>
-      <div class="col s2">Job Status: {{Job.on_hold ? 'Hold' : Job.job_status}}</div>
-      <div class="col s2">Date Started: {{Job.start_date | date : 'mediumDate' : timeZoneOffset}}</div>
-      <div class="col s2">Date Completed: {{Job.complete_date | date : 'mediumDate' : timeZoneOffset}}</div>
-      <div class="col s2">Last Accessed: {{Job.last_accessed | date : 'medium'}}</div>
-      <div class="col s2">Target Date: {{Job.target_date | date : 'mediumDate'}}</div>
+      <h5 class="col s4">Job Number: {{job.job_info.job_number < 0 ? 'None': job.job_info.job_number}}</h5> 
+      <h5 class="col s4">Job Status: {{job.job_info.on_hold ? 'Hold' : job.job_info.job_status}}</h5>
+      <h5 class="col s4">Target Date: {{job.job_info.target_date | date : 'mediumDate' : timeZoneOffset}}</h5>
+    </div>  
+    <div class='row'>
+      <div class="col s3">Job Type:
+        <span ng-repeat="jobType in job.job_types">
+          <span>{{jobType}}<span ng-hide="$index + 1 === job.job_types.length">,</span> </span>
+        </span>
+      </div> 
+      <div class="col s3">Start Date: {{job.job_info.start_date | date : 'mediumDate' : timeZoneOffset}}</div>
+      <div class="col s3">Complete Date: {{job.job_info.complete_date | date : 'mediumDate' : timeZoneOffset}}</div>
+      <div class="col s3">Last Accessed: {{job.job_info.last_accessed | date : 'medium' }}</div>
     </div>
 
     <div ng-if="showTab === 'JobMain'" ng-controller="JobMain as JM">

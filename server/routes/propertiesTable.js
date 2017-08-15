@@ -5,94 +5,135 @@ const config = require('../../database/knexfile.js').development
 const knex = require('knex')(config)
 const router = Router()
 const locateOrCreate = require('../locateOrCreate')
-const validateProperty = require('../validation/validProperty')
+const {validateProperty, validateAddress, validateRoad} = require('../validation/validProperty')
 
-router.post('/api/addNewPropertyToJob', ({body: {dbObj, ids}}, res) => {
-  let job_id = ids.job_id
-  let property_id
+router.post('/api/validateProp', ({body: {dbObj}}, res) => {
   const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
   if (errors[0]) {  //------------------------------------checks each type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
   } else {
-    getConnectTableIds(dbObj).then( data => {
-      let polishedObj = data.obj
-      let address_id = data.obj.primary_address_id  ? data.obj.primary_address_id : null
-      let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
-      knex('Properties') //------------------------make property
-      .returning('property_id')
-      .insert(polishedObj)
-      .then( data => {
-        property_id = data[0]
-        return Promise.all([
-          addAddress(address_id, property_id).then().catch( err => console.log('err', err)),
-          addRoad(road_id, property_id).then().catch( err => console.log('err', err)),
-        ]).then( () => {
-          knex('Jobs')
-          .update({property_id: property_id})
-          .where({job_id: job_id})
-          .then( () => res.send({msg: 'Successfully created and added to Job!'})).catch(err => console.log(err))
-        }).catch(err => console.log(err))
-      }).catch( err => console.log(err))
-    }).catch( err => console.log(err))
+    res.send({msg: 'Valid Property!'})
   }
 })
 
-router.post('/api/updateProperty', ({body: {dbObj, ids}}, res) => {
-  const property_id = ids.property_id
-  const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
-  if (errors[0]) {  //------------------------------------checks each type
+router.post('/api/validateAddress', ({body: {dbObj}}, res) => {
+  const errors = validateAddress.validate(dbObj) 
+  if (errors[0]) { 
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
   } else {
-    getConnectTableIds(dbObj).then( data => {
-      let polishedObj = data.obj
-      let address_id = data.obj.primary_address_id  ? data.obj.primary_address_id : null
-      let road_id = data.obj.primary_road_id ? data.obj.primary_road_id : null
-      knex('Properties')
-      .update(polishedObj)
-      .where({property_id: property_id})
-      .then( data => {
-        return Promise.all([
-          addAddress(address_id, property_id),
-          addRoad(road_id, property_id)
-        ]).then( () => res.send({msg: 'Successfully updated Job!'})).catch(err => console.log(err))
-      }).catch( err => console.log(err))
-    }).catch( err => console.log(err))
+    res.send({msg: 'Valid Address!'})
   }
 })
 
-router.post('/api/getAddressesOnProp', ({body:{ property_id }}, res) => {
-  knex('Properties')
-  .select('Addresses.address')
-  .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')
-  .join('Addresses', 'Properties_Addresses.address_id', 'Addresses.address_id')
-  .whereIn('Properties.property_id', property_id)
+router.post('/api/validateRoad', ({body: {dbObj}}, res) => {
+  const errors = validateRoad.validate(dbObj)
+  if (errors[0]) { 
+    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
+    res.status(400).send({msg: `${msg}`})
+  } else {
+    res.send({msg: 'Valid Road!'})
+  }
+})
+
+router.get('/api/getAddressesForSearch', ({body}, res) => {
+  knex('Addresses')
+  .select(
+    'address AS value',
+    'address_id AS id'
+  )
   .then( data => res.send(data))
-  .catch(err => console.log('err', err))
+  .catch( err => console.log(err))
 })
 
-router.post('/api/getRoadsOnProp', ({body:{ property_id }}, res) => {
-  knex('Properties')
-  .select('Roads.road')
-  .join('Properties_Roads', 'Properties.property_id', 'Properties_Roads.property_id')
-  .join('Roads', 'Properties_Roads.road_id', 'Roads.road_id')
-  .whereIn('Properties.property_id', property_id)
-  .then(data => res.send(data))
-  .catch(err => console.log('err', err))
+router.get('/api/getRoadsForSearch', ({body}, res) => {
+  knex('Roads')
+  .select(
+    'road AS value',
+    'road_id AS id'
+  )
+  .then( data => res.send(data))
+  .catch( err => console.log(err))
 })
 
-router.post('/api/addSecondaryAddressOrRoad', ({body: {dbObj, ids}}, res) => {
-  let property_id = ids.property_id
-  getAddresssRoadIds(dbObj).then( data => {
-    let road_id = data.obj.road_id
-    let address_id = data.obj.address_id
-    return Promise.all([
-      addAddress(address_id, property_id),
-      addRoad(road_id, property_id)
-    ]).then( () => res.send({msg: 'Successfully updated Property!'})).catch(err => console.log(err))
+
+router.post('/api/addNewPropertyToJob', ({body: {dbObj}}, res) => {
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Properties')
+    .returning('property_id')
+    .insert(polishedObj)
+    .then( data => {
+      let property_id = data[0]
+      Promise.all([
+        addAddress(polishedObj.primary_address_id, property_id),
+        addRoad(polishedObj.primary_road_id, property_id),
+      ]).then(() => res.send({property_id: property_id})).catch( err => console.log(err))
+    }).catch( err => console.log(err))
+  }).catch( err => console.log(err))
+})
+
+router.post('/api/updateProperty', ({body: {dbObj, id}}, res) => {
+  getConnectTableIds(dbObj).then( data => {
+    let polishedObj = data.obj
+    knex('Properties')
+    .update(polishedObj)
+    .then( data => {
+      Promise.all([
+        addAddress(polishedObj.primary_address_id, id),
+        addRoad(polishedObj.primary_road_id, id),
+      ]).then(() => res.send()).catch( err => console.log(err))
+    }).catch( err => console.log(err))
+  }).catch( err => console.log(err))
+})
+
+router.post('/api/addSecondaryAddress', ({body: {address, property_id}}, res) => {
+  locateOrCreate.address(address).then( data => { 
+    let address_id = data
+    addAddress(address_id, property_id).then( () => res.send()).catch(err => console.log(err))
+  }).catch( err => console.log('err', err))
+})
+
+router.post('/api/removeSecondaryAddress', ({body: {address, property_id}}, res) => {
+  knex('Addresses')
+  .select('address_id')
+  .where({address: address})
+  .then( data => {
+    let address_id = data[0].address_id
+    knex('Properties_Addresses')
+    .del()
+    .where({address_id: address_id})
+    .andWhere({property_id: property_id})
+    .then( () => res.send())
+    .catch( err => console.log('err', err))
   })
 })
+
+router.post('/api/addSecondaryRoad', ({body: {road, property_id}}, res) => {
+  locateOrCreate.road(road).then( data => { 
+    let road_id = data
+    addRoad(road_id, property_id).then( () => res.send()).catch(err => console.log(err))
+  }).catch( err => console.log('err', err))
+})
+
+router.post('/api/removeSecondaryRoad', ({body: {road, property_id}}, res) => {
+  knex('Roads')
+  .select('road_id')
+  .where({road: road})
+  .then( data => {
+    let road_id = data[0].road_id
+    knex('Properties_Roads')
+    .del()
+    .where({road_id: road_id})
+    .andWhere({property_id: property_id})
+    .then( () => res.send())
+    .catch( err => console.log('err', err))
+  })
+})
+
+//break these into two/////////////////////////////////////////////////////
+
 
 //this function adds the property and address id to Properties_Address if this combo doesn't already exist
 const addAddress = (address_id, property_id) => {
@@ -104,7 +145,7 @@ const addAddress = (address_id, property_id) => {
       .andWhere({property_id: property_id})
       .then( exists => {
         //if these exist on Properties address. dont create again
-        if (exists[0]) { 
+        if (exists[0]) {
           resolve() 
         } else {
         //else create it
@@ -148,48 +189,40 @@ const getConnectTableIds = obj => {
   return new Promise( (resolve, reject) => {
     Promise.all([ //------------------get existing state, city, address, county, zip_code, and road
       locateOrCreate.state(obj.state).then( data => {
+        if (obj.state) {
+          obj.state_id = data
+        }
         delete obj.state
-        obj.state_id = data
       }),
       locateOrCreate.city(obj.city).then( data => { 
+        if (obj.city) {
+          obj.city_id = data
+        }  
         delete obj.city
-        obj.city_id = data
       }),
-      locateOrCreate.county(obj.county).then( data => { 
+      locateOrCreate.county(obj.county).then( data => {
+        if (obj.county) {
+          obj.county_id = data
+        }
         delete obj.county
-        obj.county_id = data
       }),
       locateOrCreate.zip_code(obj.zip_code).then( data => { 
+        if (obj.zip_code) {
+          obj.zip_id = data
+        }  
         delete obj.zip_code
-        obj.zip_id = data
       }),
       locateOrCreate.address(obj.primary_address).then( data => { 
+        if (obj.primary_address) {
+          obj.primary_address_id = data
+        }
         delete obj.primary_address
-        obj.primary_address_id = data
       }),
       locateOrCreate.road(obj.primary_road).then( data => { 
+        if (obj.primary_road) {
+          obj.primary_road_id = data
+        }  
         delete obj.primary_road
-        obj.primary_road_id = data
-      })
-    ])
-    .then( () => {
-      dbPackage.obj = obj
-      resolve(dbPackage)
-    })
-  })
-}
-
-const getAddresssRoadIds = obj => {
-  let dbPackage = {}
-  return new Promise( (resolve, reject) => {
-    Promise.all([ //------------------address and road
-      locateOrCreate.address(obj.address).then( data => { 
-        delete obj.address
-        obj.address_id = data
-      }),
-      locateOrCreate.road(obj.road).then( data => { 
-        delete obj.road
-        obj.road_id = data
       })
     ])
     .then( () => {

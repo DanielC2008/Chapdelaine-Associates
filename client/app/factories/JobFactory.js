@@ -6,15 +6,7 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
-    factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})  
-
-    factory.getActiveJobs = () => $http.get('/api/activeJobs') //will remove
-
-    factory.getPendingJobs = () => $http.get('/api/pendingJobs') //will remove
-
-    factory.createNewJob = newJobObj => $http.post('/api/createNewJob', newJobObj)
-
-    factory.updateJobStatus = jobObj => $http.post('/api/updateJobStatus', jobObj)
+    factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})
 
     factory.findJob = dataArr => $http.post('/api/findJob', dataArr)
     
@@ -24,7 +16,9 @@ app.factory('JobFactory', function($location, $http) {
 
     factory.setNewTab = jobObj => $http.post('/api/setNewTab', jobObj)
 
-    factory.updateLastAccessed = jobNumber => $http.post('/api/updateLastAccessed', {jobNumber})
+    factory.updateLastAccessed = dbObj => $http.post('/api/updateLastAccessed', dbObj)
+
+    factory.checkJobNumberExists = job_number => $http.post('/api/checkJobNumberExists', {job_number})
 
   return factory
 })

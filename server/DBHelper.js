@@ -6,18 +6,6 @@ module.exports = {
     
     let tableObj = {} 
     switch(table) {
-      case 'Clients':
-        tableObj.tableName = 'Clients'
-        tableObj.connectTable = 'Client_Specs_Per_Job'
-        tableObj.returningId = 'client_id'
-        tableObj.findJobId = 'job_id'
-        break;
-      case 'Representatives':
-        tableObj.tableName = 'Representatives'
-        tableObj.connectTable = 'Client_Specs_Per_Job'
-        tableObj.returningId = 'representative_id'
-        tableObj.findJobId = 'job_id'
-        break;
       case 'Properties':
         tableObj.tableName = 'Properties'
         tableObj.connectTable = 'Jobs_Properties'

@@ -31,11 +31,6 @@ const schema = require('validate')
       type: 'string',
       required: true,
       message: 'Task Name is required.'
-    },
-    priority: {
-      type: 'number',
-      required: true,
-      message: 'Rate is required and must be a number.'
     }
   })
 

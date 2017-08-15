@@ -8,9 +8,9 @@ const { validJob } = require('../validation/validJob')
 
 const locateStatusId = status => {
   return new Promise( (resolve, reject) => {
-    if (status === undefined) {
+    if (!status) {
       resolve()
-    } else { 
+    } else {
       knex('Job_Statuses')
       .select('job_status_id')
       .where({job_status: status})
@@ -19,34 +19,56 @@ const locateStatusId = status => {
   })
 }
 
-router.post('/api/createNewJob', ({body}, res) => {
-  const errors = validJob.validate(body)
-  if (errors[0]) {  //------------------------------------checks each type
-    let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
-    res.status(400).send(msg)
-  } else {
+const locateClientTypeId = type => {
+  return new Promise( (resolve, reject) => {
+    if (!type) {
+      resolve()
+    } else {
+      knex('Client_Types')
+      .select('client_type_id')
+      .where({client_type: type})
+      .then( data => resolve(data[0])).catch( err => console.log('err', err))
+    }
+  })
+}
+
+router.post('/api/createNewJob', ({body: {dbObj}}, res) => {
+  Promise.all([
+    locateStatusId(dbObj.job_status).then( data => {
+      delete dbObj.job_status
+      dbObj.job_status_id = data.job_status_id
+    }).catch( err => console.log('err', err)),
+    locateClientTypeId(dbObj.client_type).then( data => {
+      delete dbObj.client_type
+      dbObj.client_type_id = data.client_type_id
+    }).catch( err => console.log('err', err))
+  ]).then( () => {
     knex('Jobs')
-    .insert(body)
-    .then( () => res.send({msg:'Success'}))
-    .catch( err => err.number === 2601 ? res.send({msg: "That number is in use. Please choose another."}) : console.log(err))
-  }
+    .returning( ['job_id', 'job_number'])
+    .insert(dbObj)
+    .then( data => res.send(data[0])).catch( err => console.log(err))
+  }).catch( err => console.log('err', err))
 })
 
-router.post('/api/updateJobStatus', ({body: {jobObj, currJobNum}}, res) => {
-  //finds status id
-  locateStatusId(jobObj.job_status) 
-  .then( data => {
-    //if actually changing status id manipulate jobObj 
-    let job_status_id = data ? data.job_status_id : null
-    if (job_status_id) {
-      jobObj.job_status_id = job_status_id
-      delete jobObj.job_status 
-    }
+router.post('/api/updateJob', ({body: {dbObj, job_number}}, res) => {
+  Promise.all([
+    locateStatusId(dbObj.job_status).then( data => {
+      delete dbObj.job_status
+      if (data) {
+        dbObj.job_status_id = data.job_status_id
+      }
+    }).catch( err => console.log('err', err)),
+    locateClientTypeId(dbObj.client_type).then( data => {
+      delete dbObj.client_type
+      if (data) {
+        dbObj.client_type_id = data.client_type_id
+      }
+    }).catch( err => console.log('err', err))
+  ]).then( () => {
     knex('Jobs')
-    .returning('job_number')
-    .update(jobObj)
-    .where({job_number: currJobNum})
-    .then( data => res.send({msg: 'Success', job_number: data[0]})).catch( err => res.send({msg: err}))
+    .update(dbObj)
+    .where({job_number: job_number})
+    .then( data => res.send()).catch( err => console.log(err))
   }).catch( err => console.log('err', err))
 })
 
@@ -81,12 +103,20 @@ router.post('/api/setTab', ({body:{jobNumber}, session}, res) => {
   }
 })
 
-router.post('/api/updateLastAccessed', ({body:{jobNumber}}, res) => {
+router.post('/api/updateLastAccessed', ({body: { job_number, date }}, res) => {
   knex('Jobs')
-  .where('job_number', jobNumber)
-  .update('last_accessed', new Date())
-  .then(res.send())
-  .catch(err => res.send(err))
+  .where({job_number: job_number})
+  .update('last_accessed', date)
+  .then( () => res.send())
+  .catch( err => console.log(err))
+})
+
+router.post('/api/checkJobNumberExists', ({body: { job_number }}, res) => {
+  knex('Jobs')
+  .select('job_number')
+  .where({job_number: job_number})
+  .then( data => data[0] ? res.send({exists: true}) : res.send({exists: false}))
+  .catch( err => console.log(err))
 })
 
 module.exports = router

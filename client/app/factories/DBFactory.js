@@ -4,16 +4,47 @@ app.factory('DBFactory', function($http) {
 
   const factory = {}
 
-  factory.addNew = dbPackage => {
-    if (dbPackage.table === 'Clients'){
-      return $http.post('/api/addNewClient', dbPackage)
-    } 
-    else if (dbPackage.table === 'Representatives'){
-      return $http.post('/api/addNewRep', dbPackage)
+  factory.validate = dbPackage => {
+    if (dbPackage.table === 'Customers'){
+      return $http.post('/api/validateCustomer', dbPackage)
     } 
     else if (dbPackage.table === 'Properties'){
-      return $http.post('/api/addNewPropertyToJob', dbPackage)
+      return $http.post('/api/validateProp', dbPackage)
     } 
+    else if (dbPackage.table === 'Addresses'){
+      return $http.post('/api/validateAddress', dbPackage)
+    }
+    else if (dbPackage.table === 'Roads'){
+      return $http.post('/api/validateRoad', dbPackage)
+    }
+    else if (dbPackage.table === 'Employees'){
+      return $http.post('/api/validateEmployee', dbPackage)
+    } 
+    else if (dbPackage.table === 'Tasks'){
+      return $http.post('/api/validateTask', dbPackage)
+    } 
+    else if (dbPackage.table === 'Job_Types'){
+      console.log('dbPackageyy', dbPackage)
+      return $http.post('/api/validateJobType', dbPackage)
+    }
+    else if (dbPackage.table === 'Companies'){
+      return $http.post('/api/validateCompany', dbPackage)
+    }
+    else if (dbPackage.table === 'Cancellations'){
+      return $http.post('/api/validateCause', dbPackage)
+    }
+  }
+
+  factory.addNew = dbPackage => {
+    if (dbPackage.table === 'Customers'){
+      return $http.post('/api/addNewCustomer', dbPackage)
+    }
+    else if (dbPackage.table === 'Properties'){
+      return $http.post('/api/addNewPropertyToJob', dbPackage)
+    }
+    else if (dbPackage.table === 'Jobs'){
+      return $http.post('/api/createNewJob', dbPackage)
+    }
     else if (dbPackage.table === 'Employees'){
       return $http.post('/api/addNewEmployee', dbPackage)
     } 
@@ -29,38 +60,23 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Cancellations'){
       return $http.post('/api/addNewCause', dbPackage)
     }
-    else if (dbPackage.table === 'AddressRoad'){
-      return $http.post('/api/addSecondaryAddressOrRoad', dbPackage)
+    else if (dbPackage.table === 'Addresses'){
+      return $http.post('/api/addSecondaryAddress', dbPackage)
     }
-  }
-  
-  factory.addExisting = dbPackage => {
-    if (dbPackage.table === 'Clients'){
-      return $http.post('/api/addExistingClient', dbPackage)
-    }
-    else if (dbPackage.table === 'Representatives'){
-      return $http.post('/api/addExistingRep', dbPackage)
-    }
-  }
-
-  factory.removeFromJob = dataObj => {
-    if (dataObj.table === 'Clients') {        
-      return $http.post('/api/removeClientFromJob', dataObj)
-    }
-    else if (dataObj.table === 'Representatives') {        
-      return $http.post('/api/removeRepFromJob', dataObj)
+    else if (dbPackage.table === 'Roads'){
+      return $http.post('/api/addSecondaryRoad', dbPackage)
     }
   }
 
   factory.updateExisting = dbPackage => {
-    if (dbPackage.table === 'Clients') {
-      return $http.post('/api/updateClient', dbPackage)
+    if (dbPackage.table === 'Customers') {
+      return $http.post('/api/updateCustomer', dbPackage)
     } 
-    else if (dbPackage.table === 'Representatives') {
-      return $http.post('/api/updateRep', dbPackage)
-    }
     else if (dbPackage.table === 'Properties') {        
       return $http.post('/api/updateProperty', dbPackage)
+    } 
+    else if (dbPackage.table === 'Jobs') {        
+      return $http.post('/api/updateJob', dbPackage)
     }
     else if (dbPackage.table === 'Employees') {        
       return $http.post('/api/updateEmployee', dbPackage)
@@ -71,7 +87,19 @@ app.factory('DBFactory', function($http) {
     else if (dbPackage.table === 'Companies'){
       return $http.post('/api/updateCompany', dbPackage)
     }
-  }  
+  }
+
+  factory.removeFromJob = dbPackage => {
+    if (dbPackage.table === 'Addresses'){
+      return $http.post('/api/removeSecondaryAddress', dbPackage)
+    }
+    else if (dbPackage.table === 'Roads'){
+      return $http.post('/api/removeSecondaryRoad', dbPackage)
+    }
+    else if (dbPackage.table === 'Job_Types'){
+      return $http.post('/api/removeJobTypeFromJob', dbPackage)
+    }
+  }
 
   factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
 
