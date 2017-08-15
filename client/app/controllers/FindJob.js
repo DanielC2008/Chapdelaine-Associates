@@ -1,14 +1,13 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $http, JobFactory, FormFactory,TaskFactory, FindJobService) {
+app.controller('FindJob', function($scope, $http, JobFactory, FormFactory, TaskFactory, FindJobService, FindJobFactory) {
   let FJScope = this
   let HCScope = $scope.$parent
   let numberOfParams = 1
   let values = {}
 
   TaskFactory.initialized.then(function() {
-    values.Clients = FormFactory.getClientForm()
-    values.Representatives = FormFactory.getRepForm()
+    values.Customers = FormFactory.getCustomerForm()
     values.Properties = FormFactory.getPropertyForm()
     values.Job = FormFactory.getJobForm()
     values.Tasks = TaskFactory.getTaskNames()
@@ -55,16 +54,32 @@ app.controller('FindJob', function($scope, $http, JobFactory, FormFactory,TaskFa
   }
 
   const createObjToFind = dataArr => {
-    dataArr.map( obj => {
+    dataArr.forEach( obj => {
       
       if (obj.table == 'Tasks') { //----------------------------task: make column the value
         obj.objToFind.task = obj.objToFind.column
       } else {                            //----------------------------everything else make column key and match value and send to matchdbkeys
         obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
         delete obj.objToFind.match
-        obj.objToFind = JobFactory.matchDatabaseKeys(obj.objToFind)
+        obj.objToFind = FormFactory.matchDatabaseKeys(obj.objToFind)
       }
       delete obj.objToFind.column
+    })
+  }
+
+  const connectTableParams = ['address', 'road', 'primary_address', 'primary_road']
+  const idParams = ['state', 'zip_code', 'city', 'county', 'company']
+
+  const getDBRelation = dataArr => {
+    dataArr.forEach( obj => {
+      let param = Object.keys(obj.objToFind)[0]
+      if (connectTableParams.includes(param)){
+        obj.dbRelation = 'connectTable'
+      } else if (idParams.includes(param)){
+        obj.dbRelation = 'foreignKey'
+      } else {
+        obj.dbRelation = 'regColumn'
+      }
     })
   }
 
@@ -72,10 +87,54 @@ app.controller('FindJob', function($scope, $http, JobFactory, FormFactory,TaskFa
   FJScope.submit = () => {
     let dataArr = removeUnusedParams()
     createObjToFind(dataArr)
-    JobFactory.findJob(dataArr)
-    .then( ({data}) => 
-      FindJobService.setMatches(data))
-    .catch( ({data, status}) => alert(`The server responded with a status of ${status}: ${data}. Please try another request.`))
+    getDBRelation(dataArr)
+    console.log('dataArr', dataArr)
+    Promise.all( dataArr.map( obj => {
+      return new Promise( (resolve, reject) => {
+////////////////////Jobs////////////////////
+      if (obj.table === 'Job') {
+        FindJobFactory.searchForJobStatus(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+      } 
+////////////////////Tasks////////////////////
+      else if (obj.table === 'Tasks') {
+        FindJobFactory.searchForTasks(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+      } 
+////////////////////Properties////////////////////
+      else if (obj.table === 'Properties') {
+        if (obj.dbRelation === 'connectTable') {
+          FindJobFactory.propertyConnectTable(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+        }
+        else if (obj.dbRelation === 'foreignKey') {
+          FindJobFactory.propertyForeignKey(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+        }
+        else if (obj.dbRelation === 'regColumn') {
+          FindJobFactory.propertyRegColumn(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+        }
+      } 
+////////////////////Customers////////////////////
+      else if (obj.table === 'Customers') {
+        if (obj.dbRelation === 'connectTable') {
+          FindJobFactory.customerConnectTable(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+        }
+        else if (obj.dbRelation === 'foreignKey') {
+          FindJobFactory.customerForeignKey(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+        }
+        else if (obj.dbRelation === 'regColumn') {
+          FindJobFactory.customerRegColumn(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+        }
+      }
+    })
+    })
+      // JobFactory.findJob(dataArr)
+    )
+    .then( data => {
+      console.log('data', data)
+     }) 
+    //   // FindJobService.setMatches(data))
+    .catch( err => {
+      console.log('err', err)
+      // alert(`The server responded with a status of ${status}: ${data}. Please try another request.`)
+    })
   }
 
 //initiate first parameter
