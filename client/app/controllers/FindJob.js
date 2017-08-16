@@ -67,15 +67,15 @@ app.controller('FindJob', function($scope, $http, JobFactory, FormFactory, TaskF
     })
   }
 
-  const connectTableParams = ['primary_address', 'primary_road']
-  const idParams = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
+  const connectTableColumns = ['primary_address', 'primary_road']
+  const foreignKeyColumns = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
 
   const getDBRelation = dataArr => {
     dataArr.forEach( obj => {
-      let param = Object.keys(obj.objToFind)[0]
-      if (connectTableParams.includes(param)){
+      let column = Object.keys(obj.objToFind)[0]
+      if (connectTableColumns.includes(column)){
         obj.dbRelation = 'connectTable'
-      } else if (idParams.includes(param)){
+      } else if (foreignKeyColumns.includes(column)){
         obj.dbRelation = 'foreignKey'
       } else {
         obj.dbRelation = 'regColumn'

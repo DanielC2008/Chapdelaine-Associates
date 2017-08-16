@@ -6,11 +6,7 @@ const knex = require('knex')(config)
 const router = Router()
 const DBHelper = require('../DBHelper')
 
-// router.post('/api/customerConnectTable', ({body: {objToFind}}, res) => {
-//   res.send({msg: 'cct'})
-// })
-
-router.post('/api/customerForeignKey', ({body: {objToFind}}, res) => {
+router.post('/api/customerForeignKey', ({body: { objToFind }}, res) => {
   //what column are we quering
   let column = Object.keys(objToFind)[0]
   //retrieve variables required to join table of foreign key
@@ -30,30 +26,44 @@ router.post('/api/customerForeignKey', ({body: {objToFind}}, res) => {
     .orWhereIn('client_contact_id', customerArr)
     .orWhereIn('owner_contact_id', customerArr)
     .then( data => res.send(data)).catch(err => console.log('err', err))
-  })  
+  })
 })
 
-router.post('/api/customerRegColumn', ({body}, res) => {
-  res.send({msg: 'crc'})
+router.post('/api/customerRegColumn', ({body: { objToFind }}, res) => {
+  //find column on customer table
+  knex('Customers')
+  .select('Customers.customer_id')
+  .where(objToFind)
+  .then( customers => {
+    let customerArr = customers.map( customer => customer.customer_id)
+    //find all jobs with those customers
+    knex('Jobs')
+    .select('job_number')
+    .whereIn('client_id', customerArr)
+    .orWhereIn('owner_id', customerArr)
+    .orWhereIn('client_contact_id', customerArr)
+    .orWhereIn('owner_contact_id', customerArr)
+    .then( data => res.send(data)).catch(err => console.log('err', err))
+  })
 })
 
-router.post('/api/propertyConnectTable', ({body}, res) => {
+router.post('/api/propertyConnectTable', ({body: { objToFind }}, res) => {
   res.send({msg: 'pct'})
 })
 
-router.post('/api/propertyForeignKey', ({body}, res) => {
+router.post('/api/propertyForeignKey', ({body: { objToFind }}, res) => {
   res.send({msg: 'pfk'})
 })
 
-router.post('/api/propertyRegColumn', ({body}, res) => {
+router.post('/api/propertyRegColumn', ({body: { objToFind }}, res) => {
   res.send({msg: 'prc'})
 })
 
-router.post('/api/searchForJobStatus', ({body}, res) => {
+router.post('/api/searchForJobStatus', ({body: { objToFind }}, res) => {
   res.send({msg: 'sjs'})
 })
 
-router.post('/api/searchForTasks', ({body}, res) => {
+router.post('/api/searchForTasks', ({body: { objToFind }}, res) => {
   res.send({msg: 'sft'})
 })
 
