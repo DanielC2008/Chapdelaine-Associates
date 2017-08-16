@@ -48,7 +48,31 @@ router.post('/api/customerRegColumn', ({body: { objToFind }}, res) => {
 })
 
 router.post('/api/propertyConnectTable', ({body: { objToFind }}, res) => {
-  res.send({msg: 'pct'})
+  //what column are we quering
+  const column = Object.keys(objToFind)[0]
+  //retrieve variables required to join table of foreign key
+  const {tableName, connectTable, tableId} = DBHelper.getTableInfo(column)
+  //get ids of parameter user requested
+  knex(`${tableName}`)
+  .select(`${tableId}`)
+  .where(objToFind)
+  .then( data => {
+    const id = data[0][`${tableId}`]
+    //get all propeties with the id returned
+    knex(`${tableName}`)
+    .select('Properties.property_id')
+    .join(`${connectTable}`,`${tableName}.${tableId}`, `${connectTable}.${tableId}`)
+    .join('Properties', `${connectTable}.property_id`, 'Properties.property_id')
+    .where(`${tableName}.${tableId}`, id)
+    .then( properties => {
+      const propArr = properties.map( property => property.property_id)
+      //find all jobs with those properties
+      knex('Jobs')
+      .select('job_number')
+      .whereIn('property_id', propArr)
+      .then( data => res.send(data)).catch(err => console.log('err', err))
+    })
+  })
 })
 
 router.post('/api/propertyForeignKey', ({body: { objToFind }}, res) => {

@@ -39,7 +39,13 @@ module.exports = {
       //   break;
       case 'address':
         tableObj.tableName = 'Addresses'
+        tableObj.connectTable = 'Properties_Addresses'
         tableObj.tableId = 'address_id'
+        break;
+      case 'road':
+        tableObj.tableName = 'Roads'
+        tableObj.connectTable = 'Properties_Roads'
+        tableObj.tableId = 'road_id'
         break;
       case 'state':
         tableObj.tableName = 'States'
