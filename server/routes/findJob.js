@@ -115,7 +115,12 @@ router.post('/api/searchForJobStatus', ({body: { objToFind }}, res) => {
 })
 
 router.post('/api/searchForTasks', ({body: { objToFind }}, res) => {
-  res.send({msg: 'sft'})
+  knex('Tasks')
+  .select('job_number')
+  .join('Invoices_Tasks', 'Invoices_Tasks.task_id', 'Tasks.task_id')
+  .join('Jobs', 'Jobs.invoice_id', 'Invoices_Tasks.invoice_id')
+  .where(objToFind)
+  .then( data => res.send(data)).catch(err => console.log('err', err))
 })
 
 
