@@ -22,7 +22,7 @@ app.factory('FormFactory', function($mdDialog) {
       'Company Address':customer ? customer.company_address: '',
       'Notes':          customer ? customer.notes : ''
     }
-  }   
+  } 
 
   factory.getCustomerForFindJob = () => {
     return {
@@ -41,7 +41,7 @@ app.factory('FormFactory', function($mdDialog) {
       'County':         '',
       'Company Name':   ''
     }
-  }    
+  }  
 
   factory.getPropertyForm = prop => {
     return {
@@ -62,7 +62,7 @@ app.factory('FormFactory', function($mdDialog) {
       'Acres':          prop ? prop.acres : 0,
       'Notes':          prop ? prop.notes : ''
     }
-  }      
+  }    
 
   factory.getPropertyForFindJob = () => {
     return {
@@ -82,7 +82,7 @@ app.factory('FormFactory', function($mdDialog) {
       'Lot Number':     '',
       'Acres':          '',
     }
-  }  
+  }
 
   factory.getEmployeeForm = employee => {
     return {
@@ -105,22 +105,24 @@ app.factory('FormFactory', function($mdDialog) {
       'Zip Code':       employee ? employee.zip_code : '', 
       'County':         employee ? employee.county : ''
     }
-  }  
+  }
+
+  factory.getJobStatusesForFindJob = () => {
+    return {
+      'Canceled': '',
+      'Pending': '',
+      'Hold': '', 
+      'Active': '',
+      'Complete': ''
+    }
+  }
 
   factory.getCompanyForm = company => {
     return {
       'Company Name':   company ? company.company_name : '', //required
       'Company Address':company ? company.company_address : ''
     }
-  }  
-
-  factory.getJobForm = () => {
-    return {
-      'Job Number': '',
-      'Job Status': '',
-      'Invoice Number': ''
-    }
-  }    
+  }
 
   factory.getTaskForm = () => {
     return {
@@ -171,7 +173,7 @@ app.factory('FormFactory', function($mdDialog) {
       .then( validatedObj => resolve(validatedObj))
       .catch( err => reject(err))
     })
-  }  
+  }
 
   factory.matchDatabaseKeys = obj => {
     for (let key in obj){

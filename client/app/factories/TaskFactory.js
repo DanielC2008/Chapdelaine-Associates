@@ -5,10 +5,6 @@ app.factory('TaskFactory', function($q, $http, FormFactory) {
   let _initialized = $q.defer() //wait for data to return
   const factory = {}
 
-  factory.getTaskNames = () => taskObj
-
-  factory.getEnabledTasks = () => $http.get('/api/getEnabledTasks')
-
   factory.addNew = () => {
     return new Promise ((resolve, reject) => {
       FormFactory.updateForm('Tasks', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
@@ -18,6 +14,10 @@ app.factory('TaskFactory', function($q, $http, FormFactory) {
   factory.updateExisting = (dbObj, ids) => $http.post('/api/updateTask', {dbObj, ids})
 
   factory.disableTask = id => $http.post('/api/disableTask', {id})
+
+  factory.getTaskNames = () => taskObj
+
+  factory.getEnabledTasks = () => $http.get('/api/getEnabledTasks')
 
   factory.getEnabledTasks()
   .then( ({data}) => {

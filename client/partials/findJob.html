@@ -15,7 +15,11 @@
       </select>
     </div>
     <div class="col s5 input-field" ng-keyup="$event.keyCode == 13 && FJ.submit()">
-      <input type="text" name="match{{$index}}" ng-model="param.objToFind.match" ng-disabled='!param.table || param.table == "Tasks"' placeholder="Search Terms...">
+      <input 
+        type="text" 
+        name="match{{$index}}" 
+        ng-model="param.objToFind.match" 
+        ng-disabled='!param.table || param.table == "Task" || param.table == "Job Status" || param.table == "Job Type"' placeholder="Search Terms...">
     </div> 
   </div>  
   <div class="col s1" ng-click="FJ.createParam()">

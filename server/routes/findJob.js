@@ -111,7 +111,29 @@ router.post('/api/propertyRegColumn', ({body: { objToFind }}, res) => {
 })
 
 router.post('/api/searchForJobStatus', ({body: { objToFind }}, res) => {
-  res.send({msg: 'sjs'})
+  if (objToFind.job_status === 'Hold'){
+    knex('Jobs')
+    .select('job_number')
+    .where({on_hold: true})
+    .then( data => {
+      res.send(data)
+    }).catch( err => console.log('err', err))   
+  } else {
+    knex('Jobs')
+    .select('job_number')
+    .join('Job_Statuses', 'Job_Statuses.job_status_id', 'Jobs.job_status_id')
+    .where(objToFind)
+    .then( data => res.send(data)).catch( err => console.log('err', err))
+  }
+})
+
+router.post('/api/searchForJobType', ({body: { objToFind }}, res) => {
+  knex('Job_Types')
+  .select('job_number')
+  .join('Jobs_Job_Types', 'Jobs_Job_Types.job_type_id', 'Job_Types.job_type_id')
+  .join('Jobs', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
+  .where(objToFind)
+  .then( data => res.send(data)).catch(err => console.log('err', err))
 })
 
 router.post('/api/searchForTasks', ({body: { objToFind }}, res) => {

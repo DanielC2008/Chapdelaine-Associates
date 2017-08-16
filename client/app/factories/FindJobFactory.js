@@ -17,6 +17,8 @@ app.factory('FindJobFactory', function($http) {
   factory.propertyRegColumn = dbObj => $http.post('/api/propertyRegColumn', dbObj)
 
   factory.searchForJobStatus = dbObj => $http.post('/api/searchForJobStatus', dbObj)
+
+  factory.searchForJobType = dbObj => $http.post('/api/searchForJobType', dbObj)
   
   factory.searchForTasks = dbObj => $http.post('/api/searchForTasks', dbObj)
 
