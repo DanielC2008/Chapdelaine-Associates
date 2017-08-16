@@ -7,8 +7,8 @@ app.controller('FindJob', function($scope, $http, JobFactory, FormFactory, TaskF
   let values = {}
 
   TaskFactory.initialized.then(function() {
-    values.Customers = FormFactory.getCustomerForm()
-    values.Properties = FormFactory.getPropertyForm()
+    values.Customers = FormFactory.getCustomerForFindJob()
+    values.Properties = FormFactory.getPropertyForFindJob()
     values.Job = FormFactory.getJobForm()
     values.Tasks = TaskFactory.getTaskNames()
     FJScope.Tables = Object.keys(values)
@@ -67,8 +67,8 @@ app.controller('FindJob', function($scope, $http, JobFactory, FormFactory, TaskF
     })
   }
 
-  const connectTableParams = ['address', 'road', 'primary_address', 'primary_road']
-  const idParams = ['state', 'zip_code', 'city', 'county', 'company']
+  const connectTableParams = ['primary_address', 'primary_road']
+  const idParams = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
 
   const getDBRelation = dataArr => {
     dataArr.forEach( obj => {

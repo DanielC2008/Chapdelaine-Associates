@@ -22,6 +22,25 @@ app.factory('FormFactory', function($mdDialog) {
       'Company Address':customer ? customer.company_address: '',
       'Notes':          customer ? customer.notes : ''
     }
+  }   
+
+  factory.getCustomerForFindJob = () => {
+    return {
+      'First Name':     '', 
+      'Middle Name':    '', 
+      'Last Name':      '',
+      'Email':          '', 
+      'Business Phone': '', 
+      'Mobile Phone':   '', 
+      'Home Phone':     '', 
+      'Fax Number':     '',
+      'Address':        '', 
+      'City':           '', 
+      'State':          '', 
+      'Zip Code':       '', 
+      'County':         '',
+      'Company Name':   ''
+    }
   }    
 
   factory.getPropertyForm = prop => {
@@ -42,6 +61,26 @@ app.factory('FormFactory', function($mdDialog) {
       'Lot Number':     prop ? prop.lot_number : '',
       'Acres':          prop ? prop.acres : 0,
       'Notes':          prop ? prop.notes : ''
+    }
+  }      
+
+  factory.getPropertyForFindJob = () => {
+    return {
+      'Address':        '',
+      'Road':           '', 
+      'City':           '', 
+      'State':          '', 
+      'Zip Code':       '', 
+      'County':         '',
+      'Property Map':   '',
+      'Parcel Number':  '',
+      'Plat Book':      '',
+      'Plat Page':      '',
+      'Deed Book':      '',  
+      'Deed Page':      '',
+      'Sub Division':   '',
+      'Lot Number':     '',
+      'Acres':          '',
     }
   }  
 

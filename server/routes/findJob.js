@@ -6,28 +6,31 @@ const knex = require('knex')(config)
 const router = Router()
 const DBHelper = require('../DBHelper')
 
-router.post('/api/customerConnectTable', ({body}, res) => {
-  console.log('body', body)
-  //  knex('Customers')
-  // .select('Customers.customer_id')
-  // .join('Addresses', 'Customers.address_id', 'Addresses.address_id')
-  // .where(objToFind)
-  // .then( data => {
-  //   let customerArr = data.map( customer => customer.customer_id)
-  //   // console.log('customerArr', customerArr) 
-  //   knex('Jobs')
-  //   .select('job_number')
-  //   .whereIn('client_id', customerArr)
-  //   .orWhereIn('owner_id', customerArr)
-  //   .orWhereIn('client_contact_id', customerArr)
-  //   .orWhereIn('owner_contact_id', customerArr)
-  //   .then( data => console.log('data', data))
-  res.send({msg: 'cct'})
+// router.post('/api/customerConnectTable', ({body: {objToFind}}, res) => {
+//   res.send({msg: 'cct'})
+// })
 
-})
-
-router.post('/api/customerForeignKey', ({body}, res) => {
-  res.send({msg: 'cfk'})
+router.post('/api/customerForeignKey', ({body: {objToFind}}, res) => {
+  //what column are we quering
+  let column = Object.keys(objToFind)[0]
+  //retrieve variables required to join table of foreign key
+  const {tableName, tableId} = DBHelper.getTableInfo(column)
+  //get all customers with the parameter user requested
+  knex('Customers')
+  .select('Customers.customer_id')
+  .join(`${tableName}`, `Customers.${tableId}`, `${tableName}.${tableId}`)
+  .where(objToFind)
+  .then( customers => {
+    let customerArr = customers.map( customer => customer.customer_id)
+    //find all jobs with those customers
+    knex('Jobs')
+    .select('job_number')
+    .whereIn('client_id', customerArr)
+    .orWhereIn('owner_id', customerArr)
+    .orWhereIn('client_contact_id', customerArr)
+    .orWhereIn('owner_contact_id', customerArr)
+    .then( data => res.send(data)).catch(err => console.log('err', err))
+  })  
 })
 
 router.post('/api/customerRegColumn', ({body}, res) => {
