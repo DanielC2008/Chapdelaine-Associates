@@ -146,16 +146,14 @@ app.controller('FindJob', function($q, $scope, $http, JobFactory, JobTypeFactory
           }
         })
       })
-    ).then( data => {
-      // FindJobService.setMatches(data))
-      console.log('data', data)
-     }) 
+    )
+    .then( data => FindJobService.setMatches(data)) 
     .catch( err => {
       console.log('err', err)
       // alert(`The server responded with a status of ${status}: ${data}. Please try another request.`)
     })
   }
 
-//initiate first parameter
+  //initiate first parameter
   addParam()
 })

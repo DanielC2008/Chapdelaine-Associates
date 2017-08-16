@@ -1,8 +1,8 @@
 'use strict'
 
-app.service('FindJobService', function($location) {
+app.service('FindJobService', function($location, $rootScope) {
   const service = {}
-  const Matches = {
+  const matches = {
     exact: [],
     other: []
   }
@@ -10,9 +10,9 @@ app.service('FindJobService', function($location) {
   const sorted = []
 
   const clearMatches = () => {
-      Matches.exact.length = 0
-      Matches.other.length = 0
-      sorted.length = 0
+    matches.exact.length = 0
+    matches.other.length = 0
+    sorted.length = 0
   }
 
   const pushNew = obj => {
@@ -22,21 +22,24 @@ app.service('FindJobService', function($location) {
   }
 
   const sortJobsByJobNumber = jobsArr => {
-    jobsArr.forEach( array => {
-      array.forEach( obj => {
-        if (sorted.length === 0){          
-          pushNew(obj)
-        }else {
-          let index = sorted.findIndex( sortedArr => {
-            return sortedArr[0].job_number === obj.job_number
-          }) 
-          if (index !== -1 ){
-            sorted[index].push(obj)
-          } else{
+    return new Promise( (resolve) => {
+      jobsArr.forEach( array => {
+        array.forEach( obj => {
+          if (sorted.length === 0){          
             pushNew(obj)
+          } else {
+            let index = sorted.findIndex( sortedArr => {
+              return sortedArr[0].job_number === obj.job_number
+            }) 
+            if (index !== -1 ){
+              sorted[index].push(obj)
+            } else{
+              pushNew(obj)
+            }
           }
-        }
+        })
       })
+      resolve()
     })
   }
 
@@ -45,34 +48,30 @@ app.service('FindJobService', function($location) {
 
   const manyMatches = jobsArrLength => {
     sorted.forEach( sortedArr => {
-        if (sortedArr.length === jobsArrLength) { //length is equal to number of parameters entered = exact match
-          let obj = reduceObj(sortedArr)
-          Matches.exact.push(obj)
-        } else{
-          let obj = reduceObj(sortedArr)
-          Matches.other.push(obj)
-        } 
-      })
-      $location.path(/jobs/)
+      //length is equal to number of parameters entered = exact match
+      if (sortedArr.length === jobsArrLength) { 
+        let obj = reduceObj(sortedArr)
+        matches.exact.push(obj)
+      } else{
+        let obj = reduceObj(sortedArr)
+        matches.other.push(obj)
+      } 
+    })
+    $rootScope.$apply( () => $location.path('/jobs/'))
   }
 
-  const oneMatch = () => {
-    $location.path(`/jobs/:${sorted[0][0].job_number}`)
-  }
+  const oneMatch = jobNumber => $rootScope.$apply( () => $location.path(`/jobs/${jobNumber}`))
 
 
   service.setMatches = jobsArr => {
     clearMatches()
-    sortJobsByJobNumber(jobsArr)
-    if (sorted.length === 1 ) { //-----------if one match go to that job_number
-      oneMatch()
-    } else {  //-----------------------------if many allow uset to select job
-      manyMatches(jobsArr.length)
-    }  
+    sortJobsByJobNumber(jobsArr).then( () => {
+      sorted.length === 1 ? oneMatch(sorted[0][0].job_number) : manyMatches(jobsArr.length) 
+    }).catch( err => console.log('err', err))
 
   }
 
-  service.getMatches = () => Matches 
+  service.getMatches = () => matches 
  
 
 
