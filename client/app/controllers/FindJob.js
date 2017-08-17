@@ -23,9 +23,21 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
   })
   .catch(err => console.log('err', err))
 
+  FJScope.noUserInput = index => {
+    if (!FJScope.searchParams[index].table || 
+        FJScope.searchParams[index].table == "Task" || 
+        FJScope.searchParams[index].table == "Job Status" || 
+        FJScope.searchParams[index].table == "Job Type") {
+      return true
+    } else {
+      return false
+    }
+  }
+
   FJScope.getTableValues = (selected, index) => {
     //resets select
     $scope.material()
+    //sets selects new values
     let values = Object.keys(tables[`${selected}`])
     FJScope[`fields${index}`] = values
   }
@@ -35,15 +47,35 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
 
   //create new parameter and display
   FJScope.createParam = () => {
-    //if the first param is filled out
-    if (FJScope.searchParams[`${numberOfParams - 1}`].table && FJScope.searchParams[`${numberOfParams - 1}`].objToFind) { 
+    if( paramsComplete().length === 0 ) {
       numberOfParams++
       addParam()
+    } else {
+      ToastFactory.toastReject('Please fill out all parameters!')
     }
   }
 
-  //remove empty params
-  const removeUnusedParams = () => FJScope.searchParams.filter( param => param.table)
+  const paramsComplete = () => {
+    let paramsPass = FJScope.searchParams.reduce( (arr, param) => {
+      //if Customer or Property require all inputs
+      if (param.table === 'Customer' || param.table === 'Property') {
+        if (param.table && param.objToFind && param.objToFind.match) {
+          return arr
+        } else {
+          arr.push('err')
+          return arr
+        }
+      //else only require first two inputs  
+      } else if (param.table && param.objToFind && param.objToFind.column !== null) {
+        return arr
+      } else {
+        arr.push('err')
+        return arr
+      }
+    }, [])
+    return paramsPass 
+  }
+
 
   const createObjToFind = obj => {
     obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
@@ -79,12 +111,17 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
     }
   }
 
-//submit search parameters
   FJScope.submit = () => {
-    let dataArr = removeUnusedParams()
-    console.log('dataArr', dataArr)
+    if( paramsComplete().length === 0 ) {
+      sendToDB() 
+    } else {
+      ToastFactory.toastReject('Please fill out all parameters!')
+    }
+  }
+
+  const sendToDB = () => {
     Promise.all( 
-      dataArr.map( obj => {
+      FJScope.searchParams.map( obj => {
         return new Promise( (resolve, reject) => {
           ////////////////////Jobs Status////////////////////
           if (obj.table === 'Job Status') {
@@ -138,7 +175,6 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
         ToastFactory.toastReject('Oooops! No matches found')
         FJScope.searchParams = []
         addParam()
-        //reset params
       } else {
         FindJobService.setMatches(data).then( () => $rootScope.$apply( () => $location.path('/jobs/')))
       }  

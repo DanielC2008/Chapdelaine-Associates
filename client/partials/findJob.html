@@ -22,7 +22,8 @@
         type="text" 
         name="match{{$index}}" 
         ng-model="param.objToFind.match" 
-        ng-disabled='!param.table || param.table == "Task" || param.table == "Job Status" || param.table == "Job Type"' placeholder="Search Terms...">
+        ng-disabled='FJ.noUserInput($index)' 
+        placeholder="Search Terms...">
     </div> 
     <div class="col s1" ng-click="FJ.createParam()" ng-if="$index + 1 === FJ.searchParams.length">
       <button class="btn-floating btn-large waves-effect waves-light button" type="">+</button>
