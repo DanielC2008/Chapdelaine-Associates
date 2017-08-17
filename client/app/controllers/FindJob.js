@@ -41,18 +41,15 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
 
   //create new parameter and display
   FJScope.createParam = () => {
-    numberOfParams++
-    addParam()
+    //if the first param is filled out
+    if (FJScope.searchParams[`${numberOfParams - 1}`].table && FJScope.searchParams[`${numberOfParams - 1}`].objToFind) { 
+      numberOfParams++
+      addParam()
+    }
   }
 
   //remove empty params
-  const removeUnusedParams = () => {
-    let params = FJScope.searchParams.filter( param => {
-      delete param.$$hashKey
-      return param.table
-    })
-    return params
-  }
+  const removeUnusedParams = () => FJScope.searchParams.filter( param => param.table)
 
   const createObjToFind = obj => {
     obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
@@ -91,6 +88,7 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
 //submit search parameters
   FJScope.submit = () => {
     let dataArr = removeUnusedParams()
+    console.log('dataArr', dataArr)
     Promise.all( 
       dataArr.map( obj => {
         return new Promise( (resolve, reject) => {

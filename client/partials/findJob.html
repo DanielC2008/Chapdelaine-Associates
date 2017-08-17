@@ -1,29 +1,32 @@
 <h5>Search Jobs...</h5>
 
-<div class="row">
-  <div ng-repeat="param in FJ.searchParams" ng-init="material()" ng-if='FJ.Tables'>
+<div ng-repeat="param in FJ.searchParams" ng-init="material()" ng-if='FJ.Tables'>
+  <div class="row">
     <div class="col s3 input-field">
-      <select ng-change="FJ.getTableValues(param.table)" ng-model="param.table" ng-options="table as table disable when table.notAnOption for table in FJ.Tables"> 
-        <option value="" label="-- Select option --" disabled selected="selected"> Search by...    
-        </option>
+      <select ng-change="FJ.getTableValues(param.table)" 
+        ng-model="param.table" 
+        ng-options="table as table disable when table.notAnOption for table in FJ.Tables"> 
+        <option value="" label="-- Select option --" disabled selected="selected"> Search by...</option>
       </select>
     </div>
     <div class="col s3 input-field" >
-      <select ng-model="param.objToFind.column" ng-options="columns as columns for columns in FJ.selectedTable{{$index + 1}}" ng-init="param.table" ng-disabled='!param.table'>
-        <option value="" label="-- Select option --" selected="selected"> Search fields... 
-        </option>
+      <select ng-model="param.objToFind.column"
+        ng-options="columns as columns for columns in FJ.selectedTable{{$index + 1}}" 
+        ng-init="param.table" 
+        ng-disabled='!param.table'>
+        <option value="" label="-- Select option --" selected="selected"> Search fields...</option>
       </select>
     </div>
-    <div class="col s5 input-field" ng-keyup="$event.keyCode == 13 && FJ.submit()">
+    <div class="col s4 input-field" ng-keyup="$event.keyCode == 13 && FJ.submit()">
       <input 
         type="text" 
         name="match{{$index}}" 
         ng-model="param.objToFind.match" 
         ng-disabled='!param.table || param.table == "Task" || param.table == "Job Status" || param.table == "Job Type"' placeholder="Search Terms...">
     </div> 
-  </div>  
-  <div class="col s1" ng-click="FJ.createParam()">
-    <button class="btn-floating btn-large waves-effect waves-light button" type="">+</button>
+    <div class="col s1" ng-click="FJ.createParam()" ng-if="$index + 1 === FJ.searchParams.length">
+      <button class="btn-floating btn-large waves-effect waves-light button" type="">+</button>
+    </div>  
   </div>  
 </div>  
 <div class="row"> 
