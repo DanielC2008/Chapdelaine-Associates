@@ -4,10 +4,9 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
 
   let numberOfParams = 1
   const FJScope = this
-  const values = {}
+  const tables = {}
   const propConnectTableColumns = ['address', 'road']
   const foreignKeyColumns = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
-  FJScope.selectedTable
   FJScope.searchParams = []
 
   $q.all([
@@ -15,26 +14,21 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
     JobTypeFactory.initialized
   ])
   .then( data => {
-    values.Customer = FindJobFactory.getCustomerForFindJob()
-    values.Property = FindJobFactory.getPropertyForFindJob()
-    values['Job Type'] = JobTypeFactory.getJobTypeNames()
-    values['Job Status'] = FindJobFactory.getJobStatusesForFindJob()
-    values.Task = TaskFactory.getTaskNames()
-    FJScope.Tables = Object.keys(values)
+    tables.Customer = FindJobFactory.getCustomerForFindJob()
+    tables.Property = FindJobFactory.getPropertyForFindJob()
+    tables['Job Type'] = JobTypeFactory.getJobTypeNames()
+    tables['Job Status'] = FindJobFactory.getJobStatusesForFindJob()
+    tables.Task = TaskFactory.getTaskNames()
+    FJScope.Tables = Object.keys(tables)
   })
   .catch(err => console.log('err', err))
 
-  FJScope.getTableValues = selected => {
-    $scope.material() 
-    for(let obj in values) {
-      if (obj === selected) {
-        let getValues = Object.keys(values[obj])
-        createSelect(getValues)
-      }
-    }
+  FJScope.getTableValues = (selected, index) => {
+    //resets select
+    $scope.material()
+    let values = Object.keys(tables[`${selected}`])
+    FJScope[`fields${index}`] = values
   }
-
-  const createSelect = values => FJScope[`selectedTable${numberOfParams}`] = values
 
   //adds parameter to searchParams obj
   const addParam = () => FJScope.searchParams.push({})
@@ -139,11 +133,9 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
       })
     )
     .then( data => {
-      console.log('data', data)
       let { length } = data.filter( arr => arr.length > 0 )
       if (length === 0){
         ToastFactory.toastReject('Oooops! No matches found')
-        FJScope.selectedTable = null
         FJScope.searchParams = []
         addParam()
         //reset params
