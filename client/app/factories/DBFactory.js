@@ -43,14 +43,10 @@ app.factory('DBFactory', function($http) {
     }
     else if (dbPackage.table === 'Jobs'){
       return $http.post('/api/createNewJob', dbPackage)
-    }
-    else if (dbPackage.table === 'Employees'){
-      return $http.post('/api/addNewEmployee', dbPackage)
     } 
     else if (dbPackage.table === 'Job_Types'){
       return $http.post('/api/addNewJobType', dbPackage)
     }
-
     else if (dbPackage.table === 'Cancellations'){
       return $http.post('/api/addNewCause', dbPackage)
     }
@@ -71,9 +67,6 @@ app.factory('DBFactory', function($http) {
     } 
     else if (dbPackage.table === 'Jobs') {        
       return $http.post('/api/updateJob', dbPackage)
-    }
-    else if (dbPackage.table === 'Employees') {        
-      return $http.post('/api/updateEmployee', dbPackage)
     }
   }
 

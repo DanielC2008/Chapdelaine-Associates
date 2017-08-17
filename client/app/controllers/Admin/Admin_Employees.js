@@ -1,13 +1,13 @@
 'use strict'
 
-app.controller('Admin_Employees', function($scope, UserFactory, ToastFactory, DBFactory) {
+app.controller('Admin_Employees', function($scope, UserFactory, ToastFactory, FormFactory) {
   const AE = this
 
   UserFactory.getAllEmployees().then( ({data}) => AE.Employees = data)
 
   AE.addNew = () => {
-    UserFactory.addNew().then( ({dbPackage}) => {
-      DBFactory.addNew(dbPackage).then( () => {
+     FormFactory.updateForm('Employees', null, {employee_id: null}, 'Add New').then( ({dbPackage}) => {
+      UserFactory.addNew(dbPackage).then( () => {
         $scope.setTabAndReload('AE')
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -15,8 +15,8 @@ app.controller('Admin_Employees', function($scope, UserFactory, ToastFactory, DB
 
   AE.viewOrEdit = employee => {
     let ids = {employee_id: employee.employee_id}
-    UserFactory.updateExisting(employee, ids).then( ({dbPackage}) => {
-      DBFactory.updateExisting(dbPackage).then( () => {
+    FormFactory.updateForm('Employees', employee, ids, 'Update').then( ({dbPackage}) => {
+      UserFactory.updateExisting(dbPackage).then( () => {
         $scope.setTabAndReload('AE')
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
