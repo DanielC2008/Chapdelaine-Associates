@@ -7,11 +7,7 @@ app.factory('JobTypeFactory', function($q, $http, FormFactory) {
 
   factory.addJobTypeToJob = dbPackage => $http.post('/api/addJobTypeToJob', dbPackage)
 
-  factory.addNewJobType = () => {
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Job_Types', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
+  factory.addNew = dbPackage => $http.post('/api/addNewJobType', dbPackage)
 
   factory.disableJobType = id => $http.post('/api/disableJobType', {id})
 

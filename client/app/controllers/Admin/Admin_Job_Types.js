@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory, DBFactory) {
+app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory, FormFactory) {
   let JT = this
 
   JT.priorityChanged = false
@@ -11,8 +11,8 @@ app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory,
   }) 
 
   JT.addNew = () => {
-    JobTypeFactory.addNewJobType().then( ({dbPackage}) => {
-      DBFactory.addNew(dbPackage).then( () => {
+    FormFactory.updateForm('Job_Types', null, {}, 'Add New').then( ({dbPackage}) => {
+      JobTypeFactory.addNew(dbPackage).then( () => {
         $scope.setTabAndReload('JT')
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
