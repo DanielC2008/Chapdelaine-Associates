@@ -22,6 +22,55 @@ app.factory('FindJobFactory', function($http) {
   
   factory.searchForTasks = dbObj => $http.post('/api/searchForTasks', dbObj)
 
+  factory.getCustomerForFindJob = () => {
+    return {
+      'First Name':     '', 
+      'Middle Name':    '', 
+      'Last Name':      '',
+      'Email':          '', 
+      'Business Phone': '', 
+      'Mobile Phone':   '', 
+      'Home Phone':     '', 
+      'Fax Number':     '',
+      'Address':        '', 
+      'City':           '', 
+      'State':          '', 
+      'Zip Code':       '', 
+      'County':         '',
+      'Company Name':   ''
+    }
+  }    
+
+  factory.getPropertyForFindJob = () => {
+    return {
+      'Address':        '',
+      'Road':           '', 
+      'City':           '', 
+      'State':          '', 
+      'Zip Code':       '', 
+      'County':         '',
+      'Property Map':   '',
+      'Parcel Number':  '',
+      'Plat Book':      '',
+      'Plat Page':      '',
+      'Deed Book':      '',  
+      'Deed Page':      '',
+      'Sub Division':   '',
+      'Lot Number':     '',
+      'Acres':          ''
+    }
+  }
+
+  factory.getJobStatusesForFindJob = () => {
+    return {
+      'Canceled': '',
+      'Pending':  '',
+      'Hold':     '', 
+      'Active':   '',
+      'Complete': ''
+    }
+  }  
+
   return factory
 
 })

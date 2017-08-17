@@ -1,21 +1,24 @@
 'use strict'
 
-app.controller('FindJob', function($q, $scope, $http, JobFactory, JobTypeFactory, FormFactory, TaskFactory, FindJobService, FindJobFactory) {
+app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory) {
 
-  let FJScope = this
   let numberOfParams = 1
-  let values = {}
+  const FJScope = this
+  const values = {}
+  const propConnectTableColumns = ['address', 'road']
+  const foreignKeyColumns = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
   FJScope.selectedTable
+  FJScope.searchParams = []
 
   $q.all([
     TaskFactory.initialized,
     JobTypeFactory.initialized
   ])
   .then( data => {
-    values.Customer = FormFactory.getCustomerForFindJob()
-    values.Property = FormFactory.getPropertyForFindJob()
+    values.Customer = FindJobFactory.getCustomerForFindJob()
+    values.Property = FindJobFactory.getPropertyForFindJob()
     values['Job Type'] = JobTypeFactory.getJobTypeNames()
-    values['Job Status'] = FormFactory.getJobStatusesForFindJob()
+    values['Job Status'] = FindJobFactory.getJobStatusesForFindJob()
     values.Task = TaskFactory.getTaskNames()
     FJScope.Tables = Object.keys(values)
   })
@@ -31,23 +34,18 @@ app.controller('FindJob', function($q, $scope, $http, JobFactory, JobTypeFactory
     }
   }
 
-  const createSelect = values => {
-    FJScope[`selectedTable${numberOfParams}`] = values
-  }
+  const createSelect = values => FJScope[`selectedTable${numberOfParams}`] = values
 
-
-  FJScope.searchParams = []
-
-//adds parameter to searchParams obj
+  //adds parameter to searchParams obj
   const addParam = () => FJScope.searchParams.push({})
 
-
-//create new parameter and display
+  //create new parameter and display
   FJScope.createParam = () => {
     numberOfParams++
     addParam()
   }
-//remove empty params
+
+  //remove empty params
   const removeUnusedParams = () => {
     let params = FJScope.searchParams.filter( param => {
       delete param.$$hashKey
@@ -69,9 +67,6 @@ app.controller('FindJob', function($q, $scope, $http, JobFactory, JobTypeFactory
     obj.objToFind = FormFactory.matchDatabaseKeys(obj.objToFind)
     delete obj.objToFind.column
   }
-
-  const propConnectTableColumns = ['address', 'road']
-  const foreignKeyColumns = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
 
   const getPropDBRelation = obj => {
     let column = Object.keys(obj.objToFind)[0]
@@ -99,22 +94,22 @@ app.controller('FindJob', function($q, $scope, $http, JobFactory, JobTypeFactory
     Promise.all( 
       dataArr.map( obj => {
         return new Promise( (resolve, reject) => {
-        ////////////////////Jobs Status////////////////////
+          ////////////////////Jobs Status////////////////////
           if (obj.table === 'Job Status') {
             makeColumnTheValue(obj)
             FindJobFactory.searchForJobStatus(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
           }
-        ////////////////////Jobs Type////////////////////
+          ////////////////////Jobs Type////////////////////
           if (obj.table === 'Job Type') {
             makeColumnTheValue(obj)
             FindJobFactory.searchForJobType(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
           } 
-        ////////////////////Task////////////////////
+          ////////////////////Task////////////////////
           else if (obj.table === 'Task') {
             makeColumnTheValue(obj)
             FindJobFactory.searchForTasks(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
           } 
-        ////////////////////Property////////////////////
+          ////////////////////Property////////////////////
           else if (obj.table === 'Property') {
             createObjToFind(obj)
             getPropDBRelation(obj)
@@ -128,7 +123,7 @@ app.controller('FindJob', function($q, $scope, $http, JobFactory, JobTypeFactory
               FindJobFactory.propertyRegColumn(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
             }
           } 
-        ////////////////////Customer////////////////////
+          ////////////////////Customer////////////////////
           else if (obj.table === 'Customer') {
             createObjToFind(obj)
             getCustomerDBRelation(obj)
