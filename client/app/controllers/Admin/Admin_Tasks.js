@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, DBFactory) {
+app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, FormFactory ) {
   const AT = this
   AT.editIndex = false
   let original = undefined
@@ -24,8 +24,8 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, DBFact
   }  
   
   AT.addNew = () => {
-    TaskFactory.addNew().then( ({dbPackage}) => {
-      DBFactory.addNew(dbPackage).then( () => {
+    FormFactory.updateForm('Tasks', null, {}, 'Add New').then( ({dbPackage}) => {
+      TaskFactory.addNew(dbPackage).then( () => {
         $scope.setTabAndReload('AT')
       }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))

@@ -1,15 +1,11 @@
 'use strict'
 
-app.factory('TaskFactory', function($q, $http, FormFactory) {
+app.factory('TaskFactory', function($q, $http) {
   let taskObj 
   let _initialized = $q.defer() //wait for data to return
   const factory = {}
 
-  factory.addNew = () => {
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Tasks', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
+  factory.addNew = dbPackage => $http.post('/api/addNewTask', dbPackage)
 
   factory.updateExisting = (dbObj, ids) => $http.post('/api/updateTask', {dbObj, ids})
 
