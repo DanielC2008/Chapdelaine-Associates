@@ -4,7 +4,6 @@ app.factory('CompanyFactory', function($http, SearchFactory, FormFactory) {
 
   const factory = {}
 
-
   const getCompaniesForSearch = () => $http.get('/api/getCompaniesForSearch')
 
   factory.searchForCompanies = () => {
@@ -20,17 +19,9 @@ app.factory('CompanyFactory', function($http, SearchFactory, FormFactory) {
 
   factory.getFullCompanyById = company_id => $http.post('/api/getFullCompanyById', company_id)
 
-  factory.updateExistingCompany = (ids, data) => {
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Companies', data, ids, 'Update').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
+  factory.updateExisting = dbPackage => $http.post('/api/updateCompany', dbPackage)
 
-  factory.addNewCompany = () => {
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Companies', null, {}, 'Add New').then( msg => resolve(msg)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
+  factory.addNew = dbPackage => $http.post('/api/addNewCompany', dbPackage)
 
 return factory
 
