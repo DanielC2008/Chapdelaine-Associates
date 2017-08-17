@@ -1,6 +1,6 @@
 'use strict'
 
-app.service('FindJobService', function($location, $rootScope) {
+app.service('FindJobService', function($location) {
   const service = {}
   const matches = {
     exact: [],
@@ -45,28 +45,29 @@ app.service('FindJobService', function($location, $rootScope) {
   //reduces an array of objs with different properties into one obj with only one of each property
   const reduceObj = sortedArr => Object.assign(...sortedArr)
 
-  const oneMatch = jobNumber => $rootScope.$apply( () => $location.path(`/jobs/${jobNumber}`))
-
-  const manyMatches = jobsArrLength => {
-    sorted.forEach( sortedArr => {
-      //length is equal to number of parameters entered = exact match
-      if (sortedArr.length === jobsArrLength) { 
-        let obj = reduceObj(sortedArr)
-        matches.exact.push(obj)
-      } else{
-        let obj = reduceObj(sortedArr)
-        matches.other.push(obj)
-      } 
-    })
-    $rootScope.$apply( () => $location.path('/jobs/'))
+  const createMatchesObj = jobsArrLength => {
+    return new Promise( (resolve) => {
+      sorted.forEach( sortedArr => {
+        //length is equal to number of parameters entered = exact match
+        if (sortedArr.length === jobsArrLength) { 
+          let obj = reduceObj(sortedArr)
+          matches.exact.push(obj)
+        } else{
+          let obj = reduceObj(sortedArr)
+          matches.other.push(obj)
+        } 
+      })
+      resolve()
+    })  
   }
 
   service.setMatches = jobsArr => {
-    clearMatches()
-    sortJobsByJobNumber(jobsArr).then( () => {
-      sorted.length === 1 ? oneMatch(sorted[0][0].job_number) : manyMatches(jobsArr.length) 
-    }).catch( err => console.log('err', err))
-
+    return new Promise( (resolve) => {
+      clearMatches()
+      sortJobsByJobNumber(jobsArr).then( () => {
+        createMatchesObj(jobsArr.length).then( () => resolve()).catch( err => console.log('err', err))
+      }).catch( err => console.log('err', err))
+    })
   }
 
   service.getMatches = () => matches 

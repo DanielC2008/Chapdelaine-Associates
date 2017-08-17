@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory) {
+app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope) {
 
   let numberOfParams = 1
   const FJScope = this
@@ -138,11 +138,16 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
         })
       })
     )
-    .then( data => FindJobService.setMatches(data)) 
-    .catch( err => {
-      console.log('err', err)
-      // alert(`The server responded with a status of ${status}: ${data}. Please try another request.`)
+    .then( data => {
+      console.log('data', data)
+      let { length } = data.filter( arr => arr.length > 0 )
+      if (length === 0){
+        ToastFactory.toastReject('Oooops! No matches found')
+      } else {
+        FindJobService.setMatches(data).then( () => $rootScope.$apply( () => $location.path('/jobs/')))
+      }  
     })
+    .catch( err => console.log('err', err))
   }
 
   //initiate first parameter
