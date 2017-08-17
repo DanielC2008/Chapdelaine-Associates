@@ -143,6 +143,10 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
       let { length } = data.filter( arr => arr.length > 0 )
       if (length === 0){
         ToastFactory.toastReject('Oooops! No matches found')
+        FJScope.selectedTable = null
+        FJScope.searchParams = []
+        addParam()
+        //reset params
       } else {
         FindJobService.setMatches(data).then( () => $rootScope.$apply( () => $location.path('/jobs/')))
       }  

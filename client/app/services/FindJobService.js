@@ -1,6 +1,6 @@
 'use strict'
 
-app.service('FindJobService', function($location) {
+app.service('FindJobService', function() {
   const service = {}
   const matches = {
     exact: [],
