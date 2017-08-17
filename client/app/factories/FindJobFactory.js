@@ -22,7 +22,6 @@ app.factory('FindJobFactory', function($http) {
   
   factory.searchForTasks = dbObj => $http.post('/api/searchForTasks', dbObj)
 
-
   return factory
 
 })

@@ -12,7 +12,7 @@ app.controller('RecommendNumber', function($scope, DBFactory, $mdDialog, JobFact
     if (job_number != NaN && job_number > 0) {
       JobFactory.checkJobNumberExists(job_number).then( ({data: {exists}}) => {
         if (exists) {
-          ToastFactory.toastReject('it looks like this job number already exists!')
+          ToastFactory.toastReject('It looks like this job number already exists!')
         } else {
           setNumber(job_number)
         }

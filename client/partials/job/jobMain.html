@@ -9,46 +9,46 @@
         <div class="row">
           <div id="client">
             <div class="col s6">
-              <div class="row">
+              <div>
                 Client's Name: {{job.client.first_name}} {{job.client.middle_name}} {{job.client.last_name}} 
                 <span >({{job.client_type.client_type}})</span>
               </div>
-              <div class="row">
+              <div>
                 Mailing Address: {{job.client.address}}
               </div>
-              <div class="row">
+              <div>
                 City: {{job.client.city}} State: {{job.client.state}} Zip: {{job.client.zip_code}} 
               </div>
-              <div class="row">
+              <div>
                  County: {{job.client.county}}
               </div>
-              <div class="row">
+              <div>
                 Mobile Phone: {{job.client.mobile_phone}}
               </div>
-              <div class="row">
+              <div>
                  Home Phone: {{job.client.home_phone}}
               </div>
-              <div class="row">
+              <div>
                 Email: {{job.client.email}} 
               </div>
             </div>
             <div class="col s6">
-              <div class="row">
+              <div>
                 Contact: {{job.client_contact.first_name}} {{job.client_contact.middle_name}} {{job.client_contact.last_name}}
               </div>
-              <div class="row">
+              <div>
                 Mobile Phone: {{job.client_contact.mobile_phone}}
               </div>
-              <div class="row">
+              <div>
                 Business Phone: {{job.client_contact.business_phone}}
               </div>
-              <div class="row">
+              <div>
                 Email: {{job.client_contact.email}}
               </div>
-              <div class="row">
+              <div>
                 Company Name: {{job.client_contact.company_name}}
               </div>
-              <div class="row">
+              <div>
                 Company Address: {{job.client_contact.company_address}}
               </div>
             </div>
@@ -59,10 +59,10 @@
           <div id="PropTitle">
             <div class="col s12">
               <div class="row">
-                <div>
+                <div class="col s12">
                   Owner's Name: {{job.owner.first_name}} {{job.owner.middle_name}} {{job.owner.last_name}} 
                 </div>
-                <div>
+                <div class="col s12">
                   Owner Contact Name: {{job.owner_contact.first_name}} {{job.owner_contact.middle_name}} {{job.owner_contact.last_name}} 
                 </div>
               </div>
@@ -75,7 +75,7 @@
                     {{address}}
                   </div>
                 </div>
-                <button class="button btn col s2" 
+                <button class=" col s2" 
                   ng-click="JM.allAddresses ? JM.allAddresses = false : JM.allAddresses = true">
                   {{JM.allAddresses ? 'Show Less' : 'Show All'}} 
                 </button>
@@ -89,7 +89,7 @@
                     {{road}}
                   </div>
                 </div>
-                <button class="button btn col s2" 
+                <button class=" col s2" 
                   ng-click="JM.allRoads ? JM.allRoads = false : JM.allRoads = true">
                   {{JM.allRoads ? 'Show Less' : 'Show All'}} 
                 </button>
@@ -98,33 +98,33 @@
           </div>
           <div id="property">
             <div class="col s6">
-              <div class="row">
+              <div>
                 City: {{job.property.city}} 
               </div>
-              <div class="row">
+              <div>
                 State: {{job.property.state}} Zip: {{job.property.zip_code}}  
               </div>
-              <div class="row">
+              <div>
                 County {{job.property.county}}
               </div>
-              <div class="row">
+              <div>
                 Acrage: {{job.property.acres}}
               </div>
-              <div class="row">
+              <div>
                 Notes: {{job.property.notes}} 
               </div>
             </div>
             <div class="col s6">
-              <div class="row">
+              <div>
                 Subdivision: {{job.property.sub_division}} Lot Number: {{job.property.lot_number}}
               </div>
-              <div class="row">
+              <div>
                 Platbook: {{job.property.plat_book}} Page: {{job.property.plat_page}}
               </div>
-              <div class="row">
+              <div>
                 Property Map: {{job.property.property_map}} Parcel: {{job.property.parcel_number}}
               </div>
-              <div class="row">
+              <div>
                 Deedbook: {{job.property.deed_book}} Page: {{job.property.deed_page}}
               </div>
             </div>

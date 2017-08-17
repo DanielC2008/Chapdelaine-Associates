@@ -31,7 +31,8 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
       .otherwise('/login')
   )
   .config(function($mdAriaProvider) {
-    $mdAriaProvider.disableWarnings() // Globally disables all ARIA warnings.
+    // Globally disables all ARIA warnings.
+    $mdAriaProvider.disableWarnings() 
   })
   .run( function($rootScope, $location, UserFactory) {
     $rootScope.timeZoneOffset = `+${new Date().getTimezoneOffset()}`
@@ -40,8 +41,10 @@ const app = angular.module('Database', ['ngRoute', 'ngAria', 'focus-if', 'ngMate
     // register listener to watch route changes
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
       if ( $rootScope.$user === null ) {
-        if ( next.templateUrl == "partials/login-register.html" ) { //--------- already going to #login, no redirect needed
-        } else {  // -----------------------------------------------------------not going to login-register, redirect now
+        //already going to #login, no redirect needed
+        if ( next.templateUrl == "partials/login-register.html" ) { 
+        // not going to login-register, redirect now
+        } else {  
           $location.path( "/login" )
           alert('Please Log In.')
         }

@@ -39,9 +39,7 @@ app.controller('FindJob', function($q, $scope, $http, JobFactory, JobTypeFactory
   FJScope.searchParams = []
 
 //adds parameter to searchParams obj
-  const addParam = () => {
-    FJScope.searchParams.push({})
-  }
+  const addParam = () => FJScope.searchParams.push({})
 
 
 //create new parameter and display

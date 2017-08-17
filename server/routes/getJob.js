@@ -7,13 +7,8 @@ const router = Router()
 
 router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
   let job = {}
-  // let mainClientId = null
-  // let propertyId = null
-  // let allClientIds = []
-  // let jobId
 
   return Promise.all([
-
     knex('Jobs')
       .select(
         'Jobs.job_id',
@@ -164,8 +159,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .then(data => job.job_types = data.map( type => type.job_type))
         .catch(err => console.log('err', err)),
 
-
-
     // knex('Estimates')
     //     .select(
     //       'Tasks.task',
@@ -221,8 +214,7 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
     //     .where('job_number', job_number)
     //     .then(data => jobMain.Attachments = data) 
 
-  ]) 
-  .then( () => {
+  ]).then( () => {
     return Promise.all([
 
       knex('Properties')
@@ -240,11 +232,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         .where('Properties.property_id', job.property.property_id)
         .then(data => job.roads = data.map( road => road.road ))
         .catch(err => console.log('err', err))
-    ])
-    .then( () => {
-      res.send(job)
-    })     
-  })     
+        
+    ]).then( () => res.send(job) ).catch(err => console.log('err', err))  
+  }).catch(err => console.log('err', err))       
 })
 
 module.exports = router

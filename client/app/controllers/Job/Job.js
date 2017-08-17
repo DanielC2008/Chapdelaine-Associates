@@ -46,13 +46,6 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route)
   JobFactory.getJobFromDatabase($scope.jobNumber)
   .then( ({data}) => {
     $scope.job = data
-    console.log('$scope.job', $scope.job)
-    // $scope.Estimates = data.Estimates
-    // $scope.EstimateDetails = data.EstimateDetails
-    // $scope.Invoices = data.Invoices
-    // $scope.InvoiceDetails = data.InvoiceDetails
-    // $scope.Attachments = data.Attachments
-    // $scope.jobId = $scope.Job.job_id
     //redis saves previous tab accesses
     JobFactory.setTab({jobNumber: $scope.jobNumber}).then( ({data}) => $scope.showTab = data.showTab).catch( err => console.log('err', err))
     //last access update

@@ -6,7 +6,6 @@ app.service('FindJobService', function($location, $rootScope) {
     exact: [],
     other: []
   }
-
   const sorted = []
 
   const clearMatches = () => {
@@ -46,6 +45,8 @@ app.service('FindJobService', function($location, $rootScope) {
   //reduces an array of objs with different properties into one obj with only one of each property
   const reduceObj = sortedArr => Object.assign(...sortedArr)
 
+  const oneMatch = jobNumber => $rootScope.$apply( () => $location.path(`/jobs/${jobNumber}`))
+
   const manyMatches = jobsArrLength => {
     sorted.forEach( sortedArr => {
       //length is equal to number of parameters entered = exact match
@@ -60,9 +61,6 @@ app.service('FindJobService', function($location, $rootScope) {
     $rootScope.$apply( () => $location.path('/jobs/'))
   }
 
-  const oneMatch = jobNumber => $rootScope.$apply( () => $location.path(`/jobs/${jobNumber}`))
-
-
   service.setMatches = jobsArr => {
     clearMatches()
     sortJobsByJobNumber(jobsArr).then( () => {
@@ -72,9 +70,6 @@ app.service('FindJobService', function($location, $rootScope) {
   }
 
   service.getMatches = () => matches 
- 
-
-
 
   return service
 })
