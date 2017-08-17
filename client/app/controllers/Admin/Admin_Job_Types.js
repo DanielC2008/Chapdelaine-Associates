@@ -1,7 +1,7 @@
 'use strict'
 
 app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory, FormFactory) {
-  let JT = this
+  const JT = this
 
   JT.priorityChanged = false
 

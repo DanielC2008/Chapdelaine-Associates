@@ -1,7 +1,7 @@
 'use strict'
 
 app.controller('Admin_Customers', function($scope, CustomerFactory, ToastFactory, DBFactory) {
-  let AC = this
+  const AC = this
 
   AC.addOrEdit = () => { 
     CustomerFactory.searchForCustomers().then( selected => {
