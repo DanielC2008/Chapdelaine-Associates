@@ -23,28 +23,15 @@ app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactor
     const removedRoads = findRemovals(original.roads, update.roads) 
     const newJobTypes = findAdditions(original.job_types, update.job_types)
     const removedJobTypes = findRemovals(original.job_types, update.job_types)
+    //one array to add new and one to update existing customers
+    const { customersToAdd, customersToUpdate} = seperateCustomers(client, client_contact, owner, owner_contact, update)
 
-    const customersToAdd = []
-    const customersToUpdate = []
-    if (Object.keys(client).length > 0) {
-      update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push({customer: client, idType: 'client_id'})
-    }
-    if (Object.keys(client_contact).length > 0) {
-      update.ids.client_contact_id ? customersToUpdate.push({customer: client_contact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: client_contact, idType: 'client_contact_id'})
-    }
-    if (Object.keys(owner).length > 0) {
-      update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner_id'})
-    }
-    if (Object.keys(owner_contact).length > 0) {
-      update.ids.owner_contact_id ? customersToUpdate.push({customer: owner_contact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: owner_contact, idType: 'owner_contact_id'})
-    }
     Promise.all([
       updateExistingCustomers(customersToUpdate).then( data => {}).catch( err => Promise.reject(err)), 
       addNewCustomers(customersToAdd).then( data => {
         //add new ids to id 
         data.forEach( id => ids[`${Object.keys(id)[0]}`] = id[Object.keys(id)[0]])
       }).catch( err => Promise.reject(err))
-
     ]).then( () => {
       let jobObj = Object.assign({}, job_info, client_type, ids)
       if (client_type.client_type === "Owner") {
@@ -67,7 +54,6 @@ app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactor
   }  
 
   factory.createJob = (original, update) => {
-
     let jobNumber = null
     let jobId = null
     //function to check if items on a job were changed -- this can be used by the update function as well
@@ -82,23 +68,10 @@ app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactor
     const newAddresses = findAdditions(original.addresses, update.addresses)
     const newRoads = findAdditions(original.roads, update.roads)
     const newJobTypes = findAdditions(original.job_types, update.job_types)
-
     //one array to add new and one to update existing customers
-    const customersToAdd = []
-    const customersToUpdate = []
-    if (Object.keys(client).length > 0) {
-      update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push({customer: client, idType: 'client_id'})
-    }
-    if (Object.keys(client_contact).length > 0) {
-      update.ids.client_contact_id ? customersToUpdate.push({customer: client_contact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: client_contact, idType: 'client_contact_id'})
-    }
-    if (Object.keys(owner).length > 0) {
-      update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner_id'})
-    }
-    if (Object.keys(owner_contact).length > 0) {
-      update.ids.owner_contact_id ? customersToUpdate.push({customer: owner_contact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: owner_contact, idType: 'owner_contact_id'})
-    }
-    //add new Prop, Client, (and if) C_Contact, Owner, O_Contact
+    const { customersToAdd, customersToUpdate } = seperateCustomers(client, client_contact, owner, owner_contact, update)
+
+    //add new Prop, Client, (and if) Client_Contact, Owner, Owner_Contact
     Promise.all([
       //addProp and add property_id to ids obj
       PropertyFactory.addNew({table: 'Properties', dbObj: property}).then( ({data}) => {
@@ -126,9 +99,25 @@ app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactor
         addJobTypesToJob(newJobTypes, jobId).then( () => $mdDialog.hide(jobNumber)).catch( err => console.log('err', err))
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
-
   }
 
+  const seperateCustomers = (client, client_contact, owner, owner_contact, update) => {
+    const customersToAdd = []
+    const customersToUpdate = []
+    if (Object.keys(client).length > 0) {
+      update.ids.client_id ? customersToUpdate.push({customer: client, id: update.ids.client_id}) : customersToAdd.push({customer: client, idType: 'client_id'})
+    }
+    if (Object.keys(client_contact).length > 0) {
+      update.ids.client_contact_id ? customersToUpdate.push({customer: client_contact, id: update.ids.client_contact_id}) : customersToAdd.push({customer: client_contact, idType: 'client_contact_id'})
+    }
+    if (Object.keys(owner).length > 0) {
+      update.ids.owner_id ? customersToUpdate.push({customer: owner, id: update.ids.owner_id}) : customersToAdd.push({customer: owner, idType: 'owner_id'})
+    }
+    if (Object.keys(owner_contact).length > 0) {
+      update.ids.owner_contact_id ? customersToUpdate.push({customer: owner_contact, id: update.ids.owner_contact_id}) : customersToAdd.push({customer: owner_contact, idType: 'owner_contact_id'})
+    }
+    return { customersToAdd, customersToUpdate }
+  }
 
   const findChanges = (original, update) => {
     return Object.keys(update).reduce( (obj, key) => {

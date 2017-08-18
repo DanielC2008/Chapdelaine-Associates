@@ -35,7 +35,9 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Customers.last_name',
         'Customers.email',
         'Customers.home_phone',
+        'Customers.business_phone',
         'Customers.mobile_phone',
+        'Customers.fax_number',
         'Customers.notes',
         'Addresses.address',
         'Cities.city',
@@ -216,7 +218,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
 
   ]).then( () => {
     return Promise.all([
-
       knex('Properties')
         .select('Addresses.address')
         .join('Properties_Addresses', 'Properties.property_id', 'Properties_Addresses.property_id')

@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory, $mdDialog, JobFormFactory, FormFactory) {
+app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFactory, PropertyFactory, CustomerFactory, JobTypeFactory,  JobFormFactory, FormFactory) {
 
   const defaultJob = {
     job_info: {
