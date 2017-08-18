@@ -7,9 +7,7 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route)
 
   $scope.setNewTab = newTab => {
     $scope.showTab = newTab
-    JobFactory.setNewTab({jobNumber: $scope.jobNumber, showTab: newTab})
-    .then()
-    .catch(err => console.log('err', err))
+    JobFactory.setNewTab({jobNumber: $scope.jobNumber, showTab: newTab}).then().catch(err => console.log('err', err))
    }
 
   $scope.updateJob = () => {
@@ -33,7 +31,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route)
       multiple: true
     })
     .then( jobNumber => {
-      jobNumber === $scope.jobNumber ? $route.reload() : JobFactory.goToJobPage(jobNumber)
+      //job number was not changed but other data was changed
+      if (jobNumber === $scope.jobNumber) {
+       $route.reload()
+       //job number was changed go to new page
+      } else if (typeof jobNumber === 'number')  {
+        JobFactory.goToJobPage(jobNumber)
+      }
     }).catch( err => console.log('err', err))
   }
 
