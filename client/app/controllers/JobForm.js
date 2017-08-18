@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory, $mdDialog, JobFormFactory) {
+app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, PropertyFactory, CustomerFactory, JobTypeFactory, $mdDialog, JobFormFactory, FormFactory) {
 
   const defaultJob = {
     job_info: {
@@ -228,14 +228,14 @@ $scope.removeCustomer = customerType => {
           //if exist bring back full client in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, clientSet, and id
-            CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
+              FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.client = dbPackage.dbObj
               $scope.job.ids.client_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
-          CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
+           FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.client = dbPackage.dbObj
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -245,8 +245,8 @@ $scope.removeCustomer = customerType => {
 
   $scope.editClient = () => {
     //send id for name check if id exists else we are editing a validated client not in DB
-    let customer_id = $scope.job.ids.client_id ? $scope.job.ids.client_id : null 
-    CustomerFactory.editCustomer($scope.job.client, customer_id).then( ({dbPackage, msg}) => {
+    let customer_id = $scope.job.ids.client_id ? {customer_id: $scope.job.ids.client_id} : {customer_id: null}
+     FormFactory.updateForm('Customers', $scope.job.client, customer_id, 'Update').then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.client = dbPackage.dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -261,14 +261,14 @@ $scope.removeCustomer = customerType => {
           //if exist bring back full contact in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, clientContactSet, and id
-            CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
+              FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.client_contact = dbPackage.dbObj
               $scope.job.ids.client_contact_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
-          CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
+           FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.client_contact = dbPackage.dbObj
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -278,8 +278,8 @@ $scope.removeCustomer = customerType => {
 
   $scope.editClientContact = () => {
     //send id for name check if id exists else we are editing a validated client_contact not in DB
-    let customer_id = $scope.job.ids.clientContact_id ? $scope.job.ids.clientContact_id : null 
-    CustomerFactory.editCustomer($scope.job.client_contact, customer_id).then( ({dbPackage, msg}) => {
+    let customer_id = $scope.job.ids.client_contact_id ? {customer_id: $scope.job.ids.client_contact_id} : {customer_id: null}
+     FormFactory.updateForm('Customers', $scope.job.client_contact, customer_id, 'Update').then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.client_contact = dbPackage.dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -294,14 +294,14 @@ $scope.removeCustomer = customerType => {
           //if exist bring back full owner in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, ownerSet, and id
-            CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
+              FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.owner = dbPackage.dbObj
               $scope.job.ids.owner_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
-          CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
+           FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.owner = dbPackage.dbObj
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -311,8 +311,8 @@ $scope.removeCustomer = customerType => {
 
   $scope.editOwner = () => {
     //send id for name check if id exists else we are editing a validated owner not in DB
-    let customer_id = $scope.job.ids.owner_id ? $scope.job.ids.owner_id : null 
-    CustomerFactory.editCustomer($scope.job.owner, customer_id).then( ({dbPackage, msg}) => {
+   let customer_id = $scope.job.ids.owner_id ? {customer_id: $scope.job.ids.owner_id} : {customer_id: null}
+     FormFactory.updateForm('Customers', $scope.job.owner, customer_id, 'Update').then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.owner = dbPackage.dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -326,14 +326,14 @@ $scope.removeCustomer = customerType => {
           //if exist bring back full contact in case they want to make changes
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, ownerContactSet, and id
-            CustomerFactory.editCustomer(data, data.customer_id).then( ({dbPackage, msg}) => {
+              FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
               ToastFactory.toastSuccess(msg)
               $scope.job.owner_contact = dbPackage.dbObj
               $scope.job.ids.owner_contact_id = dbPackage.ids.customer_id
             }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
         } else {
-          CustomerFactory.addCustomer().then( ({dbPackage, msg}) => {
+           FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
             ToastFactory.toastSuccess(msg)
             $scope.job.owner_contact = dbPackage.dbObj
           }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
@@ -343,8 +343,8 @@ $scope.removeCustomer = customerType => {
 
   $scope.editOwnerContact = () => {
     //send id for name check if id exists else we are editing a validated owner_contact not in DB
-    let customer_id = $scope.job.ids.ownerContact_id ? $scope.job.ids.ownerContact_id : null 
-    CustomerFactory.editCustomer($scope.job.owner_contact, customer_id).then( ({dbPackage, msg}) => {
+    let customer_id = $scope.job.ids.owner_contact_id ? {customer_id: $scope.job.ids.owner_contact_id} : {customer_id: null}
+     FormFactory.updateForm('Customers', $scope.job.owner_contact, customer_id, 'Update').then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.owner_contact = dbPackage.dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))

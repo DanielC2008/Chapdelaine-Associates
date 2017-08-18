@@ -17,9 +17,9 @@ app.factory('CustomerFactory', function($http, SearchFactory, FormFactory) {
     })
   }
 
-  factory.addCustomer = () => FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New')
+  factory.addNew = dbPackage => $http.post('/api/addNewCustomer', dbPackage)
 
-  factory.editCustomer = (customer, id) => FormFactory.updateForm('Customers', customer, {customer_id: id}, 'Update')
+  factory.updateExisting = dbPackage => $http.post('/api/updateCustomer', dbPackage)
 
   factory.getFullCustomerById = customer_id => $http.post('/api/getFullCustomerById', customer_id)
 

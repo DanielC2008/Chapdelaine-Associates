@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
+app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, CustomerFactory) {
 
   const factory = {}
 
@@ -161,7 +161,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     return new Promise( (resolve, reject) => {
       Promise.all(customersToAdd.map( customer => {
         let dbPackage = {table: 'Customers', dbObj: customer.customer, idType: customer.idType}
-        return DBFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+        return CustomerFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
@@ -170,7 +170,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory) {
     return new Promise( (resolve, reject) => {
       Promise.all(customersToUpdate.map( customer => {
         let dbPackage = {table: 'Customers', dbObj: customer.customer, customer_id: customer.id }
-        return DBFactory.updateExisting(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+        return CustomerFactory.updateExisting(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }

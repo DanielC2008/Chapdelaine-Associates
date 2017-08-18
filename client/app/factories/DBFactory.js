@@ -35,10 +35,7 @@ app.factory('DBFactory', function($http) {
   }
 
   factory.addNew = dbPackage => {
-    if (dbPackage.table === 'Customers'){
-      return $http.post('/api/addNewCustomer', dbPackage)
-    }
-    else if (dbPackage.table === 'Properties'){
+    if (dbPackage.table === 'Properties'){
       return $http.post('/api/addNewPropertyToJob', dbPackage)
     }
     else if (dbPackage.table === 'Jobs'){
@@ -53,10 +50,7 @@ app.factory('DBFactory', function($http) {
   }
 
   factory.updateExisting = dbPackage => {
-    if (dbPackage.table === 'Customers') {
-      return $http.post('/api/updateCustomer', dbPackage)
-    } 
-    else if (dbPackage.table === 'Properties') {        
+    if (dbPackage.table === 'Properties') {        
       return $http.post('/api/updateProperty', dbPackage)
     } 
     else if (dbPackage.table === 'Jobs') {        
