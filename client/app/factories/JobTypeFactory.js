@@ -8,6 +8,8 @@ app.factory('JobTypeFactory', function($q, $http, FormFactory) {
   factory.addJobTypeToJob = dbPackage => $http.post('/api/addJobTypeToJob', dbPackage)
 
   factory.addNew = dbPackage => $http.post('/api/addNewJobType', dbPackage)
+  
+  factory.removeJobTypeFromJob = dbPackage => $http.post('/api/removeJobTypeFromJob', dbPackage)
 
   factory.disableJobType = id => $http.post('/api/disableJobType', {id})
 

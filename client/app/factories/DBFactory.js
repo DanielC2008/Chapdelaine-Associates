@@ -34,12 +34,6 @@ app.factory('DBFactory', function($http) {
     }
   }
 
-  factory.removeFromJob = dbPackage => {
-    if (dbPackage.table === 'Job_Types'){
-      return $http.post('/api/removeJobTypeFromJob', dbPackage)
-    }
-  }
-
   factory.getMaxNumber = table => $http.post('/api/getMaxNumber', table)
 
   factory.getMinNumber = table => $http.post('/api/getMinNumber', table)

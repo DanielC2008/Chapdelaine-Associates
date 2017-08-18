@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, CustomerFactory, PropertyFactory, JobFactory) {
+app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactory, PropertyFactory, JobFactory) {
 
   const factory = {}
 
@@ -224,7 +224,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
     return new Promise( (resolve, reject) => {
       Promise.all(jobTypes.map( job_type => {
         let dbPackage = {table: 'Job_Types', job_type, job_id: jobId}
-        return DBFactory.removeFromJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+        return JobTypeFactory.removeJobTypeFromJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
