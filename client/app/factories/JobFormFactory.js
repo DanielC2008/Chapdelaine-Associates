@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, CustomerFactory) {
+app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, CustomerFactory, PropertyFactory) {
 
   const factory = {}
 
@@ -101,7 +101,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
     //add new Prop, Client, (and if) C_Contact, Owner, O_Contact
     Promise.all([
       //addProp and add property_id to ids obj
-      DBFactory.addNew({table: 'Properties', dbObj: property}).then( ({data}) => {
+      PropertyFactory.addNew({table: 'Properties', dbObj: property}).then( ({data}) => {
         ids.property_id = data.property_id
       }).catch( err => Promise.reject(err)),
       //if client exists send to update 
@@ -244,11 +244,11 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
     })
   }
 
-  const updateProp = (property, property_id) => {
+  const updateProp = (prop, prop_id) => {
     return new Promise( (resolve, reject) => {
       //if changes were made
-      if (Object.keys(property).length > 0) {
-        DBFactory.updateExisting({table: 'Properties', dbObj: property, id: property_id}).then( () => {
+      if (Object.keys(prop).length > 0) {
+        PropertyFactory.updateExisting({table: 'Properties', dbObj: prop, id: prop_id}).then( () => {
           resolve()
         })
         .catch( err => reject(err))

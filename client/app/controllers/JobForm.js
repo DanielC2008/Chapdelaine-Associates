@@ -127,7 +127,7 @@ app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, Proper
 
 /////////////////////////////////////////PROPERTY/////////////////////////////////////////  
   $scope.addProp = () => { 
-    PropertyFactory.addProp().then( ({dbPackage, msg}) => {
+    FormFactory.updateForm('Properties', null, {}, 'Add New').then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.property = dbPackage.dbObj
       $scope.propertySet = true
@@ -135,7 +135,7 @@ app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, Proper
   }
 
   $scope.editProp = () => {
-    PropertyFactory.editProp($scope.job.property).then( ({dbPackage, msg}) => {
+    FormFactory.updateForm('Properties', $scope.job.property, {}, 'Update').then( ({dbPackage, msg}) => {
       ToastFactory.toastSuccess(msg)
       $scope.job.property = dbPackage.dbObj
     }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))

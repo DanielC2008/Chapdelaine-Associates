@@ -4,9 +4,9 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
   const factory = {}
 
-  factory.addProp = () => FormFactory.updateForm('Properties', null, {}, 'Add New')
+  factory.addNew = dbPackage => $http.post('/api/addNewPropertyToJob', dbPackage)
 
-  factory.editProp = property => FormFactory.updateForm('Properties', property, {}, 'Update')
+  factory.updateExisting = dbPackage => $http.post('/api/updateProperty', dbPackage)
 
   factory.getAddressesOnProp = property_id => $http.post('/api/getAddressesOnProp', {property_id})
   
