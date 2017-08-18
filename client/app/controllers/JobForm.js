@@ -149,7 +149,7 @@ app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, Proper
         $scope.job.addresses.push(address)
         $scope.$apply()
       } else {
-        PropertyFactory.addAddress().then( ({dbPackage, msg}) => {
+        FormFactory.updateForm('Addresses', null,  {}, 'Add New').then( ({dbPackage, msg}) => {
           ToastFactory.toastSuccess(msg)
           $scope.job.addresses.push(dbPackage.dbObj)
         }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))

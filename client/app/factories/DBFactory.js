@@ -35,19 +35,13 @@ app.factory('DBFactory', function($http) {
   }
 
   factory.addNew = dbPackage => {
-    if (dbPackage.table === 'Addresses'){
-      return $http.post('/api/addSecondaryAddress', dbPackage)
-    }
-    else if (dbPackage.table === 'Roads'){
+    if (dbPackage.table === 'Roads'){
       return $http.post('/api/addSecondaryRoad', dbPackage)
     }
   }
 
   factory.removeFromJob = dbPackage => {
-    if (dbPackage.table === 'Addresses'){
-      return $http.post('/api/removeSecondaryAddress', dbPackage)
-    }
-    else if (dbPackage.table === 'Roads'){
+    if (dbPackage.table === 'Roads'){
       return $http.post('/api/removeSecondaryRoad', dbPackage)
     }
     else if (dbPackage.table === 'Job_Types'){

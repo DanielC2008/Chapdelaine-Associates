@@ -4,17 +4,22 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
   const factory = {}
 
+  const getAddressesForSearch = () => $http.get('/api/getAddressesForSearch')
+  
+  const getRoadsForSearch = () => $http.get('/api/getRoadsForSearch')
+
   factory.addNew = dbPackage => $http.post('/api/addNewPropertyToJob', dbPackage)
 
   factory.updateExisting = dbPackage => $http.post('/api/updateProperty', dbPackage)
 
   factory.getAddressesOnProp = property_id => $http.post('/api/getAddressesOnProp', {property_id})
-  
+
   factory.getRoadsOnProp = property_id => $http.post('/api/getRoadsOnProp', {property_id})
 
-  factory.addAddress = () => FormFactory.updateForm('Addresses', null,  {}, 'Add New')
+  factory.addSecondaryAddress = dbPackage => $http.post('/api/addSecondaryAddress', dbPackage)
+  
+  factory.removeSecondaryAddress = dbPackage => $http.post('/api/removeSecondaryAddress', dbPackage)
 
-  const getAddressesForSearch = () => $http.get('/api/getAddressesForSearch')
 
   factory.searchForAddresses = () => {
     return new Promise ((resolve, reject) => {
@@ -29,8 +34,6 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
   factory.addRoad = () => FormFactory.updateForm('Roads', null,  {}, 'Add New')
 
-  const getRoadsForSearch = () => $http.get('/api/getRoadsForSearch')
-
   factory.searchForRoads = () => {
     return new Promise ((resolve, reject) => {
       getRoadsForSearch().then( ({data}) => {
@@ -41,9 +44,6 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
       }).catch( err => reject({msg:'Nothing Saved'}))
     })
   }
-
-
-
 
   return factory
 })

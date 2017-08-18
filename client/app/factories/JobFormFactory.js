@@ -55,7 +55,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
         updateJob(jobObj, originalJobNumber).then().catch( err => Promise.reject(err)),
         updateProp(property, original.ids.property_id).then().catch( err => Promise.reject(err)),
         addAddressesToProp(newAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
-        removeAddressesFromProp(removedAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        removeSecondaryAddress(removedAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
         addRoadsToProp(newRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
         removeRoadsFromProp(removedRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
         addJobTypesToJob(newJobTypes, jobId).then().catch( err => console.log('err', err)),
@@ -179,16 +179,16 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
     return new Promise( (resolve, reject) => {
       Promise.all(newAddresses.map( address => {
         let dbPackage = {table: 'Addresses', address: address, property_id: property_id}
-        return DBFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+        return PropertyFactory.addSecondaryAddress(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
 
-  const removeAddressesFromProp = (addresses, property_id) => {
+  const removeSecondaryAddress = (addresses, property_id) => {
     return new Promise( (resolve, reject) => {
       Promise.all(addresses.map( address => {
         let dbPackage = {table: 'Addresses', address: address, property_id: property_id}
-        return DBFactory.removeFromJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+        return PropertyFactory.removeSecondaryAddress(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
