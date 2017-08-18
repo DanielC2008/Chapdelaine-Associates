@@ -184,7 +184,7 @@ app.controller('JobForm', function($rootScope, $scope, ToastFactory, job, Proper
         $scope.job.roads.push(road)
         $scope.$apply()
       } else {
-        PropertyFactory.addRoad().then( ({dbPackage, msg}) => {
+        FormFactory.updateForm('Roads', null,  {}, 'Add New').then( ({dbPackage, msg}) => {
           ToastFactory.toastSuccess(msg)
           $scope.job.roads.push(dbPackage.dbObj)
         }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))

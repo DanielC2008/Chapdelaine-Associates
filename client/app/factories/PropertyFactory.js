@@ -14,12 +14,9 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
   factory.getAddressesOnProp = property_id => $http.post('/api/getAddressesOnProp', {property_id})
 
-  factory.getRoadsOnProp = property_id => $http.post('/api/getRoadsOnProp', {property_id})
-
   factory.addSecondaryAddress = dbPackage => $http.post('/api/addSecondaryAddress', dbPackage)
   
   factory.removeSecondaryAddress = dbPackage => $http.post('/api/removeSecondaryAddress', dbPackage)
-
 
   factory.searchForAddresses = () => {
     return new Promise ((resolve, reject) => {
@@ -32,7 +29,11 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
     })
   }
 
-  factory.addRoad = () => FormFactory.updateForm('Roads', null,  {}, 'Add New')
+  factory.getRoadsOnProp = property_id => $http.post('/api/getRoadsOnProp', {property_id})
+
+  factory.addSecondaryRoad = dbPackage => $http.post('/api/addSecondaryRoad', dbPackage)
+
+  factory.removeSecondaryRoad = dbPackage => $http.post('/api/removeSecondaryRoad', dbPackage)
 
   factory.searchForRoads = () => {
     return new Promise ((resolve, reject) => {

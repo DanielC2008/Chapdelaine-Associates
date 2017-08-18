@@ -54,10 +54,10 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
       Promise.all([
         updateJob(jobObj, originalJobNumber).then().catch( err => Promise.reject(err)),
         updateProp(property, original.ids.property_id).then().catch( err => Promise.reject(err)),
-        addAddressesToProp(newAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        addSecondaryAddress(newAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
         removeSecondaryAddress(removedAddresses, original.ids.property_id).then().catch( err => Promise.reject(err)),
-        addRoadsToProp(newRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
-        removeRoadsFromProp(removedRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        addSecondaryRoad(newRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
+        removeSecondaryRoad(removedRoads, original.ids.property_id).then().catch( err => Promise.reject(err)),
         addJobTypesToJob(newJobTypes, jobId).then().catch( err => console.log('err', err)),
         removeJobTypesFromJob(removedJobTypes, jobId).then().catch( err => console.log('err', err))
       ]).then( () => {
@@ -120,8 +120,8 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
           jobId = job_id
         }).catch( err => Promise.reject(err)),
         //send address and road arrays with Prop id
-        addAddressesToProp(newAddresses, ids.property_id).then().catch( err => Promise.reject(err)),
-        addRoadsToProp(newRoads, ids.property_id).then().catch( err => Promise.reject(err))
+        addSecondaryAddress(newAddresses, ids.property_id).then().catch( err => Promise.reject(err)),
+        addSecondaryRoad(newRoads, ids.property_id).then().catch( err => Promise.reject(err))
       ]).then( () => {
         addJobTypesToJob(newJobTypes, jobId).then( () => $mdDialog.hide(jobNumber)).catch( err => console.log('err', err))
       }).catch( err => console.log('err', err))
@@ -175,7 +175,7 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
     })
   }
 
-  const addAddressesToProp = (newAddresses, property_id) => {
+  const addSecondaryAddress = (newAddresses, property_id) => {
     return new Promise( (resolve, reject) => {
       Promise.all(newAddresses.map( address => {
         let dbPackage = {table: 'Addresses', address: address, property_id: property_id}
@@ -193,20 +193,20 @@ app.factory('JobFormFactory', function(DBFactory, $mdDialog, JobTypeFactory, Cus
     })
   }
 
-  const addRoadsToProp = (newRoads, property_id) => {
+  const addSecondaryRoad = (newRoads, property_id) => {
     return new Promise( (resolve, reject) => {
       Promise.all(newRoads.map( road => {
         let dbPackage = {table: 'Roads', road: road, property_id: property_id}
-        return DBFactory.addNew(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+        return PropertyFactory.addSecondaryRoad(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
 
-  const removeRoadsFromProp = (roads, property_id) => {
+  const removeSecondaryRoad = (roads, property_id) => {
     return new Promise( (resolve, reject) => {
       Promise.all(roads.map( road => {
         let dbPackage = {table: 'Roads', road: road, property_id: property_id}
-        return DBFactory.removeFromJob(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
+        return PropertyFactory.removeSecondaryRoad(dbPackage).then( ({data}) => Promise.resolve(data)).catch( err => Promise.reject(err))
       })).then( data => resolve(data)).catch( err => console.log('err', err))
     })
   }
