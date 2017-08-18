@@ -4,6 +4,10 @@ app.factory('JobFactory', function($location, $http) {
 
   const factory = {}
 
+    factory.addNew = dbPackage => $http.post('/api/createNewJob', dbPackage)
+
+    factory.updateExisting = dbPackage => $http.post('/api/updateJob', dbPackage)
+
     factory.goToJobPage = jobNumber => $location.path(`/jobs/:${jobNumber}`)
 
     factory.getJobFromDatabase = job_number => $http.post('/api/getJobInfo', {job_number})
