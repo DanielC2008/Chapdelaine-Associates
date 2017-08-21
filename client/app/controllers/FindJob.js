@@ -9,17 +9,23 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
   const foreignKeyColumns = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
   FJScope.searchParams = []
 
-  $q.all([
-    TaskFactory.initialized,
-    JobTypeFactory.initialized
+  Promise.all([
+    TaskFactory.getAllTasks().then( ({data}) => {
+      return data.reduce( (obj, task) => {
+        obj[task.task] = ''
+        return obj
+      }, {})
+    })
+    // JobTypeFactory.initialized
   ])
   .then( data => {
     tables.Customer = FindJobFactory.getCustomerForFindJob()
     tables.Property = FindJobFactory.getPropertyForFindJob()
     tables['Job Type'] = JobTypeFactory.getJobTypeNames()
     tables['Job Status'] = FindJobFactory.getJobStatusesForFindJob()
-    tables.Task = TaskFactory.getTaskNames()
+    tables.Task = data[0]
     FJScope.Tables = Object.keys(tables)
+    $scope.$apply()
   })
   .catch(err => console.log('err', err))
 

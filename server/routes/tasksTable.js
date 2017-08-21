@@ -21,7 +21,10 @@ router.get('/api/getEnabledTasks', (req, res) => {
   knex('Tasks')
   .where({disabled: false})
   .then( data => res.send(data))
+  .catch( err => console.log('err', err))
 })
+  
+router.get('/api/getAllTasks', (req, res) => knex('Tasks').then( data => res.send(data)).catch( err => console.log('err', err)))
 
 router.post('/api/addNewTask', ({body: {dbObj}}, res) => {
   knex('Tasks')
