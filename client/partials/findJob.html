@@ -13,7 +13,9 @@
       <select ng-model="param.objToFind.column"
         ng-options="columns as columns for columns in FJ.fields{{$index + 1}}" 
         ng-init="param.table" 
-        ng-disabled='!param.table'>
+        ng-disabled='!param.table'
+        ng-change="FJ.columnSelected(param.objToFind.column, $index)"
+        >
         <option value="" label="-- Select option --" selected="selected"> Search fields...</option>
       </select>
     </div>

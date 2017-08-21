@@ -24,9 +24,7 @@ app.factory('FindJobFactory', function($http) {
 
   factory.getCustomerForFindJob = () => {
     return {
-      'First Name':     '', 
-      'Middle Name':    '', 
-      'Last Name':      '',
+      'Name':           '',
       'Email':          '', 
       'Business Phone': '', 
       'Mobile Phone':   '', 

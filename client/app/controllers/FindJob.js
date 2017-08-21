@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope) {
+app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope, CustomerFactory) {
 
   let numberOfParams = 1
   const FJScope = this
@@ -42,6 +42,15 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
       return true
     } else {
       return false
+    }
+  }
+
+  FJScope.columnSelected = (column, index) => {
+    if (column === 'Name') {
+      CustomerFactory.searchForCustomers().then( data => {
+        FJScope.searchParams[index].objToFind.match = data.value
+        $scope.$apply()
+      })
     }
   }
 
