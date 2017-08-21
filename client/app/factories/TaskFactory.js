@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('TaskFactory', function($q, $http) {
+app.factory('TaskFactory', function($http) {
 
   const factory = {}
 

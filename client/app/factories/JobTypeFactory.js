@@ -1,8 +1,7 @@
 'use strict'
 
-app.factory('JobTypeFactory', function($q, $http, FormFactory) {
-  let jobTypesObj 
-  let _initialized = $q.defer() //wait for data to return
+app.factory('JobTypeFactory', function($http) {
+
   const factory = {}
 
   factory.addJobTypeToJob = dbPackage => $http.post('/api/addJobTypeToJob', dbPackage)
@@ -19,17 +18,7 @@ app.factory('JobTypeFactory', function($q, $http, FormFactory) {
   
   factory.getEnabledJobTypes = () => $http.get('/api/getEnabledJobTypes')
 
-  factory.getEnabledJobTypes()
-  .then( ({data}) => {
-    let Types = data.reduce( (obj, type) => {
-      obj[type.job_type] = ''
-      return obj
-    }, {}) 
-    jobTypesObj = Types  
-    _initialized.resolve(true) //data has returned and obj is finished pass true to resolve
-  }).catch( (data) => console.log(data))
+  factory.getAllJobTypes = () => $http.get('/api/getAllJobTypes')
 
-  factory.initialized = _initialized.promise
-  
   return factory
 })

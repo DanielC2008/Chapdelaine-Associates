@@ -51,6 +51,8 @@ router.get('/api/getEnabledJobTypes', (req, res) => {
   .catch(err => console.log('err', err))
 })
 
+router.get('/api/getAllJobTypes', (req, res) => knex('Job_Types').then( data => res.send(data)).catch(err => console.log('err', err)))
+
 router.post('/api/addNewJobType', ({body: {dbObj}}, res) => {
   //add Priority
   getLastPriority().then( last => {

@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope) {
+app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope) {
 
   let numberOfParams = 1
   const FJScope = this
@@ -15,13 +15,18 @@ app.controller('FindJob', function($q, $scope, JobTypeFactory, TaskFactory, Find
         obj[task.task] = ''
         return obj
       }, {})
+    }),
+    JobTypeFactory.getAllJobTypes().then( ({data}) => {
+      return data.reduce( (obj, type) => {
+        obj[type.job_type] = ''
+        return obj
+      }, {})
     })
-    // JobTypeFactory.initialized
   ])
   .then( data => {
     tables.Customer = FindJobFactory.getCustomerForFindJob()
     tables.Property = FindJobFactory.getPropertyForFindJob()
-    tables['Job Type'] = JobTypeFactory.getJobTypeNames()
+    tables['Job Type'] = data[1]
     tables['Job Status'] = FindJobFactory.getJobStatusesForFindJob()
     tables.Task = data[0]
     FJScope.Tables = Object.keys(tables)
