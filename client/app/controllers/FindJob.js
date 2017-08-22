@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope, CustomerFactory) {
+app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope, CustomerFactory, PropertyFactory) {
 
   let numberOfParams = 1
   const FJScope = this
@@ -48,6 +48,18 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
   FJScope.columnSelected = (column, index) => {
     if (column === 'Name') {
       CustomerFactory.searchForCustomers().then( data => {
+        FJScope.searchParams[index].objToFind.match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'Address') {
+      PropertyFactory.searchForAddresses().then( data => {
+        FJScope.searchParams[index].objToFind.match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'Road') {
+      PropertyFactory.searchForRoads().then( data => {
         FJScope.searchParams[index].objToFind.match = data.value
         $scope.$apply()
       })
@@ -197,15 +209,15 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
               separteName(obj)
               FindJobFactory.customerName(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
             }
-            // if (obj.dbRelation === 'connectTable') {
-            //   FindJobFactory.customerConnectTable(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
-            // }
-            // else if (obj.dbRelation === 'foreignKey') {
-            //   FindJobFactory.customerForeignKey(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
-            // }
-            // else if (obj.dbRelation === 'regColumn') {
-            //   FindJobFactory.customerRegColumn(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
-            // }
+            if (obj.dbRelation === 'connectTable') {
+              FindJobFactory.customerConnectTable(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+            }
+            else if (obj.dbRelation === 'foreignKey') {
+              FindJobFactory.customerForeignKey(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+            }
+            else if (obj.dbRelation === 'regColumn') {
+              FindJobFactory.customerRegColumn(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
+            }
           }
         })
       })

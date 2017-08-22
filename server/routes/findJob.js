@@ -48,7 +48,6 @@ router.post('/api/customerRegColumn', ({body: { objToFind }}, res) => {
 })
 
 router.post('/api/customerName', ({body: { objToFind }}, res) => {
-  console.log('objToFind', objToFind)
   //find column on customer table
   knex('Customers')
   .select('Customers.customer_id')
@@ -62,9 +61,7 @@ router.post('/api/customerName', ({body: { objToFind }}, res) => {
     .orWhereIn('owner_id', customerArr)
     .orWhereIn('client_contact_id', customerArr)
     .orWhereIn('owner_contact_id', customerArr)
-    .then( data => {
-      console.log('data', data)
-      res.send(data)}).catch(err => console.log('err', err))
+    .then( data => res.send(data)).catch(err => console.log('err', err))
   })
 })
 
