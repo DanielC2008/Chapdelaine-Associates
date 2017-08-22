@@ -4,11 +4,11 @@ app.factory('FindJobFactory', function($http) {
 
   const factory = {}
 
-  factory.customerConnectTable = dbObj => $http.post('/api/customerConnectTable', dbObj)
-
   factory.customerForeignKey = dbObj => $http.post('/api/customerForeignKey', dbObj)
   
   factory.customerRegColumn = dbObj => $http.post('/api/customerRegColumn', dbObj)
+
+  factory.customerName = dbObj => $http.post('/api/customerName', dbObj)
   
   factory.propertyConnectTable = dbObj => $http.post('/api/propertyConnectTable', dbObj)
   

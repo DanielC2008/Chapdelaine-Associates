@@ -47,6 +47,27 @@ router.post('/api/customerRegColumn', ({body: { objToFind }}, res) => {
   })
 })
 
+router.post('/api/customerName', ({body: { objToFind }}, res) => {
+  console.log('objToFind', objToFind)
+  //find column on customer table
+  knex('Customers')
+  .select('Customers.customer_id')
+  .where(objToFind)
+  .then( customers => {
+    let customerArr = customers.map( customer => customer.customer_id)
+    //find all jobs with those customers
+    knex('Jobs')
+    .select('job_number')
+    .whereIn('client_id', customerArr)
+    .orWhereIn('owner_id', customerArr)
+    .orWhereIn('client_contact_id', customerArr)
+    .orWhereIn('owner_contact_id', customerArr)
+    .then( data => {
+      console.log('data', data)
+      res.send(data)}).catch(err => console.log('err', err))
+  })
+})
+
 router.post('/api/propertyConnectTable', ({body: { objToFind }}, res) => {
   //what column are we quering
   const column = Object.keys(objToFind)[0]
