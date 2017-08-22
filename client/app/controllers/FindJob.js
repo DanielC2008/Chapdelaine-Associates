@@ -33,7 +33,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
     tables['Job Type'] = data[1]
     tables['Job Status'] = FindJobFactory.getJobStatusesForFindJob()
     tables.Task = data[0]
-    FJScope.Tables = Object.keys(tables)
+    FJScope.tables = Object.keys(tables)
     $scope.$apply()
   })
   .catch(err => console.log('err', err))
