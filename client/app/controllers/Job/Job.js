@@ -1,8 +1,9 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route) {
+app.controller('Job', function($scope, $rootScope, $location, JobFactory, $mdDialog, $route) {
 
   let URL = $location.$$url
+  const lastURL = $rootScope.lastURL ? $rootScope.lastURL : 'home'
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
   $scope.setNewTab = newTab => {
@@ -10,8 +11,10 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route)
     JobFactory.setNewTab({jobNumber: $scope.jobNumber, showTab: newTab}).then().catch(err => console.log('err', err))
    }
 
+  $scope.exitJob = () => $location.path(`/${lastURL}`)
+
   $scope.updateJob = () => {
-    let locals = {
+    const locals = {
       job: $scope.job
     }
     locals.job.ids = {
