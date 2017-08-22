@@ -3,18 +3,18 @@
 <div ng-repeat="param in FJ.searchParams" ng-init="material()" ng-if='FJ.Tables'>
   <div class="row">
     <div class="col s3 input-field">
-      <select ng-change="FJ.getTableValues(param.table, $index + 1)" 
+      <select ng-change="FJ.getColumnValues(param.table, $index + 1)" 
         ng-model="param.table" 
         ng-options="table as table disable when table.notAnOption for table in FJ.Tables"> 
         <option value="" label="-- Select option --" disabled selected="selected"> Search by...</option>
       </select>
     </div>
     <div class="col s3 input-field" >
-      <select ng-model="param.objToFind.column"
-        ng-options="columns as columns for columns in FJ.fields{{$index + 1}}" 
+      <select ng-model="param.column"
+        ng-options="column as column for column in FJ.columns{{$index + 1}}" 
         ng-init="param.table" 
         ng-disabled='!param.table'
-        ng-change="FJ.columnSelected(param.objToFind.column, $index)"
+        ng-change="FJ.columnSelected(param.column, $index)"
         >
         <option value="" label="-- Select option --" selected="selected"> Search fields...</option>
       </select>
@@ -23,7 +23,7 @@
       <input 
         type="text" 
         name="match{{$index}}" 
-        ng-model="param.objToFind.match" 
+        ng-model="param.match" 
         ng-disabled='FJ.noUserInput($index)' 
         placeholder="Search Terms...">
     </div> 

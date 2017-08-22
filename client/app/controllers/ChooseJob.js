@@ -1,8 +1,8 @@
 "use strict"
 
-  app.controller('ChooseJob', function($scope, FindJobService, JobFactory) {
+  app.controller('ChooseJob', function($scope, MatchService, JobFactory) {
 
-    $scope.Matches = FindJobService.getMatches()
+    $scope.Matches = MatchService.getMatches()
     
     $scope.getJob = jobNumber => JobFactory.goToJobPage(jobNumber)
   })

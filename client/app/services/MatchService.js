@@ -1,6 +1,6 @@
 'use strict'
 
-app.service('FindJobService', function() {
+app.service('MatchService', function() {
   const service = {}
   const matches = {
     exact: [],

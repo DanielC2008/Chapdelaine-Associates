@@ -1,14 +1,18 @@
 'use strict'
 
-app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobService, FindJobFactory, FormFactory, ToastFactory, $location, $rootScope, CustomerFactory, PropertyFactory) {
+app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory, TaskFactory, MatchService, FindJobFactory, FormFactory, ToastFactory, CustomerFactory, PropertyFactory) {
+  
+  const FJScope = this
 
   let numberOfParams = 1
-  const FJScope = this
   const tables = {}
   const propConnectTableColumns = ['address', 'road']
   const foreignKeyColumns = ['address', 'road', 'state', 'zip_code', 'city', 'county', 'company']
+  //array of objs, each obj is a different param (table, column, user input)
   FJScope.searchParams = []
 
+////////////////////////////////TABLE DATA////////////////////////////////
+  //get table and column data then set to scope
   Promise.all([
     TaskFactory.getAllTasks().then( ({data}) => {
       return data.reduce( (obj, task) => {
@@ -34,46 +38,54 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
   })
   .catch(err => console.log('err', err))
 
+////////////////////////////////COLUMN DATA////////////////////////////////
+  FJScope.columnSelected = (column, index) => {
+    if (column === 'Name') {
+      CustomerFactory.searchForCustomers().then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'Address') {
+      PropertyFactory.searchForAddresses().then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'Road') {
+      PropertyFactory.searchForRoads().then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+  }
+
+  FJScope.getColumnValues = (selected, index) => {
+    //resets select
+    $scope.material()
+    //sets selects new values
+    let values = Object.keys(tables[`${selected}`])
+    FJScope[`columns${index}`] = values
+  }
+
+////////////////////////////////INPUT DATA////////////////////////////////
+  //determine if user can input should be disabled
   FJScope.noUserInput = index => {
     if (!FJScope.searchParams[index].table || 
-        FJScope.searchParams[index].table == "Task" || 
-        FJScope.searchParams[index].table == "Job Status" || 
-        FJScope.searchParams[index].table == "Job Type") {
+        FJScope.searchParams[index].table === "Task" || 
+        FJScope.searchParams[index].table === "Job Status" || 
+        FJScope.searchParams[index].table === "Job Type" ||
+        FJScope.searchParams[index].column === 'Name' ||
+        FJScope.searchParams[index].column === 'Address' ||
+        FJScope.searchParams[index].column === 'Road'
+    ) {
       return true
     } else {
       return false
     }
   }
 
-  FJScope.columnSelected = (column, index) => {
-    if (column === 'Name') {
-      CustomerFactory.searchForCustomers().then( data => {
-        FJScope.searchParams[index].objToFind.match = data.value
-        $scope.$apply()
-      })
-    }
-    else if (column === 'Address') {
-      PropertyFactory.searchForAddresses().then( data => {
-        FJScope.searchParams[index].objToFind.match = data.value
-        $scope.$apply()
-      })
-    }
-    else if (column === 'Road') {
-      PropertyFactory.searchForRoads().then( data => {
-        FJScope.searchParams[index].objToFind.match = data.value
-        $scope.$apply()
-      })
-    }
-  }
-
-  FJScope.getTableValues = (selected, index) => {
-    //resets select
-    $scope.material()
-    //sets selects new values
-    let values = Object.keys(tables[`${selected}`])
-    FJScope[`fields${index}`] = values
-  }
-
+////////////////////////////////PARAMETER DATA////////////////////////////////  
   //adds parameter to searchParams obj
   const addParam = () => FJScope.searchParams.push({})
 
@@ -91,14 +103,14 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
     let paramsPass = FJScope.searchParams.reduce( (arr, param) => {
       //if Customer or Property require all inputs
       if (param.table === 'Customer' || param.table === 'Property') {
-        if (param.table && param.objToFind && param.objToFind.match) {
+        if (param.table && param.column && param.match) {
           return arr
         } else {
           arr.push('err')
           return arr
         }
       //else only require first two inputs  
-      } else if (param.table && param.objToFind && param.objToFind.column !== null) {
+      } else if (param.table && param.column !== null) {
         return arr
       } else {
         arr.push('err')
@@ -108,25 +120,25 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
     return paramsPass 
   }
 
-
+////////////////////////////////DATABASE HELPERS////////////////////////////////  
   const createObjToFind = obj => {
-    obj.objToFind[`${obj.objToFind.column}`] = obj.objToFind.match
-    delete obj.objToFind.match
-    obj.objToFind = FormFactory.matchDatabaseKeys(obj.objToFind)
-    delete obj.objToFind.column
-  }
-
-  // if task, job status, or job type: make column the value
-  const makeColumnTheValue = obj => {
-    obj.objToFind[`${obj.table}`] = obj.objToFind.column
-    obj.objToFind = FormFactory.matchDatabaseKeys(obj.objToFind)
-    delete obj.objToFind.column
+    const newObj = {}
+    //if param required user input set column = match
+    if (obj.match) {
+      newObj[`${obj.column}`] = obj.match
+      delete obj.match
+    //set the table = column
+    } else {
+      newObj[`${obj.table}`] = obj.column
+    }
+    obj.objToFind = FormFactory.matchDatabaseKeys(newObj)
+    delete obj.column
   }
 
   const separteName = obj => {
     const name = obj.objToFind.name
     const nameArr = name.split(' ')
-    obj.objToFind = nameArr.reduce( (obj, name, index, array) => {
+    obj.objToFind = nameArr.reduce( (obj, name, index) => {
       if (index === 0) {
         obj.first_name = name
       } else if (index === 1) {
@@ -159,37 +171,26 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
       obj.dbRelation = 'regColumn'
     }
   }
-
-  FJScope.submit = () => {
-    if( paramsComplete().length === 0 ) {
-      sendToDB() 
-    } else {
-      ToastFactory.toastReject('Please fill out all parameters!')
-    }
-  }
-
+  //cycles through each param, creates the objToFind and decides which route it should go to in the db
   const sendToDB = () => {
     Promise.all( 
       FJScope.searchParams.map( obj => {
+        createObjToFind(obj)
         return new Promise( (resolve, reject) => {
           ////////////////////Jobs Status////////////////////
           if (obj.table === 'Job Status') {
-            makeColumnTheValue(obj)
             FindJobFactory.searchForJobStatus(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
           }
           ////////////////////Jobs Type////////////////////
           if (obj.table === 'Job Type') {
-            makeColumnTheValue(obj)
             FindJobFactory.searchForJobType(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
           } 
           ////////////////////Task////////////////////
           else if (obj.table === 'Task') {
-            makeColumnTheValue(obj)
             FindJobFactory.searchForTasks(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
           } 
           ////////////////////Property////////////////////
           else if (obj.table === 'Property') {
-            createObjToFind(obj)
             getPropDBRelation(obj)
             if (obj.dbRelation === 'connectTable') {
               FindJobFactory.propertyConnectTable(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
@@ -203,13 +204,12 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
           } 
           ////////////////////Customer////////////////////
           else if (obj.table === 'Customer') {
-            createObjToFind(obj)
             getCustomerDBRelation(obj)
             if (obj.dbRelation === 'name'){
               separteName(obj)
               FindJobFactory.customerName(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
             }
-            if (obj.dbRelation === 'connectTable') {
+            else if (obj.dbRelation === 'connectTable') {
               FindJobFactory.customerConnectTable(obj).then( ({data}) => resolve(data)).catch( err => Promise.reject(err))
             }
             else if (obj.dbRelation === 'foreignKey') {
@@ -229,11 +229,14 @@ app.controller('FindJob', function($scope, JobTypeFactory, TaskFactory, FindJobS
         FJScope.searchParams = []
         addParam()
       } else {
-        FindJobService.setMatches(data).then( () => $rootScope.$apply( () => $location.path('/jobs/')))
+        MatchService.setMatches(data).then( () => $rootScope.$apply( () => $location.path('/jobs/')))
       }  
     })
     .catch( err => console.log('err', err))
   }
+
+  //check if all params complete else toast reject to user
+  FJScope.submit = () => paramsComplete().length === 0 ? sendToDB() : ToastFactory.toastReject('Please fill out all parameters!')
 
   //initiate first parameter
   addParam()
