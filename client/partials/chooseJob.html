@@ -15,7 +15,7 @@
 </div>
 <div ng-repeat="match in Matches.exact"> 
   <div class="row">
-    <button class="col s12 btn button" ng-click="goToJob(match.job_number)">
+    <button class="col s12 btn button" ng-class="{selectedButton: jobsChecked.includes($index)}" ng-click="goToJob(match.job_number, $index)">
       <div class="col s1 center align "> {{match.job_number > 0 ? match.job_number : 'N/A'}}</div>
       <div class="col s1 center align "> {{match.on_hold ? 'Hold' : match.job_status}}</div>
       <div class="col s2 center align "> {{match.job_type}} </div>

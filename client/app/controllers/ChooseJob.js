@@ -4,7 +4,11 @@ app.controller('ChooseJob', function($scope, $rootScope, MatchService, JobFactor
 
   $rootScope.lastURL = 'jobs'
   $scope.Matches = MatchService.getMatches()
-  
-  $scope.goToJob = jobNumber => JobFactory.goToJobPage(jobNumber)
+  $scope.jobsChecked = MatchService.getJobsChecked()
 
+  $scope.goToJob = (jobNumber, index) => {
+    MatchService.setJobsChecked(index)
+    JobFactory.goToJobPage(jobNumber)
+  }
+    
 })

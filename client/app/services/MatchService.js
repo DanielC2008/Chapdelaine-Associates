@@ -7,11 +7,13 @@ app.service('MatchService', function() {
     other: []
   }
   const sorted = []
+  const jobsChecked = []
 
   const clearMatches = () => {
     matches.exact.length = 0
     matches.other.length = 0
     sorted.length = 0
+    jobsChecked.length = 0
   }
 
   const pushNew = obj => {
@@ -70,7 +72,11 @@ app.service('MatchService', function() {
     })
   }
 
-  service.getMatches = () => matches 
+  service.getMatches = () => matches
+
+  service.setJobsChecked = index => jobsChecked.push(index)
+
+  service.getJobsChecked = () => jobsChecked
 
   return service
 })
