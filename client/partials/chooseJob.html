@@ -1,18 +1,30 @@
 <h1>Choose Job</h1>
 <h4>Exact Matches</h4>
+<div class="container">
+  
+<div class="row">
+  <div class="col s12">
+    <div class="col s1 center align "> Job Number </div>
+    <div class="col s1 center align "> Job Status </div>
+    <div class="col s2 center align "> Job Type </div>
+    <div class="col s2 center align "> Start Date </div>
+    <div class="col s2 center align "> Target Date </div>
+    <div class="col s2 center align "> Complete Date </div>
+    <div class="col s2 center align "> Last Accessed </div>
+  </div>
+</div>
 <div ng-repeat="match in Matches.exact"> 
   <div class="row">
-    <div class="col s4">
-      <div ng-repeat="(key, value) in match">
-        <div ng-if="key != 'job_number'" class="col s12">
-          <span>{{key}}:</span><span>{{value}}</span>
-        </div>
-      </div>
-    </div>
-    <div class="col s6">
-      <div class="col s4" >Job Number: {{match.job_number}}</div>
-      <button class="button btn col s2" ng-click="getJob(match.job_number)">Get Job!</button>
-    </div>
+    <button class="col s12 btn button" ng-click="goToJob(match.job_number)">
+      <div class="col s1 center align "> {{match.job_number > 0 ? match.job_number : 'N/A'}}</div>
+      <div class="col s1 center align "> {{match.on_hold ? 'Hold' : match.job_status}}</div>
+      <div class="col s2 center align "> {{match.job_type}} </div>
+      <div class="col s2 center align "> {{match.start_date ? (match.start_date | date : 'mediumDate' : timeZoneOffset) : 'N/A'}} </div>
+      <div class="col s2 center align "> {{match.target_date ? (match.target_date | date : 'mediumDate' : timeZoneOffset) : 'N/A'}} </div>
+      <div class="col s2 center align "> {{match.complete_date ? (match.complete_date | date : 'mediumDate' : timeZoneOffset) : 'N/A'}} </div>
+      <div class="col s2 center align "> {{match.last_accessed ? (match.last_accessed | date : 'medium' ): 'N/A'}} </div>
+    </button>
   </div>
 </div>
 
+</div>
