@@ -132,9 +132,6 @@ router.post('/api/removeSecondaryRoad', ({body: {road, property_id}}, res) => {
   })
 })
 
-//break these into two/////////////////////////////////////////////////////
-
-
 //this function adds the property and address id to Properties_Address if this combo doesn't already exist
 const addAddress = (address_id, property_id) => {
   return new Promise( (resolve, reject) => {

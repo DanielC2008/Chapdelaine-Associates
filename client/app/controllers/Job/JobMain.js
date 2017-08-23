@@ -1,6 +1,7 @@
 'use strict'
 
-app.controller('JobMain', function($scope, PropertyFactory) {
+app.controller('JobMain', function($scope) {
   let JMScope = this
   $scope.allAddresses = false
+
 })

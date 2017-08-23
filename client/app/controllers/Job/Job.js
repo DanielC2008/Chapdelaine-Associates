@@ -1,19 +1,20 @@
 "use strict"
 
-app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route) {
+app.controller('Job', function($scope, $rootScope, $location, JobFactory, $mdDialog, $route) {
 
   let URL = $location.$$url
+  const lastURL = $rootScope.lastURL ? $rootScope.lastURL : 'home'
   $scope.jobNumber = URL.slice(parseInt(URL.search(":") + 1))
 
   $scope.setNewTab = newTab => {
     $scope.showTab = newTab
-    JobFactory.setNewTab({jobNumber: $scope.jobNumber, showTab: newTab})
-    .then()
-    .catch(err => console.log('err', err))
+    JobFactory.setNewTab({jobNumber: $scope.jobNumber, showTab: newTab}).then().catch(err => console.log('err', err))
    }
 
+  $scope.exitJob = () => $location.path(`/${lastURL}`)
+
   $scope.updateJob = () => {
-    let locals = {
+    const locals = {
       job: $scope.job
     }
     locals.job.ids = {
@@ -33,7 +34,13 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route)
       multiple: true
     })
     .then( jobNumber => {
-      jobNumber === $scope.jobNumber ? $route.reload() : JobFactory.goToJobPage(jobNumber)
+      //job number was not changed but other data was changed
+      if (jobNumber === $scope.jobNumber) {
+       $route.reload()
+       //job number was changed go to new page
+      } else if (typeof jobNumber === 'number')  {
+        JobFactory.goToJobPage(jobNumber)
+      }
     }).catch( err => console.log('err', err))
   }
 
@@ -46,13 +53,6 @@ app.controller('Job', function($scope, $location, JobFactory, $mdDialog, $route)
   JobFactory.getJobFromDatabase($scope.jobNumber)
   .then( ({data}) => {
     $scope.job = data
-    console.log('$scope.job', $scope.job)
-    // $scope.Estimates = data.Estimates
-    // $scope.EstimateDetails = data.EstimateDetails
-    // $scope.Invoices = data.Invoices
-    // $scope.InvoiceDetails = data.InvoiceDetails
-    // $scope.Attachments = data.Attachments
-    // $scope.jobId = $scope.Job.job_id
     //redis saves previous tab accesses
     JobFactory.setTab({jobNumber: $scope.jobNumber}).then( ({data}) => $scope.showTab = data.showTab).catch( err => console.log('err', err))
     //last access update

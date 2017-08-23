@@ -9,17 +9,9 @@ app.factory('UserFactory', function($http, FormFactory) {
 
   factory.getAllEmployees = () => $http.get('/api/getAllEmployees')
 
-  factory.addNew = () => {
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Employees', null, {employee_id: null}, 'Add New').then( dbPackage => resolve(dbPackage)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
+  factory.addNew = dbPackage => $http.post('/api/addNewEmployee', dbPackage)
 
-  factory.updateExisting = (data, ids) => {
-    return new Promise ((resolve, reject) => {
-      FormFactory.updateForm('Employees', data, ids, 'Update').then( dbPackage => resolve(dbPackage)).catch( err => reject({msg:'Nothing Saved'}))
-    })
-  }
+  factory.updateExisting = dbPackage => $http.post('/api/updateEmployee', dbPackage)
 
   factory.deleteEmployee = id => $http.post('/api/deleteEmployee', {id})
 

@@ -84,7 +84,7 @@ router.post('/api/updateCustomer', ({body: {dbObj, customer_id}}, res) => {
     knex('Customers')
     .update(polishedObj)
     .where({customer_id: customer_id})
-    .then( () => res.send())
+    .then( data => res.send())
     .catch( err => console.log(err))        
   })
 })
