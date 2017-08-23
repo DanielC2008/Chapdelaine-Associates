@@ -25,7 +25,6 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
   }
   let originalJob = _.cloneDeep(job ? job : defaultJob)
   $scope.job = _.cloneDeep(job ? job : defaultJob)
-  console.log('$scope.job', $scope.job)
 
   /////////////////////DATE STUFF///////////////////
   $scope.timeZoneOffset = $rootScope.timeZoneOffset
@@ -67,6 +66,12 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
   const setOwnerContact = () => $scope.ownerContactSet = checkIfSet($scope.job.owner_contact)
   $scope.$watch('job.owner_contact', () => setOwnerContact())
   setOwnerContact()
+  const setJobType = () => $scope.jobTypeSet = $scope.job.job_types.length === 0 ? false : true
+  $scope.$watch('job.job_types.length', () => setJobType())
+  setJobType()
+  const setJobStatus = () => $scope.jobStatusSet = $scope.job.job_info.job_status === 'New' ? false : true
+  $scope.$watch('job.job_info.job_status', () => setJobStatus())
+  setJobStatus()
 
   JobTypeFactory.getEnabledJobTypes().then( ({data}) => $scope.types = data.map( type => type.job_type ))
 
@@ -92,9 +97,9 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
   }
 
   const requirements = () => {
-    if ($scope.job.job_info.job_status === 'New') {
+    if (!$scope.jobStatusSet) {
       return 'Please set job status.'
-    } else if ($scope.job.job_info.job_type < 1) {
+    } else if (!$scope.jobTypeSet) {
       return 'Please set job type.'
     } else if (!$scope.propertySet) {
       return 'Please create a new Property.'

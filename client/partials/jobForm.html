@@ -3,7 +3,8 @@
   <!-- ////////////////////////////JOB INFO//////////////////////////// -->
     <div class="row">
 
-      <h5 class="col s12">Job info</h5>
+      <input type="checkbox" id="jobInfo" ng-checked="jobStatusSet && jobTypeSet" disabled />
+      <label for="jobInfo">Job Info</label>
       <div class="col s12">
         Job Status: {{job.job_info.on_hold ? 'Hold' : job.job_info.job_status}}
       </div>  
@@ -16,15 +17,15 @@
             <span>{{jobType}} <span ng-hide="$index + 1 === job.job_types.length">,</span> </span>
           </span>
         </div> 
-        <div class="col s4">
-          <button ng-click="removeJobType()">Remove Job Type</button>
-        </div>
       </div>
       <div class="row">
         <div class="col s6 input-field" ng-if="types" ng-init="material()">
           <select  ng-model="jobType" ng-change="addJobType(jobType)" ng-options="type as type disable when type.notAnOption for type in types"> 
             <option value="" label="-- Select option --" disabled selected="selected"> Choose a job type</option>
           </select>
+        </div>
+        <div class="col s6">
+          <button class="btn button" ng-click="removeJobType()">Remove Job Type</button>
         </div>
       </div>
    
@@ -53,7 +54,9 @@
   </div>
 
   <div class="col s6">
-  <h5 class="col s12"> Property and Client Info</h5>
+    
+    <input type="checkbox" id="propAndClientInfo" ng-checked="propertySet && clientSet && clientTypeSet" disabled />
+    <label for="propAndClientInfo">Property and Client Info</label>
     <!-- ////////////////////////////PROPERTY//////////////////////////// -->
     <div class="row">
       <div class="col s6">
