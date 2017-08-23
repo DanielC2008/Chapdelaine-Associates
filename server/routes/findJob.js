@@ -6,9 +6,20 @@ const knex = require('knex')(config)
 const router = Router()
 const DBHelper = require('../DBHelper')
 
+const jobInfo = [
+  'Jobs.job_number',
+  'Jobs.on_hold',
+  'Jobs.start_date',
+  'Jobs.complete_date',
+  'Jobs.last_accessed',
+  'Jobs.target_date',
+  'Job_Statuses.job_status',
+  'Job_Types.job_type'
+]  
+
 router.post('/api/customerForeignKey', ({body: { objToFind }}, res) => {
   //what column are we quering
-  let column = Object.keys(objToFind)[0]
+  const column = Object.keys(objToFind)[0]
   //retrieve variables required to join table of foreign key
   const {tableName, tableId} = DBHelper.getTableInfo(column)
   //get all customers with the parameter user requested
@@ -17,10 +28,13 @@ router.post('/api/customerForeignKey', ({body: { objToFind }}, res) => {
   .join(`${tableName}`, `Customers.${tableId}`, `${tableName}.${tableId}`)
   .where(objToFind)
   .then( customers => {
-    let customerArr = customers.map( customer => customer.customer_id)
+    const customerArr = customers.map( customer => customer.customer_id)
     //find all jobs with those customers
     knex('Jobs')
-    .select('job_number')
+    .column(jobInfo)
+    .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+    .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+    .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
     .whereIn('client_id', customerArr)
     .orWhereIn('owner_id', customerArr)
     .orWhereIn('client_contact_id', customerArr)
@@ -35,10 +49,13 @@ router.post('/api/customerRegColumn', ({body: { objToFind }}, res) => {
   .select('Customers.customer_id')
   .where(objToFind)
   .then( customers => {
-    let customerArr = customers.map( customer => customer.customer_id)
+    const customerArr = customers.map( customer => customer.customer_id)
     //find all jobs with those customers
     knex('Jobs')
-    .select('job_number')
+    .column(jobInfo)
+    .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+    .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+    .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
     .whereIn('client_id', customerArr)
     .orWhereIn('owner_id', customerArr)
     .orWhereIn('client_contact_id', customerArr)
@@ -53,10 +70,13 @@ router.post('/api/customerName', ({body: { objToFind }}, res) => {
   .select('Customers.customer_id')
   .where(objToFind)
   .then( customers => {
-    let customerArr = customers.map( customer => customer.customer_id)
+    const customerArr = customers.map( customer => customer.customer_id)
     //find all jobs with those customers
     knex('Jobs')
-    .select('job_number')
+    .column(jobInfo)
+    .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+    .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+    .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
     .whereIn('client_id', customerArr)
     .orWhereIn('owner_id', customerArr)
     .orWhereIn('client_contact_id', customerArr)
@@ -86,7 +106,10 @@ router.post('/api/propertyConnectTable', ({body: { objToFind }}, res) => {
       const propArr = properties.map( property => property.property_id)
       //find all jobs with those properties
       knex('Jobs')
-      .select('job_number')
+      .column(jobInfo)
+      .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+      .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+      .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
       .whereIn('property_id', propArr)
       .then( data => res.send(data)).catch(err => console.log('err', err))
     })
@@ -95,7 +118,7 @@ router.post('/api/propertyConnectTable', ({body: { objToFind }}, res) => {
 
 router.post('/api/propertyForeignKey', ({body: { objToFind }}, res) => {
   //what column are we quering
-  let column = Object.keys(objToFind)[0]
+  const column = Object.keys(objToFind)[0]
   //retrieve variables required to join table of foreign key
   const {tableName, tableId} = DBHelper.getTableInfo(column)
   //get all propeties with the parameter user requested
@@ -104,10 +127,13 @@ router.post('/api/propertyForeignKey', ({body: { objToFind }}, res) => {
   .join(`${tableName}`, `Properties.${tableId}`, `${tableName}.${tableId}`)
   .where(objToFind)
   .then( properties => {
-    let propArr = properties.map( property => property.property_id)
+    const propArr = properties.map( property => property.property_id)
     //find all jobs with those properties
     knex('Jobs')
-    .select('job_number')
+    .column(jobInfo)
+    .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+    .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+    .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
     .whereIn('property_id', propArr)
     .then( data => res.send(data)).catch(err => console.log('err', err))
   })
@@ -119,10 +145,13 @@ router.post('/api/propertyRegColumn', ({body: { objToFind }}, res) => {
   .select('Properties.property_id')
   .where(objToFind)
   .then( properties => {
-    let propArr = properties.map( property => property.property_id)
+    const propArr = properties.map( property => property.property_id)
     //find all jobs with those properties
     knex('Jobs')
-    .select('job_number')
+    .column(jobInfo)
+    .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+    .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+    .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
     .whereIn('property_id', propArr)
     .then( data => res.send(data)).catch(err => console.log('err', err))
   })
@@ -138,8 +167,10 @@ router.post('/api/searchForJobStatus', ({body: { objToFind }}, res) => {
     }).catch( err => console.log('err', err))   
   } else {
     knex('Jobs')
-    .select('job_number')
-    .join('Job_Statuses', 'Job_Statuses.job_status_id', 'Jobs.job_status_id')
+    .column(jobInfo)
+    .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+    .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+    .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
     .where(objToFind)
     .then( data => res.send(data)).catch( err => console.log('err', err))
   }
@@ -147,18 +178,22 @@ router.post('/api/searchForJobStatus', ({body: { objToFind }}, res) => {
 
 router.post('/api/searchForJobType', ({body: { objToFind }}, res) => {
   knex('Job_Types')
-  .select('job_number')
+  .column(jobInfo)
   .join('Jobs_Job_Types', 'Jobs_Job_Types.job_type_id', 'Job_Types.job_type_id')
   .join('Jobs', 'Jobs.job_id', 'Jobs_Job_Types.job_id')
+  .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
   .where(objToFind)
   .then( data => res.send(data)).catch(err => console.log('err', err))
 })
 
 router.post('/api/searchForTasks', ({body: { objToFind }}, res) => {
   knex('Tasks')
-  .select('job_number')
+  .column(jobInfo)
   .join('Invoices_Tasks', 'Invoices_Tasks.task_id', 'Tasks.task_id')
   .join('Jobs', 'Jobs.invoice_id', 'Invoices_Tasks.invoice_id')
+  .join('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
+  .join('Jobs_Job_Types', 'Jobs_Job_Types.job_id', 'Jobs.job_id')
+  .join('Job_Types', 'Job_Types.job_type_id', 'Jobs_Job_Types.job_type_id')
   .where(objToFind)
   .then( data => res.send(data)).catch(err => console.log('err', err))
 })
