@@ -8,12 +8,16 @@ app.service('MatchService', function() {
   }
   const sorted = []
   const jobsChecked = []
+  const othersChecked = []
+  service.otherMatches = false
 
-  const clearMatches = () => {
+  const resetMatchService = () => {
     matches.exact.length = 0
     matches.other.length = 0
     sorted.length = 0
     jobsChecked.length = 0
+    othersChecked.length = 0
+    service.otherMatches = false
   }
 
   const pushNew = obj => {
@@ -65,7 +69,7 @@ app.service('MatchService', function() {
 
   service.setMatches = jobsArr => {
     return new Promise( (resolve) => {
-      clearMatches()
+      resetMatchService()
       sortJobsByJobNumber(jobsArr).then( () => {
         createMatchesObj(jobsArr.length).then( () => resolve()).catch( err => console.log('err', err))
       }).catch( err => console.log('err', err))
@@ -77,6 +81,10 @@ app.service('MatchService', function() {
   service.setJobsChecked = index => jobsChecked.push(index)
 
   service.getJobsChecked = () => jobsChecked
+
+  service.setOthersChecked = index => othersChecked.push(index)
+
+  service.getOthersChecked = () => othersChecked
 
   return service
 })
