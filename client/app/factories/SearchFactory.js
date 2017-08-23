@@ -4,9 +4,12 @@ app.factory('SearchFactory', function($mdDialog) {
 
   const factory = {}
 
-  factory.addBySearch = items => {
+  factory.addBySearch = (items, allowNew) => {
     return new Promise ((resolve, reject) => { 
-      let locals = {items: items}
+      let locals = {
+        items,
+        allowNew
+      }
       $mdDialog.show({
         locals,
         controller: 'SearchFilter as SF',

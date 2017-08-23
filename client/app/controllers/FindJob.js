@@ -40,8 +40,9 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
 
 ////////////////////////////////COLUMN DATA////////////////////////////////
   FJScope.columnSelected = (column, index) => {
+    let allowNew = false   
     if (column === 'Name') {
-      CustomerFactory.searchForCustomers().then( data => {
+      CustomerFactory.searchForCustomers(allowNew).then( data => {
         FJScope.searchParams[index].match = data.value
         $scope.$apply()
       })
