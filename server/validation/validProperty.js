@@ -1,6 +1,7 @@
 'use strict'
 
 const schema = require('validate')
+const validationHelper = require('./validationHelper')
 
   const validateProperty = schema({
     property_map: {
@@ -65,7 +66,7 @@ const schema = require('validate')
     },
     acres: {
       type: 'number',
-      use: acre => (typeof acre === 'number') ? true : false, //---allows 0 but not null
+      match: validationHelper.checkNumber,
       message: 'Acres must be number'
     }
   })

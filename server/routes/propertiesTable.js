@@ -8,7 +8,7 @@ const locateOrCreate = require('../locateOrCreate')
 const {validateProperty, validateAddress, validateRoad} = require('../validation/validProperty')
 
 router.post('/api/validateProp', ({body: {dbObj}}, res) => {
-  const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
+  const errors = validateProperty.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
