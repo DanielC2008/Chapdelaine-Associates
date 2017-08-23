@@ -18,11 +18,11 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
   
   factory.removeSecondaryAddress = dbPackage => $http.post('/api/removeSecondaryAddress', dbPackage)
 
-  factory.searchForAddresses = () => {
+  factory.searchForAddresses = (allowNew = true) => {
     return new Promise ((resolve, reject) => {
       getAddressesForSearch().then( ({data}) => {
         let addresses = data
-        SearchFactory.addBySearch(addresses).then( selected => {
+        SearchFactory.addBySearch(addresses, allowNew).then( selected => {
           selected ? resolve(selected) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
@@ -35,11 +35,11 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
 
   factory.removeSecondaryRoad = dbPackage => $http.post('/api/removeSecondaryRoad', dbPackage)
 
-  factory.searchForRoads = () => {
+  factory.searchForRoads = (allowNew = true) => {
     return new Promise ((resolve, reject) => {
       getRoadsForSearch().then( ({data}) => {
         let roads = data
-        SearchFactory.addBySearch(roads).then( road_id => {
+        SearchFactory.addBySearch(roads, allowNew).then( road_id => {
           road_id ? resolve(road_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))

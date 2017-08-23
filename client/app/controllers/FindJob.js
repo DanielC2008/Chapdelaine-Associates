@@ -48,13 +48,13 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
       })
     }
     else if (column === 'Address') {
-      PropertyFactory.searchForAddresses().then( data => {
+      PropertyFactory.searchForAddresses(allowNew).then( data => {
         FJScope.searchParams[index].match = data.value
         $scope.$apply()
       })
     }
     else if (column === 'Road') {
-      PropertyFactory.searchForRoads().then( data => {
+      PropertyFactory.searchForRoads(allowNew).then( data => {
         FJScope.searchParams[index].match = data.value
         $scope.$apply()
       })
