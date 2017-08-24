@@ -1,25 +1,25 @@
 <div class='dialog row'>
   <div>
     <span>Update Status:</span>
-    <button type="submit" ng-click="JS.jobCanceled()" 
-            ng-disabled='job.job_info.job_status === "New" ||
-                     job.job_info.job_status === "Canceled" ||
-                     job.job_info.job_status === "Complete"'>Canceled
-    </button>
-    <button type="submit" ng-click="JS.jobPending()" 
-            ng-disabled='job.job_info.job_status === "Pending" ||
-                     job.job_info.job_status === "Complete"'>Pending
-    </button>
-    <button type="submit"  ng-click="JS.jobActive()" 
-            ng-disabled='job.job_info.job_status === "Active"'>Active
-    </button>
-    <button type="submit" ng-click="JS.jobChangeHold()" 
-            ng-disabled='job.job_info.job_status === "New" ||
-                     job.job_info.job_status === "Canceled" ||
-                     job.job_info.job_status === "Complete"'>{{job.job_info.on_hold ? 'Remove Hold' : 'Hold'}}
-    </button>
-    <button type="submit" ng-click="JS.jobComplete()" 
-            ng-disabled='job.job_info.job_status === "Complete" ||
-                     job.job_info.job_status === "Canceled"'>Complete
-    </button>
+
+    <input type="radio" name="status" value="Canceled" id="canceled" ng-model="status" ng-click="JS.jobCanceled()" 
+            ng-disabled='job.job_info.job_status === "New" || job.job_info.job_status === "Complete"'>
+    <label for="canceled">Canceled</label>
+
+    <input type="radio" name="status" value="Pending" id="pending" ng-model="status" ng-click="JS.jobPending()" 
+            ng-disabled='job.job_info.job_status === "Complete"'>
+    <label for="pending">Pending</label>
+
+    <input type="radio" name="status" value="Active" id="active" ng-model="status" ng-click="JS.jobActive()">
+    <label for="active">Active</label>
+
+    <input type="radio" name="status" value="Hold" id="hold" ng-model="status" ng-click="JS.jobChangeHold()" 
+           ng-disabled='job.job_info.job_status === "New" ||
+                        job.job_info.job_status === "Canceled" ||
+                        job.job_info.job_status === "Complete"'>
+    <label for="hold">Hold</label>
+
+    <input type="radio" name="status" value="Complete" id="complete" ng-model="status" ng-click="JS.jobComplete()" 
+            ng-disabled='job.job_info.job_status === "Canceled"'>
+    <label for="complete">Complete</label>
   </div>

@@ -12,7 +12,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
   const removeCompleteDate = () => $scope.job.job_info.complete_date = null
 
   const updateStatus = status => {
-    if (status != 'Canceled') {
+    if (status !== 'Canceled') {
       $scope.job.job_info.cause_id = null
       $scope.showCause(null)
     }
@@ -41,22 +41,25 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
     })
   }
   
-  JSscope.jobChangeHold = () => $scope.job.job_info.on_hold = $scope.job.job_info.on_hold === true ? false : true
+  JSscope.jobChangeHold = () => $scope.job.job_info.on_hold = true
 
   JSscope.jobPending = () => {
+    //Active to Pending > remove start date, update status, add minJobNumber
     if( $scope.job.job_info.job_status === 'Active') {
       removeStartDate()
     }
+    //Canceled/Hold to Pending > update status, add minJobNumber
     updateStatus('Pending')
     addMinJobNumber()
   }
 
   JSscope.jobActive = () => {
+    //Complete to Active > update status, remove complete date
     if ( $scope.job.job_info.job_status === 'Complete'){
       updateStatus('Active')
       removeCompleteDate()
-    //dont redo job # if going from Active to canceled to Active
-    } else if ( $scope.job.job_info.job_status === 'Canceled' && $scope.job.job_info.job_number > 0 ) {
+    //dont redo job # if job # exists
+    } else if ($scope.job.job_info.job_number > 0 ) {
       updateStatus('Active')      
     } else {
       $mdDialog.show({
@@ -74,9 +77,11 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
   }
 
   JSscope.jobComplete = () => {
+    //from Active to Complete update status, add complete date
     if ( $scope.job.job_info.job_status === 'Active') { 
       updateStatus('Complete') 
-      addCompleteDate() 
+      addCompleteDate()
+    //else add job number, update status, add start date, add complete date  
     } else {
       $mdDialog.show({
         controller: 'RecommendNumber as RN',

@@ -69,7 +69,10 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
   const setJobType = () => $scope.jobTypeSet = $scope.job.job_types.length === 0 ? false : true
   $scope.$watch('job.job_types.length', () => setJobType())
   setJobType()
-  const setJobStatus = () => $scope.jobStatusSet = $scope.job.job_info.job_status === 'New' ? false : true
+  const setJobStatus = () => {
+    $scope.status = $scope.job.job_info.on_hold ? 'Hold' : $scope.job.job_info.job_status
+    $scope.jobStatusSet = $scope.job.job_info.job_status === 'New' ? false : true
+  }  
   $scope.$watch('job.job_info.job_status', () => setJobStatus())
   setJobStatus()
 
