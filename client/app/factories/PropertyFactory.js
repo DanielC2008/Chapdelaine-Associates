@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
+app.factory('PropertyFactory', function($http, SearchFactory, FormFactory, AlertFactory) {
 
   const factory = {}
 
@@ -19,8 +19,10 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
   factory.removeSecondaryAddress = dbPackage => $http.post('/api/removeSecondaryAddress', dbPackage)
 
   factory.searchForAddresses = (allowNew = true) => {
+    AlertFactory.summonDisableForm()
     return new Promise ((resolve, reject) => {
       getAddressesForSearch().then( ({data}) => {
+        AlertFactory.banishDisableForm()
         let addresses = data
         SearchFactory.addBySearch(addresses, allowNew).then( selected => {
           selected ? resolve(selected) : resolve(null)
@@ -36,6 +38,7 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory) {
   factory.removeSecondaryRoad = dbPackage => $http.post('/api/removeSecondaryRoad', dbPackage)
 
   factory.searchForRoads = (allowNew = true) => {
+    AlertFactory.banishDisableForm()
     return new Promise ((resolve, reject) => {
       getRoadsForSearch().then( ({data}) => {
         let roads = data
