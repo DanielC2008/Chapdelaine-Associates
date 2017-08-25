@@ -174,6 +174,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
   }
   //cycles through each param, creates the objToFind and decides which route it should go to in the db
   const sendToDB = () => {
+    AlertFactory.summonDisableForm()
     Promise.all( 
       FJScope.searchParams.map( obj => {
         createObjToFind(obj)
@@ -226,11 +227,15 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
     .then( data => {
       let { length } = data.filter( arr => arr.length > 0 )
       if (length === 0){
+        AlertFactory.banishDisableForm()
         AlertFactory.toastReject('Oooops! No matches found')
         FJScope.searchParams = []
         addParam()
       } else {
-        MatchService.setMatches(data).then( () => $rootScope.$apply( () => $location.path('/jobs/')))
+        MatchService.setMatches(data).then( () => {
+          AlertFactory.banishDisableForm()
+          $rootScope.$apply( () => $location.path('/jobs/'))
+        })
       }  
     })
     .catch( err => console.log('err', err))
