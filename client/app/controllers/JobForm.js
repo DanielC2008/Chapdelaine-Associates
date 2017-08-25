@@ -7,6 +7,10 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
   let clientContactEdited = false
   let ownerContactEdited = false
   
+  $scope.statusObj = {
+    status: job ? job.job_info.job_status : ''
+  }
+
   const defaultJob = {
     job_info: {
       job_status: 'New',
@@ -70,7 +74,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
   $scope.$watch('job.job_types.length', () => setJobType())
   setJobType()
   const setJobStatus = () => {
-    $scope.status = $scope.job.job_info.on_hold ? 'Hold' : $scope.job.job_info.job_status
+    $scope.statusObj.status = $scope.job.job_info.on_hold ? 'Hold' : $scope.job.job_info.job_status
     $scope.jobStatusSet = $scope.job.job_info.job_status === 'New' ? false : true
   }  
   $scope.$watch('job.job_info.job_status', () => setJobStatus())
@@ -131,7 +135,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       controller: 'ChooseOne as CO',
       templateUrl: '/partials/chooseOne.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       multiple: true
     })
     .then( data => $scope.job.job_types.splice($scope.job.job_types.indexOf(data), 1))
@@ -183,7 +187,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       controller: 'ChooseOne as CO',
       templateUrl: '/partials/chooseOne.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       multiple: true
     })
     .then( data => $scope.job.addresses.splice($scope.job.addresses.indexOf(data), 1))
@@ -218,7 +222,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       controller: 'ChooseOne as CO',
       templateUrl: '/partials/chooseOne.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       multiple: true
     })
     .then( data => $scope.job.roads.splice($scope.job.roads.indexOf(data), 1))

@@ -3,9 +3,15 @@
 app.controller('RecommendNumber', function($scope, DBFactory, $mdDialog, JobFactory, AlertFactory) {
   let RNScope = this
 
+  const setNumber = number => $mdDialog.hide(number)
+  
   DBFactory.getMaxNumber({table: 'Jobs'})
-    .then( ({data: {max}}) => RNScope.recommended = max + 1 )
-    .catch( ({data}) => console.log(data))
+  .then( ({data: {max}}) => {
+    RNScope.last = max
+    RNScope.recommended = max + 1 
+    RNScope.selected = max + 1 
+  })
+  .catch( ({data}) => console.log(data))
 
   RNScope.checkNumber = number => {
     let job_number = Number(number)
@@ -22,6 +28,6 @@ app.controller('RecommendNumber', function($scope, DBFactory, $mdDialog, JobFact
     }
   }
 
-  const setNumber = number => $mdDialog.hide(number)
+  RNScope.cancel = () => $mdDialog.hide()
 
 })

@@ -66,12 +66,18 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
         controller: 'RecommendNumber as RN',
         templateUrl: './partials/recommendNumber.html',
         parent: angular.element(document.body),
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         multiple: true
       }).then( job_number => {
-        updateStatus('Active')
-        addStartDate()
-        $scope.job.job_info.job_number = job_number
+        //user selected a job number
+        if( job_number ) {
+          updateStatus('Active')
+          addStartDate()
+          $scope.job.job_info.job_number = job_number
+        } else {
+        // else reset status
+          $scope.statusObj.status = $scope.job.job_info.job_status
+        }
       })
     }
   }
@@ -87,13 +93,19 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
         controller: 'RecommendNumber as RN',
         templateUrl: './partials/recommendNumber.html',
         parent: angular.element(document.body),
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         multiple: true
       }).then( job_number => {
-        updateStatus('Complete') 
-        addStartDate()
-        addCompleteDate() 
-        $scope.job.job_info.job_number = job_number
+        //user selected a job number
+        if( job_number ) {
+          updateStatus('Complete') 
+          addStartDate()
+          addCompleteDate() 
+          $scope.job.job_info.job_number = job_number
+        } else {
+        // else reset status
+          $scope.statusObj.status = $scope.job.job_info.job_status
+        }
       })
     }
   } 
