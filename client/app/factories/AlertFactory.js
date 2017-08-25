@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('ToastFactory', function($mdToast) {
+app.factory('AlertFactory', function($mdToast, $mdDialog) {
 
   const factory = {}
 
@@ -25,6 +25,19 @@ app.factory('ToastFactory', function($mdToast) {
         .toastClass('toastReject')
     )
   }
+
+  factory.summonDisableForm = () => {
+    $mdDialog.show({
+      fullscreen: true,
+      controller: 'DisableForm',
+      templateUrl: '/partials/disableForm.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: false,
+      multiple: true
+    }).then().catch( err => console.log('err', err))
+  }
+
+  factory.banishDisableForm = () => $mdDialog.hide()
 
   return factory
 })  

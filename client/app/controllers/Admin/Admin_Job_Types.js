@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory, FormFactory) {
+app.controller('Admin_Job_Types', function($scope, JobTypeFactory, AlertFactory, FormFactory) {
   const JT = this
 
   JT.priorityChanged = false
@@ -14,8 +14,8 @@ app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory,
     FormFactory.updateForm('Job_Types', null, {}, 'Add New').then( ({dbPackage}) => {
       JobTypeFactory.addNew(dbPackage).then( () => {
         $scope.setTabAndReload('JT')
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   JT.moved = index => {
@@ -28,13 +28,13 @@ app.controller('Admin_Job_Types', function($scope, JobTypeFactory, ToastFactory,
     let dbPackage = priorityPackage()
     JobTypeFactory.reprioritizeJobTypes(dbPackage).then( ({data: {msg}}) => {
       $scope.setTabAndReload('JT')
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   JT.disable = type => {
     JobTypeFactory.disableJobType(type.job_type_id).then( ({data: {msg}}) => {
       $scope.setTabAndReload('JT')
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   const reprioritize = () => {

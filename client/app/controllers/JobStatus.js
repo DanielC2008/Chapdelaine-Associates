@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory, $mdDialog, $route) {
+app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory, $mdDialog, $route) {
   let JSscope = this
 
   const addStartDate = () => $scope.job.job_info.start_date = new Date()
@@ -24,7 +24,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, ToastFactory
       .then( ({data: {min}}) => { 
         (min < 0) ? $scope.job.job_info.job_number = min - 1 : $scope.job.job_info.job_number = -1 
       })
-      .catch( (data) => data.data ? ToastFactory.toastReject(data.msg) : console.log('data', data))
+      .catch( (data) => data.data ? AlertFactory.toastReject(data.msg) : console.log('data', data))
   }
   
   JSscope.jobCanceled = () => {

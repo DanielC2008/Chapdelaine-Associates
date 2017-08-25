@@ -1,10 +1,11 @@
 'use strict'
 
-app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactory, PropertyFactory, JobFactory) {
+app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactory, PropertyFactory, JobFactory, AlertFactory) {
 
   const factory = {}
 
   factory.updateJob = (original, update) => {
+    AlertFactory.summonDisableForm()
     const originalJobNumber = original.job_info.job_number
     const jobId = original.job_info.job_id
     const newJobNumber = update.job_info.job_number
@@ -48,12 +49,14 @@ app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactor
         addJobTypesToJob(newJobTypes, jobId).then().catch( err => console.log('err', err)),
         removeJobTypesFromJob(removedJobTypes, jobId).then().catch( err => console.log('err', err))
       ]).then( () => {
+        AlertFactory.banishDisableForm()
         $mdDialog.hide(newJobNumber)
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
   }  
 
   factory.createJob = (original, update) => {
+    AlertFactory.summonDisableForm()
     let jobNumber = null
     let jobId = null
     //function to check if items on a job were changed -- this can be used by the update function as well
@@ -96,7 +99,10 @@ app.factory('JobFormFactory', function($mdDialog, JobTypeFactory, CustomerFactor
         addSecondaryAddress(newAddresses, ids.property_id).then().catch( err => Promise.reject(err)),
         addSecondaryRoad(newRoads, ids.property_id).then().catch( err => Promise.reject(err))
       ]).then( () => {
-        addJobTypesToJob(newJobTypes, jobId).then( () => $mdDialog.hide(jobNumber)).catch( err => console.log('err', err))
+        addJobTypesToJob(newJobTypes, jobId).then( () => {
+          AlertFactory.banishDisableForm()
+          $mdDialog.hide(jobNumber)
+        }).catch( err => console.log('err', err))
       }).catch( err => console.log('err', err))
     }).catch( err => console.log('err', err))
   }

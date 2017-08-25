@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DBFactory, table, ids, existingObj, formType) {
+app.controller('Form', function($scope, $mdDialog, AlertFactory, FormFactory, DBFactory, table, ids, existingObj, formType) {
   let FORM = this
 
   FORM.Display = {}
@@ -53,7 +53,7 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     if (dbPackage) {
       DBFactory.validate(dbPackage)
       .then( ({data: {msg}}) => $mdDialog.hide({dbPackage, msg}))
-      .catch( ({data: {msg}}) => ToastFactory.toastReject(msg))
+      .catch( ({data: {msg}}) => AlertFactory.toastReject(msg))
     }
   }
 
@@ -67,7 +67,7 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     }
     if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
-        ToastFactory.toastReject("Please enter an Address or a Road.")
+        AlertFactory.toastReject("Please enter an Address or a Road.")
       } else {
         return dbPackage
       }   

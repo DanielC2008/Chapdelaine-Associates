@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory, TaskFactory, MatchService, FindJobFactory, FormFactory, ToastFactory, CustomerFactory, PropertyFactory) {
+app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory, TaskFactory, MatchService, FindJobFactory, FormFactory, AlertFactory, CustomerFactory, PropertyFactory) {
   
   const FJScope = this
 
@@ -96,7 +96,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
       numberOfParams++
       addParam()
     } else {
-      ToastFactory.toastReject('Please fill out all parameters!')
+      AlertFactory.toastReject('Please fill out all parameters!')
     }
   }
 
@@ -226,7 +226,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
     .then( data => {
       let { length } = data.filter( arr => arr.length > 0 )
       if (length === 0){
-        ToastFactory.toastReject('Oooops! No matches found')
+        AlertFactory.toastReject('Oooops! No matches found')
         FJScope.searchParams = []
         addParam()
       } else {
@@ -237,7 +237,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
   }
 
   //check if all params complete else toast reject to user
-  FJScope.submit = () => paramsComplete().length === 0 ? sendToDB() : ToastFactory.toastReject('Please fill out all parameters!')
+  FJScope.submit = () => paramsComplete().length === 0 ? sendToDB() : AlertFactory.toastReject('Please fill out all parameters!')
 
   //initiate first parameter
   addParam()

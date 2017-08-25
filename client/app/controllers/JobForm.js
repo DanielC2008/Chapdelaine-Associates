@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFactory, PropertyFactory, CustomerFactory, JobTypeFactory,  JobFormFactory, FormFactory) {
+app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFactory, PropertyFactory, CustomerFactory, JobTypeFactory,  JobFormFactory, FormFactory) {
 
   let clientEdited = false
   let ownerEdited = false
@@ -96,7 +96,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
 
   $scope.checkReqs = () => {
     let reqMsg = requirements()
-    typeof reqMsg === 'string' ? ToastFactory.toastReject(reqMsg) : submit()
+    typeof reqMsg === 'string' ? AlertFactory.toastReject(reqMsg) : submit()
   }
 
   const requirements = () => {
@@ -141,17 +141,17 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
 /////////////////////////////////////////PROPERTY/////////////////////////////////////////  
   $scope.addProp = () => { 
     FormFactory.updateForm('Properties', null, {}, 'Add New').then( ({dbPackage, msg}) => {
-      ToastFactory.toastSuccess(msg)
+      AlertFactory.toastSuccess(msg)
       $scope.job.property = dbPackage.dbObj
       $scope.propertySet = true
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   $scope.editProp = () => {
     FormFactory.updateForm('Properties', $scope.job.property, {}, 'Update').then( ({dbPackage, msg}) => {
-      ToastFactory.toastSuccess(msg)
+      AlertFactory.toastSuccess(msg)
       $scope.job.property = dbPackage.dbObj
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
 /////////////////////////////////////////ADDRESSES/ROADS/////////////////////////////////////////  
@@ -163,9 +163,9 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
         $scope.$apply()
       } else {
         FormFactory.updateForm('Addresses', null,  {}, 'Add New').then( ({dbPackage, msg}) => {
-          ToastFactory.toastSuccess(msg)
+          AlertFactory.toastSuccess(msg)
           $scope.job.addresses.push(dbPackage.dbObj)
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
       }
     })
   }
@@ -198,9 +198,9 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, ToastFact
         $scope.$apply()
       } else {
         FormFactory.updateForm('Roads', null,  {}, 'Add New').then( ({dbPackage, msg}) => {
-          ToastFactory.toastSuccess(msg)
+          AlertFactory.toastSuccess(msg)
           $scope.job.roads.push(dbPackage.dbObj)
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
       }
     })
   }
@@ -242,18 +242,18 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, clientSet, and id
               FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-              ToastFactory.toastSuccess(msg)
+              AlertFactory.toastSuccess(msg)
               $scope.job.client = dbPackage.dbObj
               $scope.job.ids.client_id = dbPackage.ids.customer_id
-            }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+            }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         } else {
            FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
-            ToastFactory.toastSuccess(msg)
+            AlertFactory.toastSuccess(msg)
             $scope.job.client = dbPackage.dbObj
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         }
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   $scope.editClient = () => {
@@ -262,17 +262,17 @@ $scope.removeCustomer = customerType => {
     if (customer_id && !clientEdited) {
       CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
         FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-          ToastFactory.toastSuccess(msg)
+          AlertFactory.toastSuccess(msg)
           $scope.job.client = dbPackage.dbObj
           clientEdited = true
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     //if the customer has created a new customer or has already edited the existing customer during this form session use scope
     } else {
       FormFactory.updateForm('Customers', $scope.job.client, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-        ToastFactory.toastSuccess(msg)
+        AlertFactory.toastSuccess(msg)
         $scope.job.client = dbPackage.dbObj
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     }
   }
 /////////////////////////////////////////CLIENT CONTACT/////////////////////////////////////////
@@ -285,18 +285,18 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, clientContactSet, and id
               FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-              ToastFactory.toastSuccess(msg)
+              AlertFactory.toastSuccess(msg)
               $scope.job.client_contact = dbPackage.dbObj
               $scope.job.ids.client_contact_id = dbPackage.ids.customer_id
-            }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+            }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         } else {
            FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
-            ToastFactory.toastSuccess(msg)
+            AlertFactory.toastSuccess(msg)
             $scope.job.client_contact = dbPackage.dbObj
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         }
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   $scope.editClientContact = () => {
@@ -305,17 +305,17 @@ $scope.removeCustomer = customerType => {
     if (customer_id && !clientContactEdited) {
       CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
         FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-          ToastFactory.toastSuccess(msg)
+          AlertFactory.toastSuccess(msg)
           $scope.job.client_contact = dbPackage.dbObj
           clientContactEdited = true
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     //if the customer has created a new customer or has already edited the existing customer during this form session use scope
     } else {
       FormFactory.updateForm('Customers', $scope.job.client_contact, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-        ToastFactory.toastSuccess(msg)
+        AlertFactory.toastSuccess(msg)
         $scope.job.client_contact = dbPackage.dbObj
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     }
   }
 /////////////////////////////////////////OWNER/////////////////////////////////////////
@@ -328,18 +328,18 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, ownerSet, and id
               FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-              ToastFactory.toastSuccess(msg)
+              AlertFactory.toastSuccess(msg)
               $scope.job.owner = dbPackage.dbObj
               $scope.job.ids.owner_id = dbPackage.ids.customer_id
-            }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+            }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         } else {
            FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
-            ToastFactory.toastSuccess(msg)
+            AlertFactory.toastSuccess(msg)
             $scope.job.owner = dbPackage.dbObj
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         }
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   $scope.editOwner = () => {
@@ -348,17 +348,17 @@ $scope.removeCustomer = customerType => {
     if (customer_id && !ownerEdited) {
       CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
         FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-          ToastFactory.toastSuccess(msg)
+          AlertFactory.toastSuccess(msg)
           $scope.job.owner = dbPackage.dbObj
           ownerEdited = true
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     //if the customer has created a new customer or has already edited the existing customer during this form session use scope
     } else {
       FormFactory.updateForm('Customers', $scope.job.owner, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-        ToastFactory.toastSuccess(msg)
+        AlertFactory.toastSuccess(msg)
         $scope.job.owner = dbPackage.dbObj
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     }
   }
 /////////////////////////////////////////OWNER CONTACT/////////////////////////////////////////
@@ -371,18 +371,18 @@ $scope.removeCustomer = customerType => {
           CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
             //edit, validate, and on return set obj, ownerContactSet, and id
               FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-              ToastFactory.toastSuccess(msg)
+              AlertFactory.toastSuccess(msg)
               $scope.job.owner_contact = dbPackage.dbObj
               $scope.job.ids.owner_contact_id = dbPackage.ids.customer_id
-            }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+            }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         } else {
            FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage, msg}) => {
-            ToastFactory.toastSuccess(msg)
+            AlertFactory.toastSuccess(msg)
             $scope.job.owner_contact = dbPackage.dbObj
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
         }
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   $scope.editOwnerContact = () => {
@@ -391,17 +391,17 @@ $scope.removeCustomer = customerType => {
     if (customer_id && !ownerContactEdited) {
       CustomerFactory.getFullCustomerById({customer_id}).then( ({data}) => {
         FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-          ToastFactory.toastSuccess(msg)
+          AlertFactory.toastSuccess(msg)
           $scope.job.owner_contact = dbPackage.dbObj
           ownerContactEdited = true
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     //if the customer has created a new customer or has already edited the existing customer during this form session use scope
     } else {
       FormFactory.updateForm('Customers', $scope.job.owner_contact, {customer_id: customer_id}, 'Update').then( ({dbPackage, msg}) => {
-        ToastFactory.toastSuccess(msg)
+        AlertFactory.toastSuccess(msg)
         $scope.job.owner_contact = dbPackage.dbObj
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
     }
   }
 

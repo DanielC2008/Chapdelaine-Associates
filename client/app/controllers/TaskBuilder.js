@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('TaskBuilder', function($scope, ToastFactory, TaskFactory, DBFactory) {
+app.controller('TaskBuilder', function($scope, AlertFactory, TaskFactory, DBFactory) {
   let TBScope = this
   let {table, id, connectingTableId} = $scope.DBObj
   let allTasks
@@ -45,7 +45,7 @@ app.controller('TaskBuilder', function($scope, ToastFactory, TaskFactory, DBFact
         TBScope.builder.push(addTask)
         TBScope.edit = TBScope.builder.length - 1
         getTotal()
-        ToastFactory.toastSuccess()
+        AlertFactory.toastSuccess()
       })
       .catch( (data) => console.log('data', data))
   }
@@ -60,7 +60,7 @@ app.controller('TaskBuilder', function($scope, ToastFactory, TaskFactory, DBFact
     DBFactory.updateConnectingTable(updateObj)
       .then( () => {
         getTotal()
-        ToastFactory.toastSuccess()
+        AlertFactory.toastSuccess()
       })
       .catch( (data) => console.log('data', data))
   }
@@ -74,7 +74,7 @@ app.controller('TaskBuilder', function($scope, ToastFactory, TaskFactory, DBFact
     DBFactory.deleteFromConnectingTable(objToRemove)
       .then( () => {
         getTotal()
-        ToastFactory.toastSuccess()
+        AlertFactory.toastSuccess()
       })
       .catch( (data) => console.log('data', data))
   }
