@@ -6,7 +6,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
   let ownerEdited = false
   let clientContactEdited = false
   let ownerContactEdited = false
-  
+  //using an obj to store status set on scope so changes force a digest and form will return to previous status is status change is canceled. 
   $scope.statusObj = {
     status: job ? job.job_info.job_status : ''
   }

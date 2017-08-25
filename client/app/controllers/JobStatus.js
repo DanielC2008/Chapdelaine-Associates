@@ -32,12 +32,17 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
       controller: 'JobCanceled as JC',
       templateUrl: './partials/jobCanceled.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       multiple: true
     }).then( cause => {
-      updateStatus('Canceled') 
-      $scope.showCause(cause.cause) 
-      $scope.job.job_info.cause_id = cause.cause_id
+      if (cause) { 
+        updateStatus('Canceled') 
+        $scope.showCause(cause.cause) 
+        $scope.job.job_info.cause_id = cause.cause_id
+      } else {
+      // else reset status
+        $scope.statusObj.status = $scope.job.job_info.job_status
+      }
     })
   }
   
