@@ -37,10 +37,8 @@ app.factory('AlertFactory', function($mdToast, $mdPanel) {
       trapFocus: true,
       clickOutsideToClose: false,
       multiple: true
-    }).then( scope => {
-      console.log('here')
-      disableFormScope = scope 
-    }).catch( err => console.log('err', err))
+    })
+    .then( panelScope => disableFormScope = panelScope).catch( err => console.log('err', err))
   }
 
   factory.banishDisableForm = () => disableFormScope.close()

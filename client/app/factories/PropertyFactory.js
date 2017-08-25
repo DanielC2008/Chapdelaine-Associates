@@ -38,9 +38,10 @@ app.factory('PropertyFactory', function($http, SearchFactory, FormFactory, Alert
   factory.removeSecondaryRoad = dbPackage => $http.post('/api/removeSecondaryRoad', dbPackage)
 
   factory.searchForRoads = (allowNew = true) => {
-    AlertFactory.banishDisableForm()
+    AlertFactory.summonDisableForm()
     return new Promise ((resolve, reject) => {
       getRoadsForSearch().then( ({data}) => {
+        AlertFactory.banishDisableForm()        
         let roads = data
         SearchFactory.addBySearch(roads, allowNew).then( road_id => {
           road_id ? resolve(road_id) : resolve(null)
