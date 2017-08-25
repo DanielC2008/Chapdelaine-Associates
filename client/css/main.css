@@ -304,8 +304,8 @@ md-dialog.md-dialog-fullscreen {
   color: #3c763d;
 }
 
-md-dialog#disableForm {
-  background: rgba(227, 252, 236, .5);
+.md-panel {
+  background: rgba(0, 0, 0, 0);
 }
 
 .preloader-wrapper {

@@ -2,7 +2,7 @@
 
 app.controller('Nav', function($scope, JobFactory, $mdDialog) {
   let NAV = this
-  
+
   NAV.submit = jobNumber => {
     JobFactory.goToJobPage(jobNumber)
     NAV.jobNumber = ''

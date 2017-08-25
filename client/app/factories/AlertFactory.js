@@ -1,7 +1,8 @@
 'use strict'
 
-app.factory('AlertFactory', function($mdToast, $mdDialog) {
+app.factory('AlertFactory', function($mdToast, $mdPanel) {
 
+  let disableFormScope 
   const factory = {}
 
   factory.toastSuccess = message => {
@@ -27,17 +28,22 @@ app.factory('AlertFactory', function($mdToast, $mdDialog) {
   }
 
   factory.summonDisableForm = () => {
-    $mdDialog.show({
+    $mdPanel.open({
       fullscreen: true,
       controller: 'DisableForm',
       templateUrl: '/partials/disableForm.html',
-      parent: angular.element(document.body),
+      attachTo: angular.element(document.body),
+      zIndex: 100,
+      trapFocus: true,
       clickOutsideToClose: false,
       multiple: true
-    }).then().catch( err => console.log('err', err))
+    }).then( scope => {
+      console.log('here')
+      disableFormScope = scope 
+    }).catch( err => console.log('err', err))
   }
 
-  factory.banishDisableForm = () => $mdDialog.hide()
+  factory.banishDisableForm = () => disableFormScope.close()
 
   return factory
 })  

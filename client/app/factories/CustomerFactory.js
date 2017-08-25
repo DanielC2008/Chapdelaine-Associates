@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('CustomerFactory', function($http, SearchFactory, FormFactory) {
+app.factory('CustomerFactory', function($http, SearchFactory, FormFactory, AlertFactory) {
 
   const factory = {}
 
@@ -8,7 +8,9 @@ app.factory('CustomerFactory', function($http, SearchFactory, FormFactory) {
 
   factory.searchForCustomers = (allowNew = true) => {
     return new Promise ((resolve, reject) => {
+    AlertFactory.summonDisableForm()
       getCustomersForSearch().then( ({data}) => {
+        AlertFactory.banishDisableForm()
         let names = data
         SearchFactory.addBySearch(names, allowNew).then( customer_id => {
           customer_id ? resolve(customer_id) : resolve(null)
