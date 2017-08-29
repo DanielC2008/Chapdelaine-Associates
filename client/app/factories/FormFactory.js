@@ -9,6 +9,7 @@ app.factory('FormFactory', function($mdDialog) {
       'Middle Name':    customer ? customer.middle_name : '', 
       'Last Name':      customer ? customer.last_name : '', //required
       'Email':          customer ? customer.email : '', 
+      'Company Name':   customer ? customer.company_name : '', 
       'Business Phone': customer ? customer.business_phone : '', 
       'Mobile Phone':   customer ? customer.mobile_phone : '', 
       'Home Phone':     customer ? customer.home_phone : '', 
@@ -18,8 +19,6 @@ app.factory('FormFactory', function($mdDialog) {
       'State':          customer ? customer.state : '', 
       'Zip Code':       customer ? customer.zip_code : '', 
       'County':         customer ? customer.county : '',
-      'Company Name':   customer ? customer.company_name : '',
-      'Company Address':customer ? customer.company_address: '',
       'Notes':          customer ? customer.notes : ''
     }
   }

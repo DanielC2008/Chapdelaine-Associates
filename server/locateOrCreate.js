@@ -210,7 +210,7 @@ module.exports = {
     })
   },
 
-  company_name: (company_name, company_address) => {
+  company_name: company_name => {
     return new Promise( (resolve, reject) => {
       if(!company_name) { 
         resolve(null) 
@@ -218,39 +218,20 @@ module.exports = {
       }
       else {   
         knex('Companies')
-        .select(
-          'Companies.company_id', 
-          'Addresses.address'
-        )
-        .leftJoin('Addresses', 'Companies.address_id', 'Addresses.address_id')
+        .select('company_id')
         .where('company_name', company_name)
         .then( data => {
-          if (data[0]) { //----------------------------------------company exists
-            if(data[0] && data[0].address != company_address) { // if company address has changed change it
-              module.exports.address(company_address)
-              .then( address_id => { 
-                knex('Companies')
-                .where('company_name', company_name)
-                .update({address_id: address_id})
-                .then( () => {
-                  resolve(data[0].company_id)
-                  reject(err => console.log('err', err))
-                })
-              })  
-            } else {
-              resolve(data[0].company_id)
-              reject(err => console.log('err', err))  
-            }
-          } else { //------------------------------------create company
-            module.exports.address(company_address) // if  new company need to find address on address table first
-            .then( address_id => {   
-              knex('Companies')
-              .returning('company_id')
-              .insert({company_name: company_name, address_id: address_id})
-              .then( data => {
-                resolve(data[0])
-                reject(err => console.log('err', err))
-              })
+          if (data[0]) {
+            resolve(data[0].company_id)
+            reject(err => console.log('err', err))
+          } 
+          else {
+            knex('Companies')
+            .returning('company_id')
+            .insert({company_name: company_name})
+            .then( data => {
+              resolve(data[0])
+              reject(err => console.log('err', err))
             })
           }
         })

@@ -1,17 +1,19 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, AlertFactory, FormFactory, DBFactory, table, ids, existingObj, formType) {
+app.controller('Form', function($scope, $mdDialog, AlertFactory, FormFactory, DBFactory, table, ids, existingObj, formType, CompanyFactory) {
   let FORM = this
 
   FORM.Display = {}
   FORM.table = table
   FORM.jobIdExists = ids.job_id ? true : false
   FORM.formType = formType
+  FORM.length
 
   switch(table) {
     case 'Customers':
       FORM.title = `${formType} Customer`
       FORM.Display.Customers = FormFactory.getCustomerForm(existingObj)
+      FORM.length = Object.keys(FORM.Display.Customers).length - 1
       break;
     case 'Properties':
       FORM.title = `${formType} Property`
@@ -76,6 +78,22 @@ app.controller('Form', function($scope, $mdDialog, AlertFactory, FormFactory, DB
       return dbPackage   
     }
   }
+
+  FORM.searchCompanies = () => { 
+    CompanyFactory.searchForCompanies().then( company => {
+      if (company) {
+        FORM.Display.Customers['Company Name'] = company.value
+        $scope.$apply()
+      } else {
+        FormFactory.updateForm('Companies', null, {}, 'Add New').then( ({dbPackage}) => {
+          CompanyFactory.addNew(dbPackage).then( data => {
+            console.log('data', data)
+            console.log('dbPackage', dbPackage)
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+      }
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+  } 
 
 })
 
