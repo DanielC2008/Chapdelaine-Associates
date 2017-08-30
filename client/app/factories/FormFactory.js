@@ -81,7 +81,7 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         type: 'text',
         column: 'city',
         searchable: true,
-        searchFunction: PropertyFactory.searchForAddresses,
+        searchFunction: PropertyFactory.searchForCities,
         value: customer ? customer.city : '',
         required: false
       },
@@ -89,7 +89,7 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         type: 'text',
         column: 'state',
         searchable: true,
-        searchFunction: CompanyFactory.searchForCompanies,
+        searchFunction: PropertyFactory.searchForStates,
         value: customer ? customer.state : '',
         required: false
       },
@@ -97,7 +97,7 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         type: 'text',
         column: 'zip_code',
         searchable: true,
-        searchFunction: CompanyFactory.searchForCompanies,
+        searchFunction: PropertyFactory.searchForZipCodes,
         value: customer ? customer.zip_code : '',
         required: false
       },
@@ -105,7 +105,7 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         type: 'text',
         column: 'county',
         searchable: true,
-        searchFunction: CompanyFactory.searchForCompanies,
+        searchFunction: PropertyFactory.searchForCounties,
         value: customer ? customer.county : '',
         required: false
       },
@@ -115,7 +115,7 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         searchable: false,
         value: customer ? customer.notes : '',
         required: false
-      },
+      }
     }
   }
 
