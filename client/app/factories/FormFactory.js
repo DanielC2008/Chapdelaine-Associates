@@ -1,25 +1,121 @@
 'use strict'
 
-app.factory('FormFactory', function($mdDialog) {
+app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) {
   let factory = {}
 
   factory.getCustomerForm = customer => {
     return {
-      'First Name':     customer ? customer.first_name : '', //required
-      'Middle Name':    customer ? customer.middle_name : '', 
-      'Last Name':      customer ? customer.last_name : '', //required
-      'Email':          customer ? customer.email : '', 
-      'Company Name':   customer ? customer.company_name : '', 
-      'Business Phone': customer ? customer.business_phone : '', 
-      'Mobile Phone':   customer ? customer.mobile_phone : '', 
-      'Home Phone':     customer ? customer.home_phone : '', 
-      'Fax Number':     customer ? customer.fax_number : '',
-      'Address':        customer ? customer.address : '', 
-      'City':           customer ? customer.city : '', 
-      'State':          customer ? customer.state : '', 
-      'Zip Code':       customer ? customer.zip_code : '', 
-      'County':         customer ? customer.county : '',
-      'Notes':          customer ? customer.notes : ''
+      'First Name': {
+        type: 'text',
+        column: 'first_name',
+        searchable: false,
+        value: customer ? customer.first_name : '',
+        required: true
+      },
+      'Middle Name': {
+        type: 'text',
+        column: 'middle_name',
+        searchable: false,
+        value: customer ? customer.middle_name : '',
+        required: false
+      },
+      'Last Name': {
+        type: 'text',
+        column: 'last_name',
+        searchable: false,
+        value: customer ? customer.last_name : '',
+        required: true
+      },
+      'Company Name': {
+        type: 'text',
+        column: 'company_name',
+        searchable: true,
+        searchFunction: CompanyFactory.searchForCompanies,
+        value: customer ? customer.company_name : '',
+        required: false
+      },
+      'Email': {
+        type: 'text',
+        column: 'email',
+        searchable: false,
+        value: customer ? customer.email : '',
+        required: false
+      },
+      'Home Phone': {
+        type: 'text',
+        column: 'home_phone',
+        searchable: false,
+        value: customer ? customer.home_phone : '',
+        required: false
+      },
+      'Mobile Phone': {
+        type: 'text',
+        column: 'mobile_phone',
+        searchable: false,
+        value: customer ? customer.mobile_phone : '',
+        required: false
+      },
+      'Business Phone': {
+        type: 'text',
+        column: 'business_phone',
+        searchable: false,
+        value: customer ? customer.business_phone : '',
+        required: false
+      },
+      'Fax Number': {
+        type: 'text',
+        column: 'fax_number',
+        searchable: false,
+        value: customer ? customer.fax_number : '',
+        required: false
+      },
+      'Address': {
+        type: 'text',
+        column: 'address',
+        searchable: true,
+        searchFunction: PropertyFactory.searchForAddresses,
+        value: customer ? customer.address : '',
+        required: false
+      },
+      'City': {
+        type: 'text',
+        column: 'city',
+        searchable: true,
+        searchFunction: PropertyFactory.searchForAddresses,
+        value: customer ? customer.city : '',
+        required: false
+      },
+      'State': {
+        type: 'text',
+        column: 'state',
+        searchable: true,
+        searchFunction: CompanyFactory.searchForCompanies,
+        value: customer ? customer.state : '',
+        required: false
+      },
+      'Zip Code': {
+        type: 'text',
+        column: 'zip_code',
+        searchable: true,
+        searchFunction: CompanyFactory.searchForCompanies,
+        value: customer ? customer.zip_code : '',
+        required: false
+      },
+      'County': {
+        type: 'text',
+        column: 'county',
+        searchable: true,
+        searchFunction: CompanyFactory.searchForCompanies,
+        value: customer ? customer.county : '',
+        required: false
+      },
+      'Notes': {
+        type: 'textarea',
+        column: 'notes',
+        searchable: false,
+        value: customer ? customer.notes : '',
+        required: false
+      },
     }
   }
 

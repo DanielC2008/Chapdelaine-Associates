@@ -1,23 +1,22 @@
 <div class="dialog row">
-  <h1 class="center align">{{FORM.title}}</h1>
-  <div  ng-repeat='(key, value) in FORM.Display[FORM.table] as display '>
-    <div ng-if="key !== 'Acres' && key !== 'Notes' && key !== 'Company Name'" class="col s3">
-      <span>{{key}}</span> 
-      <input type="text" ng-model='display[key]'>
+  <form>
+    <h1 class="center align">{{FORM.title}}</h1>
+    <div  ng-repeat='(field, details) in FORM.display'>
+      <div ng-if="!details.searchable && field !== 'Notes'" class="col s3">
+        <span>{{field}}</span> 
+        <input ng-if="details.type === 'text'" type="{{details.type}}" ng-model='details.value'  ng-required="details.required">
+        <input ng-if="details.type === 'number'" type="{{details.type}}" ng-model='details.value' ng-required="details.required">
+      </div>
+      <div class="col s3" ng-if="details.searchable">
+        <span>{{field}}</span> 
+        <input type="{{details.type}}" ng-focus="FORM.search(details.searchFunction, field)" ng-model='details.value' ng-required="details.required">
+      </div>
+      <textarea class='col s8 offset-s2 addToJobNotes' ng-if="field === 'Notes'" ng-model='details.value' placeholder="Special Notes..."></textarea>
     </div>
-    <div ng-if="key === 'Acres' " class="col s3">
-      <span>{{key}}</span> 
-      <input type="number" ng-model='display[key]'>
-    </div>
-    <div class="col s3" ng-if="key === 'Company Name'">
-      <span>{{key}}</span> 
-      <input type="text" ng-focus="FORM.searchCompanies()" ng-model='display[key]'>
-    </div>
-    <textarea class='col s8 offset-s2 addToJobNotes' ng-if="key === 'Notes'" ng-model='display[key]' placeholder="Special Notes..."></textarea>
   </div>
-</div>
-<div class="row">
-  <button class="button btn" ng-click="FORM.reject()">Exit Without Saving</button>
-  <button class="button btn" ng-click="FORM.validate()" >{{FORM.formType}}</button>
+  <div class="row">
+    <button class="button btn" ng-click="FORM.reject()">Exit Without Saving</button>
+    <button class="button btn" ng-click="FORM.validate()" >{{FORM.formType}}</button>
+  </form>
 </div>
 

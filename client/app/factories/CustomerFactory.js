@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('CustomerFactory', function($http, SearchFactory, FormFactory, AlertFactory) {
+app.factory('CustomerFactory', function($http, SearchFactory, AlertFactory) {
 
   const factory = {}
 
