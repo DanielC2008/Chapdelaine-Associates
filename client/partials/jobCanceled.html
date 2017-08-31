@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col s8 offset-s2" ng-if="JC.causes" ng-init="material()">
-      <select ng-model="selectedCause" ng-options="cause as cause.cause for cause in JC.causes">
+      <select ng-model="JC.selectedCause" ng-options="cause as cause.cause for cause in JC.causes">
         <option value="" label="-- Select option --" disabled selected="selected"> Choose One...
         </option>
       </select>
@@ -10,7 +10,7 @@
   <div class="row">
     <div class="col s8 offset-s4">
       <button class="btn button col s3" ng-click="JC.canceled()">Cancel</button>
-      <button class="btn button col s3" ng-click="JC.selected(selectedCause)">Submit</button>
+      <button class="btn button col s3" ng-click="JC.selected()" ng-disabled="!JC.selectedCause">Submit</button>
       </div>
     </div>
   </div>
