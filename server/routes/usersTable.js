@@ -68,7 +68,37 @@ router.get('/api/removeUser', ({session}, res) => {
   res.send()
 })
 
-router.get('/api/getAllEmployees', (req, res) => knex('Employees').then( data=> res.send(data)))
+router.get('/api/getAllEmployees', (req, res) => {
+  knex('Employees')
+  .select(
+    'Employees.employee_id',
+    'Employees.first_name',
+    'Employees.middle_name',
+    'Employees.last_name',
+    'Employees.mobile_phone',
+    'Employees.home_phone',
+    'Employees.s_s_number',
+    'Employees.date_of_birth',
+    'Employees.marital_status',
+    'Employees.u_s_citizen',
+    'Employees.start_date',
+    'Employees.end_date',
+    'Employees.position',
+    'Employees.pay_rate',
+    'Addresses.address',
+    'Cities.city',
+    'States.state',
+    'Zip_Codes.zip_code',
+    'Counties.county'
+  )
+  .leftJoin('Addresses', 'Employees.address_id', 'Addresses.address_id')      
+  .leftJoin('Cities', 'Employees.city_id', 'Cities.city_id') 
+  .leftJoin('States', 'Employees.state_id', 'States.state_id')      
+  .leftJoin('Zip_Codes', 'Employees.zip_id', 'Zip_Codes.zip_id')      
+  .leftJoin('Counties', 'Employees.county_id', 'Counties.county_id') 
+  .then( data=> res.send(data))
+  .catch( err => console.log(err))
+})
 
 router.post('/api/deleteEmployee', ({body: {id}}, res) => {
   knex('Employees')
