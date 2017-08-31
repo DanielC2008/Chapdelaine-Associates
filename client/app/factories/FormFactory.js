@@ -241,6 +241,7 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
   }
 
   factory.getEmployeeForm = employee => {
+    console.log('employee', employee)
     return {
       'First Name': {
         type: 'text',
@@ -274,7 +275,7 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         type: 'date',
         column: 'date_of_birth',
         searchable: false,        
-        value: employee ? employee.date_of_birth : null,
+        value: employee ? new Date(employee.date_of_birth): null,
         required: false
       },
       'Marital Status': {
@@ -349,14 +350,14 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         type: 'date',
         column: 'start_date',
         searchable: false,        
-        value: employee ? employee.start_date : null,
+        value: employee ? new Date(employee.start_date): null,
         required: false
       },
       'End Date': {
         type: 'date',
         column: 'end_date',
         searchable: false,        
-        value: employee ? employee.end_date : null,
+        value: employee ? new Date(employee.end_date): null,
         required: false
       },
       'Position': {
