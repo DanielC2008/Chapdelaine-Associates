@@ -35,6 +35,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
       clickOutsideToClose: false,
       multiple: true
     }).then( cause => {
+      console.log('cause', cause)
       if (cause) { 
         updateStatus('Canceled') 
         $scope.showCause(cause.cause) 

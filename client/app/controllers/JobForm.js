@@ -81,6 +81,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       $scope.requireCompleteDate = false
     } else if ( $scope.job.job_info.job_status === 'Active' ) {
       $scope.requireStartDate = true
+      $scope.requireCompleteDate = false
     } else if ( $scope.job.job_info.job_status === 'Complete' ) {
       $scope.requireStartDate = true 
       $scope.requireCompleteDate = true
