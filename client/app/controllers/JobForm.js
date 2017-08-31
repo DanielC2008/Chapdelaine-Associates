@@ -76,6 +76,16 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
   const setJobStatus = () => {
     $scope.statusObj.status = $scope.job.job_info.on_hold ? 'Hold' : $scope.job.job_info.job_status
     $scope.jobStatusSet = $scope.job.job_info.job_status === 'New' ? false : true
+    if ($scope.job.job_info.job_status !== 'Active' && $scope.job.job_info.job_status !== 'Complete') {
+      $scope.requireStartDate = false
+      $scope.requireCompleteDate = false
+    } else if ( $scope.job.job_info.job_status === 'Active' ) {
+      $scope.requireStartDate = true
+    } else if ( $scope.job.job_info.job_status === 'Complete' ) {
+      $scope.requireStartDate = true 
+      $scope.requireCompleteDate = true
+    }
+
   }  
   $scope.$watch('job.job_info.job_status', () => setJobStatus())
   setJobStatus()
@@ -108,6 +118,10 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       return 'Please set job status.'
     } else if (!$scope.jobTypeSet) {
       return 'Please set job type.'
+    } else if ($scope.requireStartDate && !$scope.job.job_info.start_date) {
+      return 'Please set start date.'
+    } else if ($scope.requireCompleteDate && !$scope.job.job_info.complete_date) {
+      return 'Please set complete date.'
     } else if (!$scope.propertySet) {
       return 'Please create a new Property.'
     } else if (!$scope.clientSet) {
