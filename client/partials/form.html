@@ -13,7 +13,7 @@
         <input type="{{details.type}}" ng-focus="FORM.search(details.searchFunction, field)" ng-model='details.value' ng-required="details.required">
       </div>
       <div class="col s1" ng-if="details.searchable">
-        <button ng-click="details.value = '' " >X</button>
+        <button ng-click="details.value = null " >X</button>
       </div>
       <textarea class='col s8 offset-s2 addToJobNotes' ng-if="field === 'Notes'" ng-model='details.value' placeholder="Special Notes..."></textarea>
     </div>
