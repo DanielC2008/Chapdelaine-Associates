@@ -124,16 +124,18 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
       'Primary Address': {
         type: 'text',
         column: 'primary_address',
-        searchable: false,
+        searchable: true,
+        searchFunction: PropertyFactory.searchForAddresses,
         value: prop ? prop.primary_address : '',
         required: false
       },
       'Primary Road': {
         type: 'text',
         column: 'primary_road',
-        searchable: false,
-        value: prop ? prop.primary_road : '', //required if no address
-        required: false
+        searchable: true,
+        searchFunction: PropertyFactory.searchForRoads,
+        value: prop ? prop.primary_road : '',
+        required: false //required if no address
       },
       'City': {
         type: 'text',
