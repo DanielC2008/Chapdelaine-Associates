@@ -3,10 +3,6 @@
 app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory, $mdDialog, $route) {
   let JSscope = this
 
-  const addStartDate = () => $scope.job.job_info.start_date = new Date()
-
-  const addCompleteDate = () => $scope.job.job_info.complete_date = new Date()
-
   const removeStartDate = () => $scope.job.job_info.start_date = null
 
   const removeCompleteDate = () => $scope.job.job_info.complete_date = null
@@ -77,7 +73,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
         //user selected a job number
         if( job_number ) {
           updateStatus('Active')
-          addStartDate()
+          $scope.changeDate( new Date(), 'start_date')
           $scope.job.job_info.job_number = job_number
         } else {
         // else reset status
@@ -91,7 +87,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
     //from Active to Complete update status, add complete date
     if ( $scope.job.job_info.job_status === 'Active') { 
       updateStatus('Complete') 
-      addCompleteDate()
+      $scope.changeDate(new Date(), 'complete_date')
     //else add job number, update status, add start date, add complete date  
     } else {
       $mdDialog.show({
@@ -104,8 +100,8 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
         //user selected a job number
         if( job_number ) {
           updateStatus('Complete') 
-          addStartDate()
-          addCompleteDate() 
+          $scope.changeDate( new Date(), 'start_date')
+          $scope.changeDate( new Date(), 'complete_date') 
           $scope.job.job_info.job_number = job_number
         } else {
         // else reset status

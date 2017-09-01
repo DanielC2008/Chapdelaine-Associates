@@ -39,15 +39,23 @@
 
       <div class="col s12">
         <label for="startDate">Start Date:</label>
-        <input ng-disabled='!requireStartDate' type="date" name="startDate" ng-blur="changeDate(startDate, 'start_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="startDate">
+        <input ng-disabled='!requireStartDate' 
+               type="date" name="startDate" 
+               ng-blur="changeDate(startDate, 'start_date')" 
+               ng-model="startDate">
       </div>
       <div class="col s12">
         <label for="completeDate">Complete Date:</label>
-        <input  ng-disabled='!requireCompleteDate' type="date" name="completeDate" ng-blur="changeDate(completeDate, 'complete_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="completeDate">
+        <input  ng-disabled='!requireCompleteDate' 
+                type="date" name="completeDate" 
+                ng-blur="changeDate(completeDate, 'complete_date')" 
+                ng-model="completeDate">
       </div>
       <div class="col s12">
         <label for="targetDate">Target Date:</label>
-        <input type="date" name="targetDate" ng-blur="changeDate(targetDate, 'target_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="targetDate">
+        <input type="date" name="targetDate" 
+               ng-blur="changeDate(targetDate, 'target_date')" 
+               ng-model="targetDate">
       </div>
 
     </div>

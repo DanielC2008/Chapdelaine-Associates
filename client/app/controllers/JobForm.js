@@ -31,21 +31,46 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
   $scope.job = _.cloneDeep(job ? job : defaultJob)
 
   /////////////////////DATE STUFF///////////////////
-  $scope.timeZoneOffset = $rootScope.timeZoneOffset
-  if ($scope.job.job_info.start_date) {
-    $scope.startDate = new Date($scope.job.job_info.start_date)
-  } 
-  if ($scope.job.job_info.complete_date) {
-    $scope.completeDate = new Date($scope.job.job_info.complete_date)
-  } 
-  if ($scope.job.job_info.target_date) {
-    $scope.targetDate = new Date($scope.job.job_info.target_date)
+  //set startDate as a seperate variable than start_date on job Obj so when original and 
+    //update objs are compared in jobFormFactory it does not detect a change in the isoString 
+    //which would result in resaving the date obj everytime the jobForm was hit
+  const setOffset = isoDate => {
+    if (isoDate) {
+      let date = new Date(isoDate)
+      let tzoffset = date.setTime( date.getTime() + new Date().getTimezoneOffset() * 60000 )
+      return new Date(tzoffset)
+    } else {
+      return null
+    }
   }
-  $scope.$watch('job.job_info.start_date', () => {
-    $scope.startDate = $scope.job.job_info.start_date ? new Date($scope.job.job_info.start_date) : null
+  //set timezone only one initial variables, user input dates have offset already
+  $scope.startDate = setOffset($scope.job.job_info.start_date)
+  $scope.completeDate = setOffset($scope.job.job_info.complete_date)
+  $scope.targetDate = setOffset($scope.job.job_info.target_date)
+
+  // watch tasks check if objs are equal if true does nothing which prevents setting startDate to iso String on page load
+  $scope.$watch( 'job.job_info.start_date', () => {
+    if (_.isEqual($scope.startDate, setOffset($scope.job.job_info.start_date))) {
+      return
+    } else {
+      $scope.startDate = $scope.job.job_info.start_date
+    }
   })
-  $scope.$watch('job.job_info.complete_date', () => {
-    $scope.completeDate = $scope.job.job_info.complete_date ? new Date($scope.job.job_info.complete_date) : null
+
+  $scope.$watch( 'job.job_info.complete_date', () => {
+    if (_.isEqual($scope.completeDate, setOffset($scope.job.job_info.complete_date))) {
+      return
+    } else {
+      $scope.completeDate = $scope.job.job_info.complete_date
+    }
+  })
+
+  $scope.$watch( 'job.job_info.target_date', () => {
+    if (_.isEqual($scope.targetDate, setOffset($scope.job.job_info.target_date))) {
+      return
+    } else {
+      $scope.targetDate = $scope.job.job_info.target_date
+    }
   })
 
   $scope.changeDate = (date, type) => $scope.job.job_info[`${type}`] = date
