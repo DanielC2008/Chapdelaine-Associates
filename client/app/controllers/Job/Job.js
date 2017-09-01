@@ -30,7 +30,7 @@ app.controller('Job', function($scope, $rootScope, $location, JobFactory, $mdDia
       controller: 'JobForm',
       templateUrl: '/partials/jobForm.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       multiple: true
     })
     .then( jobNumber => {

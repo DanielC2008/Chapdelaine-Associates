@@ -8,7 +8,7 @@ const locateOrCreate = require('../locateOrCreate')
 const {validateProperty, validateAddress, validateRoad} = require('../validation/validProperty')
 
 router.post('/api/validateProp', ({body: {dbObj}}, res) => {
-  const errors = validateProperty.validate(dbObj, {typecast: true}) //typcast allows me to force a datatype
+  const errors = validateProperty.validate(dbObj)
   if (errors[0]) {  //------------------------------------checks each type
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
@@ -39,22 +39,42 @@ router.post('/api/validateRoad', ({body: {dbObj}}, res) => {
 
 router.get('/api/getAddressesForSearch', ({body}, res) => {
   knex('Addresses')
-  .select(
-    'address AS value',
-    'address_id AS id'
-  )
-  .then( data => res.send(data))
-  .catch( err => console.log(err))
+  .select('address AS value','address_id AS id')
+  .then( data => res.send(data)).catch( err => console.log(err))
 })
 
 router.get('/api/getRoadsForSearch', ({body}, res) => {
   knex('Roads')
-  .select(
-    'road AS value',
-    'road_id AS id'
-  )
-  .then( data => res.send(data))
-  .catch( err => console.log(err))
+  .select('road AS value','road_id AS id')
+  .then( data => res.send(data)).catch( err => console.log(err))
+})
+
+
+router.get('/api/getCitiesForSearch', ({body}, res) => {
+  knex('Cities')
+  .select('city AS value','city_id AS id')
+  .then( data => res.send(data)).catch( err => console.log(err))
+})
+
+
+router.get('/api/getZipCodesForSearch', ({body}, res) => {
+  knex('Zip_Codes')
+  .select('zip_code AS value','zip_id AS id')
+  .then( data => res.send(data)).catch( err => console.log(err))
+})
+
+
+router.get('/api/getStatesForSearch', ({body}, res) => {
+  knex('States')
+  .select('state AS value','state_id AS id')
+  .then( data => res.send(data)).catch( err => console.log(err))
+})
+
+
+router.get('/api/getCountiesForSearch', ({body}, res) => {
+  knex('Counties')
+  .select('county AS value','county_id AS id')
+  .then( data => res.send(data)).catch( err => console.log(err))
 })
 
 

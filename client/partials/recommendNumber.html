@@ -1,6 +1,16 @@
-  <div>
-    Your last Job Number was {{RN.recommended -  1}}, would you like to use {{RN.recommended}} as your new job number?
+  <div class="container">
+    <div class="row">
+      <div class="col s8 offset-s2 center align">
+        Your last Job Number was {{RN.last}}, would you like to use {{RN.recommended}} as your new job number?
+      </div>
+    </div>
+    <div class="row">
+      <input class="col s8 offset-s2 center align" type="text" ng-model="RN.selected">
+    </div>
+     <div class="row">
+      <div class="col s8 offset-s4">
+        <button class="btn button col s3" ng-click="RN.cancel()">Cancel</button>
+        <button class="btn button col s3" ng-click="RN.checkNumber(RN.selected)">Submit</button>
+      </div>
+    </div>
   </div>
-  <button type="submit" ng-click="RN.checkNumber(RN.recommended)">Yes, that'll do.</button>
-  <button type="submit" ng-click="RN.checkNumber(newNumber)">Nah, use this number.</button>
-  <input type="text" ng-model="newNumber" placeholder="Choose a Number...">

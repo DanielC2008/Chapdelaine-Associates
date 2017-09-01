@@ -23,7 +23,6 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
       .leftJoin('Job_Statuses', 'Jobs.job_status_id', 'Job_Statuses.job_status_id')
       .where('Jobs.job_number', job_number)
       .then(data => {
-        // jobId = data[0].job_id
         job.job_info = data[0]
       }).catch(err => console.log('err', err)),
 
@@ -43,17 +42,18 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Cities.city',
         'States.state',
         'Zip_Codes.zip_code',
-        'Counties.county'
-        // 'Companies.company_name',
-        // 'Addresses.address as company_address'
+        'Counties.county',
+        'Companies.company_name',
+        'Company_Address.address as company_address'
       )
       .join('Customers', 'Jobs.client_id',  'Customers.customer_id')
-      // .leftJoin('Companies', 'Customers.company_id', 'Companies.company_id')
-      .leftJoin('Addresses', 'Customers.address_id', 'Addresses.address_id')      
-      .leftJoin('Cities', 'Customers.city_id', 'Cities.city_id') 
-      .leftJoin('States', 'Customers.state_id', 'States.state_id')      
-      .leftJoin('Zip_Codes', 'Customers.zip_id', 'Zip_Codes.zip_id')      
-      .leftJoin('Counties', 'Customers.county_id', 'Counties.county_id')      
+      .leftJoin('Addresses', 'Customers.address_id', 'Addresses.address_id')
+      .leftJoin('Cities', 'Customers.city_id', 'Cities.city_id')
+      .leftJoin('States', 'Customers.state_id', 'States.state_id')    
+      .leftJoin('Zip_Codes', 'Customers.zip_id', 'Zip_Codes.zip_id')  
+      .leftJoin('Counties', 'Customers.county_id', 'Counties.county_id')  
+      .leftJoin('Companies', 'Customers.company_id', 'Companies.company_id')
+      .leftJoin('Addresses as Company_Address', 'Companies.address_id', 'Company_Address.address_id')
       .where('Jobs.job_number', job_number)
       .then( data => {
         job.client = data[0]
@@ -80,16 +80,18 @@ router.post('/api/getJobInfo', ({body: {job_number} }, res) => {
         'Cities.city',
         'States.state',
         'Zip_Codes.zip_code',
-        'Counties.county'
-        // 'Companies.company_name',
-        // 'Addresses.address as company_address'
+        'Counties.county',
+        'Companies.company_name',
+        'Company_Address.address as company_address'
       )
       .join('Customers', 'Jobs.client_contact_id', 'Customers.customer_id')
-      .leftJoin('Addresses', 'Customers.address_id', 'Addresses.address_id')      
-      .leftJoin('Cities', 'Customers.city_id', 'Cities.city_id') 
-      .leftJoin('States', 'Customers.state_id', 'States.state_id')      
-      .leftJoin('Zip_Codes', 'Customers.zip_id', 'Zip_Codes.zip_id')      
-      .leftJoin('Counties', 'Customers.county_id', 'Counties.county_id')      
+      .leftJoin('Addresses', 'Customers.address_id', 'Addresses.address_id')    
+      .leftJoin('Cities', 'Customers.city_id', 'Cities.city_id')
+      .leftJoin('States', 'Customers.state_id', 'States.state_id')
+      .leftJoin('Zip_Codes', 'Customers.zip_id', 'Zip_Codes.zip_id')
+      .leftJoin('Counties', 'Customers.county_id', 'Counties.county_id')
+      .leftJoin('Companies', 'Customers.company_id', 'Companies.company_id')
+      .leftJoin('Addresses as Company_Address', 'Companies.address_id', 'Company_Address.address_id')
       .where('Jobs.job_number', job_number)
       .then(data => {
         job.client_contact = data[0] ? data[0] : {}

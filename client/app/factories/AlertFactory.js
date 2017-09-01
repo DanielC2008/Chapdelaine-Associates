@@ -1,7 +1,8 @@
 'use strict'
 
-app.factory('ToastFactory', function($mdToast) {
+app.factory('AlertFactory', function($mdToast, $mdPanel) {
 
+  let disableFormScope 
   const factory = {}
 
   factory.toastSuccess = message => {
@@ -25,6 +26,22 @@ app.factory('ToastFactory', function($mdToast) {
         .toastClass('toastReject')
     )
   }
+
+  factory.summonDisableForm = () => {
+    $mdPanel.open({
+      fullscreen: true,
+      controller: 'DisableForm',
+      templateUrl: '/partials/disableForm.html',
+      attachTo: angular.element(document.body),
+      zIndex: 100,
+      trapFocus: true,
+      clickOutsideToClose: false,
+      multiple: true
+    })
+    .then( panelScope => disableFormScope = panelScope).catch( err => console.log('err', err))
+  }
+
+  factory.banishDisableForm = () => disableFormScope.close()
 
   return factory
 })  

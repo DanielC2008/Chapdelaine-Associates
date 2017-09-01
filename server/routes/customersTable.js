@@ -123,12 +123,11 @@ const getConnectTableIds = obj => {
         } 
         delete obj.address
       }),
-      locateOrCreate.company_name(obj.company_name, obj.company_address).then( data => {
-        if (obj.company_name || obj.company_address) {
+      locateOrCreate.company_name(obj.company_name).then( data => {
+        if (obj.company_name) {
           obj.company_id = data
         }
         delete obj.company_name
-        delete obj.company_address
       })
     ])
     .then( () => {

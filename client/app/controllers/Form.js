@@ -1,59 +1,63 @@
 'use strict'
 
-app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DBFactory, table, ids, existingObj, formType) {
+app.controller('Form', function($scope, $mdDialog, AlertFactory, FormFactory, DBFactory, table, ids, existingObj, formType) {
   let FORM = this
 
-  FORM.Display = {}
-  FORM.table = table
+  FORM.display = {}
+table
   FORM.jobIdExists = ids.job_id ? true : false
   FORM.formType = formType
+  FORM.length
 
   switch(table) {
     case 'Customers':
       FORM.title = `${formType} Customer`
-      FORM.Display.Customers = FormFactory.getCustomerForm(existingObj)
+      FORM.display = FormFactory.getCustomerForm(existingObj)
       break;
     case 'Properties':
       FORM.title = `${formType} Property`
-      FORM.Display.Properties = FormFactory.getPropertyForm(existingObj)
+      FORM.display = FormFactory.getPropertyForm(existingObj)
       break;
     case 'Employees':
       FORM.title = `${formType} Employee`
-      FORM.Display.Employees = FormFactory.getEmployeeForm(existingObj)
+      FORM.display = FormFactory.getEmployeeForm(existingObj)
       break;
     case 'Tasks':
       FORM.title = `${formType} Task`
-      FORM.Display.Tasks = FormFactory.getTaskForm() //if nothing passed can only update objs from admin page
+      FORM.display = FormFactory.getTaskForm() //if nothing passed can only update objs from admin page
       break;
     case 'Job_Types':
       FORM.title = `${formType} Job Type`
-      FORM.Display.Job_Types = FormFactory.getJobTypeForm() 
+      FORM.display = FormFactory.getJobTypeForm() 
       break;
     case 'Companies':
       FORM.title = `${formType} Company`
-      FORM.Display.Companies = FormFactory.getCompanyForm(existingObj) 
+      FORM.display = FormFactory.getCompanyForm(existingObj) 
       break;
     case 'Cancellations':
       FORM.title = `${formType} Cause For Cancellation`
-      FORM.Display.Cancellations = FormFactory.getCauseForm() 
+      FORM.display = FormFactory.getCauseForm() 
       break;
     case 'Addresses':
       FORM.title = `${formType} Address`
-      FORM.Display.Addresses = FormFactory.getAddressForm() 
+      FORM.display = FormFactory.getAddressForm() 
       break;
     case 'Roads':
       FORM.title = `${formType} Road`
-      FORM.Display.Roads = FormFactory.getRoadForm() 
+      FORM.display = FormFactory.getRoadForm() 
       break;
   }
 
   FORM.validate = () => {
-    let dbObj = FormFactory.matchDatabaseKeys(_.cloneDeep(FORM.Display[`${FORM.table}`]))
+    let dbObj = {}
+    for(let item in FORM.display) {
+      dbObj[`${FORM.display[item].column}`] = FORM.display[item].value 
+    }
     let dbPackage = prepForDB(dbObj)
     if (dbPackage) {
       DBFactory.validate(dbPackage)
       .then( ({data: {msg}}) => $mdDialog.hide({dbPackage, msg}))
-      .catch( ({data: {msg}}) => ToastFactory.toastReject(msg))
+      .catch( ({data: {msg}}) => AlertFactory.toastReject(msg))
     }
   }
 
@@ -67,7 +71,7 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     }
     if (table === 'Properties') {
       if (!dbObj.primary_address && !dbObj.primary_road) {
-        ToastFactory.toastReject("Please enter an Address or a Road.")
+        AlertFactory.toastReject("Please enter an Address or a Road.")
       } else {
         return dbPackage
       }   
@@ -75,6 +79,13 @@ app.controller('Form', function($scope, $mdDialog, ToastFactory, FormFactory, DB
     else {
       return dbPackage   
     }
+  }
+
+  FORM.search = (searchFunction, field) => {
+    searchFunction().then( ({value}) => {
+      FORM.display[field].value = value
+      $scope.$apply()
+    })
   }
 
 })

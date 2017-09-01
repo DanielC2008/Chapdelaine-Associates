@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, FormFactory ) {
+app.controller('Admin_Tasks', function($scope, TaskFactory, AlertFactory, FormFactory ) {
   const AT = this
   AT.editIndex = false
   let original = undefined
@@ -27,8 +27,8 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, FormFa
     FormFactory.updateForm('Tasks', null, {}, 'Add New').then( ({dbPackage}) => {
       TaskFactory.addNew(dbPackage).then( () => {
         $scope.setTabAndReload('AT')
-      }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+      }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   AT.saveChanges = task => {
@@ -36,13 +36,13 @@ app.controller('Admin_Tasks', function($scope, TaskFactory, ToastFactory, FormFa
     delete task.task_id
     TaskFactory.updateExisting(task, ids).then( () => {
       $scope.setTabAndReload('AT')
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }
 
   AT.disableTask = id => {
     TaskFactory.disableTask(id).then( ({data: {msg}}) => {
       $scope.setTabAndReload('AT')
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   }  
 
 })

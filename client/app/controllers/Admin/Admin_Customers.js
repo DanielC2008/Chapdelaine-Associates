@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('Admin_Customers', function($scope, CustomerFactory, ToastFactory, FormFactory) {
+app.controller('Admin_Customers', function($scope, CustomerFactory, AlertFactory, FormFactory) {
   const AC = this
 
   AC.addOrEdit = () => { 
@@ -13,16 +13,16 @@ app.controller('Admin_Customers', function($scope, CustomerFactory, ToastFactory
           FormFactory.updateForm('Customers', data, {customer_id: customer_id}, 'Update').then( ({dbPackage}) => {
             //send to edit
             dbPackage.customer_id = dbPackage.ids.customer_id
-            CustomerFactory.updateExisting(dbPackage).then( () => ToastFactory.toastSuccess()).catch( err => console.log(err))
-          }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+            CustomerFactory.updateExisting(dbPackage).then( () => AlertFactory.toastSuccess()).catch( err => console.log(err))
+          }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
       } else {
          FormFactory.updateForm('Customers' , null, {customer_id: null}, 'Add New').then( ({dbPackage}) => {
           //send to add
-          CustomerFactory.addNew(dbPackage).then( () => ToastFactory.toastSuccess()).catch( err => console.log(err))
-        }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+          CustomerFactory.addNew(dbPackage).then( () => AlertFactory.toastSuccess()).catch( err => console.log(err))
+        }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
       }
-    }).catch( err => err.msg ? ToastFactory.toastReject(err.msg) : console.log('err', err))
+    }).catch( err => err.msg ? AlertFactory.toastReject(err.msg) : console.log('err', err))
   } 
 
 })

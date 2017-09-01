@@ -1,15 +1,26 @@
 <div class="dialog row">
-  <h1 class="center align">{{FORM.title}}</h1>
-  <div  ng-repeat='(key, value) in FORM.Display[FORM.table] as display '>
-    <div ng-if="key != 'Notes'" class="col s3">
-      <span>{{key}}</span> 
-      <input type="text" ng-model='display[key]'>
-    </div>  
-    <textarea class='col s8 offset-s2 addToJobNotes' ng-if="key == 'Notes'" ng-model='display[key]' placeholder="Special Notes..."></textarea>
+  <form>
+    <h1 class="center align">{{FORM.title}}</h1>
+    <div  ng-repeat='(field, details) in FORM.display'>
+      <div ng-if="!details.searchable && field !== 'Notes'" class="col s3">
+        <label ng-if="details.type !== 'checkbox'" for="{{field}}">{{field}}</label>
+        <input type="{{details.type}}" id="{{field}}" ng-model='details.value'  ng-required="details.required">
+        <!-- materialize requires label under input for checkboxes -->
+        <label ng-if="details.type === 'checkbox'" for="{{field}}">{{field}}</label> 
+      </div>
+      <div class="col s2" ng-if="details.searchable">
+        <label for="{{field}}">{{field}}</label>
+        <input type="{{details.type}}" ng-focus="FORM.search(details.searchFunction, field)" ng-model='details.value' ng-required="details.required">
+      </div>
+      <div class="col s1" ng-if="details.searchable">
+        <button ng-click="details.value = null " >X</button>
+      </div>
+      <textarea class='col s8 offset-s2 addToJobNotes' ng-if="field === 'Notes'" ng-model='details.value' placeholder="Special Notes..."></textarea>
+    </div>
   </div>
-</div>
-<div class="row">
-  <button class="button btn" ng-click="FORM.reject()">Exit Without Saving</button>
-  <button class="button btn" ng-click="FORM.validate()" >{{FORM.formType}}</button>
+  <div class="row">
+    <button class="button btn" ng-click="FORM.reject()">Exit Without Saving</button>
+    <button class="button btn" ng-click="FORM.validate()" >{{FORM.formType}}</button>
+  </form>
 </div>
 

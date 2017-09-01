@@ -1,6 +1,6 @@
 'use strict'
 
-app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory, TaskFactory, MatchService, FindJobFactory, FormFactory, ToastFactory, CustomerFactory, PropertyFactory) {
+app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory, TaskFactory, MatchService, FindJobFactory, FormFactory, AlertFactory, CustomerFactory, PropertyFactory) {
   
   const FJScope = this
 
@@ -40,20 +40,21 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
 
 ////////////////////////////////COLUMN DATA////////////////////////////////
   FJScope.columnSelected = (column, index) => {
+    let allowNew = false   
     if (column === 'Name') {
-      CustomerFactory.searchForCustomers().then( data => {
+      CustomerFactory.searchForCustomers(allowNew).then( data => {
         FJScope.searchParams[index].match = data.value
         $scope.$apply()
       })
     }
     else if (column === 'Address') {
-      PropertyFactory.searchForAddresses().then( data => {
+      PropertyFactory.searchForAddresses(allowNew).then( data => {
         FJScope.searchParams[index].match = data.value
         $scope.$apply()
       })
     }
     else if (column === 'Road') {
-      PropertyFactory.searchForRoads().then( data => {
+      PropertyFactory.searchForRoads(allowNew).then( data => {
         FJScope.searchParams[index].match = data.value
         $scope.$apply()
       })
@@ -95,7 +96,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
       numberOfParams++
       addParam()
     } else {
-      ToastFactory.toastReject('Please fill out all parameters!')
+      AlertFactory.toastReject('Please fill out all parameters!')
     }
   }
 
@@ -173,6 +174,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
   }
   //cycles through each param, creates the objToFind and decides which route it should go to in the db
   const sendToDB = () => {
+    AlertFactory.summonDisableForm()
     Promise.all( 
       FJScope.searchParams.map( obj => {
         createObjToFind(obj)
@@ -225,18 +227,22 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
     .then( data => {
       let { length } = data.filter( arr => arr.length > 0 )
       if (length === 0){
-        ToastFactory.toastReject('Oooops! No matches found')
+        AlertFactory.banishDisableForm()
+        AlertFactory.toastReject('Oooops! No matches found')
         FJScope.searchParams = []
         addParam()
       } else {
-        MatchService.setMatches(data).then( () => $rootScope.$apply( () => $location.path('/jobs/')))
+        MatchService.setMatches(data).then( () => {
+          AlertFactory.banishDisableForm()
+          $rootScope.$apply( () => $location.path('/jobs/'))
+        })
       }  
     })
     .catch( err => console.log('err', err))
   }
 
   //check if all params complete else toast reject to user
-  FJScope.submit = () => paramsComplete().length === 0 ? sendToDB() : ToastFactory.toastReject('Please fill out all parameters!')
+  FJScope.submit = () => paramsComplete().length === 0 ? sendToDB() : AlertFactory.toastReject('Please fill out all parameters!')
 
   //initiate first parameter
   addParam()

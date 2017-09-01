@@ -1,16 +1,18 @@
 'use strict'
 
-app.factory('CompanyFactory', function($http, SearchFactory, FormFactory) {
+app.factory('CompanyFactory', function($http, SearchFactory, AlertFactory) {
 
   const factory = {}
 
   const getCompaniesForSearch = () => $http.get('/api/getCompaniesForSearch')
 
-  factory.searchForCompanies = () => {
+  factory.searchForCompanies = (allowNew = true) => {
+     AlertFactory.summonDisableForm()
     return new Promise ((resolve, reject) => {
       getCompaniesForSearch().then( ({data}) => {
+        AlertFactory.banishDisableForm()
         let clientNames = data
-        SearchFactory.addBySearch(clientNames).then( client_id => {
+        SearchFactory.addBySearch(clientNames, allowNew).then( client_id => {
           client_id ? resolve(client_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))

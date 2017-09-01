@@ -3,7 +3,8 @@
   <!-- ////////////////////////////JOB INFO//////////////////////////// -->
     <div class="row">
 
-      <h5 class="col s12">Job info</h5>
+      <input type="checkbox" id="jobInfo" ng-checked="jobStatusSet && jobTypeSet" disabled />
+      <label for="jobInfo">Job Info</label>
       <div class="col s12">
         Job Status: {{job.job_info.on_hold ? 'Hold' : job.job_info.job_status}}
       </div>  
@@ -16,15 +17,15 @@
             <span>{{jobType}} <span ng-hide="$index + 1 === job.job_types.length">,</span> </span>
           </span>
         </div> 
-        <div class="col s4">
-          <button ng-click="removeJobType()">Remove Job Type</button>
-        </div>
       </div>
       <div class="row">
         <div class="col s6 input-field" ng-if="types" ng-init="material()">
           <select  ng-model="jobType" ng-change="addJobType(jobType)" ng-options="type as type disable when type.notAnOption for type in types"> 
             <option value="" label="-- Select option --" disabled selected="selected"> Choose a job type</option>
           </select>
+        </div>
+        <div class="col s6">
+          <button class="btn button" ng-click="removeJobType()">Remove Job Type</button>
         </div>
       </div>
    
@@ -38,22 +39,32 @@
 
       <div class="col s12">
         <label for="startDate">Start Date:</label>
-        <input ng-disabled='!job.job_info.start_date' type="date" name="startDate" ng-change="changeDate(startDate, 'start_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="startDate">
+        <input ng-disabled='!requireStartDate' 
+               type="date" name="startDate" 
+               ng-blur="changeDate(startDate, 'start_date')" 
+               ng-model="startDate">
       </div>
       <div class="col s12">
         <label for="completeDate">Complete Date:</label>
-        <input  ng-disabled='!job.job_info.complete_date' type="date" name="completeDate" ng-change="changeDate(completeDate, 'complete_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="completeDate">
+        <input  ng-disabled='!requireCompleteDate' 
+                type="date" name="completeDate" 
+                ng-blur="changeDate(completeDate, 'complete_date')" 
+                ng-model="completeDate">
       </div>
       <div class="col s12">
         <label for="targetDate">Target Date:</label>
-        <input type="date" name="targetDate" ng-change="changeDate(targetDate, 'target_date')" ng-model-options="{timezone: timeZoneOffset}" ng-model="targetDate">
+        <input type="date" name="targetDate" 
+               ng-blur="changeDate(targetDate, 'target_date')" 
+               ng-model="targetDate">
       </div>
 
     </div>
   </div>
 
   <div class="col s6">
-  <h5 class="col s12"> Property and Client Info</h5>
+    
+    <input type="checkbox" id="propAndClientInfo" ng-checked="propertySet && clientSet && clientTypeSet" disabled />
+    <label for="propAndClientInfo">Property and Client Info</label>
     <!-- ////////////////////////////PROPERTY//////////////////////////// -->
     <div class="row">
       <div class="col s6">
@@ -147,9 +158,9 @@
   </div>
 
   <div class="row">
-    <div class="col s4 offset-s4">
-      <button class="col s6" ng-click="cancel()">Cancel</button>
-      <button class="col s6" ng-click="checkReqs()">Submit</button>
+    <div class="col s8 offset-s4">
+      <button class="btn button col s3" ng-click="cancel()">Cancel</button>
+      <button class="btn button col s3" ng-click="checkReqs()">Submit</button>
     </div>
   </div>
 
