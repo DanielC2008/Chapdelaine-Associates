@@ -31,6 +31,10 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         column: 'company_name',
         searchable: true,
         searchFunction: CompanyFactory.searchForCompanies,
+        addNewObj: {
+          table: 'Companies',
+          create: CompanyFactory.addNew
+        },
         value: customer ? customer.company_name : '',
         required: false
       },

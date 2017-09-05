@@ -56,7 +56,7 @@ table
     let dbPackage = prepForDB(dbObj)
     if (dbPackage) {
       DBFactory.validate(dbPackage)
-      .then( ({data: {msg}}) => $mdDialog.hide({dbPackage, msg}))
+      .then( ({data, status}) => $mdDialog.hide({dbPackage, msg: data.msg, status}))
       .catch( ({data: {msg}}) => AlertFactory.toastReject(msg))
     }
   }
@@ -81,11 +81,23 @@ table
     }
   }
 
-  FORM.search = (searchFunction, field) => {
-    searchFunction().then( ({value}) => {
-      FORM.display[field].value = value
-      $scope.$apply()
-    })
+  FORM.search = (searchFunction, field, addNewObj, column) => {
+    searchFunction().then( (data) => {
+      if (data) {
+        FORM.display[field].value = data.value
+        $scope.$apply()
+      } else{
+        //update form with table Name add new
+        FormFactory.updateForm(addNewObj.table, null, {}, 'Add New')
+        .then( data => {
+          let dbPackage = data.dbPackage
+          addNewObj.create(dbPackage).then( () => {
+            //update display with value
+            FORM.display[field].value = dbPackage.dbObj[column]
+          }).catch( err => AlertFactory.toastReject(err.data.msg))
+        }).catch(err => console.log('err', err))
+      }
+    }).catch( err => console.log('err', err))
   }
 
 })

@@ -15,7 +15,7 @@ router.post('/api/validateCompany', ({body: {dbObj}}, res) => {
     let msg = errors.reduce( (string, err) => string.concat(`${err.message}\n`), '')
     res.status(400).send({msg: `${msg}`})
   } else {
-    res.send({msg: 'Valid Company!'})
+    res.status(200).send({msg: 'Valid Company!'})
   }
 })
 

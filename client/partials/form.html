@@ -10,7 +10,10 @@
       </div>
       <div class="col s2" ng-if="details.searchable">
         <label for="{{field}}">{{field}}</label>
-        <input type="{{details.type}}" ng-focus="FORM.search(details.searchFunction, field)" ng-model='details.value' ng-required="details.required">
+        <input type="{{details.type}}" 
+               ng-focus="FORM.search(details.searchFunction, field, details.addNewObj, details.column)" 
+               ng-model='details.value'
+               ng-required="details.required">
       </div>
       <div class="col s1" ng-if="details.searchable">
         <button ng-click="details.value = null " >X</button>
