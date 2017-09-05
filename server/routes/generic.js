@@ -33,6 +33,13 @@ router.post('/api/updateTable', ({body: {table, idObj, columnsToUpdate}}, res) =
     .catch( err => console.log('err', err))
 })
 
+//Insert with no connections or returns
+router.post('/api/insertSimple', ({body: {table, dbObj}}, res) => {
+  knex(`${table}`)
+  .insert(dbObj)
+  .then( data => res.send()).catch( err => console.log('err', err))
+})
+
 
 //Connect Table
 router.post('/api/insertIntoConnectingTable', ({body: {table, objToAdd}}, res) => {

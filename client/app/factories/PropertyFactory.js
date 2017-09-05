@@ -1,6 +1,6 @@
 'use strict'
 
-app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
+app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory, DBFactory) {
 
   const factory = {}
 
@@ -26,7 +26,14 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
         let addresses = data
         let formForNew = false
         SearchFactory.addBySearch(addresses, allowNew, formForNew).then( selected => {
-          selected ? resolve(selected) : resolve(null)
+          if (selected.id) {
+            resolve(selected)
+          } else {
+            // save new then update form
+            let dbObj = { address: selected.value}
+            DBFactory.insertSimple({table: 'Addresses', dbObj}).then( () => resolve(selected))
+            .catch(err => console.log('err', err))
+          }
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
     })
@@ -48,8 +55,15 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
         AlertFactory.banishDisableForm()        
         let roads = data
         let formForNew = false
-        SearchFactory.addBySearch(roads, allowNew, formForNew).then( road_id => {
-          road_id ? resolve(road_id) : resolve(null)
+        SearchFactory.addBySearch(roads, allowNew, formForNew).then( selected => {
+          if (selected.id) {
+            resolve(selected)
+          } else {
+            // save new then update form
+            let dbObj = { road: selected.value}
+            DBFactory.insertSimple({table: 'Roads', dbObj}).then( () => resolve(selected))
+            .catch(err => console.log('err', err))
+          }
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
     })
@@ -64,8 +78,15 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
         AlertFactory.banishDisableForm()        
         let cities = data
         let formForNew = false
-        SearchFactory.addBySearch(cities, allowNew, formForNew).then( city_id => {
-          city_id ? resolve(city_id) : resolve(null)
+        SearchFactory.addBySearch(cities, allowNew, formForNew).then( selected => {
+          if (selected.id) {
+            resolve(selected)
+          } else {
+            // save new then update form
+            let dbObj = { city: selected.value}
+            DBFactory.insertSimple({table: 'Cities', dbObj}).then( () => resolve(selected))
+            .catch(err => console.log('err', err))
+          }
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
     })
@@ -81,8 +102,15 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
         AlertFactory.banishDisableForm()        
         let states = data
         let formForNew = false
-        SearchFactory.addBySearch(states, allowNew, formForNew).then( state_id => {
-          state_id ? resolve(state_id) : resolve(null)
+        SearchFactory.addBySearch(states, allowNew, formForNew).then( selected => {
+          if (selected.id) {
+            resolve(selected)
+          } else {
+            // save new then update form
+            let dbObj = { state: selected.value}
+            DBFactory.insertSimple({table: 'States', dbObj}).then( () => resolve(selected))
+            .catch(err => console.log('err', err))
+          }
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
     })
@@ -98,9 +126,15 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
         AlertFactory.banishDisableForm()        
         let zipCodes = data
         let formForNew = false
-        SearchFactory.addBySearch(zipCodes, allowNew, formForNew).then( zip_code_id => {
-          zip_code_id ? resolve(zip_code_id) : resolve(null)
-        })
+        SearchFactory.addBySearch(zipCodes, allowNew, formForNew).then( selected => {
+          if (selected.id) {
+            resolve(selected)
+          } else {
+            // save new then update form
+            let dbObj = { zip_code: selected.value}
+            DBFactory.insertSimple({table: 'Zip_Codes', dbObj}).then( () => resolve(selected))
+            .catch(err => console.log('err', err))
+          }        })
       }).catch( err => reject({msg:'Nothing Saved'}))
     })
   }
@@ -116,9 +150,15 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
         AlertFactory.banishDisableForm()        
         let counties = data
         let formForNew = false
-        SearchFactory.addBySearch(counties, allowNew, formForNew).then( county_id => {
-          county_id ? resolve(county_id) : resolve(null)
-        })
+        SearchFactory.addBySearch(counties, allowNew, formForNew).then( selected => {
+          if (selected.id) {
+            resolve(selected)
+          } else {
+            // save new then update form
+            let dbObj = { county: selected.value}
+            DBFactory.insertSimple({table: 'Counties', dbObj}).then( () => resolve(selected))
+            .catch(err => console.log('err', err))
+          }        })
       }).catch( err => reject({msg:'Nothing Saved'}))
     })
   }
