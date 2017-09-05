@@ -40,6 +40,8 @@ app.factory('DBFactory', function($http) {
 
   factory.updateTable = updateObj => $http.post('/api/updateTable', updateObj)
 
+  factory.insertSimple = dbPackage => $http.post('/api/insertSimple', dbPackage)
+
   factory.updateConnectingTable = updateObj => $http.post('/api/updateConnectingTable', updateObj)
 
   factory.insertIntoConnectingTable = lineItemObj => $http.post('/api/insertIntoConnectingTable', lineItemObj)

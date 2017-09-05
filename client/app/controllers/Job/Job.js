@@ -31,6 +31,7 @@ app.controller('Job', function($scope, $rootScope, $location, JobFactory, $mdDia
       templateUrl: '/partials/jobForm.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
+      escapeToClose: false,
       multiple: true
     })
     .then( jobNumber => {

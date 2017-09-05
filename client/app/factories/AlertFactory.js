@@ -36,6 +36,7 @@ app.factory('AlertFactory', function($mdToast, $mdPanel) {
       zIndex: 100,
       trapFocus: true,
       clickOutsideToClose: false,
+      escapeToClose: false,
       multiple: true
     })
     .then( panelScope => disableFormScope = panelScope).catch( err => console.log('err', err))

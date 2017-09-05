@@ -11,10 +11,13 @@
   <md-item-template>
     <span md-highlight-text="SF.searchText" >{{item.value}}</span>
   </md-item-template>
-  <md-not-found >
-    <div ng-click="SF.allowNew ? SF.new() : SF.searchText = '' ">
-      No matches found for "{{SF.searchText}}". <span>{{SF.allowNew ? 'Would you like to add one?' : 'Clear Search Text?'}}</span>
-    </div>
-  </md-not-found>
+    <md-not-found>
+      <div ng-if="SF.allowNew === false" ng-click="SF.searchText = '' ">
+        No matches found for "{{SF.searchText}}". <span>{{'Click to clear search text.'}}</span>
+      </div>
+      <div ng-if="SF.allowNew === true" ng-click="SF.formForNew ? SF.new() : SF.userInput(SF.searchText)">
+        No matches found for "{{SF.searchText}}". <span>{{SF.formForNew ? 'Would you like to add one?' : ' Use mine!'}}</span>
+      </div>
+    </md-not-found>
 </md-autocomplete>
 <button class=" col s3 button btn" ng-click='SF.cancel()'>Cancel</button>
