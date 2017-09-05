@@ -176,6 +176,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       templateUrl: '/partials/chooseOne.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
+      escapeToClose: false,
       multiple: true
     })
     .then( data => $scope.job.job_types.splice($scope.job.job_types.indexOf(data), 1))
@@ -228,6 +229,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       templateUrl: '/partials/chooseOne.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
+      escapeToClose: false,
       multiple: true
     })
     .then( data => $scope.job.addresses.splice($scope.job.addresses.indexOf(data), 1))
@@ -263,6 +265,7 @@ app.controller('JobForm', function($rootScope, $scope, $mdDialog, job, AlertFact
       templateUrl: '/partials/chooseOne.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
+      escapeToClose: false,
       multiple: true
     })
     .then( data => $scope.job.roads.splice($scope.job.roads.indexOf(data), 1))

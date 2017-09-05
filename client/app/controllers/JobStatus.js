@@ -29,6 +29,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
       templateUrl: './partials/jobCanceled.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
+      escapeToClose: false,
       multiple: true
     }).then( cause => {
       if (cause) { 
@@ -68,6 +69,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
         templateUrl: './partials/recommendNumber.html',
         parent: angular.element(document.body),
         clickOutsideToClose: false,
+        escapeToClose: false,
         multiple: true
       }).then( job_number => {
         //user selected a job number
@@ -95,6 +97,7 @@ app.controller('JobStatus', function($scope, JobFactory, DBFactory, AlertFactory
         templateUrl: './partials/recommendNumber.html',
         parent: angular.element(document.body),
         clickOutsideToClose: false,
+        escapeToClose: false,
         multiple: true
       }).then( job_number => {
         //user selected a job number

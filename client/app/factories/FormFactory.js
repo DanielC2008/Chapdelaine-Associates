@@ -3,6 +3,37 @@
 app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) {
   let factory = {}
 
+  factory.updateForm = (table, existingObj, ids, formType) => {
+    return new Promise ((resolve, reject) => { 
+      let locals = {
+        ids: ids,
+        table: table,
+        existingObj: existingObj,
+        formType: formType
+      }
+      $mdDialog.show({
+        locals,
+        fullscreen: true,
+        controller: 'Form as FORM',
+        templateUrl: '/partials/form.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose: false,
+        escapeToClose: false,
+        multiple: true
+      })
+      .then( validatedObj => resolve(validatedObj))
+      .catch( err => reject(err))
+    })
+  }
+
+  factory.matchDatabaseKeys = obj => {
+    for (let key in obj){
+      obj[key.toLowerCase().replace(/ /g, '_')] = obj[key]
+      delete obj[key]
+    }
+    return obj
+  }
+
   factory.getCustomerForm = customer => {
     return {
       'First Name': {
@@ -474,37 +505,6 @@ app.factory('FormFactory', function($mdDialog, CompanyFactory, PropertyFactory) 
         required: true
       }
     }
-  }
-
-  factory.updateForm = (table, existingObj, ids, formType) => {
-    return new Promise ((resolve, reject) => { 
-      let locals = {
-        ids: ids,
-        table: table,
-        existingObj: existingObj,
-        formType: formType
-      }
-      $mdDialog.show({
-        locals,
-        fullscreen: true,
-        controller: 'Form as FORM',
-        templateUrl: '/partials/form.html',
-        parent: angular.element(document.body),
-        clickOutsideToClose: false,
-        escapeToClose: false,
-        multiple: true
-      })
-      .then( validatedObj => resolve(validatedObj))
-      .catch( err => reject(err))
-    })
-  }
-
-  factory.matchDatabaseKeys = obj => {
-    for (let key in obj){
-      obj[key.toLowerCase().replace(/ /g, '_')] = obj[key]
-      delete obj[key]
-    }
-    return obj
   }
 
   return factory

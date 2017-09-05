@@ -19,6 +19,7 @@ app.controller('Nav', function($scope, JobFactory, $mdDialog) {
       templateUrl: '/partials/jobForm.html',
       parent: angular.element(document.body),
       clickOutsideToClose: false,
+      escapeToClose: false,
       multiple: true
     })
     .then( jobNumber => {
