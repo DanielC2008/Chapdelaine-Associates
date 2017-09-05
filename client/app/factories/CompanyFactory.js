@@ -12,7 +12,8 @@ app.factory('CompanyFactory', function($http, SearchFactory, AlertFactory) {
       getCompaniesForSearch().then( ({data}) => {
         AlertFactory.banishDisableForm()
         let clientNames = data
-        SearchFactory.addBySearch(clientNames, allowNew).then( client_id => {
+        let formForNew = true
+        SearchFactory.addBySearch(clientNames, allowNew, formForNew).then( client_id => {
           client_id ? resolve(client_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))

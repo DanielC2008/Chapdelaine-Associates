@@ -24,7 +24,8 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
       getAddressesForSearch().then( ({data}) => {
         AlertFactory.banishDisableForm()
         let addresses = data
-        SearchFactory.addBySearch(addresses, allowNew).then( selected => {
+        let formForNew = false
+        SearchFactory.addBySearch(addresses, allowNew, formForNew).then( selected => {
           selected ? resolve(selected) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
@@ -46,7 +47,8 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
       getRoadsForSearch().then( ({data}) => {
         AlertFactory.banishDisableForm()        
         let roads = data
-        SearchFactory.addBySearch(roads, allowNew).then( road_id => {
+        let formForNew = false
+        SearchFactory.addBySearch(roads, allowNew, formForNew).then( road_id => {
           road_id ? resolve(road_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
@@ -61,7 +63,8 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
       getCitiesForSearch().then( ({data}) => {
         AlertFactory.banishDisableForm()        
         let cities = data
-        SearchFactory.addBySearch(cities, allowNew).then( city_id => {
+        let formForNew = false
+        SearchFactory.addBySearch(cities, allowNew, formForNew).then( city_id => {
           city_id ? resolve(city_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
@@ -77,7 +80,8 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
       getStatesForSearch().then( ({data}) => {
         AlertFactory.banishDisableForm()        
         let states = data
-        SearchFactory.addBySearch(states, allowNew).then( state_id => {
+        let formForNew = false
+        SearchFactory.addBySearch(states, allowNew, formForNew).then( state_id => {
           state_id ? resolve(state_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
@@ -93,7 +97,8 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
       getZipCodesForSearch().then( ({data}) => {
         AlertFactory.banishDisableForm()        
         let zipCodes = data
-        SearchFactory.addBySearch(zipCodes, allowNew).then( zip_code_id => {
+        let formForNew = false
+        SearchFactory.addBySearch(zipCodes, allowNew, formForNew).then( zip_code_id => {
           zip_code_id ? resolve(zip_code_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
@@ -110,7 +115,8 @@ app.factory('PropertyFactory', function($http, SearchFactory, AlertFactory) {
       getCountiesForSearch().then( ({data}) => {
         AlertFactory.banishDisableForm()        
         let counties = data
-        SearchFactory.addBySearch(counties, allowNew).then( county_id => {
+        let formForNew = false
+        SearchFactory.addBySearch(counties, allowNew, formForNew).then( county_id => {
           county_id ? resolve(county_id) : resolve(null)
         })
       }).catch( err => reject({msg:'Nothing Saved'}))
