@@ -1,11 +1,39 @@
 {
   "name": "Chapdelaine-Associates",
-  "version": "1.0.0",
-  "description": "",
-  "main": "electron.js",
+  "version": "1.1.0",
+  "description": "Chapdelaine & Associates Job Retriever",
+  "main": "main.js",
+  "author": {
+    "name": "Daniel Chapdelaine",
+    "email": "daniel.chapdelaine@yahoo.com"
+  },
+  "build": {
+    "appId": "com.Chapdelaine&Associates.CALS",
+    "nsis": {
+      "createDesktopShortcut": true,
+      "shortcutName": "CALS"
+    },
+    "directories": {
+      "output": "C:\\Program Files\\CALS"
+    },
+    "publish": {
+      "provider": "github"
+    }
+  },
+  "scripts": {
+    "start": "electron .",
+    "release": "build",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
   "dependencies": {
+    "body-parser": "^1.18.0",
     "connect-busboy": "0.0.2",
     "connect-redis": "^3.2.0",
+    "electron-is-dev": "^0.3.0",
+    "electron-log": "^2.2.9",
+    "electron-updater": "^2.8.9",
     "express": "^4.14.0",
     "express-session": "^1.15.1",
     "knex": "^0.12.6",
@@ -15,18 +43,14 @@
   },
   "devDependencies": {
     "bower": "^1.8.0",
-    "electron": "^1.4.6"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "electron": "^1.4.6",
+    "electron-builder": "^19.27.7"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DanielC2008/Chapdelaine-Associates.git"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DanielC2008/Chapdelaine-Associates/issues"
