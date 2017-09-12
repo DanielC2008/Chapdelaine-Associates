@@ -31,7 +31,7 @@ const createWindow = () => {
     mainWindow = new BrowserWindow({
       fullscreen: true
     })
-    mainWindow.loadURL(`http://localhost:3000`)
+    mainWindow.loadURL(`http://localhost:3001`)
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
       mainWindow = null
