@@ -6,10 +6,7 @@ const busboy = require('connect-busboy')
 const routes = require('./routes/') // same as ./routes/index.js
 const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
-const PORT = process.env.PORT || 3001
-
-const config = require('../database/knexfile.js').development
-const knex = require('knex')(config)
+const PORT = process.env.PORT || 3002
 
 const app = express()
 
@@ -27,4 +24,13 @@ app.use(bodyParser.json())
 
 //routes
 app.use(routes)
-app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
+
+//server
+const server = require('http').createServer(app)
+server.listen(PORT, () => console.log(`port listening on: ${PORT}`))
+
+const closeServer = () => {
+  server.close();
+}
+
+module.exports = { PORT, closeServer }

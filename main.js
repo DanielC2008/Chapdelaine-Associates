@@ -6,6 +6,8 @@ const path = require('path')
 const url = require('url')
 
 const server = require("./server/server.js")
+const PORT = server.PORT
+const closeServer = server.closeServer
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -31,9 +33,10 @@ const createWindow = () => {
     mainWindow = new BrowserWindow({
       fullscreen: true
     })
-    mainWindow.loadURL(`http://localhost:3001`)
+    mainWindow.loadURL(`http://localhost:${PORT}`)
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
+      closeServer()
       mainWindow = null
     })
   }).catch(err => console.log('err', err))
