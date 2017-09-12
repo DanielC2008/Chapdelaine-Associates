@@ -6,7 +6,7 @@ const busboy = require('connect-busboy')
 const routes = require('./routes/') // same as ./routes/index.js
 const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 const config = require('../database/knexfile.js').development
 const knex = require('knex')(config)
