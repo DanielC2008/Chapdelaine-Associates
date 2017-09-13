@@ -34,6 +34,7 @@ const createWindow = () => {
       fullscreen: true
     })
     mainWindow.loadURL(`http://localhost:${PORT}`)
+    mainWindow.webContents.openDevTools()
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
       closeServer()
