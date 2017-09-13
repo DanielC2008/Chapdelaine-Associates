@@ -14,7 +14,7 @@ const closeServer = server.closeServer
 let mainWindow
 let updateWindow
 
-const createWindow = () => {
+const createUpdateWindow = () => {
   updateWindow = new BrowserWindow({
     width: 500,
     height: 250,
@@ -27,24 +27,21 @@ const createWindow = () => {
   }))
 
   log.info('App starting...')
-  let check = autoUpdater.checkForUpdatesAndNotify()
-  console.log('check', check)
-  autoUpdater.checkForUpdates().then( data => {
-    console.log('data', data)
+  autoUpdater.checkForUpdates()
+}
 
-    updateWindow.hide()
-    // Create the browser window and load the index.html of the app.
-    mainWindow = new BrowserWindow({
-      fullscreen: true
-    })
-    mainWindow.loadURL(`http://localhost:${PORT}`)
-    mainWindow.webContents.openDevTools()
-    // Emitted when the window is closed.
-    mainWindow.on('closed', function () {
-      closeServer()
-      mainWindow = null
-    })
-  }).catch(err => console.log('err', err))
+const createAppWindow = () => {
+  updateWindow.hide()
+  // Create the browser window and load the index.html of the app.
+  mainWindow = new BrowserWindow({
+    fullscreen: true
+  })
+  mainWindow.loadURL(`http://localhost:${PORT}`)
+  // Emitted when the window is closed.
+  mainWindow.on('closed', function () {
+    closeServer()
+    mainWindow = null
+  })
 }
 
 const sendStatusToWindow = text => {
@@ -63,7 +60,7 @@ autoUpdater.on('update-available', (info) => {
   sendStatusToWindow('Update available.')
 })
 autoUpdater.on('update-not-available', (info) => {
-  sendStatusToWindow('Update not available.')
+  createAppWindow()
 })
 autoUpdater.on('error', (err) => {
   sendStatusToWindow('Error in auto-updater.')
@@ -80,7 +77,7 @@ autoUpdater.on('update-downloaded', (info) => {
 })
 
 app.on('ready', function()  {
-  createWindow()
+  createUpdateWindow()
 })
 
 app.on('window-all-closed', () => {
