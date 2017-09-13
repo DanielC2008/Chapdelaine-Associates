@@ -27,7 +27,11 @@ const createWindow = () => {
   }))
 
   log.info('App starting...')
-  autoUpdater.checkForUpdates().then( () => {
+  let check = autoUpdater.checkForUpdatesAndNotify()
+  console.log('check', check)
+  autoUpdater.checkForUpdates().then( data => {
+    console.log('data', data)
+
     updateWindow.hide()
     // Create the browser window and load the index.html of the app.
     mainWindow = new BrowserWindow({
