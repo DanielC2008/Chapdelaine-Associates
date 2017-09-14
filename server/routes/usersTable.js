@@ -62,7 +62,6 @@ router.post('/api/login', ({body: {user_name, password}, session}, res) => {
 })
 
 router.get('/api/getUserName', ({session}, res) => {
-  console.log('session', session)
   res.send({user_name: session.user})
 })
 
