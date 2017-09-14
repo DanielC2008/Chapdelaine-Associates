@@ -19,7 +19,9 @@ app.use(session({
   store: new RedisStore({
     url: process.env.REDIS_URL || "redis://localhost:6379"
   }),
-  secret: 'persistance'
+  secret: 'persistance',
+  resave: true,
+  saveUninitialized: true
 }))
 console.log('app', app)
 app.use(busboy())
