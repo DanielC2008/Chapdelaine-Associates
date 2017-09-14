@@ -9,16 +9,26 @@ const RedisStore = require('connect-redis')(session)
 const path = require('path')
 const PORT = process.env.PORT || 3002
 const publicPath = path.resolve(__dirname, '../client');
-
 const app = express()
+
+//server
+const server = require('http').createServer(app)
+server.listen(PORT, () => console.log(`port listening on: ${PORT}`))
+
+const closeServer = () => {
+  server.close();
+}
 
 //middleware
 app.use(session({
   store: new RedisStore({
     url: process.env.REDIS_URL || "redis://localhost:6379"
   }),
-  secret: 'persistance'
-}))
+  secret: 'persistance',
+  resave: true,
+  saveUninitialized: true
+  })
+)
 app.use(busboy())
 // point for static assets
 app.use(express.static(publicPath));
@@ -30,12 +40,5 @@ app.use(bodyParser.json())
 //routes
 app.use(routes)
 
-//server
-const server = require('http').createServer(app)
-server.listen(PORT, () => console.log(`port listening on: ${PORT}`))
-
-const closeServer = () => {
-  server.close();
-}
 
 module.exports = { PORT, closeServer }

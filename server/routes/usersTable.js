@@ -61,7 +61,9 @@ router.post('/api/login', ({body: {user_name, password}, session}, res) => {
     })
 })
 
-router.get('/api/getUserName', ({session}, res) => res.send({user_name: session.user}))
+router.get('/api/getUserName', ({session}, res) => {
+  res.send({user_name: session.user})
+})
 
 router.get('/api/removeUser', ({session}, res) => {
   session.destroy()
