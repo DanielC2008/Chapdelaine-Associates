@@ -5,7 +5,9 @@ const bodyParser = require('body-parser')
 const busboy = require('connect-busboy')
 const routes = require('./routes/') // same as ./routes/index.js
 const session = require('express-session')
+console.log('session', session)
 const RedisStore = require('connect-redis')(session)
+console.log('RedisStore', RedisStore)
 const path = require('path')
 const PORT = process.env.PORT || 3002
 const publicPath = path.resolve(__dirname, '../client');
@@ -19,6 +21,7 @@ app.use(session({
   }),
   secret: 'persistance'
 }))
+console.log('app', app)
 app.use(busboy())
 // point for static assets
 app.use(express.static(publicPath));
