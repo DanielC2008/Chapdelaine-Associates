@@ -64,6 +64,8 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
   FJScope.getColumnValues = (selected, index) => {
     //resets select
     $scope.material()
+    FJScope.searchParams[`${index - 1}`].column = null
+    FJScope.searchParams[`${index - 1}`].match = null
     //sets selects new values
     let values = Object.keys(tables[`${selected}`])
     FJScope[`columns${index}`] = values
