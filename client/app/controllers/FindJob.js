@@ -39,6 +39,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
   .catch(err => console.log('err', err))
 
 ////////////////////////////////COLUMN DATA////////////////////////////////
+
   FJScope.columnSelected = (column, index) => {
     let allowNew = false   
     if (column === 'Name') {
@@ -59,11 +60,37 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
         $scope.$apply()
       })
     }
+    else if (column === 'City') {
+      PropertyFactory.searchForCities(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'State') {
+      PropertyFactory.searchForStates(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'Zip Code') {
+      PropertyFactory.searchForZipCodes(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'County') {
+      PropertyFactory.searchForCounties(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
   }
 
   FJScope.getColumnValues = (selected, index) => {
     //resets select
     $scope.material()
+    FJScope.searchParams[`${index - 1}`].column = null
+    FJScope.searchParams[`${index - 1}`].match = null
     //sets selects new values
     let values = Object.keys(tables[`${selected}`])
     FJScope[`columns${index}`] = values
@@ -75,10 +102,7 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
     if (!FJScope.searchParams[index].table || 
         FJScope.searchParams[index].table === "Task" || 
         FJScope.searchParams[index].table === "Job Status" || 
-        FJScope.searchParams[index].table === "Job Type" ||
-        FJScope.searchParams[index].column === 'Name' ||
-        FJScope.searchParams[index].column === 'Address' ||
-        FJScope.searchParams[index].column === 'Road'
+        FJScope.searchParams[index].table === "Job Type"
     ) {
       return true
     } else {

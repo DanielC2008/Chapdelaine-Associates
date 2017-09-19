@@ -9,7 +9,7 @@
         <option value="" label="-- Select option --" disabled selected="selected"> Search by...</option>
       </select>
     </div>
-    <div class="col s3 input-field" >
+    <div class="col s3 input-field">
       <select ng-model="param.column"
         ng-options="column as column for column in FJ.columns{{$index + 1}}" 
         ng-init="param.table" 
@@ -22,7 +22,8 @@
     <div class="col s4 input-field" ng-keyup="$event.keyCode == 13 && FJ.submit()">
       <input 
         type="text" 
-        name="match{{$index}}" 
+        name="match{{$index}}"
+        ng-click="FJ.columnSelected(param.column, $index)"
         ng-model="param.match" 
         ng-disabled='FJ.noUserInput($index)' 
         placeholder="Search Terms...">

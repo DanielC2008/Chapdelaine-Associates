@@ -8,16 +8,17 @@ const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
 const path = require('path')
 const PORT = process.env.PORT || 3002
-const publicPath = path.resolve(__dirname, '../client');
+const publicPath = path.resolve(__dirname, '../client')
 const app = express()
 
 //server
 const server = require('http').createServer(app)
 server.listen(PORT, () => console.log(`port listening on: ${PORT}`))
 
-const closeServer = () => {
-  server.close();
-}
+const closeServer = () => server.close()
+
+//view engine setup
+app.set('client', path.join(__dirname, '../client/'))
 
 //middleware
 app.use(session({
@@ -30,12 +31,10 @@ app.use(session({
   })
 )
 app.use(busboy())
-// point for static assets
-app.use(express.static(publicPath));
-//view engine setup
-app.set('client', path.join(__dirname, '../client/'));
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
+// point for static assets
+app.use(express.static(publicPath))
 
 //routes
 app.use(routes)
