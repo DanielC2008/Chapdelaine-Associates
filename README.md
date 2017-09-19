@@ -1,6 +1,12 @@
 # CALS Repo
 
-##### This is the production side repository
+##### This is the production side repository, to push here go to Chapdelaine-Associates master branch...
+
+```
+git fetch
+git merge upstream/master master 
+git push upstream master
+```
 
 
 # Chapdelaine-Associates Repo

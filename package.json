@@ -17,7 +17,8 @@
       "output": "C:\\Program Files\\CALS"
     },
     "publish": {
-      "provider": "github"
+      "provider": "github",
+      "repo": "CALS"
     }
   },
   "scripts": {

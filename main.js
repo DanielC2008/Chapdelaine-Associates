@@ -4,6 +4,9 @@ const log = require('electron-log')
 const isDev = require('electron-is-dev')
 const path = require('path')
 const url = require('url')
+const fs = require("fs")
+const initPath = "C:\\Program Files\\CALS\\init.json"
+let data 
 
 const server = require("./server/server.js")
 const PORT = server.PORT
@@ -34,14 +37,21 @@ const createAppWindow = () => {
   updateWindow.hide()
   // Create the browser window and load the index.html of the app.
   mainWindow = new BrowserWindow({
-    fullscreen: true
+    //browser window options here
+    x: data.bounds.x,
+    y: data.bounds.y,
+    width: data.bounds.width,
+    height: data.bounds.height
   })
   mainWindow.loadURL(`http://localhost:${PORT}`)
-  mainWindow.webContents.openDevTools()
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    closeServer()
+  mainWindow.on('close', function () {
+    data = {
+      bounds: mainWindow.getBounds()
+    }
+    fs.writeFileSync(initPath, JSON.stringify(data))
     mainWindow = null
+    closeServer()
   })
 }
 
@@ -78,6 +88,11 @@ autoUpdater.on('update-downloaded', (info) => {
 })
 
 app.on('ready', function()  {
+  try {
+    data = JSON.parse(fs.readFileSync(initPath, 'utf8'))
+  }
+  catch(e) {
+  }
   createUpdateWindow()
 })
 
