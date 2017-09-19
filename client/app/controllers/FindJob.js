@@ -60,6 +60,30 @@ app.controller('FindJob', function($scope, $location, $rootScope, JobTypeFactory
         $scope.$apply()
       })
     }
+    else if (column === 'City') {
+      PropertyFactory.searchForCities(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'State') {
+      PropertyFactory.searchForStates(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'Zip Code') {
+      PropertyFactory.searchForZipCodes(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
+    else if (column === 'County') {
+      PropertyFactory.searchForCounties(allowNew).then( data => {
+        FJScope.searchParams[index].match = data.value
+        $scope.$apply()
+      })
+    }
   }
 
   FJScope.getColumnValues = (selected, index) => {
