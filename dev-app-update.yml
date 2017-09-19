@@ -1,4 +1,4 @@
 # this file is required if you want to connect to a remote repository in a dev environment
 provider: github
 owner: DanielC2008
-repo: CALS
+repo: Chapdelaine-Associates
