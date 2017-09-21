@@ -11,11 +11,7 @@
     "appId": "com.Chapdelaine&Associates.CALS",
     "nsis": {
       "createDesktopShortcut": true,
-      "shortcutName": "CALS",
-      "publish": {
-        "provider": "github",
-        "repo": "CALS"
-      }
+      "shortcutName": "CALS"
     },
     "directories": {
       "output": "C:\\Program Files\\CALS"

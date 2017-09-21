@@ -1,14 +1,3 @@
-# CALS Repo
-
-##### This is the production side repository, to push here go to Chapdelaine-Associates master branch...
-
-```
-git fetch
-git merge upstream/master master 
-git push upstream master
-```
-
-
 # Chapdelaine-Associates Repo
 
-##### This is the development side of the CALS app. In Development code should be done on this repository. When new code is ready to be integrated into production it should be pushed upstream to the CALS repository and then a new version should be released from there using the 'yarn release script'. Ensure that code is ready, When the new code is release it will automatically update all users with the new version.
+##### When a new version is ready to be deployed use 'yarn release' script. For testing in Electron use 'yarn start' Ensure that code is ready, When the new code is released and then published it will automatically update all users with the new version.
