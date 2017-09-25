@@ -6,11 +6,17 @@ const path = require('path')
 const url = require('url')
 const fs = require("fs")
 const initPath = "C:\\Program Files\\CALS\\init.json"
-let data 
+let data = {
+  bounds: {
+    x: -8,
+    y: -8,
+    width: 800,
+    height: 600
+  }
+}
 
 const server = require("./server/server.js")
 const PORT = server.PORT
-const closeServer = server.closeServer
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -51,7 +57,7 @@ const createAppWindow = () => {
     }
     fs.writeFileSync(initPath, JSON.stringify(data))
     mainWindow = null
-    closeServer()
+    process.exit()
   })
 }
 
