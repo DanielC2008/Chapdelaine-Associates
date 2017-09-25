@@ -11,12 +11,6 @@ const PORT = process.env.PORT || 3002
 const publicPath = path.resolve(__dirname, '../client')
 const app = express()
 
-//server
-const server = require('http').createServer(app)
-server.listen(PORT, () => console.log(`port listening on: ${PORT}`))
-
-const closeServer = () => server.close()
-
 //view engine setup
 app.set('client', path.join(__dirname, '../client/'))
 
@@ -39,5 +33,7 @@ app.use(express.static(publicPath))
 //routes
 app.use(routes)
 
+//server
+app.listen(PORT, () => console.log(`port listening on: ${PORT}`))
 
-module.exports = { PORT, closeServer }
+module.exports = { PORT }
