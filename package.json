@@ -14,7 +14,7 @@
       "shortcutName": "CALS"
     },
     "directories": {
-      "output": "C:\\Program Files\\CALS"
+      "output": "../installer"
     },
     "publish": {
       "provider": "github"
