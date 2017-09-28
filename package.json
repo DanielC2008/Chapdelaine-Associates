@@ -15,6 +15,9 @@
     },
     "directories": {
       "output": "C:\\Program Files\\CALS"
+    },
+    "publish": {
+      "provider": "github"
     }
   },
   "scripts": {
