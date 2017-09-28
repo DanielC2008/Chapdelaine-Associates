@@ -5,7 +5,8 @@ const isDev = require('electron-is-dev')
 const path = require('path')
 const url = require('url')
 const fs = require("fs")
-const initPath = "C:\\Program Files\\CALS\\init.json"
+const initPath = path.join(__dirname, 'init.json')
+
 let data = {
   bounds: {
     x: -8,
@@ -92,12 +93,11 @@ autoUpdater.on('download-progress', (progressObj) => {
 autoUpdater.on('update-downloaded', (info) => {
   autoUpdater.quitAndInstall()  
 })
-
 app.on('ready', function()  {
-  try {
+  if (fs.existsSync(initPath)) {
     data = JSON.parse(fs.readFileSync(initPath, 'utf8'))
-  }
-  catch(e) {
+  } else {
+    fs.writeFileSync(initPath, JSON.stringify(data))
   }
   createUpdateWindow()
 })
