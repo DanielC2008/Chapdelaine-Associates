@@ -5,7 +5,8 @@ const isDev = require('electron-is-dev')
 const path = require('path')
 const url = require('url')
 const fs = require("fs")
-const initPath = path.join(__dirname, 'init.json')
+const initPath = path.join(__dirname, '../init.json')
+console.log('initPath', initPath)
 
 let data = {
   bounds: {
